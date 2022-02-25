@@ -12,11 +12,11 @@
             <Font size="32.0" />
          </font>
       </Label>
-      <Label fx:id="nomMenu" alignment="CENTER" layoutX="2.0" layoutY="160.0" prefHeight="40.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
+      <Label fx:id="menuName" alignment="CENTER" layoutX="2.0" layoutY="160.0" prefHeight="40.0" prefWidth="600.0" text="Label" textAlignment="CENTER">
          <font>
             <Font size="28.0" />
          </font>
       </Label>
-      <Button fx:id="boutonRetour" layoutX="274.0" layoutY="273.0" mnemonicParsing="false" onAction="#retour" text="Retour" />
+      <Button fx:id="backButton" layoutX="274.0" layoutY="273.0" mnemonicParsing="false" onAction="#back" text="Retour" />
    </children>
 </AnchorPane>

@@ -14,18 +14,18 @@ import java.io.IOException;
 public class MenuController {
 
     @FXML
-    Label nomMenu;
+    Label menuName;
 
     private Stage stage;
     private Scene scene;
     private Parent root;
 
-    public void afficherNomMenu(String nom){
-        nomMenu.setText(nom);
+    public void displayMenuName(String name){
+        menuName.setText(name);
     }
 
-    public void retour(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("interface/ListeMenus.fxml"));
+    public void back(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("interface/MenuList.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);

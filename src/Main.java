@@ -13,9 +13,9 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage){
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("interface/ListeMenus.fxml"));
+            Parent root = FXMLLoader.load(getClass().getResource("interface/MenuList.fxml"));
             Scene scene =  new Scene(root);
-            primaryStage.setTitle("Calendar");
+            primaryStage.setTitle("Calendrier des menus");
             primaryStage.setScene(scene);
             primaryStage.show();
 
