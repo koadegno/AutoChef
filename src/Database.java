@@ -1,3 +1,4 @@
+import java.lang.constant.Constable;
 import java.sql.*;
 
 public class Database {
@@ -39,6 +40,19 @@ public class Database {
         return null;
     }
 
+    private Integer createAndGetIdShoppingList(String query){
+        try {
+            request.executeUpdate(query);
+            ResultSet getKey = request.getGeneratedKeys();
+            getKey.next();
+            return getKey.getInt(1);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     public boolean creationTableFamilleAliment(){
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
                 "    FamilleAlimentID INTEGER PRIMARY KEY,\n" +
@@ -46,5 +60,18 @@ public class Database {
                 ");\n";
         return sendRequest(req);
     }
+
+    public boolean creationTableShoppingList(){
+        String req = "CREATE TABLE IF NOT EXISTS ListeCourse (\n" +
+                "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT " +
+                ");\n";
+        return sendRequest(req);
+    }
+
+    public Integer createIdShoppingList(){
+        String req = "INSERT INTO ListeCourse values (null)";
+        return createAndGetIdShoppingList(req);
+    }
+
 
 }

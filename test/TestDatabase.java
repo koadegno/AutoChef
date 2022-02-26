@@ -36,7 +36,21 @@ class TestDatabase {
     @Test
     public void testNotCreateSameTableTwice(){
         boolean result = db.creationTableFamilleAliment();
-        assertEquals(result, false);
+        assertFalse(result);
+    }
+
+    @Test
+    public void testCreationListeCourse(){
+        db.creationTableShoppingList();
+        String query = "SELECT ListeCourseID FROM ListeCourse;";
+        Boolean res = db.sendRequest(query);
+        assertEquals(res, true);
+    }
+
+    @Test
+    public void testCreateIdShoppingList(){
+        db.creationTableShoppingList();
+        assertEquals(1,db.createIdShoppingList());
     }
 
 }
