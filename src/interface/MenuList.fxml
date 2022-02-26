@@ -14,9 +14,9 @@
             <Font size="40.0" />
          </font>
       </Label>
-      <Button fx:id="displayButton" layoutX="385.0" layoutY="200.0" mnemonicParsing="false" onAction="#display" text="Afficher" />
+      <Button fx:id="displayButton" layoutX="404.0" layoutY="200.0" mnemonicParsing="false" onAction="#display" text="Afficher" />
       <TextField fx:id="menuName" layoutX="176.0" layoutY="200.0" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
       <Label layoutX="176.0" layoutY="165.0" text="Quel menu souhaitez vous afficher?" />
-      <TreeView fx:id="menuTreeView" layoutX="185.0" layoutY="263.0" onContextMenuRequested="#selectMenu" onMouseClicked="#selectMenu" prefHeight="250.0" prefWidth="200.0" />
+      <TreeView fx:id="menuTreeView" layoutX="200.0" layoutY="264.0" onContextMenuRequested="#selectMenu" onMouseClicked="#selectMenu" prefHeight="250.0" prefWidth="200.0" />
    </children>
 </AnchorPane>

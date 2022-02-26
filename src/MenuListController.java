@@ -3,6 +3,7 @@ package src;
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -39,8 +40,7 @@ public class MenuListController implements Initializable {
         TreeItem<String> rootItem =  new TreeItem<>("Tous les menus");
 
         for (String category : this.categories){
-            System.out.println(category);
-            TreeItem<String> categoryName = new TreeItem<>("Menus" + category);
+            TreeItem<String> categoryName = new TreeItem<>("Menus " + category);
             rootItem.getChildren().add(categoryName);
             for (int i = 0; i < 4; i++) {
                 TreeItem<String> recipeName = new TreeItem<>("Menu "+ category+ " " + i);
@@ -63,6 +63,7 @@ public class MenuListController implements Initializable {
     private Parent root;
 
     public void display(ActionEvent event) throws IOException{
+
         String name = menuName.getText();
 
         FXMLLoader loader = new FXMLLoader(getClass().getResource("interface/Menu.fxml"));
@@ -78,6 +79,7 @@ public class MenuListController implements Initializable {
         stage.show();
 
     }
+
 
     public void selectMenu(){
 
