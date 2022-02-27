@@ -16,20 +16,22 @@ import java.util.Vector;
 public class MenuAddIngredient {
 
     private Stage primaryStage;
-    private Vector<Product> myIngredient = new Vector<>();
+    private Vector<Product> myIngredient;
 
-    public MenuAddIngredient(Stage _primaryStage){
+    public MenuAddIngredient(Stage _primaryStage,Vector<Product> _myIngredient ){
         this.primaryStage = _primaryStage;
+        this.myIngredient = _myIngredient;
     }
 
     public void addProdcut() {
-        final Stage dialog = new Stage();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(primaryStage);
-        VBox dialogVbox = new VBox(20);
-        dialog.setTitle("Choisir un produit");
 
-        ToggleGroup quantityOrNumber = new ToggleGroup();
+        final Stage dialogAddProduct = new Stage();
+        dialogAddProduct.initModality(Modality.APPLICATION_MODAL);
+        dialogAddProduct.initOwner(primaryStage);
+        VBox dialogVbox = new VBox(20);
+        dialogAddProduct.setTitle("Choisir un produit");
+
+        ToggleGroup quantityOrNumber = new ToggleGroup(); //bouton choix du type de valeur
         RadioButton quantity = new RadioButton("Quantité (kg)");
         quantity.setToggleGroup(quantityOrNumber);
         quantity.setSelected(true);
@@ -37,6 +39,8 @@ public class MenuAddIngredient {
         numberOfPiece.setToggleGroup(quantityOrNumber);
 
         TextField textNumberOrQuantity = new TextField();
+        textNumberOrQuantity.setPromptText("valeur numérique du produit");
+
         textNumberOrQuantity.textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,
@@ -54,44 +58,34 @@ public class MenuAddIngredient {
 
         ComboBox<String> listProduct = new ComboBox<>();
         listProduct.setEditable(true);
-        //Appeler la base de donnée
-        listProduct.setItems(FXCollections.observableArrayList(("tomate"), ("toomate"), ("salade")));
+
+        //TODO; Appeler la base de donnée pour remplir la comboBox
+        listProduct.setItems(FXCollections.observableArrayList(createListIngredient()));
 
         listProduct.getEditor().textProperty().addListener(observable -> {
             List<String> myProduct =  createListIngredient(); //TODO: remplacer par db
             listProduct.setItems(FXCollections.observableList(myProduct));
-
-
         });
 
-        dialogVbox.getChildren().addAll(listProduct);
-        Button btnConfirm = new Button("Confirmer"); //TODO: lier avec nom apres
-        dialogVbox.getChildren().addAll(quantity, numberOfPiece,textNumberOrQuantity, btnConfirm);
+        Button btnConfirm = new Button("Confirmer");
+        dialogVbox.getChildren().addAll(listProduct, quantity, numberOfPiece,textNumberOrQuantity, btnConfirm);
         btnConfirm.setOnAction(
                 new EventHandler<ActionEvent>() {
                     @Override
                     public void handle(ActionEvent event) {
-                        String number = "33"; // Double.parseDouble(textNumberOrQuantity.getText());
-                        String ingredient = listProduct.getItems().toString();
-                        Product prod = new Product("hhezhr", "hjdez");
-                        myIngredient.add(prod);
-                        dialog.close();
-                        //BOUTON VALID POUR RETOUR
-                        //onAddIngredientButtonClick(primaryStage, myIngredient);
-
-
-
-
-
-                        //TODO: afficher le produit dans
-
+                        String chooseNameProduct = listProduct.getEditor().textProperty().getValue() ;
+                        String chooseNumberProduct = textNumberOrQuantity.getText(); //TODO:changer en int
+                        Product prod = new Product(chooseNameProduct, chooseNumberProduct);
+                        myIngredient.add(prod); //TODO: rajouter en retard?
+                        dialogAddProduct.close();
                     }
                 });
 
-
         Scene dialogScene = new Scene(dialogVbox, 700, 600);
-        dialog.setScene(dialogScene);
-        dialog.show();
+        dialogAddProduct.setScene(dialogScene);
+        dialogAddProduct.show();
+
+        //TODO: RAJOUTER BOUTON + ET -
 
     }
 
