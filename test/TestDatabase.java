@@ -117,17 +117,29 @@ class TestDatabase {
     @Test
     public void testCreateIdShoppingList(){
         db.createTableListeCourse();
-        assertEquals(1,db.createIdShoppingList());
+        assertEquals(1,db.createAndGetIdShoppingList());
     }
 
     @Test
     public void testInsert() throws SQLException {
         String[] name = {"null","'litres'"};
         db.insert("Unite",name);
-        String query = "SELECT UniteID FROM Unite WHERE nom = 'litres'";
+        String query = "SELECT UniteID FROM Unite WHERE Nom = 'litres'";
         ResultSet res = db.sendQuery(query);
         res.next();
         int id = res.getInt("UniteID");
         assertEquals(1,id);
     }
+
+    @Test
+    public void testSelect() throws SQLException {
+        String[] name = {"Nom"};
+        String[] values = {"'litres'"};
+        String[] signs = {"="};
+        ResultSet res = db.select("Unite",name,values,signs);
+        res.next();
+        int id = res.getInt("UniteID");
+        assertEquals(1,id);
+    }
+
 }

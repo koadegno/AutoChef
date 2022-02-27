@@ -45,17 +45,7 @@ public class Database {
         }
     }
 
-    private Integer createAndGetIdShoppingList(String query) {
-        try {
-            sendQueryUpdate(query);
-            ResultSet getKey = request.getGeneratedKeys();
-            getKey.next();
-            return getKey.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
+
 
     public boolean createTableFamilleAliment() {
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
@@ -134,11 +124,6 @@ public class Database {
         return sendRequest(req);
     }
 
-    public Integer createIdShoppingList() {
-        String req = "INSERT INTO ListeCourse values (null)";
-        return createAndGetIdShoppingList(req);
-    }
-
     public boolean createTableListeCourseIngredient() {
         String req = "CREATE TABLE IF NOT EXISTS ListeCourseIngredient(\n" +
                 "    ListeCourseID INTEGER\n" +
@@ -163,20 +148,42 @@ public class Database {
     }
 
     /**
-     * Les valeurs doivent etre encode sous la forme : "'exemple'"
-     * Sauf pour la valeur null qui doit etre encode sous la forme : "null"
+     * Les valeurs doivent etre encode sous la forme pour les strings : "'exemple'"
+     * Reste doit etre encode sous la forme : "exemple"
      *
-     * @param values Les differentes valeurs a insert dans l'ordre des colonnes
+     * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
      */
-    public void insert(String nomTable,String[] values){
-        StringBuilder req = new StringBuilder(String.format("INSERT INTO %s values (", nomTable));
+    public void insert(String nameTable,String[] values){
+        StringBuilder req = new StringBuilder(String.format("INSERT INTO %s values (", nameTable));
         for (String value : values) {
             req.append(value).append(",");
         }
         req.deleteCharAt(req.length()-1);
         req.append(");");
         sendQueryUpdate(String.valueOf(req));
+    }
 
+    public ResultSet select(String nameTable,String[]names,String[]values,String[]signs){
+        StringBuilder req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
+        for (int i = 0; i < names.length;i++) {
+            req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+        }
+        req.delete(req.length()-3, req.length());
+        req.append(";");
+        return sendQuery(String.valueOf(req));
+    }
+
+    public Integer createAndGetIdShoppingList() {
+        String[] values = {"null"};
+        try {
+            insert("ListeCourse",values);
+            ResultSet getKey = request.getGeneratedKeys();
+            getKey.next();
+            return getKey.getInt(1);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
 }
