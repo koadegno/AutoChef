@@ -37,9 +37,17 @@ public class Database {
         return null;
     }
 
+    private void sendQueryUpdate(String query){
+        try {
+             request.executeUpdate(query);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
     private Integer createAndGetIdShoppingList(String query) {
         try {
-            request.executeUpdate(query);
+            sendQueryUpdate(query);
             ResultSet getKey = request.getGeneratedKeys();
             getKey.next();
             return getKey.getInt(1);
@@ -152,6 +160,10 @@ public class Database {
                 "    PRIMARY KEY (Date, Heure)\n" +
                 ")";
         return sendRequest(req);
+    }
 
+    public void insertUnite(String name){
+        String req = String.format("INSERT INTO Unite values (null,'%s');",name);
+        sendQueryUpdate(req);
     }
 }

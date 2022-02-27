@@ -4,6 +4,7 @@ import org.junit.jupiter.api.Test;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -93,11 +94,6 @@ class TestDatabase {
         assertEquals(res, true);
     }
 
-    @Test
-    public void testCreateIdShoppingList(){
-        db.createTableListeCourse();
-        assertEquals(1,db.createIdShoppingList());
-    }
     // ------------------------------------------------------------
 
     @Test
@@ -115,4 +111,24 @@ class TestDatabase {
         Boolean res = db.sendRequest(query);
         assertEquals(res, true);
     }
+    //-------------------------------------------------------------
+
+
+    @Test
+    public void testCreateIdShoppingList(){
+        db.createTableListeCourse();
+        assertEquals(1,db.createIdShoppingList());
+    }
+
+    @Test
+    public void testInsertUnite() throws SQLException {
+        db.insertUnite("litres");
+        String query = "SELECT UniteID FROM Unite WHERE nom = 'litres'";
+        ResultSet res = db.sendQuery(query);
+        res.next();
+        int id = res.getInt("UniteID");
+        assertEquals(1,id);
+    }
+
+   
 }
