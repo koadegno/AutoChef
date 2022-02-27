@@ -27,7 +27,10 @@ public class ListeDeCourseApplication {
         label.getChildren().addAll(buttonOne,buttonTwo,buttonThree); //Tous les boutons dans le label
         Scene scene = new Scene(label, 720, 630); //Fenetre principal + boutons
 
-        this.menuCreateShoppingList = new MenuCreateShoppingList(primaryStage);
+        Button btnReturnCreateShoppingList = new Button("Retour");
+        btnReturnCreateShoppingList.setOnAction(e-> { menu();});
+
+        this.menuCreateShoppingList = new MenuCreateShoppingList(primaryStage, btnReturnCreateShoppingList);
         buttonTwo.setOnAction(e-> {menuCreateShoppingList.displayMenuCreateShoppingList();});
 
         primaryStage.setTitle("Mon Menu");
