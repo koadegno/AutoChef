@@ -16,27 +16,30 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class MenuCreateShoppingList {
+public class MenuCreateShoppingList extends ListeDeCourseApplication{
 
-    private Stage primaryStage;
+    private final Stage primaryStage;
     private MenuAddIngredient menuAddIngredient;
+    private ListeDeCourseApplication listeDeCourseApplication;
     private TableView table = new TableView();
 
+
     public MenuCreateShoppingList(Stage _primaryStage){
+        super(_primaryStage);
         this.primaryStage = _primaryStage;
     }
 
     public void displayMenuCreateShoppingList(){
         List<String> ingredien = createListIngredient(); //remplacer par la bdd
-        Vector<Product> myIngredient = new Vector<>();
+        Vector<Product> myIngredient = new Vector<>(); //envoyer a la bdd un vector
         myIngredient = null;
+
         Button btnAddProduct = new Button("Ajouter un produit");
         VBox label = new VBox(ingredien.size());
         //btnConfirm.setId()
         label.getChildren().addAll(btnAddProduct);
 
         TableView table = createTableList(myIngredient);
-        ListeDeCourseApplication menuApplication = new ListeDeCourseApplication(primaryStage);
 
 
         btnAddProduct.setOnAction(
@@ -55,9 +58,12 @@ public class MenuCreateShoppingList {
                     }
                 });
 
-
+        listeDeCourseApplication = new ListeDeCourseApplication(primaryStage);
         Button btnReturn = new Button("Retour");
-        btnReturn.setOnAction(e-> {menuApplication.menu(primaryStage);});
+        btnReturn.setOnAction(e-> {
+            super.menu();
+            //listeDeCourseApplication.menu();
+        });
 
         Button btnValid = new Button("Valide");
         btnValid.setOnAction(e-> {}); //getIngredient
@@ -68,7 +74,7 @@ public class MenuCreateShoppingList {
                     public void handle(ActionEvent event) {
                         getIngredient();
                         //TODO: recup les infos
-                        menuApplication.menu(primaryStage);
+                        listeDeCourseApplication.menu();
                         //TODO: refaire le retour
 
                     }

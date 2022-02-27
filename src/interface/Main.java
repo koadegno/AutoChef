@@ -10,7 +10,7 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage) throws Exception {
         ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(primaryStage);
-        menuShoppingList.menu(primaryStage);
+        menuShoppingList.menu(); //Menu principal
 
     }
 }
