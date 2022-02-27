@@ -121,14 +121,13 @@ class TestDatabase {
     }
 
     @Test
-    public void testInsertUnite() throws SQLException {
-        db.insertUnite("litres");
+    public void testInsert() throws SQLException {
+        String[] name = {"null","'litres'"};
+        db.insert("Unite",name);
         String query = "SELECT UniteID FROM Unite WHERE nom = 'litres'";
         ResultSet res = db.sendQuery(query);
         res.next();
         int id = res.getInt("UniteID");
         assertEquals(1,id);
     }
-
-   
 }

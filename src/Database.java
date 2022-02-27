@@ -162,8 +162,21 @@ public class Database {
         return sendRequest(req);
     }
 
-    public void insertUnite(String name){
-        String req = String.format("INSERT INTO Unite values (null,'%s');",name);
-        sendQueryUpdate(req);
+    /**
+     * Les valeurs doivent etre encode sous la forme : "'exemple'"
+     * Sauf pour la valeur null qui doit etre encode sous la forme : "null"
+     *
+     * @param values Les differentes valeurs a insert dans l'ordre des colonnes
+     */
+    public void insert(String nomTable,String[] values){
+        StringBuilder req = new StringBuilder(String.format("INSERT INTO %s values (", nomTable));
+        for (String value : values) {
+            req.append(value).append(",");
+        }
+        req.deleteCharAt(req.length()-1);
+        req.append(");");
+        sendQueryUpdate(String.valueOf(req));
+
     }
+
 }
