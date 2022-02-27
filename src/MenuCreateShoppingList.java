@@ -8,6 +8,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.BackgroundImage;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
@@ -16,72 +17,43 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
-public class MenuCreateShoppingList extends ListeDeCourseApplication{
+public class MenuCreateShoppingList{
 
     private final Stage primaryStage;
     private MenuAddIngredient menuAddIngredient;
-    private ListeDeCourseApplication listeDeCourseApplication;
+    private final Button btnReturnOldMenu;
     private TableView table = new TableView();
+    private Vector<Product> myIngredient = new Vector<>();
 
 
-    public MenuCreateShoppingList(Stage _primaryStage){
-        super(_primaryStage);
+    public MenuCreateShoppingList(Stage _primaryStage, Button btnReturnOldMenu){
+        this.btnReturnOldMenu = btnReturnOldMenu;
         this.primaryStage = _primaryStage;
+        menuAddIngredient =  new MenuAddIngredient(primaryStage, myIngredient);
     }
 
     public void displayMenuCreateShoppingList(){
-        List<String> ingredien = createListIngredient(); //remplacer par la bdd
-        Vector<Product> myIngredient = new Vector<>(); //envoyer a la bdd un vector
-        myIngredient = null;
+        myIngredient = createListIngredient(); //base de donnée ici
 
+        VBox label = new VBox();
+        createTableList();
         Button btnAddProduct = new Button("Ajouter un produit");
-        VBox label = new VBox(ingredien.size());
-        //btnConfirm.setId()
-        label.getChildren().addAll(btnAddProduct);
-
-        TableView table = createTableList(myIngredient);
 
 
-        btnAddProduct.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        menuAddIngredient = new MenuAddIngredient(primaryStage);
-                        menuAddIngredient.addProdcut();
-                        Vector<Product> myIngredient = menuAddIngredient.getMyIngredient();
-                        final ObservableList<Product> data = FXCollections.observableArrayList(
-                                new Product("fzf", "23.2"));
-                        table.setItems(data);
-                        //addProdcut(primaryStage);
-                        //faire la classe Product
+        btnAddProduct.setOnAction(e->{
+            menuAddIngredient.addProdcut(); //affichage du menu pour rajouter un produit
+            myIngredient = menuAddIngredient.getMyIngredient(); //TODO: remplacer par bdd
+            setTable(myIngredient);});
 
-                    }
-                });
-
-        listeDeCourseApplication = new ListeDeCourseApplication(primaryStage);
-        Button btnReturn = new Button("Retour");
-        btnReturn.setOnAction(e-> {
-            super.menu();
-            //listeDeCourseApplication.menu();
-        });
 
         Button btnValid = new Button("Valide");
-        btnValid.setOnAction(e-> {}); //getIngredient
+        btnValid.setOnAction(e-> {
+            getIngredient();
+            //TODO: recup les infos -> la liste le fait mais pour etre sur plus tard essayer de recup
+            //direct du tableView mais pas ici qu'on envoie a la bdd
+        });
 
-        btnValid.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        getIngredient();
-                        //TODO: recup les infos
-                        listeDeCourseApplication.menu();
-                        //TODO: refaire le retour
-
-                    }
-                });
-
-
-        label.getChildren().addAll(table, btnReturn,btnValid);
+        label.getChildren().addAll(table,btnAddProduct, btnReturnOldMenu,btnValid);
         Scene scene = new Scene(label, 720, 630); //Fenetre pour creer des courses
         primaryStage.setTitle("Créer une liste de courses");
         primaryStage.setScene(scene);
@@ -89,32 +61,30 @@ public class MenuCreateShoppingList extends ListeDeCourseApplication{
 
     }
 
-    private TableView createTableList(Vector<Product> myIngredient) {
+    private void createTableList() {
         table.setEditable(false);
 
-        TableColumn firstNameCol = new TableColumn("Produc");
-        TableColumn lastNameCol = new TableColumn("Quantity");
-
+        TableColumn firstNameCol = new TableColumn("Produit");
+        TableColumn lastNameCol = new TableColumn("Quantité");
 
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("produc"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
 
-
-        final ObservableList<Product> data = FXCollections.observableArrayList(
-                new Product("tomate", "23.2"));
-        table.setItems(data);
+        setTable(myIngredient); //remplir la table de produit
         table.getColumns().addAll(firstNameCol, lastNameCol);
 
-        //table.getItems().add(new Product("tomate", 23.2));
-
-        return table;
     }
 
-    private List<String> createListIngredient(){ //fonction test
-        List<String> ingredient = new ArrayList<String>();
-        ingredient.add("Tomate");
-        ingredient.add("Fraise");
-        return ingredient;
+    public void setTable(Vector<Product> myIngredient){
+        final ObservableList<Product> data = FXCollections.observableArrayList(myIngredient);
+        table.setItems(data);
+    }
+
+    private Vector<Product> createListIngredient(){ //fonction test
+        myIngredient.add(new Product("tomate", "23.2"));
+        myIngredient.add(new Product("fraise", "22.2"));
+        myIngredient.add(new Product("pomme", "0.2"));
+        return myIngredient;
     }
 
     private void getIngredient(){
@@ -125,37 +95,20 @@ public class MenuCreateShoppingList extends ListeDeCourseApplication{
         dialog.setTitle("Confirmer avec le nom de la liste de courses");
 
         TextField nameOfList = new TextField();
-        nameOfList.setText("Donne un nom de liste de courses");
         Button btnConfirm = new Button("Confirmer");
-        Button btnReturn = new Button("Retour");
-        dialogVbox.getChildren().addAll(nameOfList, btnReturn, btnConfirm);
+        dialogVbox.getChildren().addAll(nameOfList, btnConfirm);
 
-        btnReturn.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        dialog.close();
-
-                    }
-                });
-
-        btnConfirm.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        String getNameOfList = nameOfList.getText();
-                        System.out.println(getNameOfList);
-                        dialog.close();
-                        //TODO: verif le nom avec la bdd aprees recup le nom
-
-                    }
-                });
+        btnConfirm.setOnAction(e-> {
+                String getNameOfList = nameOfList.getText(); //recup nom de la liste de course
+                btnReturnOldMenu.fire(); //retourner au menu precedent
+                dialog.close();
+                //TODO: verif le nom avec la bdd aprees recup le nom?
+                //TODO: envoyer la liste a la bdd avec nom
+        });
 
         Scene dialogScene = new Scene(dialogVbox, 500, 300);
         dialog.setScene(dialogScene);
         dialog.show();
-
-        //TODO: recup all info
 
     }
 }
