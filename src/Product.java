@@ -1,57 +1,57 @@
-public class Produit {
-    private String nom;
-    private int quantite = 1;
+public class Product {
+    private String name;
+    private int quantity = 1;
 
-    public Produit(String nomProduit) {
-        nom = nomProduit;
+    public Product(String productName) {
+        name = productName;
     }
 
-    public Produit(String nomProduit, int quantite) {
-        nom = nomProduit;
-        this.quantite = quantite;
+    public Product(String productName, int quantity) {
+        name = productName;
+        this.quantity = quantity;
     }
 
-    public void renommer(String nouveauNom) {
-        nom = nouveauNom;
+    public void rename(String newName) {
+        name = newName;
     }
 
-    public boolean reduire() {
-        if (quantite == 1)
+    public boolean decrease() {
+        if (quantity == 1)
             return false;
-        quantite--;
+        quantity--;
         return true;
     }
 
-    public void augmenter() {
-        quantite++;
+    public void increase() {
+        quantity++;
     }
 
-    public void changeQuantite(int newQuantite) {
-        if (newQuantite > 0)
-            quantite = newQuantite;
+    public void changeQuantity(int newQuantity) {
+        if (newQuantity > 0)
+            quantity = newQuantity;
         else
-            quantite = 1;
+            quantity = 1;
     }
 
-    public int getQuantite() {
-        return quantite;
+    public int getQuantity() {
+        return quantity;
     }
 
-    public String getNom() {
-        return nom;
+    public String getName() {
+        return name;
     }
 
     @Override
-    public boolean equals(Object autre) {
+    public boolean equals(Object other) {
 
-        if (this == autre)
+        if (this == other)
             return true;
 
-        if (autre == null || this.getClass() != autre.getClass())
+        if (other == null || this.getClass() != other.getClass())
             return false;
 
-        Produit produit = (Produit)autre;
+        Product product = (Product)other;
 
-        return this.getNom().equals(produit.getNom());
+        return this.getName().equals(product.getName());
     }
 }
