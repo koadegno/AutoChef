@@ -147,6 +147,17 @@ public class Database {
         return sendRequest(req);
     }
 
+    private Integer getkey(){
+        try {
+            ResultSet getKey = request.getGeneratedKeys();
+            getKey.next();
+            return getKey.getInt(1);
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+        return null;
+    }
+
     /**
      * Les valeurs doivent etre encode sous la forme pour les strings : "'exemple'"
      * Reste doit etre encode sous la forme : "exemple"
@@ -175,15 +186,8 @@ public class Database {
 
     public Integer createAndGetIdShoppingList() {
         String[] values = {"null"};
-        try {
-            insert("ListeCourse",values);
-            ResultSet getKey = request.getGeneratedKeys();
-            getKey.next();
-            return getKey.getInt(1);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        return null;
+        insert("ListeCourse",values);
+        return getkey();
     }
 
 }
