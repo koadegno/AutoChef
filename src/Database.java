@@ -46,7 +46,6 @@ public class Database {
     }
 
 
-
     public boolean createTableFamilleAliment() {
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
                 "    FamilleAlimentID INTEGER PRIMARY KEY,\n" +
@@ -119,8 +118,9 @@ public class Database {
 
     public boolean createTableListeCourse() {
         String req = "CREATE TABLE IF NOT EXISTS ListeCourse (\n" +
-                "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT " +
-                ");\n";
+                "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT,\n " +
+                "    Nom CHAR(25) NOT NULL UNIQUE \n" +
+                ");";
         return sendRequest(req);
     }
 
@@ -184,10 +184,30 @@ public class Database {
         return sendQuery(String.valueOf(req));
     }
 
-    public Integer createAndGetIdShoppingList() {
-        String[] values = {"null"};
+    public Integer createAndGetIdShoppingList(String name) {
+        String[] values = {"null",name};
         insert("ListeCourse",values);
         return getkey();
     }
+
+    private void insertIngredientInShoppingList(int courseId,int ingredientId,int quantity) {
+        //TODO: si on ajoute le nom dans ListeCourse, changer le courseId par le nom
+        String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
+        insert("ListeCourseIngredient",values);
+    }
+
+    //TODO: Pour save une shopping list quand elle sera implemente
+//    public void saveShoppingList(ShoppingList shoppingList){
+//        int id = createAndGetIdShoppingList(shoppingList.getName());
+//        for(Produit produit : shoppingList){
+//            insertIngredientInShoppingList(id,produit.getId(),produit.getQuantite());
+//        }
+//    }
+
+
+
+
+
+
 
 }

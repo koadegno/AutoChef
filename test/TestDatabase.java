@@ -117,7 +117,7 @@ class TestDatabase {
     @Test
     public void testCreateIdShoppingList(){
         db.createTableListeCourse();
-        assertEquals(1,db.createAndGetIdShoppingList());
+        assertEquals(1,db.createAndGetIdShoppingList("'noel'"));
     }
 
     @Test
