@@ -16,6 +16,10 @@
 .idea/**/misc.xml
 .idea/**/modules.xml
 
+.idea/**/misc.xml
+.idea/**/vcs.xml
+.idea/**/modules.xml
+
 # AWS User-specific
 .idea/**/aws.xml
 
