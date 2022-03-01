@@ -31,4 +31,13 @@ public class MainController {
         MenuListController menu = new MenuListController();
         menu.displayMenuList(event);
     }
+
+    @FXML
+    public void redirectRecipe(ActionEvent event){
+
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        MenuRecipe recipe = new MenuRecipe(stage);
+        recipe.menu(); //Menu principal
+
+    }
 }
