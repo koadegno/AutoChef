@@ -12,6 +12,8 @@
 .idea/**/usage.statistics.xml
 .idea/**/dictionaries
 .idea/**/shelf
+.idea/**/misc.xml
+.idea/**/modules.xml
 
 .idea/**/misc.xml
 .idea/**/vcs.xml
