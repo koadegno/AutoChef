@@ -16,9 +16,7 @@
 .idea/**/misc.xml
 .idea/**/modules.xml
 
-.idea/**/misc.xml
 .idea/**/vcs.xml
-.idea/**/modules.xml
 
 # AWS User-specific
 .idea/**/aws.xml
@@ -145,3 +143,5 @@ hs_err_pid*
 replay_pid*
 
 # End of https://www.toptal.com/developers/gitignore/api/java,intellij
+/lib/javafx-sdk-17.0.2/
+/lib/poi-bin-5.2.0/
