@@ -12,9 +12,11 @@ import java.util.Vector;
 
 public class MenuDisplayShoppingList {
 
+    private Vector<Product> myIngredient = new Vector<>();
     private Stage primaryStage;
     private Button btnReturnShoppingList;
     private TableView table = new TableView();
+    private String nameListProduct;
 
     public MenuDisplayShoppingList(Stage primaryStage, Button btnReturnShoppingList){
         this.primaryStage = primaryStage;
@@ -24,13 +26,13 @@ public class MenuDisplayShoppingList {
     public void displayMenuDisplayShoppingList(){
         VBox label = new VBox();
 
-        ComboBox<String> nameListProduct = new ComboBox<>(); //barre de recherche 
-        nameListProduct.setEditable(true);
+        ComboBox<String> searchBarNameListProduct = new ComboBox<>(); //barre de recherche
+        searchBarNameListProduct.setEditable(true);
 
         //TODO; Appeler la base de donnée pour remplir la comboBox
-        nameListProduct.setItems(FXCollections.observableArrayList(("Liste de Mardi"), ("Liste de pauvre")));
-        nameListProduct.getEditor().textProperty().addListener(observable -> {
-             String nameListWriting = nameListProduct.getEditor().textProperty().getValue();
+        searchBarNameListProduct.setItems(FXCollections.observableArrayList(("Liste de Mardi"), ("Liste de pauvre")));
+        searchBarNameListProduct.getEditor().textProperty().addListener(observable -> {
+             String nameListWriting = searchBarNameListProduct.getEditor().textProperty().getValue();
              //TODO: envoyer nameListWriting a la bdd -> nous enverra une liste de liste de course
              //TODO: remplacer par db qui va remplir par rapport au lettre envoyé
         });
@@ -38,14 +40,15 @@ public class MenuDisplayShoppingList {
         //Creation des boutons
         Button btnSeeList = new Button("Voir la liste");
         Button btnSaveModify = new Button("Enregistrer les modifications");
-        Button btnCancelModify = new Button("Annuler les modufications");
+        Button btnCancelModify = new Button("Annuler les modifications");
         Button btnAddProduct = new Button("Ajouter un produit");
 
-        btnSeeList.setOnAction(e-> {SeeProduct(nameListProduct.getEditor().textProperty().getValue(), btnAddProduct);});
-        btnSaveModify.setOnAction(e-> {//TODO: envoyer les modifications a la bdd : verifier s'il en a fait -> liste de copie?
-        });
-        btnCancelModify.setOnAction(e-> {//TODO: soit faire une copie ou demander a la bdd de renvoyer la liste
-        });
+        btnSeeList.setOnAction(e-> {
+            nameListProduct = searchBarNameListProduct.getEditor().textProperty().getValue();
+            SeeProduct(nameListProduct, btnAddProduct);});
+
+        btnSaveModify.setOnAction(e-> {saveShoppingList();});
+        btnCancelModify.setOnAction(e-> {SeeProduct(nameListProduct, btnAddProduct);});
 
         //tableView pour afficher contenu d'une liste de courses
         createTableView(); 
@@ -53,12 +56,23 @@ public class MenuDisplayShoppingList {
         btnAddProduct.setVisible(false);
         btnAddProduct.setOnAction(e->{addProduct();});
 
-        label.getChildren().addAll(nameListProduct,btnSeeList, table, btnAddProduct, btnReturnShoppingList, btnCancelModify, btnSaveModify);
+        label.getChildren().addAll(searchBarNameListProduct,btnSeeList, table, btnAddProduct, btnReturnShoppingList, btnCancelModify, btnSaveModify);
         Scene scene = new Scene(label, 720, 630);
         primaryStage.setTitle("Afficher liste de courses");
         primaryStage.setScene(scene);
         primaryStage.show();
 
+    }
+    private void saveShoppingList(){
+        Vector<Product> myIngredientCopy = new Vector<>();
+        for (int i=0; i < table.getItems().size(); i++){
+            Product product = (Product) table.getItems().get(i);
+            myIngredientCopy.add(product);
+        }
+        if(!myIngredientCopy.equals(myIngredient)){
+            //TODO: envoyer a la base de donne les modifs
+            System.out.println("je suis diff");
+        }
     }
 
     private void createTableView() {
@@ -80,6 +94,7 @@ public class MenuDisplayShoppingList {
     }
 
     private void modifyProductValue(Button btnModify) {
+        //TODO: faire en sorte de pouvoir ecrire pour le nombre
         if (Objects.equals(btnModify.getText(), "Modifier")){
             btnModify.setText("Ne plus modifier") ;
             table.setEditable(true);
@@ -91,13 +106,11 @@ public class MenuDisplayShoppingList {
         }
     }
 
-    private void deleteProductValue(Button btnDelete){
-    }
-
     private void SeeProduct(String nameListSelected, Button btnAddProduct) {
         //TODO: envoyer a la bdd le nom de la liste -> nameListSelected -> on recevra la liste de course avec produit
         //TODO: verifier que ce n'est pas du vide le nameListSelected
-        Vector<Product> myIngredient = new Vector<Product>(); // TODO: remplir la table de produit
+        // TODO: remplir la table de produit
+        myIngredient.clear();
         if(Objects.equals(nameListSelected, "")){
             btnAddProduct.setVisible(false);
         }
@@ -143,8 +156,8 @@ public class MenuDisplayShoppingList {
                             });
 
                             btnDelete.setOnAction((ActionEvent event) -> {
-                                deleteProductValue(btnDelete);
                                 Product data = getTableView().getItems().get(getIndex());
+                                table.getItems().remove(data);
                                 System.out.println("selectedDataDelete: " + data.getQuantity());
                             });
                         }
