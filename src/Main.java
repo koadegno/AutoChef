@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
+import java.util.Objects;
+
 public class Main extends Application {
 
     public static void main(String[] args) {launch(args);}
@@ -14,7 +16,7 @@ public class Main extends Application {
     public void start(Stage primaryStage){
 
         try{
-            Parent root = FXMLLoader.load(getClass().getResource("interface/MenuList.fxml"));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/MenuList.fxml")));
             Scene scene =  new Scene(root);
             primaryStage.setTitle("Calendrier des menus");
             primaryStage.setScene(scene);

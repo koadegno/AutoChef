@@ -131,12 +131,4 @@ public class MenuListController implements Initializable {
         }
 
     }
-    @FXML
-    Button btnDisplayCalendar;
-
-    public void handleDisplayCalendar(MouseEvent mouseEvent){
-        System.out.println("here other button");
-    }
-
-
 }
