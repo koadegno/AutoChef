@@ -55,3 +55,4 @@ public class Product {
         return this.getName().equals(product.getName());
     }
 }
+
