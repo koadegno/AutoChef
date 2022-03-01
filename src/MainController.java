@@ -40,4 +40,12 @@ public class MainController {
         recipe.menu(); //Menu principal
 
     }
+    @FXML
+    public void editMeal(ActionEvent event){
+
+        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
+        EditMeal meal = new EditMeal(stage);
+
+    }
+
 }
