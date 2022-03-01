@@ -36,8 +36,14 @@ public class MenuListController implements Initializable {
 
     }
 
-    public void initializeMenusFromDB(){
+    public void initializeMenusFromDB() {
         //TODO: Relier avec BDD --> requetes (nomMenu)
+        //db = new Database("test.sqlite");
+        //db.creationTableMenus();
+        //String query = "SELECT * FROM Menus;"; --> get all the info of one menu
+        //if (db.sendRequest(query)){
+        //  fill this.menus with the query
+        //}
     }
 
 
