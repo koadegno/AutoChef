@@ -4,6 +4,8 @@ import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 
+import java.io.IOException;
+
 
 public class ListeDeCourseApplication {
 
@@ -21,15 +23,21 @@ public class ListeDeCourseApplication {
         Button buttonOne = new Button("Mes listes de courses");
         Button buttonTwo = new Button("Créer une liste de courses");
         Button buttonThree = new Button("Modifier une liste de courses");
+        Button buttonFour = new Button("Accueil");
 
         label.setAlignment(Pos.CENTER);
 
-        label.getChildren().addAll(buttonOne,buttonTwo,buttonThree); //Tous les boutons dans le label
+        label.getChildren().addAll(buttonOne,buttonTwo,buttonThree, buttonFour); //Tous les boutons dans le label
         Scene scene = new Scene(label, 720, 630); //Fenetre principal + boutons
 
         this.menuCreateShoppingList = new MenuCreateShoppingList(primaryStage);
-        buttonTwo.setOnAction(e-> {menuCreateShoppingList.displayMenuCreateShoppingList();});
-
+        buttonTwo.setOnAction(e-> menuCreateShoppingList.displayMenuCreateShoppingList());
+        buttonFour.setOnAction(e->{try{
+                                        MainController mainController = new MainController();
+                                        mainController.displayMain(primaryStage);
+                                    }catch (Exception exception){
+                                        exception.printStackTrace();}
+                                });
         primaryStage.setTitle("Mon Menu");
         primaryStage.setScene(scene);
         primaryStage.show();
