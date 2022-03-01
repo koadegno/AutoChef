@@ -20,7 +20,7 @@ import java.util.Vector;
 public class MenuCreateShoppingList{
 
     private final Stage primaryStage;
-    private MenuAddIngredient menuAddIngredient;
+    private final MenuAddIngredient menuAddIngredient;
     private final Button btnReturnOldMenu;
     private TableView table = new TableView();
     private Vector<Product> myIngredient = new Vector<>();
@@ -29,29 +29,20 @@ public class MenuCreateShoppingList{
     public MenuCreateShoppingList(Stage _primaryStage, Button btnReturnOldMenu){
         this.btnReturnOldMenu = btnReturnOldMenu;
         this.primaryStage = _primaryStage;
-        menuAddIngredient =  new MenuAddIngredient(primaryStage, myIngredient);
+        menuAddIngredient =  new MenuAddIngredient(primaryStage);
     }
 
     public void displayMenuCreateShoppingList(){
-        myIngredient = createListIngredient(); //base de donnée ici
+        myIngredient = createListIngredient(); //TODO: base de donnée ici
 
         VBox label = new VBox();
         createTableList();
+
         Button btnAddProduct = new Button("Ajouter un produit");
-
-
-        btnAddProduct.setOnAction(e->{
-            menuAddIngredient.addProdcut(); //affichage du menu pour rajouter un produit
-            myIngredient = menuAddIngredient.getMyIngredient(); //TODO: remplacer par bdd
-            setTable(myIngredient);});
-
+        btnAddProduct.setOnAction(e->{menuAddIngredient.addProdcut(table);;});
 
         Button btnValid = new Button("Valide");
-        btnValid.setOnAction(e-> {
-            getIngredient();
-            //TODO: recup les infos -> la liste le fait mais pour etre sur plus tard essayer de recup
-            //direct du tableView mais pas ici qu'on envoie a la bdd
-        });
+        btnValid.setOnAction(e-> {getIngredient();});
 
         label.getChildren().addAll(table,btnAddProduct, btnReturnOldMenu,btnValid);
         Scene scene = new Scene(label, 720, 630); //Fenetre pour creer des courses
@@ -70,14 +61,13 @@ public class MenuCreateShoppingList{
         firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("produc"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
 
-        setTable(myIngredient); //remplir la table de produit
+        myIngredient.add(new Product("hey","n"));
+        myIngredient.add(new Product("zerrrrrrze","n"));
+
+        final ObservableList<Product> data = FXCollections.observableArrayList(myIngredient);
+        table.setItems(data); //TODO: remplir la table de produit avec la bdd
         table.getColumns().addAll(firstNameCol, lastNameCol);
 
-    }
-
-    public void setTable(Vector<Product> myIngredient){
-        final ObservableList<Product> data = FXCollections.observableArrayList(myIngredient);
-        table.setItems(data);
     }
 
     private Vector<Product> createListIngredient(){ //fonction test
@@ -98,17 +88,28 @@ public class MenuCreateShoppingList{
         Button btnConfirm = new Button("Confirmer");
         dialogVbox.getChildren().addAll(nameOfList, btnConfirm);
 
-        btnConfirm.setOnAction(e-> {
-                String getNameOfList = nameOfList.getText(); //recup nom de la liste de course
-                btnReturnOldMenu.fire(); //retourner au menu precedent
-                dialog.close();
-                //TODO: verif le nom avec la bdd aprees recup le nom?
-                //TODO: envoyer la liste a la bdd avec nom
-        });
+        btnConfirm.setOnAction(e-> {confirmProduct(nameOfList);dialog.close();});
 
         Scene dialogScene = new Scene(dialogVbox, 500, 300);
         dialog.setScene(dialogScene);
         dialog.show();
 
+    }
+
+    private void confirmProduct(TextField nameOfList) {
+        String getNameOfList = nameOfList.getText(); //recup nom de la liste de course
+
+        if(getNameOfList != ""){ //TODO: verif le nom avec la bdd aprees recup le nom?
+
+            for (int i=0; i < table.getItems().size(); i++){
+                Product product = (Product) table.getItems().get(i);
+                myIngredient.add(product);
+                System.out.println(product.getProduc());
+            }
+
+            //TODO: envoyer a la base de donnée la liste avec le nom
+        }
+
+        btnReturnOldMenu.fire(); //retourner au menu precedent
     }
 }
