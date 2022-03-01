@@ -9,6 +9,7 @@ public class ListeDeCourseApplication {
 
     private final Stage primaryStage;
     private MenuCreateShoppingList menuCreateShoppingList;
+    private MenuDisplayShoppingList menuDisplayShoppingList;
 
     public ListeDeCourseApplication(Stage _primaryStage){
         this.primaryStage = _primaryStage;
@@ -20,18 +21,20 @@ public class ListeDeCourseApplication {
 
         Button buttonOne = new Button("Mes listes de courses");
         Button buttonTwo = new Button("Créer une liste de courses");
-        Button buttonThree = new Button("Modifier une liste de courses");
 
         label.setAlignment(Pos.CENTER);
 
-        label.getChildren().addAll(buttonOne,buttonTwo,buttonThree); //Tous les boutons dans le label
+        label.getChildren().addAll(buttonOne,buttonTwo); //Tous les boutons dans le label
         Scene scene = new Scene(label, 720, 630); //Fenetre principal + boutons
 
-        Button btnReturnCreateShoppingList = new Button("Retour");
-        btnReturnCreateShoppingList.setOnAction(e-> { menu();});
+        Button btnReturnShoppingList = new Button("Retour");
+        btnReturnShoppingList.setOnAction(e-> { menu();});
 
-        this.menuCreateShoppingList = new MenuCreateShoppingList(primaryStage, btnReturnCreateShoppingList);
+        this.menuCreateShoppingList = new MenuCreateShoppingList(primaryStage, btnReturnShoppingList);
         buttonTwo.setOnAction(e-> {menuCreateShoppingList.displayMenuCreateShoppingList();});
+
+        this.menuDisplayShoppingList = new MenuDisplayShoppingList(primaryStage, btnReturnShoppingList);
+        buttonOne.setOnAction(e-> {menuDisplayShoppingList.displayMenuDisplayShoppingList();});
 
         primaryStage.setTitle("Mon Menu");
         primaryStage.setScene(scene);
