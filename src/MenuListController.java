@@ -1,6 +1,7 @@
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -16,17 +17,25 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class MenuListController implements Initializable {
 
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
-
     private ArrayList<String> menus = new ArrayList<>();
 
+    public void displayMenuList(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/MenuList.fxml")));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
 
+    public void backToMain(ActionEvent event)throws IOException {
+        MainController main = new MainController();
+        main.displayMain((Stage) ((Node) event.getSource()).getScene().getWindow());
+    }
 
     public void initializeMenusFromTextFile(String filename){
         //Les catégories doivent être séparées par des virgules!
@@ -87,7 +96,6 @@ public class MenuListController implements Initializable {
         }
         return result;
     }
-
     public String selectedMenu(){
         TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
@@ -102,28 +110,16 @@ public class MenuListController implements Initializable {
 
     @FXML
     TextField menuName;
+
     @FXML
     Button btnDisplayMenu;
 
     public void handleDisplayMenu(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
-
-        //TODO: Vérifier que name est dans menus
-
         if (menus.contains(name)){
-            System.out.println("Menu existe");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("interface/Menu.fxml"));
-            root = loader.load();
-
-            MenuController menuController = loader.getController();
-            menuController.displayMenuName(name);
-
-            stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-            scene =  new Scene(root);
-            stage.setTitle("Menu "+name);
-            stage.setScene(scene);
-            stage.show();
+            MenuController menu = new MenuController();
+            menu.displayMenu(mousePressed, name);
         }else {
             System.out.println("Menu n'existe pas!");
         }

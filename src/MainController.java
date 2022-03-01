@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -12,23 +11,24 @@ import java.util.Objects;
 
 public class MainController {
 
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
+    public void displayMain(Stage stage)throws IOException{
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/Main.fxml")));
+        Scene scene =  new Scene(root);
+        stage.setTitle("Page d'accueil");
+        stage.setScene(scene);
+        stage.show();
+    }
 
-    @FXML
+
     public void redirectToShoppingList(ActionEvent e){
-
         Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
         ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(stage);
-        menuShoppingList.menu(); //Menu principal
+        menuShoppingList.menu(); //Menu principal des shopping lists
 
     }
 
-    @FXML
     public void redirectMenuList(ActionEvent event) throws IOException {
-        MenuController menu =  new MenuController();
-        menu.back(event);
-
+        MenuListController menu = new MenuListController();
+        menu.displayMenuList(event);
     }
 }

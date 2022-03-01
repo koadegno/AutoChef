@@ -73,7 +73,7 @@ public class MenuAddIngredient {
                     public void handle(ActionEvent event) {
                         String number = "33"; // Double.parseDouble(textNumberOrQuantity.getText());
                         String ingredient = listProduct.getItems().toString();
-                        Product prod = new Product("hhezhr", "hjdez");
+                        Product prod = new Product("hhezhr", 23);
                         myIngredient.add(prod);
                         dialog.close();
                         //BOUTON VALID POUR RETOUR

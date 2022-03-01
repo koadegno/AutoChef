@@ -30,12 +30,11 @@ public class MenuCreateShoppingList extends ListeDeCourseApplication{
     }
 
     public void displayMenuCreateShoppingList(){
-        List<String> ingredien = createListIngredient(); //remplacer par la bdd
-        Vector<Product> myIngredient = new Vector<>(); //envoyer a la bdd un vector
-        myIngredient = null;
+        List<String> ingredients = createListIngredient(); //remplacer par la bdd
+        Vector<Product> myIngredient = null; //envoyer a la bdd un vector
 
         Button btnAddProduct = new Button("Ajouter un produit");
-        VBox label = new VBox(ingredien.size());
+        VBox label = new VBox(ingredients.size());
         //btnConfirm.setId()
         label.getChildren().addAll(btnAddProduct);
 
@@ -50,7 +49,7 @@ public class MenuCreateShoppingList extends ListeDeCourseApplication{
                         menuAddIngredient.addProdcut();
                         Vector<Product> myIngredient = menuAddIngredient.getMyIngredient();
                         final ObservableList<Product> data = FXCollections.observableArrayList(
-                                new Product("fzf", "23.2"));
+                                new Product("fzf", 23));
                         table.setItems(data);
                         //addProdcut(primaryStage);
                         //faire la classe Product
@@ -101,7 +100,7 @@ public class MenuCreateShoppingList extends ListeDeCourseApplication{
 
 
         final ObservableList<Product> data = FXCollections.observableArrayList(
-                new Product("tomate", "23.2"));
+                new Product("tomate", 23));
         table.setItems(data);
         table.getColumns().addAll(firstNameCol, lastNameCol);
 

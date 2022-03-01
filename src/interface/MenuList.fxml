@@ -9,14 +9,15 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="MenuListController">
    <children>
-      <Label layoutX="167.0" layoutY="59.0" text="Liste de Menus">
+      <Label layoutX="167.0" layoutY="41.0" text="Liste de Menus">
          <font>
             <Font size="40.0" />
          </font>
       </Label>
-      <Button fx:id="btnDisplayMenu" layoutX="404.0" layoutY="200.0" mnemonicParsing="false" onMousePressed="#handleDisplayMenu" text="Afficher" />
-      <TextField fx:id="menuName" layoutX="176.0" layoutY="200.0" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
-      <Label layoutX="176.0" layoutY="165.0" text="Quel menu souhaitez vous afficher?" />
-      <TreeView fx:id="menuTreeView" layoutX="171.0" layoutY="258.0" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu" prefHeight="286.0" prefWidth="200.0" />
+      <Button fx:id="btnDisplayMenu" layoutX="400.0" layoutY="156.0" mnemonicParsing="false" onMousePressed="#handleDisplayMenu" text="Afficher" />
+      <TextField fx:id="menuName" layoutX="172.0" layoutY="156.0" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
+      <Label layoutX="172.0" layoutY="121.0" text="Quel menu souhaitez vous afficher?" />
+      <TreeView fx:id="menuTreeView" layoutX="167.0" layoutY="214.0" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu" prefHeight="286.0" prefWidth="200.0" />
+      <Button fx:id="backToMainBtn" layoutX="240.0" layoutY="523.0" mnemonicParsing="false" onAction="#backToMain" text="Accueil" />
    </children>
 </AnchorPane>
