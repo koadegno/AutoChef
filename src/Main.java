@@ -1,4 +1,3 @@
-package src;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -15,15 +14,21 @@ public class Main extends Application {
     @Override
     public void start(Stage primaryStage){
 
+
         try{
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/MenuList.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/Main.fxml")));
             Scene scene =  new Scene(root);
-            primaryStage.setTitle("Calendrier des menus");
+            primaryStage.setTitle("Page principale");
             primaryStage.setScene(scene);
             primaryStage.show();
 
         }catch (Exception e ){
             e.printStackTrace();
         }
+
+
+
+        //ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(primaryStage);
+        //menuShoppingList.menu(); //Menu principal
     }
 }
