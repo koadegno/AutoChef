@@ -16,19 +16,17 @@ import java.util.Vector;
 public class MenuAddIngredient {
 
     private Stage primaryStage;
-    private Vector<Product> myIngredient;
+    private Product myProduct;
 
-    public MenuAddIngredient(Stage _primaryStage,Vector<Product> _myIngredient ){
+    public MenuAddIngredient(Stage _primaryStage){
         this.primaryStage = _primaryStage;
-        this.myIngredient = _myIngredient;
     }
 
-    public void addProdcut() {
-
+    public void addProdcut(TableView table) {
         final Stage dialogAddProduct = new Stage();
         dialogAddProduct.initModality(Modality.APPLICATION_MODAL);
         dialogAddProduct.initOwner(primaryStage);
-        VBox dialogVbox = new VBox(20);
+        VBox dialogVbox = new VBox();
         dialogAddProduct.setTitle("Choisir un produit");
 
         ToggleGroup quantityOrNumber = new ToggleGroup(); //bouton choix du type de valeur
@@ -56,29 +54,24 @@ public class MenuAddIngredient {
             }
         });
 
-        ComboBox<String> listProduct = new ComboBox<>();
+        ComboBox<String> listProduct = new ComboBox<>(); //barre de recherche
         listProduct.setEditable(true);
 
         //TODO; Appeler la base de donnée pour remplir la comboBox
         listProduct.setItems(FXCollections.observableArrayList(createListIngredient()));
 
         listProduct.getEditor().textProperty().addListener(observable -> {
+            //TODO: afficher direct qd une lettre est noté?
             List<String> myProduct =  createListIngredient(); //TODO: remplacer par db
             listProduct.setItems(FXCollections.observableList(myProduct));
         });
 
         Button btnConfirm = new Button("Confirmer");
         dialogVbox.getChildren().addAll(listProduct, quantity, numberOfPiece,textNumberOrQuantity, btnConfirm);
-        btnConfirm.setOnAction(
-                new EventHandler<ActionEvent>() {
-                    @Override
-                    public void handle(ActionEvent event) {
-                        String chooseNameProduct = listProduct.getEditor().textProperty().getValue() ;
-                        String chooseNumberProduct = textNumberOrQuantity.getText(); //TODO:changer en int
-                        Product prod = new Product(chooseNameProduct, chooseNumberProduct);
-                        myIngredient.add(prod); //TODO: rajouter en retard?
-                        dialogAddProduct.close();
-                    }
+        btnConfirm.setOnAction(e-> {
+                //recupere les informations du produit
+                addProdcutInTheTable(table, listProduct.getEditor().textProperty().getValue(), textNumberOrQuantity.getText());
+                dialogAddProduct.close();
                 });
 
         Scene dialogScene = new Scene(dialogVbox, 700, 600);
@@ -88,6 +81,12 @@ public class MenuAddIngredient {
         //TODO: RAJOUTER BOUTON + ET -
 
     }
+    private void addProdcutInTheTable(TableView table, String chooseNameProduct, String chooseNumberProduct ){
+        myProduct = new Product(chooseNameProduct, chooseNumberProduct);
+        if(myProduct != null){
+            table.getItems().add(myProduct);
+        }
+    }
 
     private List<String> createListIngredient(){ //fonction test
         List<String> ingredient = new ArrayList<String>();
@@ -96,8 +95,5 @@ public class MenuAddIngredient {
         return ingredient;
     }
 
-    public Vector<Product> getMyIngredient(){
-        return myIngredient;
-    }
 
 }
