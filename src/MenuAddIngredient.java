@@ -11,7 +11,10 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.Vector;
+
+import static java.lang.Integer.parseInt;
 
 public class MenuAddIngredient {
 
@@ -82,8 +85,9 @@ public class MenuAddIngredient {
 
     }
     private void addProdcutInTheTable(TableView table, String chooseNameProduct, String chooseNumberProduct ){
-        myProduct = new Product(chooseNameProduct, chooseNumberProduct);
-        if(myProduct != null){
+        if(!Objects.equals(chooseNameProduct, "") && !Objects.equals(chooseNumberProduct, "")) {
+            int toIntchooseNumberProduct = parseInt(chooseNumberProduct);
+            myProduct = new Product(chooseNameProduct, toIntchooseNumberProduct);
             table.getItems().add(myProduct);
         }
     }

@@ -58,11 +58,11 @@ public class MenuCreateShoppingList{
         TableColumn firstNameCol = new TableColumn("Produit");
         TableColumn lastNameCol = new TableColumn("Quantité");
 
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("produc"));
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         lastNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
 
-        myIngredient.add(new Product("hey","n"));
-        myIngredient.add(new Product("zerrrrrrze","n"));
+        myIngredient.add(new Product("hey",322));
+        myIngredient.add(new Product("zerrrrrrze",32));
 
         final ObservableList<Product> data = FXCollections.observableArrayList(myIngredient);
         table.setItems(data); //TODO: remplir la table de produit avec la bdd
@@ -71,9 +71,9 @@ public class MenuCreateShoppingList{
     }
 
     private Vector<Product> createListIngredient(){ //fonction test
-        myIngredient.add(new Product("tomate", "23.2"));
-        myIngredient.add(new Product("fraise", "22.2"));
-        myIngredient.add(new Product("pomme", "0.2"));
+        myIngredient.add(new Product("tomate", 23));
+        myIngredient.add(new Product("fraise", 22));
+        myIngredient.add(new Product("pomme", 2));
         return myIngredient;
     }
 
@@ -104,7 +104,7 @@ public class MenuCreateShoppingList{
             for (int i=0; i < table.getItems().size(); i++){
                 Product product = (Product) table.getItems().get(i);
                 myIngredient.add(product);
-                System.out.println(product.getProduc());
+                System.out.println(product.getName());
             }
 
             //TODO: envoyer a la base de donnée la liste avec le nom

@@ -79,7 +79,7 @@ public class MenuDisplayShoppingList {
         TableColumn firstNameCol = new TableColumn("Produit");
         TableColumn secondNameCol = new TableColumn("Quantité");
         table.setEditable(false);
-        firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("produc"));
+        firstNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         secondNameCol.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         table.getColumns().addAll(firstNameCol, secondNameCol);
         addButtonToTable();
@@ -116,8 +116,8 @@ public class MenuDisplayShoppingList {
         }
         else {
             if(Objects.equals(nameListSelected, "Liste de Mardi")) {
-                myIngredient.add(new Product("hey", "hdq"));
-                myIngredient.add(new Product("hjxjsey", "hdjkwjq"));
+                myIngredient.add(new Product("hey", 343));
+                myIngredient.add(new Product("hjxjsey", 424));
                 btnAddProduct.setVisible(true);
             }
         }
