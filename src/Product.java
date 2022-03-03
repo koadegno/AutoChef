@@ -1,7 +1,7 @@
 public class Product {
     private String name;
     private int quantity = 1;
-    private String nameUnity;
+    private String nameUnity = "Unité";
 
     public Product(String productName) {
         name = productName;
