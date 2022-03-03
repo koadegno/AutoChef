@@ -1,12 +1,9 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
+import static org.junit.jupiter.api.Assertions.*;
 
-import java.util.ArrayList;
 import java.util.Vector;
 
-import static org.junit.jupiter.api.Assertions.*;
+import cuisine.*;
 
 class TestShoppingList {
 
