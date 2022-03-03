@@ -95,7 +95,8 @@ public class WindowsMyShoppingListsController implements Initializable {
         columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton();
+        CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
     }
     @FXML
@@ -111,35 +112,6 @@ public class WindowsMyShoppingListsController implements Initializable {
         });
     }
 
-    private Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(){
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
-            @Override
-            public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
-                final TableCell<Product, Void> cell = new TableCell<Product, Void>() {
-                    private final Button btnDelete = new Button("Supprimer");
-                    {
-                        btnDelete.setOnAction((ActionEvent event) -> {
-                            Product data = getTableView().getItems().get(getIndex());
-                            tableViewDisplayProductList.getItems().remove(data);
-                            System.out.println("selectedDataDelete: " + data.getQuantity());
-                        });
-                    }
-
-                    @Override
-                    public void updateItem(Void item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                        } else {
-                            setGraphic(btnDelete);
-                        }
-                    }
-                };
-                return cell;
-            }
-        };
-        return cellFactory;
-    }
 
     private void fillComboBoxShoppingNameList(ComboBox comboBoxNameList, int numberOfComboBoxList) {
         comboBoxNameList.setItems(FXCollections.observableArrayList(callBDDToComboBoxList(numberOfComboBoxList)));
