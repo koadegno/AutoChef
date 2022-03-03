@@ -1,3 +1,5 @@
+package ulb.infof307.g01;
+
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;

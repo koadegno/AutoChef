@@ -1,4 +1,4 @@
-import cuisine.Product;
+import ulb.infof307.g01.cuisine.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

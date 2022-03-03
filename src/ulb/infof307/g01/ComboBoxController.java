@@ -1,3 +1,4 @@
+package ulb.infof307.g01;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;

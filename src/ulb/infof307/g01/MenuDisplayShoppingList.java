@@ -1,4 +1,6 @@
-import cuisine.Product;
+package ulb.infof307.g01;
+
+import ulb.infof307.g01.cuisine.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;

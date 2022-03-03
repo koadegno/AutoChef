@@ -1,4 +1,4 @@
-package cuisine;
+package ulb.infof307.g01.cuisine;
 
 public class Product {
     private String name;

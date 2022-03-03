@@ -1,3 +1,4 @@
+package ulb.infof307.g01;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;

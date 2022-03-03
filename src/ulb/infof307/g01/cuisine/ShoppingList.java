@@ -1,7 +1,5 @@
-package cuisine;
+package ulb.infof307.g01.cuisine;
 
-import java.util.Iterator;
-import java.util.List;
 import java.util.Vector;
 
 public class ShoppingList extends Vector<Product> {

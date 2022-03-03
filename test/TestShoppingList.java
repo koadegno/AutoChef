@@ -3,7 +3,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import java.util.Vector;
 
-import cuisine.*;
+import ulb.infof307.g01.cuisine.*;
 
 class TestShoppingList {
 

@@ -3,7 +3,7 @@
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.layout.AnchorPane?>
 
-<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ComboBoxController">
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ComboBoxController">
     <children>
         <ComboBox fx:id="comboBox" editable="true" layoutX="112.0" layoutY="55.0" onAction="#handleOnKeyPressed" onHidden="#handleOnHiding" onKeyPressed="#handleOnKeyPressed" onMouseClicked="#handleOnMouseClicked" prefHeight="26.0" prefWidth="348.0" />
     </children>
