@@ -14,7 +14,24 @@ public class Database {
             request = connection.createStatement();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
+            return;
         }
+
+        createDB();
+
+    }
+
+    public void createDB(){
+        createTableFamilleAliment();
+        createTableUnite();
+        createTableCategorie();
+        createTableTypePlat();
+        createTableRecette();
+        createTableIngredient();
+        createTableRecetteIngredient();
+        createTableListeCourse();
+        createTableListeCourseIngredient();
+        createTableMenuRecette();
     }
 
     public void closeConnection() throws SQLException {
@@ -25,9 +42,9 @@ public class Database {
         try {
             return request.execute(req);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.toString());
+            return false;
         }
-        return false;
     }
 
     public ResultSet sendQuery(String query) {
@@ -54,13 +71,13 @@ public class Database {
     public boolean createTableFamilleAliment() {
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
                 "    FamilleAlimentID INTEGER PRIMARY KEY,\n" +
-                "    Nom CHAR(20) NOT NULL);";
+                "    Nom CHAR(20) NOT NULL UNIQUE);";
         return sendRequest(req);
     }
 
     public boolean createTableUnite() {
         String req = "CREATE TABLE IF NOT EXISTS Unite(\n" +
-                "    UniteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    UniteID INTEGER PRIMARY KEY ,\n" +
                 "    Nom CHAR(10) NOT NULL UNIQUE\n" +
                 ")";
         return sendRequest(req);
@@ -68,7 +85,7 @@ public class Database {
 
     public boolean createTableCategorie() {
         String req = "CREATE TABLE IF NOT EXISTS Categorie(\n" +
-                "    CategorieID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    CategorieID INTEGER PRIMARY KEY ,\n" +
                 "    Nom CHAR(20) NOT NULL UNIQUE\n" +
                 ")";
         return sendRequest(req);
@@ -76,7 +93,7 @@ public class Database {
 
     public boolean createTableTypePlat() {
         String req = "CREATE TABLE IF NOT EXISTS TypePlat(\n" +
-                "    TypePlatID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    TypePlatID INTEGER PRIMARY KEY ,\n" +
                 "    Nom CHAR(20) NOT NULL UNIQUE\n" +
                 ")";
         return sendRequest(req);
@@ -84,7 +101,7 @@ public class Database {
 
     public boolean createTableRecette() {
         String req = "CREATE TABLE IF NOT EXISTS Recette(\n" +
-                "    RecetteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    RecetteID INTEGER PRIMARY KEY ,\n" +
                 "    Nom CHAR(40) NOT NULL,\n" +
                 "    Duree INTEGER NOT NULL,\n" +
                 "    NbPersonnes INTEGER NOT NULL,\n" +
@@ -99,7 +116,7 @@ public class Database {
 
     public boolean createTableIngredient() {
         String req = "CREATE TABLE IF NOT EXISTS Ingredient(\n" +
-                "    IngredientID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                "    IngredientID INTEGER PRIMARY KEY ,\n" +
                 "    Nom CHAR(25) NOT NULL UNIQUE,\n" +
                 "    FamilleAlimentID INTEGER\n" +
                 "        CONSTRAINT fkFamilleAliment REFERENCES FamilleAliment(FamilleAlimentID),\n" +
@@ -123,7 +140,7 @@ public class Database {
 
     public boolean createTableListeCourse() {
         String req = "CREATE TABLE IF NOT EXISTS ListeCourse (\n" +
-                "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT " +
+                "    ListeCourseID INTEGER PRIMARY KEY  " +
                 ");\n";
         return sendRequest(req);
     }
