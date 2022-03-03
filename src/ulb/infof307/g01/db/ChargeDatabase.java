@@ -1,4 +1,4 @@
-package ulb.infof307.g01;
+package ulb.infof307.g01.db;
 
 import org.apache.poi.ss.usermodel.Cell;
 import org.apache.poi.ss.usermodel.Row;
