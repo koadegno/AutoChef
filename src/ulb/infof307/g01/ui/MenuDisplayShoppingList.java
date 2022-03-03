@@ -1,4 +1,4 @@
-package ulb.infof307.g01;
+package ulb.infof307.g01.ui;
 
 import ulb.infof307.g01.cuisine.Product;
 import javafx.collections.FXCollections;

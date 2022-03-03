@@ -1,4 +1,4 @@
-package ulb.infof307.g01;
+package ulb.infof307.g01.ui;
 
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
