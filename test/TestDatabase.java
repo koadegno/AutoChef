@@ -8,6 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -138,10 +139,20 @@ class TestDatabase {
         String[] name = {"Nom"};
         String[] values = {"'litres'"};
         String[] signs = {"="};
-        ResultSet res = db.select("Unite",name,values,signs);
+        ResultSet res = db.select("Unite",name,signs, values);
         res.next();
         int id = res.getInt("UniteID");
         assertEquals(1,id);
+    }
+
+    @Test
+    public void testGetAllCategories() throws SQLException {
+        String[] name = {"null","'Poisson'"};
+        db.insert("Categorie",name);
+        name[1] = "'Viande'";
+        db.insert("Categorie",name);
+        ArrayList<String> res = db.getAllCategories();
+        assertEquals(2, res.size());
     }
 
 }

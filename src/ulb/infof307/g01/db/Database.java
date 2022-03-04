@@ -1,4 +1,6 @@
+package ulb.infof307.g01.db;
 import java.sql.*;
+import java.util.ArrayList;
 
 public class Database {
     private String dbName;
@@ -10,9 +12,23 @@ public class Database {
         try {
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
+            createDB();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+    }
+
+    public void createDB(){
+        createTableFamilleAliment();
+        createTableUnite();
+        createTableCategorie();
+        createTableTypePlat();
+        createTableRecette();
+        createTableIngredient();
+        createTableRecetteIngredient();
+        createTableListeCourse();
+        createTableListeCourseIngredient();
+        createTableMenuRecette();
     }
 
     public void closeConnection() throws SQLException {
@@ -43,7 +59,6 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        return null;
     }
 
     public boolean createTableFamilleAliment() {
@@ -174,12 +189,17 @@ public class Database {
         sendQueryUpdate(String.valueOf(req));
     }
 
-    public ResultSet select(String nameTable,String[]names,String[]values,String[]signs){
-        StringBuilder req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
-        for (int i = 0; i < names.length;i++) {
-            req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+    public ResultSet select(String nameTable,String[]names, String[]signs, String[]values){
+        StringBuilder req;
+        if (values.length > 0){
+            req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
+            for (int i = 0; i < names.length;i++) {
+                req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+            }
+            req.delete(req.length()-3, req.length());
+        } else {
+            req = new StringBuilder(String.format("SELECT * FROM %s", nameTable));
         }
-        req.delete(req.length()-3, req.length());
         req.append(";");
         return sendQuery(String.valueOf(req));
     }
@@ -190,11 +210,44 @@ public class Database {
         return getkey();
     }
 
-    private void insertIngredientInShoppingList(int courseId,int ingredientId,int quantity) {
+    private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
         //TODO: si on ajoute le nom dans ListeCourse, changer le courseId par le nom
         String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
         insert("ListeCourseIngredient",values);
     }
+
+    public ArrayList<String> getAllCategories() throws SQLException {
+        String[] vide = new String[0];
+        ResultSet res = select("Categorie", vide, vide, vide);
+        ArrayList<String> categories = new ArrayList<>();
+        while (res.next()){
+            categories.add(res.getString("Nom"));
+        }
+        return categories;
+    }
+
+    /*
+    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
+        String[] name = {"Nom"};
+        String[] signs = {"="};
+        String[] values = {String.format("'%s'", nameCategory)};
+        ResultSet res = select("Categorie",name, signs, values);
+        res.next();
+        int key = res.getInt("CategorieID");
+        name[0] = "CategorieID";
+        values[0] = String.format("%d", key);
+        ArrayList<Recipe> recipes = new ArrayList<>();
+
+        res = select("Recette",name, signs, values);
+
+        while (res.next()){
+            Recipe recipe = new Recipe(res.getString("Nom"), ...)
+            recipes.add(recipe);
+        }
+        return recipes;
+
+    }
+    */
 
     //TODO: Pour save une shopping list quand elle sera implemente
 //    public void saveShoppingList(ShoppingList shoppingList){
@@ -203,11 +256,5 @@ public class Database {
 //            insertIngredientInShoppingList(id,produit.getId(),produit.getQuantite());
 //        }
 //    }
-
-
-
-
-
-
 
 }
