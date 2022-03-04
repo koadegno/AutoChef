@@ -4,9 +4,9 @@ public class AutoCompletion {
 
     static LinkedList<Recipe> generateMenu (LinkedList<Recipe> prec, int nbRecipes) {
 
-        LinkedList<Recipe> menu = new LinkedList<Recipe>();
+        LinkedList<Recipe> menu = new LinkedList<>();
 
-        HashMap<String, Integer> recipes = new HashMap<String, Integer>();
+        HashMap<String, Integer> recipes = new HashMap<>();
 
         //Ajouter au dico les category, 0
 

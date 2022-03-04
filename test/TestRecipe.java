@@ -1,3 +1,5 @@
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRecipe {
@@ -14,7 +16,9 @@ public class TestRecipe {
         Recipe recipeTestCopy = new Recipe(1, "Test", 3, "Informatique",
                 "Test", 2, "Faire le test avant le code");
         assertEquals(recipeTest, recipeTestCopy, "Echec du test de comparaison valide");
-        productTestCopy.rename("p");
-        assertNotEquals(recipeTest, recipeTestCopy, "Echec du test de comparaison invalide");
+
+        Recipe recipeTestInvalid = new Recipe(2, "Invalid", 3, "Informatique",
+                "Test", 2, "Faire le test avant le code");
+        assertNotEquals(recipeTest, recipeTestInvalid, "Echec du test de comparaison invalide");
     }
 }
