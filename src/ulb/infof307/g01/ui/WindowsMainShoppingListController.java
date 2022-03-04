@@ -1,3 +1,5 @@
+package ulb.infof307.g01.ui;
+
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -13,9 +15,8 @@ public class WindowsMainShoppingListController {
     private Stage stage;
     private Parent root;
 
-    @FXML
     public void displayMenuShoppingListController(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMainShoppingList.fxml")));
+        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainShoppingList.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
@@ -23,7 +24,7 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayMyShoppingListController(ActionEvent event) throws IOException{
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyShoppingLists.fxml")));
+        root = FXMLLoader.load((getClass().getResource("interface/FXMLMyShoppingLists.fxml")));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
@@ -31,7 +32,7 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayCreateShoppingListController(ActionEvent event) throws IOException{
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLCreateMyShoppingList.fxml")));
+        root = FXMLLoader.load((getClass().getResource("interface/FXMLCreateMyShoppingList.fxml")));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
@@ -39,7 +40,7 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void returnMainMenu(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/Main.fxml")));
+        root = FXMLLoader.load((getClass().getResource("interface/Main.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

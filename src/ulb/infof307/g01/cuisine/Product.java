@@ -1,3 +1,5 @@
+package ulb.infof307.g01.cuisine;
+
 public class Product {
     private String name;
     private int quantity = 1;

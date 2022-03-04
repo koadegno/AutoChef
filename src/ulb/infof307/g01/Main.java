@@ -1,3 +1,4 @@
+package ulb.infof307.g01;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
@@ -16,7 +17,7 @@ public class Main extends Application {
 
 
         try{
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/Main.fxml")));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ui/interface/Main.fxml")));
             Scene scene =  new Scene(root);
             primaryStage.setTitle("Page principale");
             primaryStage.setScene(scene);
@@ -26,9 +27,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-
-
-        //ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(primaryStage);
-        //menuShoppingList.menu(); //Menu principal
     }
 }

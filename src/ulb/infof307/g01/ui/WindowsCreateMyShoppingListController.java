@@ -1,3 +1,4 @@
+package ulb.infof307.g01.ui;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
@@ -12,6 +13,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import javafx.util.Callback;
+import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.ui.CreateColWithButtonDelete;
 
 import java.io.IOException;
 import java.net.URL;

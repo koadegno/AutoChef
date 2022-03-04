@@ -1,9 +1,12 @@
+package ulb.infof307.g01.ui;
+
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
+import ulb.infof307.g01.cuisine.Product;
 
 public class CreateColWithButtonDelete {
     public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
