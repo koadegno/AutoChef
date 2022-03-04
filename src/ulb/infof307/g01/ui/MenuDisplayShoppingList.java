@@ -1,3 +1,6 @@
+package ulb.infof307.g01.ui;
+
+import ulb.infof307.g01.cuisine.Product;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
