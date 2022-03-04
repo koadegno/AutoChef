@@ -14,7 +14,7 @@ public class ChargeDatabase {
 
     Database db = new Database("autochef.sqlite");
     //"C:\\Users\\Django\\Desktop\\ULB\\git\\2022-groupe01\\team\\ingredients\\ingredients.xlsx"
-    String excelFilePath ="C:\\Users\\Django\\Desktop\\ingredient.xlsx" ;
+    String excelFilePath ="C:\\Users\\Django\\Desktop\\unite.xlsx" ;
 
     public static void main(String[] args) {
         ChargeDatabase chargeDatabase = new ChargeDatabase();
@@ -40,9 +40,15 @@ public class ChargeDatabase {
             String ingredientName = "";
             String ingredientType = "";
             String ingredientUnit = "";
-            String insertFamilleAliment = "INSERT INTO FamilleAliment(Nom) VALUES (";
-            String insertIngredient = "INSERT INTO Ingredient(Nom, FamilleAlimentID) VALUES (";
-            String insertIngredientSecondPart = "(SELECT FamilleAlimentID from FamilleAliment WHERE FamilleAliment.Nom = ";
+
+            String updateIngredientPart1 = "UPDATE Ingredient SET UniteID = (SELECT Unite.UniteID from Unite where Unite.Nom = ";
+            String updateIngredientPart2 = "where Ingredient.FamilleAlimentID is ( Select DISTINCT FamilleAliment.FamilleAlimentID from Ingredient INNER JOIN FamilleAliment On Ingredient.FamilleAlimentID = FamilleAliment.FamilleAlimentID  where FamilleAliment.Nom = ";
+            String updateIngredientPart3 = "LIMIT 1)";
+
+
+            String insertUnite = "INSERT INTO Unite(Nom) VALUES (";
+            String insertIngredient = "INSERT INTO Ingredient(Nom, UniteID) VALUES (";
+            String insertIngredientSecondPart = "(SELECT UniteID from Unite WHERE Unite.Nom = ";
 
             //
             while (rowIterator.hasNext()) {
@@ -54,31 +60,25 @@ public class ChargeDatabase {
                     int columnIndex = nextCell.getColumnIndex();
 
                     switch (columnIndex) {
-                        case 3 -> { //1er colonne
+                        case 0 -> { //1er colonne
                             ingredientType = nextCell.getStringCellValue();
+                            System.out.print(ingredientType +" : ");
                         }
-                        case 6 -> { //2eme colonne
-                            ingredientName = nextCell.getStringCellValue();
-
+                        case 1 -> { //2eme colonne
+                            ingredientUnit= nextCell.getStringCellValue();
+                            System.out.println(ingredientUnit);
                         }
                         default -> {
                         }
                     }
+
                     //replace string
-                    String queryFamilleAliment = insertFamilleAliment + "'" +ingredientType+"'" + ")";
-                    String queryIngredient = insertIngredient + "'" +ingredientName+"'" + "," +insertIngredientSecondPart +"'" + ingredientType+"'"  + "))";
-                    //if(db.sendRequest(queryIngredient)){
-                    if(db.sendRequest(queryIngredient)){
-                        System.out.println("OK POUR 2 : "+queryIngredient );
-                    }
-                    else{
-                        System.out.println("PAS BON : "+queryIngredient );
-
-                    }
-
-
-
+                    //String queryUnite = insertUnite + "'" +ingredientUnit+"'" + ")";
+                    //String queryIngredient = insertIngredient + "'" +ingredientName+"'" + "," +insertIngredientSecondPart +"'" + ingredientUnit+"'"  + "))";
                 }
+                String queryIngredientUpdate = updateIngredientPart1 + "'"+ ingredientUnit +"' ) "+ updateIngredientPart2 +"'"+ingredientType+"' "+updateIngredientPart3;
+                System.out.println(queryIngredientUpdate );
+                db.sendRequest(queryIngredientUpdate);
             }
             // execute the remaining queries
 
