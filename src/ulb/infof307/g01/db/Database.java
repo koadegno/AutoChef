@@ -43,8 +43,8 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        return null;
     }
-
 
     public boolean createTableFamilleAliment() {
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
