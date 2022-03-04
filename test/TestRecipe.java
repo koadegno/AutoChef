@@ -1,5 +1,7 @@
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.cuisine.Recipe;
+
 import static org.junit.jupiter.api.Assertions.*;
 
 public class TestRecipe {
@@ -7,7 +9,7 @@ public class TestRecipe {
     private Recipe recipeTest;
 
     @BeforeEach
-    private void createRecipe() {Recipe recipeTest = new Recipe(1, "Test", 3, "Informatique",
+    private void createRecipe() {recipeTest = new Recipe(1, "Test", 3, "Informatique",
         "Test", 2, "Faire le test avant le code");
     }
 

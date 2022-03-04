@@ -1,3 +1,5 @@
+package ulb.infof307.g01.cuisine;
+
 import java.util.LinkedList;
 
 public class Recipe {
