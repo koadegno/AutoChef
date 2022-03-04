@@ -1,5 +1,5 @@
-import java.util.Iterator;
-import java.util.List;
+package ulb.infof307.g01.cuisine;
+
 import java.util.Vector;
 
 public class ShoppingList extends Vector<Product> {
@@ -9,7 +9,7 @@ public class ShoppingList extends Vector<Product> {
 
     private boolean isArchived = false;
 
-    ShoppingList(String name) {this.name = name;}
+    public ShoppingList(String name) {this.name = name;}
 
     ShoppingList(String name, int id) {
         this.id = id;

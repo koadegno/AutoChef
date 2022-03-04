@@ -1,3 +1,5 @@
+package ulb.infof307.g01.ui;
+
 import java.io.FileReader;
 import java.net.URL;
 

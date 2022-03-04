@@ -1,3 +1,5 @@
+package ulb.infof307.g01.db;
+
 import java.sql.*;
 
 public class Database {
