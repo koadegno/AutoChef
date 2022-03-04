@@ -19,8 +19,6 @@ import java.util.*;
 
 public class WindowsCreateMyShoppingListController implements Initializable {
 
-    private Parent root;
-    private Stage stage;
     private Vector<Product> myListProduct = new Vector<>();
 
     @FXML
@@ -34,8 +32,8 @@ public class WindowsCreateMyShoppingListController implements Initializable {
 
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainShoppingList.fxml"));
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        Parent root = FXMLLoader.load(getClass().getResource("interface/FXMLMainShoppingList.fxml"));
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
     }
