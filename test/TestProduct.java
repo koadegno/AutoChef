@@ -1,3 +1,4 @@
+import ulb.infof307.g01.cuisine.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -47,6 +48,11 @@ public class TestProduct {
         productTest.changeQuantity(-50);
         assertEquals(1, productTest.getQuantity(), "La quantité n'a pas été réduite à sa valeur " +
                 "minimale avec une reduction négative");
+    }
+
+    @Test
+    public void testNameUnity(){
+        assertEquals("Unité", productTest.getNameUnity());
     }
 
     @Test
