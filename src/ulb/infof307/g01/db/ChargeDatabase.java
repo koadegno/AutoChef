@@ -16,7 +16,7 @@ public class ChargeDatabase {
 
     Database db = new Database("autochef.sqlite");
     //"C:\\Users\\Django\\Desktop\\ULB\\git\\2022-groupe01\\team\\ingredients\\ingredients.xlsx"
-    String excelFilePath ="C:\\Users\\salma\\IdeaProjects\\2022-groupe01\\team\\recettes\\Recettes.xlsx" ;
+    String excelFilePath ="C:\\Users\\salma\\IdeaProjects\\2022-groupe01\\team\\recettes\\moules marinières.xlsx" ;
 
     public static void main(String[] args) {
         ChargeDatabase chargeDatabase = new ChargeDatabase();
@@ -49,6 +49,8 @@ public class ChargeDatabase {
             double nbPersonne = 0;
             double  duree = 0;
             String preparation = "";
+            double quantite = 0;
+
 
             String updateIngredientPart1 = "UPDATE Ingredient SET UniteID = (SELECT Unite.UniteID from Unite where Unite.Nom = ";
             String updateIngredientPart2 = "where Ingredient.FamilleAlimentID is ( Select DISTINCT FamilleAliment.FamilleAlimentID from Ingredient INNER JOIN FamilleAliment On Ingredient.FamilleAlimentID = FamilleAliment.FamilleAlimentID  where FamilleAliment.Nom = ";
@@ -65,6 +67,8 @@ public class ChargeDatabase {
             String insertRecettePart2 = "( Select TypePlatID from TypePlat WHERE TypePlat.Nom = ";
             String insertRecettePart3 = "( Select CategorieID from Categorie WHERE Categorie.Nom = ";
 
+            String insertRecetteIngredient1 = "INSERT INTO RecetteIngredient(RecetteID, IngredientID, Quantite) VALUES ((SELECT RecetteID from Recette WHERE Recette.Nom = 'moules marinières'), (SELECT IngredientID from Ingredient WHERE Ingredient.Nom = \"";
+
             //
             while (rowIterator.hasNext()) {
                 Row nextRow = rowIterator.next();
@@ -75,29 +79,13 @@ public class ChargeDatabase {
                     int columnIndex = nextCell.getColumnIndex();
 
                     switch (columnIndex) {
-                        case 0 -> { //1er colonne
-                            recetteName = nextCell.getStringCellValue();
-                            System.out.print(recetteName +" : ");
-                        }
                         case 1 -> { //2eme colonne
-                            categorie = nextCell.getStringCellValue();
-                            System.out.println(categorie);
+                            ingredientName = nextCell.getStringCellValue();
+                            System.out.println(ingredientName);
                         }
                         case 2 -> {
-                            type = nextCell.getStringCellValue();
-                            System.out.println(type);
-                        }
-                        case 3 -> {
-                            duree = nextCell.getNumericCellValue();
-                            System.out.println(duree);
-                        }
-                        case 4 -> {
-                            nbPersonne = nextCell.getNumericCellValue();
-                            System.out.println(nbPersonne);
-                        }
-                        case 5 -> {
-                            preparation = nextCell.getStringCellValue();
-                            System.out.println(preparation);
+                            quantite = nextCell.getNumericCellValue();
+                            System.out.println(quantite);
                         }
                         default -> {
                         }
@@ -108,8 +96,9 @@ public class ChargeDatabase {
                     //String queryUnite = insertUnite + "'" +ingredientUnit+"'" + ")";
                     //String queryIngredient = insertIngredient + "'" +ingredientName+"'" + "," +insertIngredientSecondPart +"'" + ingredientUnit+"'"  + "))";
                 }
-                String queryRecette = insertRecettePart1 + "'"+ recetteName + "', " +duree+", "+ nbPersonne +","+ insertRecettePart2 +"'"+ type+ "')," + insertRecettePart3+ "'"+ categorie+"'),\""+preparation+"\")";
-                db.sendRequest(queryRecette);
+                String queryRecetteIngredient = insertRecetteIngredient1 + ingredientName +"\")," +quantite +")";
+                //String queryRecette = insertRecettePart1 + "'"+ recetteName + "', " +duree+", "+ nbPersonne +","+ insertRecettePart2 +"'"+ type+ "')," + insertRecettePart3+ "'"+ categorie+"'),\""+preparation+"\")";
+                db.sendRequest(queryRecetteIngredient);
                 //String queryIngredientUpdate = updateIngredientPart1 + "'"+ ingredientUnit +"' ) "+ updateIngredientPart2 +"'"+ingredientType+"' "+updateIngredientPart3;
                 //System.out.println(queryIngredientUpdate );
             }
