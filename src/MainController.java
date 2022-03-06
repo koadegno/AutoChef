@@ -13,6 +13,7 @@ public class MainController {
 
     public void displayMain(Stage stage)throws IOException{
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/Main.fxml")));
+        //Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/MenuList.fxml")));
         Scene scene =  new Scene(root);
         stage.setTitle("Page d'accueil");
         stage.setScene(scene);
