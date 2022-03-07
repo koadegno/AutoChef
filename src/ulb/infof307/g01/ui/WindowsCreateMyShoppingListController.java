@@ -3,6 +3,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -11,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
@@ -23,11 +25,16 @@ import java.util.*;
 public class WindowsCreateMyShoppingListController implements Initializable {
 
     private Vector<Product> myListProduct = new Vector<>();
+    private SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
 
+    @FXML
+    HBox hBoxToCreateProduct;
     @FXML
     ComboBox comboBoxListProduct, comboBoxListUnity;
     @FXML
-    TextField textFieldQuantityOrNumber, nameMyCreateShoppingList;
+    TextField nameMyCreateShoppingList;
+    @FXML
+    Spinner textFieldQuantityOrNumber;
     @FXML
     TableView tableViewDisplayProductList;
     @FXML
@@ -44,9 +51,11 @@ public class WindowsCreateMyShoppingListController implements Initializable {
     @FXML
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         String name = nameMyCreateShoppingList.getText();
-        if(Objects.equals(nameMyCreateShoppingList, "")){
-            //TODO: error
-        }
+
+        nameMyCreateShoppingList.setStyle("");
+        tableViewDisplayProductList.setStyle("");
+
+        if(Objects.equals(name, "")){nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
         else{
             for (int i=0; i < tableViewDisplayProductList.getItems().size(); i++){
                 Product product = (Product) tableViewDisplayProductList.getItems().get(i);
@@ -57,33 +66,39 @@ public class WindowsCreateMyShoppingListController implements Initializable {
                 returnShoppingList(event);
             }
             else{
-                //TODO: error rien ecrit
+                tableViewDisplayProductList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
             }
         }
     }
 
     @FXML
     public void addElementOfListToComboBoxProduct(){
-        String nameProductChoose =  comboBoxListProduct.getEditor().textProperty().getValue();
-        String quantityOrNumberChoose = textFieldQuantityOrNumber.getText();
-        String nameUnityChoose = comboBoxListUnity.getEditor().textProperty().getValue();
+        hBoxToCreateProduct.setStyle("");
+        Object nameProductChoose =  comboBoxListProduct.getSelectionModel().getSelectedItem() ;
+        int quantityOrNumberChoose = spinnerValueFactory.getValue();
+        Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
         Product myProduct;
 
-        if(Objects.equals(nameProductChoose, "") || Objects.equals(quantityOrNumberChoose, "") || Objects.equals(nameUnityChoose, "") ){
-            //TODO:error
-        }
-        else{
-            myProduct = new Product(nameProductChoose, 	Integer.parseInt(quantityOrNumberChoose), nameUnityChoose);
+        if(!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null)) ){
+            myProduct = new Product(nameProductChoose.toString(), 	quantityOrNumberChoose, nameUnityChoose.toString());
             tableViewDisplayProductList.getItems().add(myProduct);
-            //TODO: effacer le texte ecrit
+
+            //Nettoyer les combobox et le spinner
+            comboBoxListProduct.getSelectionModel().clearSelection();
+            comboBoxListUnity.getSelectionModel().clearSelection();
+            spinnerValueFactory.setValue(0);
             //TODO: Creer une liste? Ou attendre le bouton confirmé?
         }
-
+        else{
+            hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        OnlyIntOrFloatTextFieldUnity();
+        this.textFieldQuantityOrNumber.setValueFactory(spinnerValueFactory);
+        textFieldQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
+
         fillComboBoxShoppingList(comboBoxListProduct, callBDDToComboBoxList(true), true);
         fillComboBoxShoppingList(comboBoxListUnity, callBDDToComboBoxList(false), false);
 
@@ -96,17 +111,13 @@ public class WindowsCreateMyShoppingListController implements Initializable {
     }
 
     @FXML
-    private void OnlyIntOrFloatTextFieldUnity(){
-        textFieldQuantityOrNumber.textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    textFieldQuantityOrNumber.setText(newValue.replaceAll("[^\\d*]", ""));
-                }
-            }
-        });
-    }
+    private void OnlyIntOrFloatTextFieldUnity(String newValue)  {
+        if (!newValue.matches("^\\d*")){
+            textFieldQuantityOrNumber.getEditor().setText("0");
+            spinnerValueFactory.setValue(0);
+        }
+
+}
     @FXML
     public void fillComboBoxShoppingList(ComboBox comboBoxNameList, List<String> comboBoxList, boolean isListProduct)  {
         comboBoxNameList.setItems(FXCollections.observableArrayList(comboBoxList));

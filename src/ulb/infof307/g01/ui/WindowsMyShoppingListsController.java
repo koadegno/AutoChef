@@ -13,6 +13,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
@@ -26,13 +27,16 @@ public class WindowsMyShoppingListsController implements Initializable {
     private Parent root;
     private Stage stage;
     private Vector<Product> myVectorProduct = new Vector<>();
+    private SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
 
+    @FXML
+    HBox hBoxToCreateProduct;
     @FXML
     ComboBox<String> comboBoxShoppingNameList, comboBoxListUnity, comboBoxListProduct;
     @FXML
     Button btnConfirm, btnAddNewProduct;
     @FXML
-    TextField textFieldQuantityOrNumber;
+    Spinner<Integer> textFieldQuantityOrNumber;
     @FXML
     TableView tableViewDisplayProductList;
     @FXML
@@ -65,7 +69,6 @@ public class WindowsMyShoppingListsController implements Initializable {
 
     }
 
-
     @FXML
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         Vector<Product> myListProduct = new Vector<>();
@@ -92,10 +95,13 @@ public class WindowsMyShoppingListsController implements Initializable {
     }
          @Override
     public void initialize(URL location, ResourceBundle resources) {
-        OnlyIntOrFloatTextFieldUnity();
+        this.textFieldQuantityOrNumber.setValueFactory(spinnerValueFactory);
+        textFieldQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
+
         fillComboBoxShoppingNameList(comboBoxShoppingNameList, 1);
         fillComboBoxShoppingNameList(comboBoxListProduct,2);
         fillComboBoxShoppingNameList(comboBoxListUnity, 3);
+
         columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
@@ -104,18 +110,12 @@ public class WindowsMyShoppingListsController implements Initializable {
         columnDelete.setCellFactory(cellFactory);
     }
     @FXML
-    private void OnlyIntOrFloatTextFieldUnity(){
-        textFieldQuantityOrNumber.textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    textFieldQuantityOrNumber.setText(newValue.replaceAll("[^\\d*]", ""));
-                }
-            }
-        });
+    private void OnlyIntOrFloatTextFieldUnity(String newValue){
+        if (!newValue.matches("^\\d*")){
+            textFieldQuantityOrNumber.getEditor().setText("0");
+            spinnerValueFactory.setValue(0);
+        }
     }
-
 
     private void fillComboBoxShoppingNameList(ComboBox comboBoxNameList, int numberOfComboBoxList) {
         comboBoxNameList.setItems(FXCollections.observableArrayList(callBDDToComboBoxList(numberOfComboBoxList)));
@@ -157,20 +157,23 @@ public class WindowsMyShoppingListsController implements Initializable {
 
     @FXML
     public void addElementOfListToComboBoxProduct(){
-        String nameProductChoose =  comboBoxListProduct.getEditor().textProperty().getValue();
-        String quantityOrNumberChoose = textFieldQuantityOrNumber.getText();
-        String nameUnityChoose = comboBoxListUnity.getEditor().textProperty().getValue();
+        hBoxToCreateProduct.setStyle("");
+        Object nameProductChoose =  comboBoxListProduct.getSelectionModel().getSelectedItem() ;
+        int quantityOrNumberChoose = spinnerValueFactory.getValue();
+        Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
         Product myProduct;
 
-        if(Objects.equals(nameProductChoose, "") || Objects.equals(quantityOrNumberChoose, "") || Objects.equals(nameUnityChoose, "") ){
-            //TODO:error
-        }
-        else{
-            myProduct = new Product(nameProductChoose, 	Integer.parseInt(quantityOrNumberChoose), nameUnityChoose);
+        if(!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null)) ){
+            myProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
             tableViewDisplayProductList.getItems().add(myProduct);
-            //TODO: effacer le texte ecrit
+
+            //Nettoyer les combobox et le spinner //TODO: peux mieux faire
+            comboBoxListProduct.getSelectionModel().clearSelection();
+            comboBoxListUnity.getSelectionModel().clearSelection();
+            spinnerValueFactory.setValue(0);
             //TODO: Creer une liste? Ou attendre le bouton confirmé?
         }
-
-    }
-}
+        else{
+            hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+        }
+}}
