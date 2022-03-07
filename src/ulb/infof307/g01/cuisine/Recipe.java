@@ -13,6 +13,10 @@ public class Recipe {
     private String preparation;
     private LinkedList <Product>  products;
 
+    public Recipe (String name){
+        this.name = name;
+    }
+
     public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation) {
 
         this.id = id;

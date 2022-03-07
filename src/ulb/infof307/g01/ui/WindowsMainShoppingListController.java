@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.util.Objects;
 
 public class WindowsMainShoppingListController {
     private Stage stage;
@@ -40,7 +39,7 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void returnMainMenu(ActionEvent event) throws IOException {
-        root = FXMLLoader.load((getClass().getResource("interface/Main.fxml")));
+        root = FXMLLoader.load((getClass().getResource("interface/FXMLMainPage.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();

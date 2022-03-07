@@ -16,27 +16,33 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import ulb.infof307.g01.cuisine.TempMenu;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class MenuListController implements Initializable {
+public class WindowMyMenusController implements Initializable {
 
     private ArrayList<String> menus = new ArrayList<>();
 
     public void displayMenuList(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/MenuList.fxml")));
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
+
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
 
-    public void backToMain(ActionEvent event)throws IOException {
-        MainController main = new MainController();
-        main.displayMain((Stage) ((Node) event.getSource()).getScene().getWindow());
+    @FXML
+    Button backBtn;
+
+    public void backToMain(MouseEvent mousePressed)throws IOException {
+        WindowMainController main = new WindowMainController();
+        main.displayMain((Stage) ((Node) mousePressed.getSource()).getScene().getWindow());
     }
 
     public void initializeMenusFromTextFile(String filename){
@@ -98,6 +104,7 @@ public class MenuListController implements Initializable {
         }
         return result;
     }
+
     public String selectedMenu(){
         TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
@@ -120,8 +127,24 @@ public class MenuListController implements Initializable {
 
         String name = menuName.getText();
         if (menus.contains(name)){
-            MenuController menu = new MenuController();
-            menu.displayMenu(mousePressed, name);
+            LocalDate dateBegin = LocalDate.of(2022, 3, 10);
+            LocalDate dateEnd = LocalDate.of(2017, 3, 17);
+            LocalDate[] duration =  {dateBegin, dateEnd};
+            //TempMenu _menu = new TempMenu(name, duration, 3);
+
+            FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
+            Parent root = loader.load();
+
+            WindowShowMenuController controller = loader.getController();
+            controller.setMenu(name, duration, 3);
+            //controller.displayMenu(mousePressed, name);
+
+            Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
+            Scene scene =  new Scene(root);
+            stage.setTitle("Menu "+name);
+            stage.setScene(scene);
+            stage.show();
+
         }else {
             System.out.println("Menu n'existe pas!");
         }
