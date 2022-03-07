@@ -51,14 +51,15 @@ public class WindowsMyShoppingListsController implements Initializable {
     }
      @FXML
      public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
-         String nameMyShoppingList =  comboBoxShoppingNameList.getEditor().textProperty().getValue();
-         if(Objects.equals(nameMyShoppingList, "")){
+         Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
+         if(Objects.equals(nameMyShoppingList, null)){
              //TODO:error
              isVisibleElementToModifyMyShoppingList(false);
              //TODO: faire en sorte que la liste soit vide
          }
          else{
              //TODO:call bdd
+             System.out.println(nameMyShoppingList);
              Product myProduct = new Product("salade", 1, "unité");
              final ObservableList<Product> data = FXCollections.observableArrayList(myProduct);
              tableViewDisplayProductList.setItems(data);
