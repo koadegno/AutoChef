@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.CheckBox?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repas 1" />
+            <TextField disable="true" />
+            <CheckBox mnemonicParsing="false" text="Enlever Repas 1" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repas 2" />
+            <TextField disable="true" />
+            <CheckBox mnemonicParsing="false" text="Enlever Repas 2" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="10.0" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repas 3" />
+            <TextField disable="true" />
+            <CheckBox mnemonicParsing="false" text="Enlever Repas 3" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="110.0" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
+         <children>
+            <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Repas 4" />
+            <TextField disable="true" />
+            <CheckBox mnemonicParsing="false" text="Enlever Repas 4" />
+         </children>
+      </HBox>
+      <HBox alignment="TOP_CENTER" layoutX="10.0" layoutY="310.0" prefHeight="100.0" prefWidth="200.0" spacing="45.0">
+         <children>
+            <Button mnemonicParsing="false" text="Changer Repas" />
+            <Button mnemonicParsing="false" text="Retour" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

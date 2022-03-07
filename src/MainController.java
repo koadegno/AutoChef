@@ -15,6 +15,13 @@ public class MainController {
     private Parent root;
     private Stage stage;
     private Scene scene;
+    /*
+    Need it for the return button
+    private final Stage primaryStage;
+    public MainController(Stage _primaryStage){
+        this.primaryStage = _primaryStage;
+    }
+    */
 
     @FXML
     public void redirectToShoppingList(ActionEvent e){
