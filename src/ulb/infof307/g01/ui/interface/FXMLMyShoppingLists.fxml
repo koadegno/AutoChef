@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowsMyShoppingListsController">
+   <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <ComboBox fx:id="comboBoxShoppingNameList" editable="true" prefHeight="25.0" prefWidth="181.0" promptText="choisir ma liste" />
+            <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#seeMyShoppingListTableView" prefHeight="25.0" prefWidth="224.0" text="afficher la liste de courses" />
+         </children>
+      </HBox>
+      <TableView fx:id="tableViewDisplayProductList" prefHeight="200.0" prefWidth="200.0">
+        <columns>
+          <TableColumn fx:id="columnProduct" prefWidth="165.99996948242188" text="Produit" />
+          <TableColumn fx:id="columnQuantityOrNumber" prefWidth="163.3333740234375" text="Quantité/Nombre" />
+            <TableColumn fx:id="columnUnity" prefWidth="127.33331298828125" text="Unité" />
+            <TableColumn fx:id="columnDelete" prefWidth="143.3333740234375" text="Supprimer" />
+        </columns>
+      </TableView>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <ComboBox fx:id="comboBoxListProduct" editable="true" prefWidth="150.0" promptText="Produit" visible="false" />
+            <TextField fx:id="textFieldQuantityOrNumber" promptText="le nombre d'unité" visible="false" />
+            <ComboBox fx:id="comboBoxListUnity" editable="true" prefWidth="150.0" promptText="Unité" visible="false" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#addElementOfListToComboBoxProduct" fx:id="btnAddNewProduct" text="Ajouter le produit" visible="false" />
+            <Button fx:id="btnConfirm" onAction="#confirmMyCreateShoppingList" mnemonicParsing="false" prefHeight="25.0" prefWidth="98.0" text="Confirmer" visible="false" />
+            <Button mnemonicParsing="false" onAction="#returnShoppingList" prefHeight="25.0" prefWidth="105.0" text="Retour" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

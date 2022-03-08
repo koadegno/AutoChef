@@ -16,11 +16,9 @@ public class MainController {
     private Scene scene;
 
     @FXML
-    public void redirectToShoppingList(ActionEvent e){
-
-        Stage stage = (Stage) ((Node)e.getSource()).getScene().getWindow();
-        ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(stage);
-        menuShoppingList.menu(); //Menu principal
+    public void redirectToShoppingList(ActionEvent event) throws IOException {
+        WindowsMainShoppingListController windowsShoppingListController = new WindowsMainShoppingListController();
+        windowsShoppingListController.displayMenuShoppingListController(event);
 
     }
 

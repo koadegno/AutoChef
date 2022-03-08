@@ -51,6 +51,11 @@ public class TestProduct {
     }
 
     @Test
+    public void testNameUnity(){
+        assertEquals("Unité", productTest.getNameUnity());
+    }
+
+    @Test
     public void testEquals() {
         Product productTestCopy = new Product(productTest.getName());
 
