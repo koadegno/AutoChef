@@ -3,6 +3,7 @@ package ulb.infof307.g01.cuisine;
 public class Product {
     private String name;
     private int quantity = 1;
+    private String nameUnity = "Unité";
 
     public Product(String productName) {
         name = productName;
@@ -11,6 +12,12 @@ public class Product {
     public Product(String productName, int quantity) {
         name = productName;
         this.quantity = quantity;
+    }
+
+    public Product(String productName, int quantity, String _nameUnity) {
+        name = productName;
+        this.quantity = quantity;
+        this.nameUnity = _nameUnity;
     }
 
     public void rename(String newName) {
@@ -43,6 +50,7 @@ public class Product {
         return name;
     }
 
+    public String getNameUnity(){return nameUnity;}
     @Override
     public boolean equals(Object other) {
 

@@ -52,7 +52,7 @@ public class MenuListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMenusFromTextFile("src/menus");
+        initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
 
         TreeItem<String> rootItem =  new TreeItem<>("Tous les menus");
 

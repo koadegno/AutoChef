@@ -27,9 +27,5 @@ public class Main extends Application {
             e.printStackTrace();
         }
 
-
-
-        //ListeDeCourseApplication menuShoppingList = new ListeDeCourseApplication(primaryStage);
-        //menuShoppingList.menu(); //Menu principal
     }
 }
