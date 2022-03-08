@@ -1,6 +1,9 @@
 package ulb.infof307.g01.db;
+import ulb.infof307.g01.cuisine.Recipe;
+
 import java.sql.*;
 import java.util.ArrayList;
+
 
 public class Database {
     private String dbName;
@@ -18,7 +21,7 @@ public class Database {
         }
     }
 
-    public void createDB(){
+    private void createDB(){
         createTableFamilleAliment();
         createTableUnite();
         createTableCategorie();
@@ -35,6 +38,7 @@ public class Database {
         connection.close();
     }
 
+    // TODO : METTRE EN PRIVATE
     public boolean sendRequest(String req) {
         try {
             return request.execute(req);
@@ -44,7 +48,7 @@ public class Database {
         return false;
     }
 
-    public ResultSet sendQuery(String query) {
+    private ResultSet sendQuery(String query) {
         try {
             return request.executeQuery(query);
         } catch (SQLException e) {
@@ -61,14 +65,14 @@ public class Database {
         }
     }
 
-    public boolean createTableFamilleAliment() {
+    private boolean createTableFamilleAliment() {
         String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
                 "    FamilleAlimentID INTEGER PRIMARY KEY,\n" +
                 "    Nom CHAR(20) NOT NULL);";
         return sendRequest(req);
     }
 
-    public boolean createTableUnite() {
+    private boolean createTableUnite() {
         String req = "CREATE TABLE IF NOT EXISTS Unite(\n" +
                 "    UniteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    Nom CHAR(10) NOT NULL UNIQUE\n" +
@@ -76,7 +80,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableCategorie() {
+    private boolean createTableCategorie() {
         String req = "CREATE TABLE IF NOT EXISTS Categorie(\n" +
                 "    CategorieID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    Nom CHAR(20) NOT NULL UNIQUE\n" +
@@ -84,7 +88,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableTypePlat() {
+    private boolean createTableTypePlat() {
         String req = "CREATE TABLE IF NOT EXISTS TypePlat(\n" +
                 "    TypePlatID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    Nom CHAR(20) NOT NULL UNIQUE\n" +
@@ -92,7 +96,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableRecette() {
+    private boolean createTableRecette() {
         String req = "CREATE TABLE IF NOT EXISTS Recette(\n" +
                 "    RecetteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    Nom CHAR(40) NOT NULL,\n" +
@@ -107,7 +111,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableIngredient() {
+    private boolean createTableIngredient() {
         String req = "CREATE TABLE IF NOT EXISTS Ingredient(\n" +
                 "    IngredientID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
                 "    Nom CHAR(25) NOT NULL UNIQUE,\n" +
@@ -119,7 +123,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableRecetteIngredient() {
+    private boolean createTableRecetteIngredient() {
         String req = "CREATE TABLE IF NOT EXISTS RecetteIngredient(\n" +
                 "    RecetteID INTEGER NOT NULL\n" +
                 "        CONSTRAINT fkRecette REFERENCES Recette(RecetteID),\n" +
@@ -131,7 +135,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableListeCourse() {
+    private boolean createTableListeCourse() {
         String req = "CREATE TABLE IF NOT EXISTS ListeCourse (\n" +
                 "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT,\n " +
                 "    Nom CHAR(25) NOT NULL UNIQUE \n" +
@@ -139,7 +143,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableListeCourseIngredient() {
+    private boolean createTableListeCourseIngredient() {
         String req = "CREATE TABLE IF NOT EXISTS ListeCourseIngredient(\n" +
                 "    ListeCourseID INTEGER\n" +
                 "        CONSTRAINT fkListeCourse REFERENCES ListeCourse(ListeCourseID),\n" +
@@ -151,7 +155,7 @@ public class Database {
         return sendRequest(req);
     }
 
-    public boolean createTableMenuRecette() {
+    private boolean createTableMenuRecette() {
         String req = "CREATE TABLE IF NOT EXISTS MenuRecette(\n" +
                 "    Date DATE NOT NULL,\n" +
                 "    Heure TIME,\n" +
@@ -179,7 +183,7 @@ public class Database {
      *
      * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
      */
-    public void insert(String nameTable,String[] values){
+    private void insert(String nameTable,String[] values){
         StringBuilder req = new StringBuilder(String.format("INSERT INTO %s values (", nameTable));
         for (String value : values) {
             req.append(value).append(",");
@@ -189,7 +193,7 @@ public class Database {
         sendQueryUpdate(String.valueOf(req));
     }
 
-    public ResultSet select(String nameTable,String[]names, String[]signs, String[]values){
+    private ResultSet select(String nameTable,String[]names, String[]signs, String[]values){
         StringBuilder req;
         if (values.length > 0){
             req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
@@ -204,16 +208,33 @@ public class Database {
         return sendQuery(String.valueOf(req));
     }
 
+    private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
+        String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
+        insert("ListeCourseIngredient",values);
+    }
+
+    private String getNameFromID(String table, int id, String nameID) throws SQLException {
+        String[]names = {nameID};
+        String[]signs = {"="};
+        String[]values = {String.format("%d", id)};
+        ResultSet res = select(table, names, signs, values);
+        res.next();
+        return res.getString("Nom");
+    }
+
+    private int getIDFromName(String table, String name, String nameID) throws SQLException {
+        String[]names = {"Nom"};
+        String[]signs = {"="};
+        String[]values = {String.format("'%s'", name)};
+        ResultSet res = select(table, names, signs, values);
+        res.next();
+        return res.getInt(nameID);
+    }
+
     public Integer createAndGetIdShoppingList(String name) {
         String[] values = {"null",name};
         insert("ListeCourse",values);
         return getkey();
-    }
-
-    private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
-        //TODO: si on ajoute le nom dans ListeCourse, changer le courseId par le nom
-        String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
-        insert("ListeCourseIngredient",values);
     }
 
     public ArrayList<String> getAllCategories() throws SQLException {
@@ -226,28 +247,56 @@ public class Database {
         return categories;
     }
 
-    /*
+    public void insertCategory(String nameCategory){
+        String[] val = {"null", String.format("'%s'", nameCategory)};
+        insert("Categorie", val);
+    }
+
+    public void insertType(String nameType){
+        String[] val = {"null", String.format("'%s'", nameType)};
+        insert("TypePlat", val);
+    }
+
+    // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
+    public void insertRecipe(Recipe recipe) throws SQLException {
+        String name = String.format("'%s'", recipe.getName());
+        String duration = String.format("%d", recipe.getDuration());
+        String nbPerson = String.format("%d", recipe.getNbrPerson());
+        String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
+        String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
+        String preparation = String.format("'%s'", recipe.getPreparation());
+
+        String[] val = {"null", name, duration, nbPerson, type, category, preparation};
+        insert("Recette", val);
+    }
+
     public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
         String[] name = {"Nom"};
         String[] signs = {"="};
         String[] values = {String.format("'%s'", nameCategory)};
-        ResultSet res = select("Categorie",name, signs, values);
-        res.next();
-        int key = res.getInt("CategorieID");
+        ResultSet result = select("Categorie",name, signs, values);
+        result.next();
+        int key = result.getInt("CategorieID");
         name[0] = "CategorieID";
         values[0] = String.format("%d", key);
         ArrayList<Recipe> recipes = new ArrayList<>();
 
-        res = select("Recette",name, signs, values);
+        result = select("Recette",name, signs, values);
 
-        while (res.next()){
-            Recipe recipe = new Recipe(res.getString("Nom"), ...)
+        while (result.next()){
+            int recipeID = result.getInt("RecetteID");
+            String nom = result.getString("Nom");
+            System.out.println(nom);
+            int duration = result.getInt("Duree");
+            int nbPersons = result.getInt("NbPersonnes");
+            String method = result.getString("Preparation");
+            String type = getNameFromID("TypePlat", result.getInt("TypePlatID"), "TypePlatID");
+
+            Recipe recipe = new Recipe(recipeID, nom, duration, nameCategory, type, nbPersons, method);
             recipes.add(recipe);
         }
         return recipes;
-
     }
-    */
 
     //TODO: Pour save une shopping list quand elle sera implemente
 //    public void saveShoppingList(ShoppingList shoppingList){
