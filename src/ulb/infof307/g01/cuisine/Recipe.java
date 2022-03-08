@@ -2,7 +2,7 @@ package ulb.infof307.g01.cuisine;
 
 import java.util.LinkedList;
 
-public class Recipe {
+public class Recipe extends UniqueProductList {
 
     private int id;
     private String name;
@@ -11,7 +11,6 @@ public class Recipe {
     private String type;       //Exemple mijoté, quiche
     private int nbrPerson;
     private String preparation;
-    private LinkedList <Product>  products;
 
     public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation) {
 
@@ -32,6 +31,7 @@ public class Recipe {
     public String getName() {
         return name;
     }
+
 
     @Override
     public boolean equals(Object other) {
