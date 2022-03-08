@@ -27,17 +27,17 @@ abstract class UniqueProductList extends Vector<Product> {
 
     @Override
     public void copyInto(Object[] anArray) {
-        throw new NotImplementedException("Not usable");
+        throw new RuntimeException("Not usable");
     }
 
     @Override
     public void insertElementAt(Product p, int index) {
-        throw new NotImplementedException("Not usable");
+        throw new RuntimeException("Not usable");
     }
 
     @Override
     public Product remove(int index) {
-        throw new NotImplementedException("Not usable");
+        throw new RuntimeException("Not usable");
     }
 
     @Override
