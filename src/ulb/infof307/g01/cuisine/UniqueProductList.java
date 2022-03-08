@@ -1,7 +1,5 @@
 package ulb.infof307.g01.cuisine;
 
-import org.apache.poi.ss.formula.eval.NotImplementedException;
-
 import java.util.Vector;
 
 abstract class UniqueProductList extends Vector<Product> {

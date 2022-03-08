@@ -1,7 +1,5 @@
 package ulb.infof307.g01.cuisine;
 
-import java.util.LinkedList;
-
 public class Recipe extends UniqueProductList {
 
     private int id;
@@ -14,24 +12,16 @@ public class Recipe extends UniqueProductList {
 
     public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation) {
 
-        this.id = id;
-        this.name = name;
-        this.duration = duration;
-        this.category = category;
-        this.type = type;
-        this.nbrPerson = nbrPerson;
-        this.preparation = preparation;
-
+        this.id = id; this.name = name; this.duration = duration; this.category = category; this.type = type;
+        this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
 
     public String getCategory() {
         return category;
     }
-
     public String getName() {
         return name;
     }
-
 
     @Override
     public boolean equals(Object other) {
