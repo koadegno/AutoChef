@@ -2,7 +2,7 @@ package ulb.infof307.g01.cuisine;
 
 import java.util.Vector;
 
-public class ShoppingList extends Vector<Product> {
+public class ShoppingList extends UniqueProductList {
 
     private int id;
     private String name;
