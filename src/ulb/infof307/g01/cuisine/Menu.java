@@ -6,16 +6,20 @@ import java.util.Collections;
 
 public class Menu {
     private String name;
-    private Vector<Vector<Recipe>> menu;
     private final int nbOfdays = 7;
+    private Vector<Vector<Recipe>> menu = new Vector<Vector<Recipe>>(nbOfdays);
 
-    Menu(String name) {
+    public Menu(String name) {
         this.name = name;
-        menu = new Vector<>(nbOfdays);
+
+        menu = new Vector<>(10);
+        for (int i = 0; i<nbOfdays; i++) {
+            menu.add(new Vector<>());
+        }
     }
 
     public List<Recipe> getMealsfor(Day day) {
-        return Collections.unmodifiableList(menu.get(day.index));
+       return Collections.unmodifiableList(menu.get(day.index));
     }
 
     public void addMealTo(Day day, Recipe meal) {
@@ -39,19 +43,12 @@ public class Menu {
         ShoppingList shopList = new ShoppingList(name);
         for (Vector<Recipe> menuDay : menu) {
             for (Recipe meal : menuDay)
-                shopList.addAll(meal);
+                for (Product p : meal) {
+                    shopList.add(p);
+                }
         }
         return shopList;
     }
 
 }
 
-enum Day {
-    Monday(0), Tuesday(1), Wednesday(2),
-    Thursday(3), Friday(4), Saturday(5), Sunday(6);
-
-    final int index;
-    Day(int index) {
-        this.index = index;
-    }
-}
