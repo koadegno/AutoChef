@@ -1,5 +1,7 @@
 package ulb.infof307.g01.db;
+import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.cuisine.ShoppingList;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -231,6 +233,23 @@ public class Database {
         return res.getInt(nameID);
     }
 
+    private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
+
+        ArrayList<Recipe> recipes = new ArrayList<>();
+        while (result.next()){
+            int recipeID = result.getInt(1);
+            String nom = result.getString(2);
+            int duration = result.getInt(3);
+            int nbPersons = result.getInt(4);
+            String method = result.getString(5);
+            String category = result.getString(6);
+            String type = result.getString(7);
+            Recipe recipe = new Recipe(recipeID, nom, duration, category, type, nbPersons, method);
+            recipes.add(recipe);
+        }
+        return recipes;
+    }
+
     public Integer createAndGetIdShoppingList(String name) {
         String[] values = {"null",name};
         insert("ListeCourse",values);
@@ -256,8 +275,8 @@ public class Database {
         String[] val = {"null", String.format("'%s'", nameType)};
         insert("TypePlat", val);
     }
-
     // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
+
     public void insertRecipe(Recipe recipe) throws SQLException {
         String name = String.format("'%s'", recipe.getName());
         String duration = String.format("%d", recipe.getDuration());
@@ -279,31 +298,22 @@ public class Database {
         int key = result.getInt("CategorieID");
         name[0] = "CategorieID";
         values[0] = String.format("%d", key);
-        ArrayList<Recipe> recipes = new ArrayList<>();
 
-        result = select("Recette",name, signs, values);
+        result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n"+
+                "FROM Recette as R\n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n"+
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n"+
+                "WHERE R.CategorieID = %d",key));
 
-        while (result.next()){
-            int recipeID = result.getInt("RecetteID");
-            String nom = result.getString("Nom");
-            System.out.println(nom);
-            int duration = result.getInt("Duree");
-            int nbPersons = result.getInt("NbPersonnes");
-            String method = result.getString("Preparation");
-            String type = getNameFromID("TypePlat", result.getInt("TypePlatID"), "TypePlatID");
-
-            Recipe recipe = new Recipe(recipeID, nom, duration, nameCategory, type, nbPersons, method);
-            recipes.add(recipe);
-        }
-        return recipes;
+        return getRecipes(result);
     }
 
-    //TODO: Pour save une shopping list quand elle sera implemente
-//    public void saveShoppingList(ShoppingList shoppingList){
-//        int id = createAndGetIdShoppingList(shoppingList.getName());
-//        for(Produit produit : shoppingList){
-//            insertIngredientInShoppingList(id,produit.getId(),produit.getQuantite());
-//        }
-//    }
+/*    //TODO: Pour save une shopping list quand elle sera implemente
+    public void saveNewShoppingList(ShoppingList shoppingList){
+        int id = createAndGetIdShoppingList(shoppingList.getName());
+        for(Product product : shoppingList){
+           insertIngredientInShoppingList(id,product.getId(), product.getQuantity());
+       }
+   }*/
 
 }

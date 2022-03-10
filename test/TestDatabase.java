@@ -60,12 +60,22 @@ class TestDatabase {
     public void testGetRecipeWhereCategorieIsMeat() throws SQLException {
         ArrayList<Recipe> res = db.getRecipeWhereCategorie("Viande");
         assertEquals(1 , res.size());
+        assertEquals(res.get(0).getName(),"Bolognaise");
+        assertEquals(res.get(0).getDuration(),60);
+        assertEquals(res.get(0).getCategory(),"Viande");
+        assertEquals(res.get(0).getType(),"Mijoté");
+        assertEquals(res.get(0).getNbrPerson(),4);
+        assertEquals(res.get(0).getPreparation(),"Cuire des pâtes, oignons, tomates, ail, basilic");
+
     }
 
     @Test
     public void testGetRecipeWhereCategorieIsFish() throws SQLException {
+
         ArrayList<Recipe> res = db.getRecipeWhereCategorie("Poisson");
         assertEquals(2 , res.size());
     }
+
+
 
 }
