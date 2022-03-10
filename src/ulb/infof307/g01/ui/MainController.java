@@ -30,11 +30,10 @@ public class MainController {
     }
 
     @FXML
-    public void redirectRecipe(ActionEvent event){
+    public void redirectRecipe(ActionEvent event) throws IOException{
 
-        Stage stage = (Stage) ((Node)event.getSource()).getScene().getWindow();
-        MenuRecipe recipe = new MenuRecipe(stage);
-        recipe.menu(); //Menu principal
+        SearchRecipeController displayRecipe =  new SearchRecipeController();
+        displayRecipe.displaySearchRecipe(event);
 
     }
 }
