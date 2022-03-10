@@ -210,6 +210,25 @@ public class Database {
         return sendQuery(String.valueOf(req));
     }
 
+    private void appendValuesToWhere(String[] names, String[] signs, String[] values, StringBuilder req) {
+        for (int i = 0; i < names.length;i++) {
+            req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+        }
+        req.delete(req.length()-3, req.length());
+        req.append(";");
+        sendQueryUpdate(String.valueOf(req));
+    }
+
+    private void delete(String nameTable,String[]names, String[]signs, String[]values){
+        StringBuilder req = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
+        appendValuesToWhere(names, signs, values, req);
+    }
+
+    private void updateName(String nameTable,String[]names, String[]signs, String[]values,String nameToUpdate){
+        StringBuilder req = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable,nameToUpdate));
+        appendValuesToWhere(names, signs, values, req);
+    }
+
     private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
         String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
         insert("ListeCourseIngredient",values);
@@ -224,13 +243,13 @@ public class Database {
         return res.getString("Nom");
     }
 
-    private int getIDFromName(String table, String name, String nameID) throws SQLException {
+    private int getIDFromName(String table, String name, String nameColumn) throws SQLException {
         String[]names = {"Nom"};
         String[]signs = {"="};
         String[]values = {String.format("'%s'", name)};
         ResultSet res = select(table, names, signs, values);
         res.next();
-        return res.getInt(nameID);
+        return res.getInt(nameColumn);
     }
 
     private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
@@ -308,12 +327,36 @@ public class Database {
         return getRecipes(result);
     }
 
-/*    //TODO: Pour save une shopping list quand elle sera implemente
-    public void saveNewShoppingList(ShoppingList shoppingList){
+    public ArrayList<String> getAllShoppingListName() throws SQLException {
+
+        String[] vide = new String[0];
+        ResultSet request = select("ListeCourse",vide,vide,vide);
+        ArrayList<String> shoppingListName = new ArrayList<>();
+        while(request.next()){
+            shoppingListName.add(request.getString("Nom"));
+        }
+        return shoppingListName;
+    }
+
+    public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
         int id = createAndGetIdShoppingList(shoppingList.getName());
         for(Product product : shoppingList){
-           insertIngredientInShoppingList(id,product.getId(), product.getQuantity());
+            int idProduct = getIDFromName("Ingredient", product.getName(),"Nom");
+            insertIngredientInShoppingList(id,idProduct, product.getQuantity());
        }
-   }*/
+   }
+
+   public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
+       String[] name = {"ListeCourseID"};
+       String[] signs = {"="};
+       String[] values = {String.format("%d", shoppingList.getId())};
+       delete("ListeCourseIngredient", name, signs, values);
+       updateName("ListeCourse",name,signs,values, shoppingList.getName());
+       for (Product product : shoppingList) {
+           int idProduct = getIDFromName("Ingredient", product.getName(), "Nom");
+           insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
+       }
+   }
+
 
 }

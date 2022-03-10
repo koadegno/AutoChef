@@ -2,6 +2,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.cuisine.ShoppingList;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
@@ -33,6 +34,9 @@ class TestDatabase {
         db.insertRecipe(bolo);
         db.insertRecipe(carbo);
         db.insertRecipe(pesto);
+        db.createAndGetIdShoppingList("'Halloween'");
+        db.createAndGetIdShoppingList("'noel'");
+        db.createAndGetIdShoppingList("'ete'");
     }
 
     @AfterAll
@@ -77,5 +81,19 @@ class TestDatabase {
     }
 
 
+    @Test
+    public void testGetAllShoppingListNameWith1() throws SQLException {
+        ArrayList<String> shoppingListName = db.getAllShoppingListName();
+        assertEquals(3,shoppingListName.size());
+    }
+
+
+    @Test
+    public void testSaveModifyShoppingList() throws SQLException {
+        ShoppingList rename = new ShoppingList("hiver",3);
+        db.saveModifyShoppingList(rename);
+        ArrayList<String> shoppingListName = db.getAllShoppingListName();
+        assertEquals("hiver",shoppingListName.get(2));
+    }
 
 }
