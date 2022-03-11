@@ -207,9 +207,9 @@ public class Database {
         if (values.length > 0){
             req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
             for (int i = 0; i < names.length;i++) {
-                req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+                req.append(names[i]).append(signs[i]).append(values[i]).append(" AND ");
             }
-            req.delete(req.length()-3, req.length());
+            req.delete(req.length()-4, req.length());
         } else {
             req = new StringBuilder(String.format("SELECT * FROM %s", nameTable));
         }
@@ -219,9 +219,9 @@ public class Database {
 
     private void appendValuesToWhere(String[] names, String[] signs, String[] values, StringBuilder req) {
         for (int i = 0; i < names.length;i++) {
-            req.append(names[i]).append(signs[i]).append(values[i]).append("AND");
+            req.append(names[i]).append(signs[i]).append(values[i]).append(" AND ");
         }
-        req.delete(req.length()-3, req.length());
+        req.delete(req.length()-4, req.length());
         req.append(";");
         sendQueryUpdate(String.valueOf(req));
     }
@@ -461,10 +461,10 @@ public class Database {
         }
 
         for (int i = 0; i < where.size(); i++) {
-            query.append(where.get(i)).append(" AND");
+            query.append(where.get(i)).append(" AND ");
         }
         if (where.size() > 0)
-            query.delete(query.length()-3, query.length());
+            query.delete(query.length()-4, query.length());
 
         ResultSet result = sendQuery(query.toString());
         return getRecipes(result);
