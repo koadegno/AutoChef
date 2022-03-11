@@ -19,6 +19,7 @@ public class Database {
             request = connection.createStatement();
             createDB();
         } catch (SQLException e) {
+            System.out.println("il y une erreur");
             System.out.println(e.getMessage());
         }
     }
@@ -359,9 +360,16 @@ public class Database {
        String[] values = {String.format("%d", shoppingList.getId())};
        delete("ListeCourseIngredient", name, signs, values);
        updateName("ListeCourse",name,signs,values, shoppingList.getName());
-       for (Product product : shoppingList) {
-           int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
-           insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
+
+       if(shoppingList.size() == 0){
+           delete("ListeCourse", name, signs, values);
+       }
+       else{
+           for (Product product : shoppingList) {
+               int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
+               insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
+           }
+
        }
    }
 
