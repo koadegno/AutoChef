@@ -35,11 +35,9 @@ public class WindowsMainShoppingListController {
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLMyShoppingLists.fxml"));
         root = loader.load();
         WindowsMyShoppingListsController windowsMyShoppingListsController = loader.getController();
-        if( dataBase == null){System.out.println("je suis null haha 3");}
         windowsMyShoppingListsController.setDatabase(dataBase);
         windowsMyShoppingListsController.initShoppingListElement();
         windowsMyShoppingListsController.initComboBox();
-
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
@@ -48,7 +46,14 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayCreateShoppingListController(ActionEvent event) throws IOException{
-        root = FXMLLoader.load((getClass().getResource("interface/FXMLCreateMyShoppingList.fxml")));
+        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        root = loader.load();
+        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = loader.getController();
+        windowsCreateMyShoppingListController.setDatabase(dataBase);
+        if( dataBase == null){System.out.println("je suis null haha 34");}
+        windowsCreateMyShoppingListController.initShoppingListElement();
+        windowsCreateMyShoppingListController.initComboBox();
+
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();

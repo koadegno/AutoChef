@@ -1,25 +1,15 @@
 package ulb.infof307.g01.ui;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.ShoppingList;
-import ulb.infof307.g01.ui.CreateColWithButtonDelete;
-import ulb.infof307.g01.db.*;
 
 import java.io.IOException;
 import java.net.URL;
@@ -31,9 +21,6 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     @FXML
     Button btnConfirm, btnAddNewProduct;
-    @FXML
-    TableColumn columnQuantityOrNumber,columnDelete,columnProduct, columnUnity;
-
 
     @FXML
      public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
@@ -54,25 +41,39 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
              } catch (SQLException e) {
                  e.printStackTrace();
              }
-
-
-
          }
+
+    }
+
+    @FXML
+    public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
+        try {
+            ShoppingList shoppingListInDataBase = dataBase.getShoppingListFromName(currentShoppingListname);
+            ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
+
+            fillShoppingListToSend(shoppingListToSend);
+            dataBase.saveModifyShoppingList(shoppingListToSend);
+            returnShoppingList(event);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
     }
 
     @FXML
     public void isVisibleElementToModifyMyShoppingList(boolean isVisible){
         comboBoxListProduct.setVisible(isVisible);
-        textFieldQuantityOrNumber.setVisible(isVisible);
+        spinnerQuantityOrNumber.setVisible(isVisible);
         comboBoxListUnity.setVisible(isVisible);
         btnConfirm.setVisible(isVisible);
         btnAddNewProduct.setVisible(isVisible);
     }
-         @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        this.textFieldQuantityOrNumber.setValueFactory(spinnerValueFactory);
-        textFieldQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
+        spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
 
         columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
@@ -81,6 +82,12 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+    }
+
+    @Override
+    public void initComboBox(){
+        super.initComboBox();
+        fillComboBoxShoppingNameList(comboBoxShoppingNameList, 1);
     }
 
 }

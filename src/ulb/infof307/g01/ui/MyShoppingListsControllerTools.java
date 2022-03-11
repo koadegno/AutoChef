@@ -4,13 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Spinner;
-import javafx.scene.control.SpinnerValueFactory;
-import javafx.scene.control.TableView;
+import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Product;
@@ -27,22 +25,24 @@ public class MyShoppingListsControllerTools {
     public static Database dataBase;
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
     @FXML
-    HBox hBoxToCreateProduct;
+    protected HBox hBoxToCreateProduct;
     @FXML
-    ComboBox<String> comboBoxShoppingNameList;
+    protected TableColumn columnQuantityOrNumber,columnDelete,columnProduct, columnUnity;
     @FXML
-    ComboBox<String> comboBoxListUnity;
+    protected ComboBox<String> comboBoxShoppingNameList;
     @FXML
-    ComboBox<String> comboBoxListProduct;
+    protected ComboBox<String> comboBoxListUnity;
     @FXML
-    Spinner<Integer> textFieldQuantityOrNumber;
+    protected ComboBox<String> comboBoxListProduct;
     @FXML
-    TableView tableViewDisplayProductList;
-    ArrayList<String> allUnitName = null;
-    ArrayList<String> allProduct = null;
-    ArrayList<String> allShoppinListName = null;
-    String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
-    String currentShoppingListname;
+    protected Spinner<Integer> spinnerQuantityOrNumber;
+    @FXML
+    protected TableView tableViewDisplayProductList;
+    protected ArrayList<String> allUnitName = null;
+    protected ArrayList<String> allProduct = null;
+    protected ArrayList<String> allShoppinListName = null;
+    protected String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
+    protected String currentShoppingListname;
     private Parent root;
     private Stage stage;
 
@@ -74,30 +74,18 @@ public class MyShoppingListsControllerTools {
         stage.show();
     }
 
-    @FXML
-    public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
-        try {
-            ShoppingList shoppingListInDataBase = dataBase.getShoppingListFromName(currentShoppingListname);
-            ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
-
-            // ajout de chaque produit de la table dans une nvl shoppingList
-            for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
-                Product product = (Product) tableViewDisplayProductList.getItems().get(i);
-                System.out.println(product.getName());
-                shoppingListToSend.add(product);
-            }
-            dataBase.saveModifyShoppingList(shoppingListToSend);
-            returnShoppingList(event);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
+    protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {
+        // ajout de chaque produit de la table dans une nvl shoppingList
+        for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
+            Product product = (Product) tableViewDisplayProductList.getItems().get(i);
+            System.out.println(product.getName());
+            shoppingListToSend.add(product);
         }
-
     }
 
     protected void OnlyIntOrFloatTextFieldUnity(String newValue) {
         if (!newValue.matches("^\\d*")) {
-            textFieldQuantityOrNumber.getEditor().setText("0");
+            spinnerQuantityOrNumber.getEditor().setText("0");
             spinnerValueFactory.setValue(0);
         }
     }
@@ -140,6 +128,7 @@ public class MyShoppingListsControllerTools {
             spinnerValueFactory.setValue(0);
             //TODO: Creer une liste? Ou attendre le bouton confirmé?
         } else {
+            System.out.println((String)nameProductChoose +" " +  quantityOrNumberChoose+ " " + (String)nameUnityChoose);
             hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
     }
@@ -159,8 +148,10 @@ public class MyShoppingListsControllerTools {
     }
 
     public void initComboBox() {
-        fillComboBoxShoppingNameList(comboBoxShoppingNameList, 1);
+
         fillComboBoxShoppingNameList(comboBoxListProduct, 2);
         fillComboBoxShoppingNameList(comboBoxListUnity, 3);
     }
+
+
 }

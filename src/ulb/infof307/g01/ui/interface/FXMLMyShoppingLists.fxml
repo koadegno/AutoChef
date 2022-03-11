@@ -22,7 +22,7 @@
       <HBox fx:id="hBoxToCreateProduct" alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
          <children>
             <ComboBox fx:id="comboBoxListProduct" prefWidth="150.0" promptText="Produit" visible="false" />
-            <Spinner fx:id="textFieldQuantityOrNumber" promptText="le nombre d'unité" visible="false" />
+            <Spinner fx:id="spinnerQuantityOrNumber" promptText="le nombre d'unité" visible="false" />
             <ComboBox fx:id="comboBoxListUnity" prefWidth="150.0" promptText="Unité" visible="false" />
             <Button fx:id="btnAddNewProduct" mnemonicParsing="false" onAction="#addElementOfListToComboBoxProduct" prefHeight="25.0" prefWidth="113.0" text="Ajouter" visible="false" />
          </children>
