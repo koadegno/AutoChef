@@ -20,6 +20,11 @@ public class Recipe extends UniqueProductList {
         this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
 
+    public Recipe (String name) {
+        this.name = name; this.duration = 30; this.category = "cat"; this.type = "typ";
+        this.nbrPerson = 3;     this.preparation = "prep";
+    }
+
     public String getName() {
         return name;
     }

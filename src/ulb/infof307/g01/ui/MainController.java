@@ -31,7 +31,6 @@ public class MainController {
 
     @FXML
     public void redirectRecipe(ActionEvent event) throws IOException{
-
         SearchRecipeController displayRecipe =  new SearchRecipeController();
         displayRecipe.displaySearchRecipe(event);
 
