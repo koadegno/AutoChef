@@ -26,6 +26,15 @@
             <HBox alignment="CENTER" prefHeight="308.0" prefWidth="600.0">
                <children>
                   <TreeView fx:id="menuTreeView" prefHeight="238.0" prefWidth="188.0" showRoot="false" />
+                  <VBox alignment="CENTER" prefHeight="308.0" prefWidth="105.0">
+                     <children>
+                        <HBox prefHeight="100.0" prefWidth="200.0">
+                           <children>
+                              <Button mnemonicParsing="false" text="Rajouter recette" />
+                           </children>
+                        </HBox>
+                     </children>
+                  </VBox>
                </children>
             </HBox>
             <Button mnemonicParsing="false" onAction="#back" text="Retour" />

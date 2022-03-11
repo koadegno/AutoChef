@@ -111,7 +111,6 @@ public class WindowShowMenuController implements Initializable {
     public void getSelectedItem(){
         TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
-
         }
     }
 
