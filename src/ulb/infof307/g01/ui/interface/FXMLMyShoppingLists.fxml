@@ -30,6 +30,7 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0">
          <children>
             <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#confirmMyCreateShoppingList" prefHeight="25.0" prefWidth="98.0" text="Confirmer" visible="false" />
+             <Button fx:id="btnArchiver" mnemonicParsing="false" onAction="#archiveMyCreateShoppingList" prefHeight="25.0" prefWidth="98.0" text="Archiver" visible="false" />
             <Button mnemonicParsing="false" onAction="#returnShoppingList" prefHeight="25.0" prefWidth="105.0" text="Retour" />
          </children>
       </HBox>

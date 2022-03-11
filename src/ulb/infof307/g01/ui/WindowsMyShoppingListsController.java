@@ -34,7 +34,7 @@ public class WindowsMyShoppingListsController implements Initializable {
     @FXML
     ComboBox<String> comboBoxShoppingNameList, comboBoxListUnity, comboBoxListProduct;
     @FXML
-    Button btnConfirm, btnAddNewProduct;
+    Button btnConfirm, btnAddNewProduct, btnArchiver;
     @FXML
     Spinner<Integer> textFieldQuantityOrNumber;
     @FXML
@@ -92,6 +92,7 @@ public class WindowsMyShoppingListsController implements Initializable {
         textFieldQuantityOrNumber.setVisible(isVisible);
         comboBoxListUnity.setVisible(isVisible);
         btnConfirm.setVisible(isVisible);
+        btnArchiver.setVisible(isVisible);
         btnAddNewProduct.setVisible(isVisible);
     }
          @Override
@@ -177,4 +178,9 @@ public class WindowsMyShoppingListsController implements Initializable {
         else{
             hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
-}}
+}
+
+    public void archiveMyCreateShoppingList(ActionEvent actionEvent) {
+        //TODO appeller la Db pour save la liste selectionner
+    }
+}
