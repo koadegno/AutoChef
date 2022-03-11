@@ -1,9 +1,11 @@
 package ulb.infof307.g01.cuisine;
 
 public class Product {
+
     private String name;
     private int quantity = 1;
     private String nameUnity = "Unité";
+    private String famillyProduct = "Famille";
 
     public Product(String productName) {
         name = productName;
@@ -14,10 +16,17 @@ public class Product {
         this.quantity = quantity;
     }
 
-    public Product(String productName, int quantity, String _nameUnity) {
+    public Product(String productName, int quantity, String nameUnity) {
         name = productName;
         this.quantity = quantity;
-        this.nameUnity = _nameUnity;
+        this.nameUnity = nameUnity;
+    }
+
+    public Product(String productName, int quantity, String nameUnity,String famillyProduct ) {
+        name = productName;
+        this.quantity = quantity;
+        this.nameUnity = nameUnity;
+        this.famillyProduct = famillyProduct;
     }
 
     public void rename(String newName) {
@@ -50,7 +59,11 @@ public class Product {
         return name;
     }
 
+    public String getFamillyProduct() { return famillyProduct; }
+
     public String getNameUnity(){return nameUnity;}
+
+    public void setQuantity(int quantity) { this.quantity = quantity; }
     @Override
     public boolean equals(Object other) {
 
