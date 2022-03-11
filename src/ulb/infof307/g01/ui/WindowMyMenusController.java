@@ -3,6 +3,7 @@ package ulb.infof307.g01.ui;
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -17,18 +18,31 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
-public class MenuListController implements Initializable {
-
-    private Stage stage;
-    private Scene scene;
-    private Parent root;
+public class WindowMyMenusController implements Initializable {
 
     private ArrayList<String> menus = new ArrayList<>();
 
+    public void displayMenuList(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
 
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+
+    @FXML
+    Button backBtn;
+
+    public void backToMain(MouseEvent mousePressed)throws IOException {
+        WindowMainController main = new WindowMainController();
+        main.displayMain((Stage) ((Node) mousePressed.getSource()).getScene().getWindow());
+    }
 
     public void initializeMenusFromTextFile(String filename){
         //Les catégories doivent être séparées par des virgules!
@@ -104,6 +118,7 @@ public class MenuListController implements Initializable {
 
     @FXML
     TextField menuName;
+
     @FXML
     Button btnDisplayMenu;
 
@@ -111,21 +126,19 @@ public class MenuListController implements Initializable {
 
         String name = menuName.getText();
 
-        //TODO: Vérifier que name est dans menus
-
         if (menus.contains(name)){
-            System.out.println("Menu existe");
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("interface/Menu.fxml"));
-            root = loader.load();
+            FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
+            Parent root = loader.load();
 
-            MenuController menuController = loader.getController();
-            menuController.displayMenuName(name);
+            WindowShowMenuController controller = loader.getController();
+            controller.setMenu(name);
 
-            stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-            scene =  new Scene(root);
+            Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
+            Scene scene =  new Scene(root);
             stage.setTitle("Menu "+name);
             stage.setScene(scene);
             stage.show();
+
         }else {
             System.out.println("Menu n'existe pas!");
         }
