@@ -16,7 +16,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.Stage;
-import ulb.infof307.g01.cuisine.*;
+import ulb.infof307.g01.cuisine.Recipe;
 
 import java.io.IOException;
 import java.net.URL;
@@ -96,7 +96,7 @@ public class SearchRecipeController implements Initializable {
     }
 
     public void returnToCreateMenu(ActionEvent event) throws IOException {
-        root = FXMLLoader.load((getClass().getResource("interface/Main.fxml")));
+        root = FXMLLoader.load((getClass().getResource("interface/FXMLMainPage.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
