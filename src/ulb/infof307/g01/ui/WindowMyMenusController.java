@@ -16,7 +16,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
-import ulb.infof307.g01.cuisine.TempMenu;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -126,18 +125,13 @@ public class WindowMyMenusController implements Initializable {
     public void handleDisplayMenu(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
-        if (menus.contains(name)){
-            LocalDate dateBegin = LocalDate.of(2022, 3, 10);
-            LocalDate dateEnd = LocalDate.of(2017, 3, 17);
-            LocalDate[] duration =  {dateBegin, dateEnd};
-            //TempMenu _menu = new TempMenu(name, duration, 3);
 
+        if (menus.contains(name)){
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
             Parent root = loader.load();
 
             WindowShowMenuController controller = loader.getController();
-            controller.setMenu(name, duration, 3);
-            //controller.displayMenu(mousePressed, name);
+            controller.setMenu(name);
 
             Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
             Scene scene =  new Scene(root);

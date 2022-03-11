@@ -1,7 +1,10 @@
+//TODO: DOSSIER RESSOURCES!!!!
 package ulb.infof307.g01.ui;
 
+import com.sun.source.tree.Tree;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -18,119 +21,98 @@ import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.cuisine.TempMenu;
+import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.cuisine.Day;
 
 
 public class WindowShowMenuController implements Initializable {
 
-    private TempMenu menu;
+    //private TempMenu menu;
+    private Menu menu;
+    public void setMenu(String name){
+        this.menu= new Menu(name);
+        //TODO: Get from DB!
+        ObservableList<Recipe> recipes = FXCollections.observableArrayList(
+                new Recipe("recette 1"),
+                new Recipe("recette 2"),
+                new Recipe("recette 3")
+        );
+        ArrayList<Day> days = new ArrayList<>();
+        for (int i = 0; i < 7; i++) {
+            for (Recipe recipe : recipes){
+                this.menu.addMealTo(Day.values()[i], recipe);
+            }
+            days.add(Day.values()[i]);
+        }
 
-    public void setMenu(String name, LocalDate[] duration, int numOfDays){
-        this.menu= new TempMenu(name, duration, numOfDays);
         displayMenuInfo(name);
+        displayMenuTable(days);
     }
 
-    @FXML
-    DatePicker dateBegin, dateEnd;
 
     private Stage stage;
     private Scene scene;
     //private Parent root;
 
-    @FXML
-    TableView menuTable;
 
     @FXML
-    Label menuName;
+    Label menuName, nbOfdays;
+
+    @FXML
+    TreeView<String> menuTreeView;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-       // displayMenuInfo(menu.name);
         this.menuName.setText(" ");
-        //menuTable.setEditable(false);
     }
 
     @FXML
     public void displayMenuInfo(String name){
         this.menuName.setText(name);
-        dateBegin.setValue(menu.duration[0]);
-        dateEnd.setValue(menu.duration[1]);
-        displayMenuTable(menu);
+        this.nbOfdays.setText("Duration: 7 jours");
+
     }
 
     @FXML
-    public void displayMenuTable(TempMenu menu){
-        System.out.println("table");
-        int numOfDays= this.menu.numOfDays;
-        ObservableList<TableColumn> cols = FXCollections.observableArrayList();
-        TableColumn columnDelete = new TableColumn("test column");
-        ObservableList<Recipe> data = FXCollections.observableArrayList(
-                new Recipe("recette 1"),
-                new Recipe("recette 2"),
-                new Recipe("recette 3"),
-                new Recipe("recette 4"),
-                new Recipe("recette 5"),
-                new Recipe("recette 6"),
-                new Recipe("recette 7"),
-                new Recipe("recette 8")
-                );
-        //menuTable.get
-        //menuTable.setItems(FXCollections.observableArrayList("recette_test"));
-        //TODO: CORRIGER!!
-        menuTable.getItems().add(null);
-        CreateDayColumn createDayColumn = new CreateDayColumn();
-        Callback<TableColumn<Recipe, Void>, TableCell<Recipe, Void>> cellFactory = createDayColumn.createColWithButton(data);
-        columnDelete.setCellFactory(cellFactory);
-
-
-        /*for (int i = 0; i < numOfDays; i++) {
-            int dayIndex = i-1;
-            TableColumn<Recipe, String> column = new TableColumn<>("Day " + i);
-            /*column.setCellValueFactory(cd -> {
-                Recipe recipe = cd.getValue()[dayIndex];
-                return new SimpleObjectProperty<>(recipe == null ? null : recipe.getName());
-            });
-            //column.getCellData(i);
-            column.setCellValueFactory(new PropertyValueFactory<>("name"));
-            //column.
-            //cols.add(column);
-        }
-        menuTable.getColumns().addAll(cols);
-        ObservableList<Recipe> listeRecipes = FXCollections.observableArrayList();
-        menuTable.setItems(listeRecipes);*/
-
+    public void displayMenuTable(ArrayList<Day> days){
         /*
-        TableColumn day0 = new TableColumn<>("Name");
-        day0.setCellValueFactory(new PropertyValueFactory<>("name"));
-        TableColumn day1 = new TableColumn("Qté");
-        day1.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        for (Day day : days){
+            TableColumn<Recipe, String> col = new TableColumn<>(day.name());
+            col.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+            List<Recipe> recipes = menu.getMealsfor(day);
+            menuTableView.getColumns().add(col);
+            menuTableView.getItems().add(recipes);
+        }*/
 
-        //String[] mardi =  new String[3];
-        //mardi[0]="Recette0";
-        //mardi[1]="Recette1";
-        //mardi[2]="Recette2";
+        TreeItem<String> rootItem =  new TreeItem<>();
+        menuTreeView.setRoot(rootItem);
 
-        //day0.setText("Lundi");
-        //for (int i = 0; i < mardi.length; i++) {
-           // menuTable.getItems().add(mardi[i]);
-        //}
-        //day1.setText("Mardi");
-        //day2.setText("Mercredi");
+        for (Day day : days){
+            TreeItem<String> menuDay = new TreeItem<String>(day.name());
+            List<Recipe> mealForDay = menu.getMealsfor(day);
+            for (Recipe recipe : mealForDay){
+                TreeItem<String> recipeForMeal = new TreeItem<String>(recipe.getName());
+                menuDay.getChildren().add(recipeForMeal);
+            }
+            rootItem.getChildren().add(menuDay);
+        }
+    }
 
-        menuTable.getColumns().addAll(day0, day1);
+    @FXML
+    public void getSelectedItem(){
+        TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
 
-        menuTable.getItems().add(new Product("Tomate", 100));
-        menuTable.getItems().add(new Product("Pommes", 50));
-
- */
-
-        menuTable.getColumns().add(columnDelete);
+        }
     }
 
     @FXML
@@ -139,14 +121,6 @@ public class WindowShowMenuController implements Initializable {
             System.out.println("Menu existe");
 
             Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));  //          Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-            /*LocalDate dateBegin = LocalDate.of(2022, 3, 10);
-            LocalDate dateEnd = LocalDate.of(2017, 3, 17);
-            LocalDate[] duration =  {dateBegin, dateEnd};
-            this.menu = new TempMenu(name, duration, 3);
-
-             */
-            //displayMenuInfo(name);
-
             stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
             scene =  new Scene(root);
             stage.setTitle("Menu "+name);
