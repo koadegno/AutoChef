@@ -130,4 +130,10 @@ class TestDatabase {
         assertEquals("g",newShoppingList.get(0).getNameUnity(),"test unite 1er produit");
     }
 
+    @Test
+    public void testGetRecipeWhere() throws SQLException {
+        ArrayList<Recipe> res = db.getRecipeWhere("Poisson", "Plat", 3);
+        assertEquals(1 , res.size());
+    }
+
 }

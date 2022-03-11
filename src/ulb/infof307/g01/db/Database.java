@@ -180,9 +180,9 @@ public class Database {
     }
 
     /**
-     * Les valeurs doivent etre encode sous la forme pour les strings : "'exemple'"
+     * Les valeurs doivent etre encodees sous la forme pour les strings : "'exemple'"
      * Reste doit etre encode sous la forme : "exemple"
-     *
+     * @param nameTable Le nom de la table dans laquelle inserer
      * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
      */
     private void insert(String nameTable,String[] values){
@@ -196,10 +196,9 @@ public class Database {
     }
 
     /**
-     *
-     * @param nameTable La table pour lequel il faut faire un select
+     * @param nameTable La table pour laquelel il faut faire un select
      * @param names Nom des colonnes qui seront ajoutees dans les contraintes
-     * @param signs Signe associe a une contrainte (ex : =, <, > ...)
+     * @param signs Signe associé a une contrainte (ex : =, <, > ...)
      * @param values Valeur a respecter dans la contrainte
      * @return Resultat de la query
      */
@@ -242,6 +241,13 @@ public class Database {
         insert("ListeCourseIngredient",values);
     }
 
+    /**
+     * @param table Table dans laquelle on cherche le nom
+     * @param id ID correspondant au nom
+     * @param nameID nom de la colonne contenant l'ID
+     * @return Nom correspondant à l'ID
+     * @throws SQLException
+     */
     private String getNameFromID(String table, int id, String nameID) throws SQLException {
         String[]names = {nameID};
         String[]signs = {"="};
@@ -251,6 +257,9 @@ public class Database {
         return res.getString("Nom");
     }
 
+    /**
+     * Methode inverse de getNameFromID
+     */
     private int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
         String[]names = {"Nom"};
         String[]signs = {"="};
@@ -260,6 +269,12 @@ public class Database {
         return res.getInt(nameIDColumn);
     }
 
+    /**
+     * Methode remplissant une ArrayList a partir d'un objet ResultSet contenant des Recipes
+     * @param result ResultSet qui contient le resultat de la requete
+     * @return ArrayList d'objets Recipes correctement remplis
+     * @throws SQLException
+     */
     private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
 
         ArrayList<Recipe> recipes = new ArrayList<>();
@@ -277,22 +292,10 @@ public class Database {
         return recipes;
     }
 
-    public Integer createAndGetIdShoppingList(String name) {
-        String[] values = {"null",name};
-        insert("ListeCourse",values);
-        return getkey();
-    }
-
-    public ArrayList<String> getAllCategories() throws SQLException {
-        String[] vide = new String[0];
-        ResultSet res = select("Categorie", vide, vide, vide);
-        ArrayList<String> categories = new ArrayList<>();
-        while (res.next()){
-            categories.add(res.getString("Nom"));
-        }
-        return categories;
-    }
-
+    /**
+     * Insertion dans la table Categorie
+     * @param nameCategory Nouvelle categorie à inserer
+     */
     public void insertCategory(String nameCategory){
         String[] val = {"null", String.format("'%s'", nameCategory)};
         insert("Categorie", val);
@@ -302,7 +305,6 @@ public class Database {
         String[] val = {"null", String.format("'%s'", nameType)};
         insert("TypePlat", val);
     }
-    // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
 
     public void insertRecipe(Recipe recipe) throws SQLException {
         String name = String.format("'%s'", recipe.getName());
@@ -316,22 +318,55 @@ public class Database {
         insert("Recette", val);
     }
 
-    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
+    public void insertUnite(String name){
+        String[] values = {"null",String.format("'%s'",name)};
+        insert("Unite",values);
+    }
 
-        String[] name = {"Nom"};
+    public void insertFamilleAliment(String name){
+        String[] values = {"null",String.format("'%s'",name)};
+        insert("FamilleAliment",values);
+    }
+
+    public void insertIngredient(String name,String famille,String unite) throws SQLException {
+        int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
+        int idUnite = getIDFromName("Unite",unite,"UniteID");
+        String stringIdFamille = String.format("%d", idFamille);
+        String stringIdUnite = String.format("%d",idUnite);
+        String stringName = String.format("'%s'",name);
+        String[] values = {"null",stringName, stringIdFamille,stringIdUnite};
+        insert("Ingredient",values);
+    }
+
+    /**
+     * @param idProduct ID de l'ingredient que l'on cherche
+     * @return objet Product trouvé
+     * @throws SQLException
+     */
+    private Product getProduct(int idProduct) throws SQLException {
+        String[] name = {"IngredientID"};
         String[] signs = {"="};
-        String[] values = {String.format("'%s'", nameCategory)};
-        int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
-        name[0] = "CategorieID";
-        values[0] = String.format("%d", idCategory);
+        String[] values = {String.format("%d", idProduct)};
+        ResultSet querySelectProduct = select("Ingredient", name,signs,values);
+        querySelectProduct.next();
+        String nameProduct = querySelectProduct.getString("Nom");
+        String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
+        String uniteProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
+        return new Product(nameProduct,1,uniteProduct,familleProduct);
+    }
 
-        ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE R.CategorieID = %d", idCategory));
-
-        return getRecipes(result);
+    /**
+     * @return ArrayList contenant le nom de toutes les categories
+     * @throws SQLException
+     */
+    public ArrayList<String> getAllCategories() throws SQLException {
+        String[] vide = new String[0];
+        ResultSet res = select("Categorie", vide, vide, vide);
+        ArrayList<String> categories = new ArrayList<>();
+        while (res.next()){
+            categories.add(res.getString("Nom"));
+        }
+        return categories;
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
@@ -343,6 +378,102 @@ public class Database {
             shoppingListName.add(request.getString("Nom"));
         }
         return shoppingListName;
+    }
+    // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
+
+    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
+
+        String[] name = {"Nom"};
+        String[] signs = {"="};
+        String[] values = {String.format("'%s'", nameCategory)};
+        int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
+
+        ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
+                "FROM Recette as R\n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE R.CategorieID = %d", idCategory));
+
+        return getRecipes(result);
+    }
+
+    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
+        String[] vide = new String[0];
+        ResultSet queryAllProductName = select(table,vide,vide,vide);
+        ArrayList<String> allProductName = new ArrayList<>();
+        while(queryAllProductName.next()){
+            allProductName.add(queryAllProductName.getString("Nom"));
+        }
+        return allProductName;
+    }
+
+    public ArrayList<String> getAllProductName() throws SQLException {
+        return getAllNameFromTable("Ingredient");
+    }
+
+    public ArrayList<String> getAllUniteName() throws SQLException {
+        return getAllNameFromTable("Unite");
+    }
+
+    public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
+
+        int idName = getIDFromName("ListeCourse",nameShoppingList,"ListeCourseID");
+        String[] name = {"ListeCourseID"};
+        String[] signs = {"="};
+        String[] values = {String.format("%d", idName)};
+        ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
+                "FROM ListeCourseIngredient as S\n" +
+                "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
+                "INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID \n" +
+                "INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID\n" +
+                "WHERE S.ListeCourseID = %d", idName));
+        ShoppingList shoppingList = new ShoppingList(nameShoppingList,idName);
+        while(querySelectShoppingList.next()){
+            int productQuantity = querySelectShoppingList.getInt(1);
+            String productName = querySelectShoppingList.getString(2);
+            String productUnite = querySelectShoppingList.getString(3);
+            String productFamille = querySelectShoppingList.getString(4);
+            shoppingList.add(new Product(productName,productQuantity,productUnite,productFamille));
+        }
+        return shoppingList;
+    }
+
+    public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
+
+        ArrayList<String> where = new ArrayList<>();
+
+        StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
+                "FROM Recette as R\n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE ");
+
+        if (nameCategory != null){
+            int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
+            where.add(String.format("R.CategorieID = %d", idCategory));
+        }
+        if (nameType != null){
+            int idType = getIDFromName("TypePlat",nameType,"TypePlatID");
+            where.add(String.format("R.TypePlatID = %d", idType));
+        }
+        if (nbPerson > 0){
+            where.add(String.format("R.NbPersonnes = %d", nbPerson));
+        }
+
+        for (int i = 0; i < where.size(); i++) {
+            query.append(where.get(i)).append(" AND");
+        }
+        if (where.size() > 0)
+            query.delete(query.length()-3, query.length());
+
+        ResultSet result = sendQuery(query.toString());
+        return getRecipes(result);
+    }
+
+    public Integer createAndGetIdShoppingList(String name) {
+        String[] values = {"null",name};
+        insert("ListeCourse",values);
+        return getkey();
     }
 
     public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
@@ -364,79 +495,5 @@ public class Database {
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
    }
-
-   public void insertUnite(String name){
-       String[] values = {"null",String.format("'%s'",name)};
-       insert("Unite",values);
-   }
-
-   public void insertFamilleAliment(String name){
-        String[] values = {"null",String.format("'%s'",name)};
-        insert("FamilleAliment",values);
-   }
-
-   public void insertIngredient(String name,String famille,String unite) throws SQLException {
-        int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
-        int idUnite = getIDFromName("Unite",unite,"UniteID");
-        String stringIdFamille = String.format("%d", idFamille);
-        String stringIdUnite = String.format("%d",idUnite);
-        String stringName = String.format("'%s'",name);
-        String[] values = {"null",stringName, stringIdFamille,stringIdUnite};
-        insert("Ingredient",values);
-   }
-
-    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
-        String[] vide = new String[0];
-        ResultSet queryAllProductName = select(table,vide,vide,vide);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllProductName.next()){
-            allProductName.add(queryAllProductName.getString("Nom"));
-        }
-        return allProductName;
-    }
-
-   public ArrayList<String> getAllProductName() throws SQLException {
-       return getAllNameFromTable("Ingredient");
-   }
-
-   public ArrayList<String> getAllUniteName() throws SQLException {
-       return getAllNameFromTable("Unite");
-   }
-
-   private Product getProduct(int idProduct) throws SQLException {
-       String[] name = {"IngredientID"};
-       String[] signs = {"="};
-       String[] values = {String.format("%d", idProduct)};
-       ResultSet querySelectProduct = select("Ingredient", name,signs,values);
-       querySelectProduct.next();
-       String nameProduct = querySelectProduct.getString("Nom");
-       String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
-       String uniteProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
-       return new Product(nameProduct,1,uniteProduct,familleProduct);
-   }
-
-   public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
-
-        int idName = getIDFromName("ListeCourse",nameShoppingList,"ListeCourseID");
-        String[] name = {"ListeCourseID"};
-        String[] signs = {"="};
-        String[] values = {String.format("%d", idName)};
-        ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
-               "FROM ListeCourseIngredient as S\n" +
-               "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
-               "INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID \n" +
-               "INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID\n" +
-               "WHERE S.ListeCourseID = %d", idName));
-        ShoppingList shoppingList = new ShoppingList(nameShoppingList,idName);
-        while(querySelectShoppingList.next()){
-            int productQuantity = querySelectShoppingList.getInt(1);
-            String productName = querySelectShoppingList.getString(2);
-            String productUnite = querySelectShoppingList.getString(3);
-            String productFamille = querySelectShoppingList.getString(4);
-            shoppingList.add(new Product(productName,productQuantity,productUnite,productFamille));
-        }
-        return shoppingList;
-   }
-
 
 }
