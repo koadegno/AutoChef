@@ -1,12 +1,17 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.cuisine.ShoppingList;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -14,8 +19,30 @@ class TestDatabase {
     private static Database db;
 
     @BeforeAll
-    static public void createDB(){
+    static public void createDB() throws SQLException {
+
         db = new Database("test.sqlite");
+        db.insertCategory("Poisson");
+        db.insertCategory("Viande");
+
+
+        db.insertType("Plat");
+        db.insertType("Mijoté");
+        Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+        Recipe carbo = new Recipe("Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
+        Recipe pesto = new Recipe("Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+
+        db.insertRecipe(bolo);
+        db.insertRecipe(carbo);
+        db.insertRecipe(pesto);
+        db.createAndGetIdShoppingList("'Halloween'");
+        db.createAndGetIdShoppingList("'noel'");
+        db.createAndGetIdShoppingList("'ete'");
+        db.insertUnite("g");
+        db.insertUnite("litres");
+        db.insertFamilleAliment("Fruit");
+        db.insertIngredient("peche","Fruit","g");
+        db.insertIngredient("fraise","Fruit","g");
     }
 
     @AfterAll
@@ -24,97 +51,83 @@ class TestDatabase {
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
+//    @Test
+//    public void testCreateFamilleAliment(){
+//        db.createTableFamilleAliment();
+//        String query = "SELECT Nom FROM FamilleAliment;";
+//        Boolean res = db.sendRequest(query);
+//        assertEquals(res, true);
+//    }
+
+
     @Test
-    public void testCreateFamilleAliment(){
-        db.createTableFamilleAliment();
-        String query = "SELECT Nom FROM FamilleAliment;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
+    public void testGetAllCategories() throws SQLException {
+        ArrayList<String> res = db.getAllCategories();
+        assertEquals(2, res.size());
     }
 
     @Test
-    public void testNotCreateSameTableTwice(){
-        boolean result = db.createTableFamilleAliment();
-        assertFalse(result);
+    public void testGetRecipeWhereCategorieIsMeat() throws SQLException {
+        ArrayList<Recipe> res = db.getRecipeWhereCategorie("Viande");
+        assertEquals(1 , res.size(),"Test nombre recette pour categorie viande");
+        assertEquals(res.get(0).getName(),"Bolognaise","Test nom de cette recette");
+        assertEquals(res.get(0).getDuration(),60,"Test la duree de la preparation");
+        assertEquals(res.get(0).getCategory(),"Viande","Test categorie de la recette");
+        assertEquals(res.get(0).getType(),"Mijoté","Test Type de la recette");
+        assertEquals(res.get(0).getNbrPerson(),4,"test le nombre de personne");
+        assertEquals(res.get(0).getPreparation(),"Cuire des pâtes, oignons, tomates, ail, basilic","Test la preparation");
+
     }
 
     @Test
-    public void testCreateUnite(){
-        db.createTableUnite();
-        String query = "SELECT Nom FROM Unite;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
+    public void testGetRecipeWhereCategorieIsFish() throws SQLException {
+
+        ArrayList<Recipe> res = db.getRecipeWhereCategorie("Poisson");
+        assertEquals(2 , res.size());
+    }
+
+
+    @Test
+    public void testGetAllShoppingListNameWith3() throws SQLException {
+        ArrayList<String> shoppingListName = db.getAllShoppingListName();
+        assertEquals(3,shoppingListName.size());
+    }
+
+
+    @Test
+    public void testSaveModifyShoppingList() throws SQLException {
+        ShoppingList rename = new ShoppingList("hiver",3);
+        db.saveModifyShoppingList(rename);
+        ArrayList<String> shoppingListName = db.getAllShoppingListName();
+        assertEquals("hiver",shoppingListName.get(2));
     }
 
     @Test
-    public void testCreateCategorie(){
-        db.createTableCategorie();
-        String query = "SELECT Nom FROM Categorie;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
+    public void testGetAllProductName() throws SQLException {
+        ArrayList<String> names = db.getAllProductName();
+        assertEquals(2,names.size(),"test nombre produit");
+        assertEquals("peche",names.get(0));
+
     }
 
     @Test
-    public void testCreateTypePlat(){
-        db.createTableTypePlat();
-        String query = "SELECT Nom FROM TypePlat;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
+    public void testGetAllUniteName() throws SQLException {
+        ArrayList<String> names = db.getAllUniteName();
+        assertEquals(2,names.size(),"test nombre produit");
+        assertEquals("g",names.get(0));
     }
 
     @Test
-    public void testCreateRecette(){
-        db.createTableRecette();
-        String query = "SELECT Nom FROM Recette;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
+    public void testGetShoppingListFromName() throws SQLException {
+        ShoppingList shoppingList = db.getShoppingListFromName("Halloween");
+        shoppingList.add(new Product("peche",5,"g","Fruit"));
+        shoppingList.add(new Product("fraise",6,"g","Fruit"));
+        db.saveModifyShoppingList(shoppingList);
+        ShoppingList newShoppingList = db.getShoppingListFromName("Halloween");
+        assertEquals("Halloween",newShoppingList.getName(),"test name shoppingList");
+        assertEquals("peche",newShoppingList.get(0).getName(),"test name 1er produit");
+        assertEquals(6,newShoppingList.get(1).getQuantity(),"test quantite 2eme produit");
+        assertEquals("g",newShoppingList.get(0).getNameUnity(),"test unite 1er produit");
     }
 
-    @Test
-    public void testCreateIngredient(){
-        db.createTableIngredient();
-        String query = "SELECT Nom FROM Ingredient;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
-    }
-
-    @Test
-    public void testCreateRecetteIngredient(){
-        db.createTableRecetteIngredient();
-        String query = "SELECT RecetteID FROM RecetteIngredient;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
-    }
-
-    // ------------------------------------------------------------
-    @Test
-    public void testCreateListeCourse(){
-        db.createTableListeCourse();
-        String query = "SELECT ListeCourseID FROM ListeCourse;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
-    }
-
-    @Test
-    public void testCreateIdShoppingList(){
-        db.createTableListeCourse();
-        assertEquals(1,db.createIdShoppingList());
-    }
-    // ------------------------------------------------------------
-
-    @Test
-    public void testCreateListeCourseIngredient(){
-        db.createTableListeCourseIngredient();
-        String query = "SELECT ListeCourseID FROM ListeCourseIngredient;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
-    }
-
-    @Test
-    public void testCreateMenuRecette(){
-        db.createTableMenuRecette();
-        String query = "SELECT Date, Heure FROM MenuRecette;";
-        Boolean res = db.sendRequest(query);
-        assertEquals(res, true);
-    }
 }
