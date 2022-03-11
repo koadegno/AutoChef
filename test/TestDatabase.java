@@ -1,6 +1,7 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.cuisine.ShoppingList;
 import ulb.infof307.g01.db.Database;
@@ -102,7 +103,7 @@ class TestDatabase {
     }
 
     @Test
-    public void TestGetAllProductName() throws SQLException {
+    public void testGetAllProductName() throws SQLException {
         ArrayList<String> names = db.getAllProductName();
         assertEquals(2,names.size(),"test nombre produit");
         assertEquals("peche",names.get(0));
@@ -114,6 +115,19 @@ class TestDatabase {
         ArrayList<String> names = db.getAllUniteName();
         assertEquals(2,names.size(),"test nombre produit");
         assertEquals("g",names.get(0));
+    }
+
+    @Test
+    public void testGetShoppingListFromName() throws SQLException {
+        ShoppingList shoppingList = db.getShoppingListFromName("Halloween");
+        shoppingList.add(new Product("peche",5,"g","Fruit"));
+        shoppingList.add(new Product("fraise",6,"g","Fruit"));
+        db.saveModifyShoppingList(shoppingList);
+        ShoppingList newShoppingList = db.getShoppingListFromName("Halloween");
+        assertEquals("Halloween",newShoppingList.getName(),"test name shoppingList");
+        assertEquals("peche",newShoppingList.get(0).getName(),"test name 1er produit");
+        assertEquals(6,newShoppingList.get(1).getQuantity(),"test quantite 2eme produit");
+        assertEquals("g",newShoppingList.get(0).getNameUnity(),"test unite 1er produit");
     }
 
 }

@@ -348,7 +348,7 @@ public class Database {
     public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
         int id = createAndGetIdShoppingList(shoppingList.getName());
         for(Product product : shoppingList){
-            int idProduct = getIDFromName("Ingredient", product.getName(),"Nom");
+            int idProduct = getIDFromName("Ingredient", product.getName(),"IngredientID");
             insertIngredientInShoppingList(id,idProduct, product.getQuantity());
        }
    }
@@ -360,7 +360,7 @@ public class Database {
        delete("ListeCourseIngredient", name, signs, values);
        updateName("ListeCourse",name,signs,values, shoppingList.getName());
        for (Product product : shoppingList) {
-           int idProduct = getIDFromName("Ingredient", product.getName(), "Nom");
+           int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
    }
@@ -401,6 +401,41 @@ public class Database {
 
    public ArrayList<String> getAllUniteName() throws SQLException {
        return getAllNameFromTable("Unite");
+   }
+
+   private Product getProduct(int idProduct) throws SQLException {
+       String[] name = {"IngredientID"};
+       String[] signs = {"="};
+       String[] values = {String.format("%d", idProduct)};
+       ResultSet querySelectProduct = select("Ingredient", name,signs,values);
+       querySelectProduct.next();
+       String nameProduct = querySelectProduct.getString("Nom");
+       String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
+       String uniteProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
+       return new Product(nameProduct,1,uniteProduct,familleProduct);
+   }
+
+   public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
+
+        int idName = getIDFromName("ListeCourse",nameShoppingList,"ListeCourseID");
+        String[] name = {"ListeCourseID"};
+        String[] signs = {"="};
+        String[] values = {String.format("%d", idName)};
+        ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
+               "FROM ListeCourseIngredient as S\n" +
+               "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
+               "INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID \n" +
+               "INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID\n" +
+               "WHERE S.ListeCourseID = %d", idName));
+        ShoppingList shoppingList = new ShoppingList(nameShoppingList,idName);
+        while(querySelectShoppingList.next()){
+            int productQuantity = querySelectShoppingList.getInt(1);
+            String productName = querySelectShoppingList.getString(2);
+            String productUnite = querySelectShoppingList.getString(3);
+            String productFamille = querySelectShoppingList.getString(4);
+            shoppingList.add(new Product(productName,productQuantity,productUnite,productFamille));
+        }
+        return shoppingList;
    }
 
 
