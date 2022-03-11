@@ -317,21 +317,19 @@ public class Database {
     }
 
     public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
-        //TODO utiliser GetIDFROMNAME !!!!
+
         String[] name = {"Nom"};
         String[] signs = {"="};
         String[] values = {String.format("'%s'", nameCategory)};
-        ResultSet result = select("Categorie",name, signs, values);
-        result.next();
-        int key = result.getInt("CategorieID");
+        int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
         name[0] = "CategorieID";
-        values[0] = String.format("%d", key);
+        values[0] = String.format("%d", idCategory);
 
-        result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n"+
+        ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
                 "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n"+
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n"+
-                "WHERE R.CategorieID = %d",key));
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE R.CategorieID = %d", idCategory));
 
         return getRecipes(result);
     }
@@ -387,14 +385,22 @@ public class Database {
         insert("Ingredient",values);
    }
 
+    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
+        String[] vide = new String[0];
+        ResultSet queryAllProductName = select(table,vide,vide,vide);
+        ArrayList<String> allProductName = new ArrayList<>();
+        while(queryAllProductName.next()){
+            allProductName.add(queryAllProductName.getString("Nom"));
+        }
+        return allProductName;
+    }
+
    public ArrayList<String> getAllProductName() throws SQLException {
-       String[] vide = new String[0];
-       ResultSet queryAllProductName = select("Ingredient",vide,vide,vide);
-       ArrayList<String> allProductName = new ArrayList<>();
-       while(queryAllProductName.next()){
-           allProductName.add(queryAllProductName.getString("Nom"));
-       }
-       return allProductName;
+       return getAllNameFromTable("Ingredient");
+   }
+
+   public ArrayList<String> getAllUniteName() throws SQLException {
+       return getAllNameFromTable("Unite");
    }
 
 

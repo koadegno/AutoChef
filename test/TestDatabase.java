@@ -38,6 +38,7 @@ class TestDatabase {
         db.createAndGetIdShoppingList("'noel'");
         db.createAndGetIdShoppingList("'ete'");
         db.insertUnite("g");
+        db.insertUnite("litres");
         db.insertFamilleAliment("Fruit");
         db.insertIngredient("peche","Fruit","g");
         db.insertIngredient("fraise","Fruit","g");
@@ -106,6 +107,13 @@ class TestDatabase {
         assertEquals(2,names.size(),"test nombre produit");
         assertEquals("peche",names.get(0));
 
+    }
+
+    @Test
+    public void testGetAllUniteName() throws SQLException {
+        ArrayList<String> names = db.getAllUniteName();
+        assertEquals(2,names.size(),"test nombre produit");
+        assertEquals("g",names.get(0));
     }
 
 }
