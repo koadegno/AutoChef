@@ -1,3 +1,0 @@
-Manifest-Version: 1.0
-Main-Class: ulb.infof307.g01.Main
-
