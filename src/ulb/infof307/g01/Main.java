@@ -6,7 +6,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 
-import java.net.URL;
 import java.util.Objects;
 
 public class Main extends Application {
@@ -15,9 +14,9 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage){
+
         try{
-            URL ressource = getClass().getResource("ui/interface/FXMLMainPage.fxml");
-            Parent root = FXMLLoader.load(Objects.requireNonNull(ressource));
+            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ui/interface/Main.fxml")));
             Scene scene =  new Scene(root);
             primaryStage.setTitle("Page principale");
             primaryStage.setScene(scene);
@@ -26,5 +25,6 @@ public class Main extends Application {
         }catch (Exception e ){
             e.printStackTrace();
         }
+
     }
 }

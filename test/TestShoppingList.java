@@ -25,6 +25,7 @@ class TestShoppingList {
     @BeforeEach
     private void addElements() {
         list.add(testList.get(0));
+        list.add(testList.get(0));
         list.add(testList.get(1));
     }
 
@@ -37,12 +38,24 @@ class TestShoppingList {
     void add() {
         assertEquals(testList.get(0), list.get(0));
         assertEquals(testList.get(1), list.get(1));
+
+        // Element in double
+        assertEquals(2 , list.get(0).getQuantity());
+        assertThrows(ArrayIndexOutOfBoundsException.class, () -> {list.get(2);});
     }
 
     @Test
     void remove() {
-        list.remove(testList.get(0));
-        assertEquals(testList.get(1), list.get(0));
+        assertTrue(list.remove(testList.get(0)), "ShoppingList.remove() n'a pas renvoyé True");
+        assertEquals(1, list.get(0).getQuantity(),
+                "La quantité du produit list[0] n'a pas été décrémenté après suppression");
+
+        assertTrue(list.remove(testList.get(0)), "ShoppingList.remove() n'a pas renvoyé True");
+        assertEquals(testList.get(1), list.get(0),
+                "Le produit list[0] n'as pas été supprimé avec une quantité de 0");
+
+        assertFalse(list.remove(new Product("false")),
+                "ShoppingList.remove() n'a pas renvoyé False avec un objet non présent dans la liste");
     }
 
     @Test
