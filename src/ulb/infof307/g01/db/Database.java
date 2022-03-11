@@ -3,176 +3,102 @@ import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.cuisine.ShoppingList;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.List;
+import java.util.Scanner;
 
 
 public class Database {
+
     private String dbName;
     private Connection connection;
     private Statement request;
 
     public Database(String nameDB) {
         dbName = "jdbc:sqlite:" + nameDB;
+        File file = new File(nameDB);
+        boolean fileExist = file.exists();
         try {
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
-            createDB();
+            if(! fileExist ) {
+                createDB();
+            }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
     private void createDB(){
-        createTableFamilleAliment();
-        createTableUnite();
-        createTableCategorie();
-        createTableTypePlat();
-        createTableRecette();
-        createTableIngredient();
-        createTableRecetteIngredient();
-        createTableListeCourse();
-        createTableListeCourseIngredient();
-        createTableMenuRecette();
+        try{
+            FileInputStream fileDb =new FileInputStream("bdd.txt");
+            Scanner scanner =new Scanner(fileDb);
+            while(scanner.hasNextLine()){
+                sendRequest(scanner.nextLine());
+            }
+            scanner.close();
+        }
+        catch(IOException e) {
+            System.out.println(e.getMessage());
+        }
     }
 
     public void closeConnection() throws SQLException {
         connection.close();
     }
 
-    // TODO : METTRE EN PRIVATE
-    public boolean sendRequest(String req) {
+    /**
+     * Uniquement pour la creation de table
+     * @param query requete sql
+     * @return return True si la requete est effectuee, False sinon
+     */
+    public boolean sendRequest(String query) {
         try {
-            return request.execute(req);
+            return request.execute(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return false;
     }
 
+    /**
+     * Requete lecture de la database
+     * @param query requete sql
+     * @return resultat de la requete, ou null si la requete echoue
+     */
     private ResultSet sendQuery(String query) {
         try {
             return request.executeQuery(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
         return null;
     }
 
+    /**
+     * Requete ecriture de la database
+     * @param query requete sql
+     */
     private void sendQueryUpdate(String query){
         try {
              request.executeUpdate(query);
         } catch (SQLException e) {
-            e.printStackTrace();
+            System.out.println(e.getMessage());
         }
     }
 
-    private boolean createTableFamilleAliment() {
-        String req = "CREATE TABLE IF NOT EXISTS FamilleAliment (\n" +
-                "    FamilleAlimentID INTEGER PRIMARY KEY,\n" +
-                "    Nom CHAR(20) NOT NULL);";
-        return sendRequest(req);
-    }
-
-    private boolean createTableUnite() {
-        String req = "CREATE TABLE IF NOT EXISTS Unite(\n" +
-                "    UniteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    Nom CHAR(10) NOT NULL UNIQUE\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableCategorie() {
-        String req = "CREATE TABLE IF NOT EXISTS Categorie(\n" +
-                "    CategorieID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    Nom CHAR(20) NOT NULL UNIQUE\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableTypePlat() {
-        String req = "CREATE TABLE IF NOT EXISTS TypePlat(\n" +
-                "    TypePlatID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    Nom CHAR(20) NOT NULL UNIQUE\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableRecette() {
-        String req = "CREATE TABLE IF NOT EXISTS Recette(\n" +
-                "    RecetteID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    Nom CHAR(40) NOT NULL,\n" +
-                "    Duree INTEGER NOT NULL,\n" +
-                "    NbPersonnes INTEGER NOT NULL,\n" +
-                "    TypePlatID INTEGER NOT NULL\n" +
-                "        CONSTRAINT fkTypePlat REFERENCES TypePlat(TypePlatID),\n" +
-                "    CategorieID INTEGER NOT NULL\n" +
-                "        CONSTRAINT fkCategorie REFERENCES Categorie(CategorieID),\n" +
-                "    Preparation TEXT NOT NULL\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableIngredient() {
-        String req = "CREATE TABLE IF NOT EXISTS Ingredient(\n" +
-                "    IngredientID INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
-                "    Nom CHAR(25) NOT NULL UNIQUE,\n" +
-                "    FamilleAlimentID INTEGER\n" +
-                "        CONSTRAINT fkFamilleAliment REFERENCES FamilleAliment(FamilleAlimentID),\n" +
-                "    UniteID INTEGER\n" +
-                "        CONSTRAINT fkUnite REFERENCES Unite(UniteID)\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableRecetteIngredient() {
-        String req = "CREATE TABLE IF NOT EXISTS RecetteIngredient(\n" +
-                "    RecetteID INTEGER NOT NULL\n" +
-                "        CONSTRAINT fkRecette REFERENCES Recette(RecetteID),\n" +
-                "    IngredientID INTEGER NOT NULL\n" +
-                "        CONSTRAINT fkIngredient REFERENCES Ingredient(IngredientID),\n" +
-                "    Quantite INTEGER NOT NULL,\n" +
-                "    PRIMARY KEY (RecetteID, IngredientID)\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableListeCourse() {
-        String req = "CREATE TABLE IF NOT EXISTS ListeCourse (\n" +
-                "    ListeCourseID INTEGER PRIMARY KEY AUTOINCREMENT,\n " +
-                "    Nom CHAR(25) NOT NULL UNIQUE \n" +
-                ");";
-        return sendRequest(req);
-    }
-
-    private boolean createTableListeCourseIngredient() {
-        String req = "CREATE TABLE IF NOT EXISTS ListeCourseIngredient(\n" +
-                "    ListeCourseID INTEGER\n" +
-                "        CONSTRAINT fkListeCourse REFERENCES ListeCourse(ListeCourseID),\n" +
-                "    IngredientID INTEGER\n" +
-                "        CONSTRAINT fkIngredient REFERENCES Ingredient(IngredientID),\n" +
-                "    Quantite INTEGER NOT NULL,\n" +
-                "    PRIMARY KEY (ListeCourseID, IngredientID)\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private boolean createTableMenuRecette() {
-        String req = "CREATE TABLE IF NOT EXISTS MenuRecette(\n" +
-                "    Date DATE NOT NULL,\n" +
-                "    Heure TIME,\n" +
-                "    RecetteID INTEGER\n" +
-                "        CONSTRAINT fkRecette REFERENCES Recette(RecetteID),\n" +
-                "    PRIMARY KEY (Date, Heure)\n" +
-                ")";
-        return sendRequest(req);
-    }
-
-    private Integer getkey(){
+    /**
+     * @return un id genere par la database, null si l'id n'est pas cree
+     */
+    private Integer getGeneratedID(){
         try {
-            ResultSet getKey = request.getGeneratedKeys();
-            getKey.next();
-            return getKey.getInt(1);
+            ResultSet getID = request.getGeneratedKeys();
+            getID.next();
+            return getID.getInt(1);
         }catch (SQLException e){
             e.printStackTrace();
         }
@@ -180,7 +106,7 @@ public class Database {
     }
 
     /**
-     * Les valeurs doivent etre encodees sous la forme pour les strings : "'exemple'"
+     * Les valeurs doivent etre encodees sous la forme : "'exemple'", pour les strings
      * Reste doit etre encode sous la forme : "exemple"
      * @param nameTable Le nom de la table dans laquelle inserer
      * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
@@ -196,44 +122,43 @@ public class Database {
     }
 
     /**
-     * @param nameTable La table pour laquelel il faut faire un select
-     * @param names Nom des colonnes qui seront ajoutees dans les contraintes
-     * @param signs Signe associé a une contrainte (ex : =, <, > ...)
-     * @param values Valeur a respecter dans la contrainte
+     * @param nameTable La table pour laquel il faut faire un select
+     * @param constraintToAppend
      * @return Resultat de la query
      */
-    private ResultSet select(String nameTable,String[]names, String[]signs, String[]values){
+    private ResultSet select(String nameTable, List<String> constraintToAppend){
+
         StringBuilder req;
-        if (values.length > 0){
+        String query;
+        if (constraintToAppend.size() > 0){
             req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
-            for (int i = 0; i < names.length;i++) {
-                req.append(names[i]).append(signs[i]).append(values[i]).append(" AND ");
-            }
-            req.delete(req.length()-4, req.length());
+            query = appendValuesToWhere(req,constraintToAppend);
         } else {
-            req = new StringBuilder(String.format("SELECT * FROM %s", nameTable));
+            query = String.format("SELECT * FROM %s;", nameTable);
         }
-        req.append(";");
-        return sendQuery(String.valueOf(req));
+        return sendQuery(query);
     }
 
-    private void appendValuesToWhere(String[] names, String[] signs, String[] values, StringBuilder req) {
-        for (int i = 0; i < names.length;i++) {
-            req.append(names[i]).append(signs[i]).append(values[i]).append(" AND ");
+    private String appendValuesToWhere(StringBuilder req, List<String> constraintToAppend) {
+
+        for (String s : constraintToAppend) {
+            req.append(s).append(" AND ");
         }
         req.delete(req.length()-4, req.length());
         req.append(";");
-        sendQueryUpdate(String.valueOf(req));
+        return String.valueOf(req);
     }
 
-    private void delete(String nameTable,String[]names, String[]signs, String[]values){
+    private void delete(String nameTable, List<String> constraintToAppend){
         StringBuilder req = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        appendValuesToWhere(names, signs, values, req);
+        String stringQuery = appendValuesToWhere(req, constraintToAppend);
+        sendQueryUpdate(stringQuery);
     }
 
-    private void updateName(String nameTable,String[]names, String[]signs, String[]values,String nameToUpdate){
+    private void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend){
         StringBuilder req = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable,nameToUpdate));
-        appendValuesToWhere(names, signs, values, req);
+        String stringQuery = appendValuesToWhere(req, constraintToAppend);
+        sendQueryUpdate(stringQuery);
     }
 
     private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
@@ -244,15 +169,15 @@ public class Database {
     /**
      * @param table Table dans laquelle on cherche le nom
      * @param id ID correspondant au nom
-     * @param nameID nom de la colonne contenant l'ID
+     * @param nameIDColumn nom de la colonne contenant l'ID
      * @return Nom correspondant à l'ID
      * @throws SQLException
      */
-    private String getNameFromID(String table, int id, String nameID) throws SQLException {
-        String[]names = {nameID};
-        String[]signs = {"="};
-        String[]values = {String.format("%d", id)};
-        ResultSet res = select(table, names, signs, values);
+    private String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
+
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("%s=%d",nameIDColumn,id));
+        ResultSet res = select(table,constraint);
         res.next();
         return res.getString("Nom");
     }
@@ -261,10 +186,9 @@ public class Database {
      * Methode inverse de getNameFromID
      */
     private int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
-        String[]names = {"Nom"};
-        String[]signs = {"="};
-        String[]values = {String.format("'%s'", name)};
-        ResultSet res = select(table, names, signs, values);
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("%s='%s'","Nom",name));
+        ResultSet res = select(table,constraint);
         res.next();
         return res.getInt(nameIDColumn);
     }
@@ -344,10 +268,9 @@ public class Database {
      * @throws SQLException
      */
     private Product getProduct(int idProduct) throws SQLException {
-        String[] name = {"IngredientID"};
-        String[] signs = {"="};
-        String[] values = {String.format("%d", idProduct)};
-        ResultSet querySelectProduct = select("Ingredient", name,signs,values);
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("%s = %d","IngredientID",idProduct));
+        ResultSet querySelectProduct = select("Ingredient",constraint);
         querySelectProduct.next();
         String nameProduct = querySelectProduct.getString("Nom");
         String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
@@ -360,8 +283,8 @@ public class Database {
      * @throws SQLException
      */
     public ArrayList<String> getAllCategories() throws SQLException {
-        String[] vide = new String[0];
-        ResultSet res = select("Categorie", vide, vide, vide);
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet res = select("Categorie",constraint);
         ArrayList<String> categories = new ArrayList<>();
         while (res.next()){
             categories.add(res.getString("Nom"));
@@ -371,35 +294,18 @@ public class Database {
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
 
-        String[] vide = new String[0];
-        ResultSet request = select("ListeCourse",vide,vide,vide);
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet request = select("ListeCourse",constraint);
         ArrayList<String> shoppingListName = new ArrayList<>();
         while(request.next()){
             shoppingListName.add(request.getString("Nom"));
         }
         return shoppingListName;
     }
-    // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
-
-    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
-
-        String[] name = {"Nom"};
-        String[] signs = {"="};
-        String[] values = {String.format("'%s'", nameCategory)};
-        int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
-
-        ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE R.CategorieID = %d", idCategory));
-
-        return getRecipes(result);
-    }
 
     private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
-        String[] vide = new String[0];
-        ResultSet queryAllProductName = select(table,vide,vide,vide);
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet queryAllProductName = select(table, constraint);
         ArrayList<String> allProductName = new ArrayList<>();
         while(queryAllProductName.next()){
             allProductName.add(queryAllProductName.getString("Nom"));
@@ -418,9 +324,6 @@ public class Database {
     public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
 
         int idName = getIDFromName("ListeCourse",nameShoppingList,"ListeCourseID");
-        String[] name = {"ListeCourseID"};
-        String[] signs = {"="};
-        String[] values = {String.format("%d", idName)};
         ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
                 "FROM ListeCourseIngredient as S\n" +
                 "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
@@ -440,7 +343,7 @@ public class Database {
 
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
 
-        ArrayList<String> where = new ArrayList<>();
+        ArrayList<String> constraintForQuery = new ArrayList<>();
 
         StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
                 "FROM Recette as R\n" +
@@ -450,20 +353,20 @@ public class Database {
 
         if (nameCategory != null){
             int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
-            where.add(String.format("R.CategorieID = %d", idCategory));
+            constraintForQuery.add(String.format("R.CategorieID = %d", idCategory));
         }
         if (nameType != null){
             int idType = getIDFromName("TypePlat",nameType,"TypePlatID");
-            where.add(String.format("R.TypePlatID = %d", idType));
+            constraintForQuery.add(String.format("R.TypePlatID = %d", idType));
         }
         if (nbPerson > 0){
-            where.add(String.format("R.NbPersonnes = %d", nbPerson));
+            constraintForQuery.add(String.format("R.NbPersonnes = %d", nbPerson));
         }
 
-        for (int i = 0; i < where.size(); i++) {
-            query.append(where.get(i)).append(" AND ");
+        for (int i = 0; i < constraintForQuery.size(); i++) {
+            query.append(constraintForQuery.get(i)).append(" AND ");
         }
-        if (where.size() > 0)
+        if (constraintForQuery.size() > 0)
             query.delete(query.length()-4, query.length());
 
         ResultSet result = sendQuery(query.toString());
@@ -473,7 +376,7 @@ public class Database {
     public Integer createAndGetIdShoppingList(String name) {
         String[] values = {"null",name};
         insert("ListeCourse",values);
-        return getkey();
+        return getGeneratedID();
     }
 
     public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
@@ -485,11 +388,10 @@ public class Database {
    }
 
    public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
-       String[] name = {"ListeCourseID"};
-       String[] signs = {"="};
-       String[] values = {String.format("%d", shoppingList.getId())};
-       delete("ListeCourseIngredient", name, signs, values);
-       updateName("ListeCourse",name,signs,values, shoppingList.getName());
+       ArrayList<String> constraint = new ArrayList<>();
+       constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
+       delete("ListeCourseIngredient",constraint);
+       updateName("ListeCourse", shoppingList.getName(),constraint );
        for (Product product : shoppingList) {
            int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
