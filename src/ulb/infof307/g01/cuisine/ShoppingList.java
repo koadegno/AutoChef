@@ -11,7 +11,7 @@ public class ShoppingList extends UniqueProductList {
 
     public ShoppingList(String name) {this.name = name;}
 
-    ShoppingList(String name, int id) {
+    public ShoppingList(String name, int id) {
         this.id = id;
         this.name = name;
     }
