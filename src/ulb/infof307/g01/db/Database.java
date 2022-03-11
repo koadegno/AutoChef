@@ -1,4 +1,5 @@
 package ulb.infof307.g01.db;
+import org.sqlite.SQLiteException;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.cuisine.ShoppingList;
@@ -19,7 +20,6 @@ public class Database {
             request = connection.createStatement();
             createDB();
         } catch (SQLException e) {
-            System.out.println("il y une erreur");
             System.out.println(e.getMessage());
         }
     }
@@ -62,7 +62,7 @@ public class Database {
 
     private void sendQueryUpdate(String query){
         try {
-             request.executeUpdate(query);
+            request.executeUpdate(query);
         } catch (SQLException e) {
             e.printStackTrace();
         }
@@ -279,7 +279,7 @@ public class Database {
     }
 
     public Integer createAndGetIdShoppingList(String name) {
-        String[] values = {"null",name};
+        String[] values = {"null","'"+name+"'"};
         insert("ListeCourse",values);
         return getkey();
     }
@@ -346,7 +346,7 @@ public class Database {
         return shoppingListName;
     }
 
-    public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
+    public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException, SQLiteException {
         int id = createAndGetIdShoppingList(shoppingList.getName());
         for(Product product : shoppingList){
             int idProduct = getIDFromName("Ingredient", product.getName(),"IngredientID");
