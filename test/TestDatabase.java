@@ -130,8 +130,8 @@ class TestDatabase {
 
     @Test
     public void testGetRecipeWhere2Null() throws SQLException {
-        ArrayList<Recipe> res = db.getRecipeWhere("Poisson",null,0);
-        assertEquals(2 , res.size());
+        ArrayList<Recipe> res = db.getRecipeWhere(null,null,0);
+        assertEquals(3 , res.size());
     }
 
 }

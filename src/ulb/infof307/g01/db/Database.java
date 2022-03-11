@@ -123,7 +123,7 @@ public class Database {
 
     /**
      * @param nameTable La table pour laquel il faut faire un select
-     * @param constraintToAppend
+     * @param constraintToAppend liste de toute les contraintes à ajouter
      * @return Resultat de la query
      */
     private ResultSet select(String nameTable, List<String> constraintToAppend){
@@ -139,14 +139,14 @@ public class Database {
         return sendQuery(query);
     }
 
-    private String appendValuesToWhere(StringBuilder req, List<String> constraintToAppend) {
+    private String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
 
         for (String s : constraintToAppend) {
-            req.append(s).append(" AND ");
+            query.append(s).append(" AND ");
         }
-        req.delete(req.length()-4, req.length());
-        req.append(";");
-        return String.valueOf(req);
+        query.delete(query.length()-4, query.length());
+        query.append(";");
+        return String.valueOf(query);
     }
 
     private void delete(String nameTable, List<String> constraintToAppend){
@@ -343,33 +343,33 @@ public class Database {
 
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
 
-        ArrayList<String> constraintForQuery = new ArrayList<>();
-
+        ArrayList<String> constraint = new ArrayList<>();
+        String stringQuery;
         StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
                 "FROM Recette as R\n" +
                 "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE ");
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n");
 
         if (nameCategory != null){
             int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
-            constraintForQuery.add(String.format("R.CategorieID = %d", idCategory));
+            constraint.add(String.format("R.CategorieID = %d", idCategory));
         }
         if (nameType != null){
             int idType = getIDFromName("TypePlat",nameType,"TypePlatID");
-            constraintForQuery.add(String.format("R.TypePlatID = %d", idType));
+            constraint.add(String.format("R.TypePlatID = %d", idType));
         }
         if (nbPerson > 0){
-            constraintForQuery.add(String.format("R.NbPersonnes = %d", nbPerson));
+            constraint.add(String.format("R.NbPersonnes = %d", nbPerson));
         }
 
-        for (int i = 0; i < constraintForQuery.size(); i++) {
-            query.append(constraintForQuery.get(i)).append(" AND ");
+        if (constraint.size() > 0){
+            query.append(" Where ");
+            stringQuery = appendValuesToWhere(query,constraint);
         }
-        if (constraintForQuery.size() > 0)
-            query.delete(query.length()-4, query.length());
-
-        ResultSet result = sendQuery(query.toString());
+        else {
+            stringQuery = String.valueOf(query);
+        }
+        ResultSet result = sendQuery(stringQuery);
         return getRecipes(result);
     }
 
