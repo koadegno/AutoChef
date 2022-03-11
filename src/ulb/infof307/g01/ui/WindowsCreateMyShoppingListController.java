@@ -23,8 +23,6 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
     @FXML
     TextField nameMyCreateShoppingList;
     @FXML
-    TableView tableViewDisplayProductList;
-    @FXML
     TableColumn columnProduct, columnQuantityOrNumber, columnUnity, columnDelete;
 
     @Override
@@ -42,27 +40,40 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
 
     @FXML
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
-
+        removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
-        if(Objects.equals(shoppingListName, "")){
+
+        System.out.println(shoppingListName);
+        if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
             nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+        }
+        else if(tableViewDisplayProductList.getItems().size() == 0){ // table view est vide
+            tableViewDisplayProductList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
         else {
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListName);
             fillShoppingListToSend(shoppingListToSend);
             try {
-                System.out.println("je veux etre ici mais j'y suis deja bg");
                 dataBase.saveNewShoppingList(shoppingListToSend);
             }
-            catch (SQLiteException e) {
-                System.out.println("je veux etre ici");
-                System.out.println(e.getErrorCode());
+            catch (SQLiteException e) { //Erreur de doublon
+                nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+                System.out.println(e.getMessage());
+                return;
+
             } catch (SQLException e) {
-                System.out.println("yoo" + e.getErrorCode());
                 e.printStackTrace();
-                exit(e.getErrorCode());
+                return;
             }
+            // else tout ce passe bien
+            returnShoppingList(event);
         }
+    }
+
+    @Override
+    protected void removeBorderColor() {
+        super.removeBorderColor();
+        nameMyCreateShoppingList.setStyle("");
     }
 
 }

@@ -53,6 +53,11 @@ public class MyShoppingListsControllerTools {
         dataBase = db;
     }
 
+    protected void removeBorderColor() {
+        tableViewDisplayProductList.setStyle("");
+        hBoxToCreateProduct.setStyle("");
+    }
+
     public void initShoppingListElement() {
 
         try { //TODO gerer l'erreur
@@ -110,9 +115,10 @@ public class MyShoppingListsControllerTools {
         return myListComboBox;
     }
 
+
     @FXML
     public void addElementOfListToComboBoxProduct() {
-        hBoxToCreateProduct.setStyle("");
+        this.removeBorderColor();
         Object nameProductChoose = comboBoxListProduct.getSelectionModel().getSelectedItem();
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();

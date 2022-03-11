@@ -8,8 +8,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.cuisine.*;
 
 import java.io.IOException;
 import java.net.URL;

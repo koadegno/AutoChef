@@ -1,5 +1,6 @@
 package ulb.infof307.g01.ui;
 
+import ulb.infof307.g01.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -17,6 +18,15 @@ public class WindowMainController {
     private Parent root;
     private Stage stage;
     private Scene scene;
+
+    private Database dataBase;
+    private String dataBaseName = "autochef.sqlite";
+
+    public WindowMainController() {
+        dataBase = new Database(dataBaseName);
+    }
+
+
 
     @FXML
     public void displayMain(Stage primaryStage){
@@ -36,6 +46,7 @@ public class WindowMainController {
     @FXML
     public void redirectToShoppingList(ActionEvent event) throws IOException {
         WindowsMainShoppingListController windowsShoppingListController = new WindowsMainShoppingListController();
+        windowsShoppingListController.setDataBase(dataBase);
         windowsShoppingListController.displayMenuShoppingListController(event);
 
     }
