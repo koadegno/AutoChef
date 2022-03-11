@@ -37,6 +37,10 @@ class TestDatabase {
         db.createAndGetIdShoppingList("'Halloween'");
         db.createAndGetIdShoppingList("'noel'");
         db.createAndGetIdShoppingList("'ete'");
+        db.insertUnite("g");
+        db.insertFamilleAliment("Fruit");
+        db.insertIngredient("peche","Fruit","g");
+        db.insertIngredient("fraise","Fruit","g");
     }
 
     @AfterAll
@@ -63,13 +67,13 @@ class TestDatabase {
     @Test
     public void testGetRecipeWhereCategorieIsMeat() throws SQLException {
         ArrayList<Recipe> res = db.getRecipeWhereCategorie("Viande");
-        assertEquals(1 , res.size());
-        assertEquals(res.get(0).getName(),"Bolognaise");
-        assertEquals(res.get(0).getDuration(),60);
-        assertEquals(res.get(0).getCategory(),"Viande");
-        assertEquals(res.get(0).getType(),"Mijoté");
-        assertEquals(res.get(0).getNbrPerson(),4);
-        assertEquals(res.get(0).getPreparation(),"Cuire des pâtes, oignons, tomates, ail, basilic");
+        assertEquals(1 , res.size(),"Test nombre recette pour categorie viande");
+        assertEquals(res.get(0).getName(),"Bolognaise","Test nom de cette recette");
+        assertEquals(res.get(0).getDuration(),60,"Test la duree de la preparation");
+        assertEquals(res.get(0).getCategory(),"Viande","Test categorie de la recette");
+        assertEquals(res.get(0).getType(),"Mijoté","Test Type de la recette");
+        assertEquals(res.get(0).getNbrPerson(),4,"test le nombre de personne");
+        assertEquals(res.get(0).getPreparation(),"Cuire des pâtes, oignons, tomates, ail, basilic","Test la preparation");
 
     }
 
@@ -82,7 +86,7 @@ class TestDatabase {
 
 
     @Test
-    public void testGetAllShoppingListNameWith1() throws SQLException {
+    public void testGetAllShoppingListNameWith3() throws SQLException {
         ArrayList<String> shoppingListName = db.getAllShoppingListName();
         assertEquals(3,shoppingListName.size());
     }
@@ -94,6 +98,14 @@ class TestDatabase {
         db.saveModifyShoppingList(rename);
         ArrayList<String> shoppingListName = db.getAllShoppingListName();
         assertEquals("hiver",shoppingListName.get(2));
+    }
+
+    @Test
+    public void TestGetAllProductName() throws SQLException {
+        ArrayList<String> names = db.getAllProductName();
+        assertEquals(2,names.size(),"test nombre produit");
+        assertEquals("peche",names.get(0));
+
     }
 
 }

@@ -195,6 +195,14 @@ public class Database {
         sendQueryUpdate(String.valueOf(req));
     }
 
+    /**
+     *
+     * @param nameTable La table pour lequel il faut faire un select
+     * @param names Nom des colonnes qui seront ajoutees dans les contraintes
+     * @param signs Signe associe a une contrainte (ex : =, <, > ...)
+     * @param values Valeur a respecter dans la contrainte
+     * @return Resultat de la query
+     */
     private ResultSet select(String nameTable,String[]names, String[]signs, String[]values){
         StringBuilder req;
         if (values.length > 0){
@@ -243,13 +251,13 @@ public class Database {
         return res.getString("Nom");
     }
 
-    private int getIDFromName(String table, String name, String nameColumn) throws SQLException {
+    private int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
         String[]names = {"Nom"};
         String[]signs = {"="};
         String[]values = {String.format("'%s'", name)};
         ResultSet res = select(table, names, signs, values);
         res.next();
-        return res.getInt(nameColumn);
+        return res.getInt(nameIDColumn);
     }
 
     private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
@@ -309,6 +317,7 @@ public class Database {
     }
 
     public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
+        //TODO utiliser GetIDFROMNAME !!!!
         String[] name = {"Nom"};
         String[] signs = {"="};
         String[] values = {String.format("'%s'", nameCategory)};
@@ -356,6 +365,36 @@ public class Database {
            int idProduct = getIDFromName("Ingredient", product.getName(), "Nom");
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
+   }
+
+   public void insertUnite(String name){
+       String[] values = {"null",String.format("'%s'",name)};
+       insert("Unite",values);
+   }
+
+   public void insertFamilleAliment(String name){
+        String[] values = {"null",String.format("'%s'",name)};
+        insert("FamilleAliment",values);
+   }
+
+   public void insertIngredient(String name,String famille,String unite) throws SQLException {
+        int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
+        int idUnite = getIDFromName("Unite",unite,"UniteID");
+        String stringIdFamille = String.format("%d", idFamille);
+        String stringIdUnite = String.format("%d",idUnite);
+        String stringName = String.format("'%s'",name);
+        String[] values = {"null",stringName, stringIdFamille,stringIdUnite};
+        insert("Ingredient",values);
+   }
+
+   public ArrayList<String> getAllProductName() throws SQLException {
+       String[] vide = new String[0];
+       ResultSet queryAllProductName = select("Ingredient",vide,vide,vide);
+       ArrayList<String> allProductName = new ArrayList<>();
+       while(queryAllProductName.next()){
+           allProductName.add(queryAllProductName.getString("Nom"));
+       }
+       return allProductName;
    }
 
 
