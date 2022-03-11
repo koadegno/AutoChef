@@ -1,7 +1,7 @@
 package ulb.infof307.g01.cuisine;
 
 public class Recipe extends UniqueProductList {
-
+    
     private int id;
     private String name;
     private int duration;
@@ -20,6 +20,7 @@ public class Recipe extends UniqueProductList {
         this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
 
+    public int getId() {return id;}
     public String getName() {
         return name;
     }
@@ -29,8 +30,8 @@ public class Recipe extends UniqueProductList {
     }
     public String getType() { return type; }
     public int getNbrPerson() { return nbrPerson; }
-    public String getPreparation() { return preparation; }
-
+    public String getPreparation() { return preparation;}
+    
     @Override
     public boolean equals(Object other) {
 
@@ -40,7 +41,6 @@ public class Recipe extends UniqueProductList {
         if (other == null || this.getClass() != other.getClass())
             return false;
 
-        Recipe recipe = (Recipe) other;
-        return this.getName().equals(recipe.getName());
+        return this.getId() == ((Recipe) other).getId();
     }
 }
