@@ -230,6 +230,11 @@ public class Database {
         insert("TypePlat", val);
     }
 
+    public void insertMenu(String name, int duration){
+        String[] val = {"null",String.format("'%s'",name),String.format("'%d'",duration)};
+        insert("Menu",val);
+    }
+
     public void insertRecipe(Recipe recipe) throws SQLException {
         String name = String.format("'%s'", recipe.getName());
         String duration = String.format("%d", recipe.getDuration());
@@ -308,8 +313,13 @@ public class Database {
     public ArrayList<String> getAllUniteName() throws SQLException {
         return getAllNameFromTable("Unite");
     }
+
     public ArrayList<String> getAllTypeName() throws SQLException {
         return getAllNameFromTable("TypePlat");
+    }
+
+    public ArrayList<String> getAllMenuName() throws SQLException {
+        return getAllNameFromTable("Menu");
     }
 
 
@@ -398,7 +408,5 @@ public class Database {
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
    }
-
-
 
 }
