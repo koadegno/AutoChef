@@ -1,7 +1,5 @@
 package ulb.infof307.g01.db;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.cuisine.*;
 
 import java.io.File;
 import java.io.FileInputStream;
@@ -83,12 +81,8 @@ public class Database {
      * Requete ecriture de la database
      * @param query requete sql
      */
-    private void sendQueryUpdate(String query){
-        try {
-             request.executeUpdate(query);
-        } catch (SQLException e) {
-            System.out.println(e.getMessage());
-        }
+    private void sendQueryUpdate(String query) throws SQLException {
+        request.executeUpdate(query);
     }
 
     /**
@@ -111,7 +105,7 @@ public class Database {
      * @param nameTable Le nom de la table dans laquelle inserer
      * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
      */
-    private void insert(String nameTable,String[] values){
+    private void insert(String nameTable,String[] values) throws SQLException {
         StringBuilder req = new StringBuilder(String.format("INSERT INTO %s values (", nameTable));
         for (String value : values) {
             req.append(value).append(",");
@@ -149,19 +143,19 @@ public class Database {
         return String.valueOf(query);
     }
 
-    private void delete(String nameTable, List<String> constraintToAppend){
+    private void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
         StringBuilder req = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
         String stringQuery = appendValuesToWhere(req, constraintToAppend);
         sendQueryUpdate(stringQuery);
     }
 
-    private void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend){
+    private void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
         StringBuilder req = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable,nameToUpdate));
         String stringQuery = appendValuesToWhere(req, constraintToAppend);
         sendQueryUpdate(stringQuery);
     }
 
-    private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) {
+    private void insertIngredientInShoppingList(int courseId, int ingredientId, int quantity) throws SQLException {
         String[] values = {String.format("%d",courseId),String.format("%d",ingredientId),String.format("%d",quantity)};
         insert("ListeCourseIngredient",values);
     }
@@ -220,17 +214,17 @@ public class Database {
      * Insertion dans la table Categorie
      * @param nameCategory Nouvelle categorie à inserer
      */
-    public void insertCategory(String nameCategory){
+    public void insertCategory(String nameCategory) throws SQLException {
         String[] val = {"null", String.format("'%s'", nameCategory)};
         insert("Categorie", val);
     }
 
-    public void insertType(String nameType){
+    public void insertType(String nameType) throws SQLException {
         String[] val = {"null", String.format("'%s'", nameType)};
         insert("TypePlat", val);
     }
 
-    public void insertMenu(String name, int duration){
+    public void insertMenu(String name, int duration) throws SQLException{
         String[] val = {"null",String.format("'%s'",name),String.format("'%d'",duration)};
         insert("Menu",val);
     }
@@ -247,12 +241,12 @@ public class Database {
         insert("Recette", val);
     }
 
-    public void insertUnite(String name){
+    public void insertUnite(String name) throws SQLException {
         String[] values = {"null",String.format("'%s'",name)};
         insert("Unite",values);
     }
 
-    public void insertFamilleAliment(String name){
+    public void insertFamilleAliment(String name) throws SQLException {
         String[] values = {"null",String.format("'%s'",name)};
         insert("FamilleAliment",values);
     }
@@ -383,8 +377,8 @@ public class Database {
         return getRecipes(result);
     }
 
-    public Integer createAndGetIdShoppingList(String name) {
-        String[] values = {"null",name};
+    public Integer createAndGetIdShoppingList(String name) throws SQLException {
+        String[] values = {"null","'"+name+"'"};
         insert("ListeCourse",values);
         return getGeneratedID();
     }
@@ -402,10 +396,15 @@ public class Database {
        constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
        delete("ListeCourseIngredient",constraint);
        updateName("ListeCourse", shoppingList.getName(),constraint );
+       if(shoppingList.size() == 0){
+           delete("ListeCourse",constraint);
+       }
+       else{
+           for (Product product : shoppingList) {
+               int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
+               insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
+           }
 
-       for (Product product : shoppingList) {
-           int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
-           insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
    }
 
