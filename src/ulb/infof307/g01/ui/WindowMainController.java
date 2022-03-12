@@ -54,8 +54,10 @@ public class WindowMainController {
 
     @FXML
     public void redirectMenuList(ActionEvent event) throws IOException {
-        WindowMyMenusController windowMyMenus = new WindowMyMenusController();
-        windowMyMenus.displayMenuList(event);
+        //WindowMyMenusController windowMyMenus = new WindowMyMenusController();
+        //windowMyMenus.displayMenuList(event);
+        CreateDisplayMenuController windowCreateMenu = new CreateDisplayMenuController();
+        windowCreateMenu.displayEditMeal(event);
     }
 
     @FXML

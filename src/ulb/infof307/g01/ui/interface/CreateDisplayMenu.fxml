@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Menu?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.CreateDisplayMenuController">
+   <children>
+      <MenuBar fx:id="daysMenuBar" prefHeight="50.0" prefWidth="600.0">
+        <menus>
+          <Menu mnemonicParsing="false" text="Lundi" />
+          <Menu mnemonicParsing="false" text="Mardi" />
+          <Menu mnemonicParsing="false" text="Mercredi" />
+            <Menu mnemonicParsing="false" text="Jeudi" />
+            <Menu mnemonicParsing="false" text="Vendredi" />
+            <Menu mnemonicParsing="false" text="Samedi" />
+            <Menu mnemonicParsing="false" text="Dimanche" />
+        </menus>
+      </MenuBar>
+      <HBox alignment="CENTER_LEFT" prefHeight="294.0" prefWidth="600.0" spacing="200.0">
+         <children>
+            <TableView prefHeight="285.0" prefWidth="226.0">
+              <columns>
+                <TableColumn fx:id="mondayTableView" prefWidth="225.60001220703126" text="Menu" />
+              </columns>
+            </TableView>
+            <Button fx:id="addRecipeButtun" mnemonicParsing="false" prefHeight="26.0" prefWidth="98.0" text="Ajouter recette" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+         <children>
+            <Button fx:id="saveButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="109.0" text="Enregister" />
+            <Button fx:id="returnButton" mnemonicParsing="false" prefHeight="26.0" prefWidth="101.0" text="Retour" onAction="#returnMain" />
+         </children>
+      </HBox>
+   </children>
+</VBox>
