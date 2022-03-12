@@ -97,7 +97,7 @@ public class WindowShowMenuController implements Initializable {
         menuTreeView.setRoot(rootItem);
 
         for (Day day : days){
-            TreeItem<String> menuDay = new TreeItem<String>(day.name());
+            TreeItem<String> menuDay = new TreeItem<String>(day.toString());
             List<Recipe> mealForDay = menu.getMealsfor(day);
             for (Recipe recipe : mealForDay){
                 TreeItem<String> recipeForMeal = new TreeItem<String>(recipe.getName());
