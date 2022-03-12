@@ -10,6 +10,10 @@ public class Recipe extends UniqueProductList {
     private int nbrPerson;
     private String preparation;
 
+    public Recipe (String name){
+        this.name = name;
+    }
+
     public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation) {
         this.id = id; this.name = name; this.duration = duration; this.category = category; this.type = type;
         this.nbrPerson = nbrPerson;     this.preparation = preparation;

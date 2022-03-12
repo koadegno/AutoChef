@@ -8,7 +8,10 @@ import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
 
+import java.util.ArrayList;
+
 public class CreateColWithButtonDelete {
+
     public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
             @Override
@@ -19,7 +22,6 @@ public class CreateColWithButtonDelete {
                         btnDelete.setOnAction((ActionEvent event) -> {
                             Product data = getTableView().getItems().get(getIndex());
                             tableViewDisplayProductList.getItems().remove(data);
-                            System.out.println("selectedDataDelete: " + data.getQuantity());
                         });
                     }
 
@@ -38,4 +40,5 @@ public class CreateColWithButtonDelete {
         };
         return cellFactory;
     }
+
 }
