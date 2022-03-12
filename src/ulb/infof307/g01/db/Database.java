@@ -19,7 +19,7 @@ public class Database {
             request = connection.createStatement();
             createDB();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace();
         }
     }
 
@@ -52,6 +52,7 @@ public class Database {
 
     private ResultSet sendQuery(String query) {
         try {
+            System.out.println(query);
             return request.executeQuery(query);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -283,12 +284,16 @@ public class Database {
         return getkey();
     }
 
-    public ArrayList<String> getAllCategories() throws SQLException {
+    public ArrayList<String> getAllCategories()  {
         String[] vide = new String[0];
         ResultSet res = select("Categorie", vide, vide, vide);
         ArrayList<String> categories = new ArrayList<>();
-        while (res.next()){
-            categories.add(res.getString("Nom"));
+        try {
+            while (res.next()) {
+                categories.add(res.getString("Nom"));
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
         }
         return categories;
     }
@@ -304,34 +309,44 @@ public class Database {
     }
     // TODO : PROBLEME VERIFIER SI TYPE ET CATEGORIE EXISTENT SINON MAYBE LES CREER? THROW? IDK
 
-    public void insertRecipe(Recipe recipe) throws SQLException {
-        String name = String.format("'%s'", recipe.getName());
-        String duration = String.format("%d", recipe.getDuration());
-        String nbPerson = String.format("%d", recipe.getNbrPerson());
-        String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
-        String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
-        String preparation = String.format("'%s'", recipe.getPreparation());
+    public void insertRecipe(Recipe recipe){
+        try {
+            String name = String.format("'%s'", recipe.getName());
+            String duration = String.format("%d", recipe.getDuration());
+            String nbPerson = String.format("%d", recipe.getNbrPerson());
+            String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID"));
+            String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID"));
+            String preparation = String.format("'%s'", recipe.getPreparation());
 
-        String[] val = {"null", name, duration, nbPerson, type, category, preparation};
-        insert("Recette", val);
+            String[] val = {"null", name, duration, nbPerson, type, category, preparation};
+            insert("Recette", val);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
-    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory) throws SQLException {
+    public ArrayList<Recipe> getRecipeWhereCategorie(String nameCategory)  {
 
-        String[] name = {"Nom"};
-        String[] signs = {"="};
-        String[] values = {String.format("'%s'", nameCategory)};
-        int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
-        name[0] = "CategorieID";
-        values[0] = String.format("%d", idCategory);
+        try {
+            String[] name = {"Nom"};
+            String[] signs = {"="};
+            String[] values = {String.format("'%s'", nameCategory)};
+            int idCategory = getIDFromName("Categorie",nameCategory,"CategorieID");
+            name[0] = "CategorieID";
+            values[0] = String.format("%d", idCategory);
 
-        ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE R.CategorieID = %d", idCategory));
+            ResultSet result = sendQuery(String.format("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation,Categorie.Nom, TypePlat.Nom\n" +
+                    "FROM Recette as R\n" +
+                    "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                    "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                    "WHERE R.CategorieID = %d", idCategory));
 
-        return getRecipes(result);
+            return getRecipes(result);
+        }
+        catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
@@ -437,6 +452,4 @@ public class Database {
         }
         return shoppingList;
    }
-
-
 }
