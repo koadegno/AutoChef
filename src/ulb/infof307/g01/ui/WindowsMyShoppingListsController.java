@@ -86,7 +86,7 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
     @Override
     public void initComboBox(){
         super.initComboBox();
-        fillComboBoxShoppingNameList(comboBoxShoppingNameList, 1);
+        fillComboBoxShoppingNameListWithBDD(comboBoxShoppingNameList, 1);
     }
 
 }
