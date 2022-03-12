@@ -278,39 +278,27 @@ public class Database {
         return new Product(nameProduct,1,uniteProduct,familleProduct);
     }
 
+    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet queryAllTableName = select(table, constraint);
+        ArrayList<String> allProductName = new ArrayList<>();
+        while(queryAllTableName.next()){
+            allProductName.add(queryAllTableName.getString("Nom"));
+        }
+        return allProductName;
+    }
+
     /**
      * @return ArrayList contenant le nom de toutes les categories
      * @throws SQLException
      */
     public ArrayList<String> getAllCategories() throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        ResultSet res = select("Categorie",constraint);
-        ArrayList<String> categories = new ArrayList<>();
-        while (res.next()){
-            categories.add(res.getString("Nom"));
-        }
-        return categories;
+        return getAllNameFromTable("Categorie");
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
 
-        ArrayList<String> constraint = new ArrayList<>();
-        ResultSet request = select("ListeCourse",constraint);
-        ArrayList<String> shoppingListName = new ArrayList<>();
-        while(request.next()){
-            shoppingListName.add(request.getString("Nom"));
-        }
-        return shoppingListName;
-    }
-
-    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        ResultSet queryAllProductName = select(table, constraint);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllProductName.next()){
-            allProductName.add(queryAllProductName.getString("Nom"));
-        }
-        return allProductName;
+        return getAllNameFromTable("ListeCourse");
     }
 
     public ArrayList<String> getAllProductName() throws SQLException {
@@ -320,6 +308,10 @@ public class Database {
     public ArrayList<String> getAllUniteName() throws SQLException {
         return getAllNameFromTable("Unite");
     }
+    public ArrayList<String> getAllTypeName() throws SQLException {
+        return getAllNameFromTable("TypePlat");
+    }
+
 
     public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
 
@@ -341,6 +333,14 @@ public class Database {
         return shoppingList;
     }
 
+    /**
+     * Si un ou plusieurs parametres sont null ils ne sont pas ajoutes dans les contraintes de la requete
+     * @param nameCategory contrainte pour le nom de la categorie
+     * @param nameType contrainte pour le nom du type
+     * @param nbPerson contrainte pour le nombre de personne
+     * @return
+     * @throws SQLException
+     */
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
 
         ArrayList<String> constraint = new ArrayList<>();
@@ -392,10 +392,13 @@ public class Database {
        constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
        delete("ListeCourseIngredient",constraint);
        updateName("ListeCourse", shoppingList.getName(),constraint );
+
        for (Product product : shoppingList) {
            int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
            insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
        }
    }
+
+
 
 }
