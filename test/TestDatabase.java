@@ -67,6 +67,13 @@ class TestDatabase {
     }
 
     @Test
+    public void testGetAllTypes() throws SQLException {
+        ArrayList<String> res = db.getAllTypes();
+        assertEquals(2, res.size());
+    }
+
+
+    @Test
     public void testGetRecipeWhereCategorieIsMeat() throws SQLException {
         ArrayList<Recipe> res = db.getRecipeWhere("Viande",null,0);
         assertEquals(1 , res.size(),"Test nombre recette pour categorie viande");

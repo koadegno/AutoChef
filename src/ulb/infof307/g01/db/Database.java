@@ -290,6 +290,16 @@ public class Database {
         return categories;
     }
 
+    public ArrayList<String> getAllTypes() throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet res = select("TypePlat",constraint);
+        ArrayList<String> types = new ArrayList<>();
+        while (res.next()){
+            types.add(res.getString("Nom"));
+        }
+        return types;
+    }
+
     public ArrayList<String> getAllShoppingListName() throws SQLException {
 
         ArrayList<String> constraint = new ArrayList<>();

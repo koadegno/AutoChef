@@ -11,6 +11,7 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.Objects;
 
 public class WindowMainController {
@@ -58,7 +59,7 @@ public class WindowMainController {
     }
 
     @FXML
-    public void redirectRecipe(ActionEvent event) throws IOException{
+    public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
         SearchRecipeController displayRecipe =  new SearchRecipeController();
         displayRecipe.displaySearchRecipe(event);
 

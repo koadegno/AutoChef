@@ -15,11 +15,14 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.InputMethodEvent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Recipe;
+import  ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.ResourceBundle;
@@ -27,9 +30,14 @@ import java.util.ResourceBundle;
 public class SearchRecipeController implements Initializable {
     private Stage stage;
     private Parent root;
-    private ArrayList<String> dietList = new ArrayList<>(Arrays.asList("Végétarien","Viande", "Poisson", "Halal"));
+    private Database db ;
+    private ArrayList<String> dietList ;
+    private ArrayList<String> typeList ;
+    private ArrayList<Recipe>  recipeName;
+
+    /*private ArrayList<String> dietList = new ArrayList<>(Arrays.asList("Végétarien","Viande", "Poisson", "Halal"));
     private ArrayList<String>  typeList = new ArrayList<>(Arrays.asList("Desserts", "Entrées", "Plats", "Boissons"));
-    private ArrayList<Recipe>  recipeName = new ArrayList<>(Arrays.asList(new Recipe("Gateau"), new Recipe("Muffins"), new Recipe("Lasagne"), new  Recipe("Gratin dauphinois")));
+    private ArrayList<Recipe>  recipeName = new ArrayList<>(Arrays.asList(new Recipe("Gateau"), new Recipe("Muffins"), new Recipe("Lasagne"), new  Recipe("Gratin dauphinois")));*/
     @FXML
     ComboBox recipeDietComboBox, recipeTypeComboBox;
     @FXML
@@ -39,9 +47,22 @@ public class SearchRecipeController implements Initializable {
     @FXML
     TableColumn columnRecipeName;
     @FXML
-    Button addFindRecipeButton, cancelSearchRecipeButton;
+    Button cancelSearchRecipeButton;
+    @FXML
+    CheckBox activateSpinnerCheckBox;
 
 
+
+    public SearchRecipeController() throws SQLException {
+        this.db = new Database("autochef.sqlite");
+        this.dietList = db.getAllCategories();
+        this.typeList = db.getAllTypes();
+        this.recipeName = db.getRecipeWhere(null, null, 0);
+        this.dietList.add(0, "Tout");
+        this.typeList.add(0, "Tout");
+
+
+    }
     @FXML
     public void fillComboBox(ComboBox box, ArrayList<String> valueList){
         for(String value: valueList)
@@ -86,10 +107,11 @@ public class SearchRecipeController implements Initializable {
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
         );
         onlyIntValue();
+        this.numberOfPersonSpinner.setVisible(false);
     }
 
-    public void displaySearchRecipe(ActionEvent event) throws IOException{
-        root = FXMLLoader.load(getClass().getResource("interface/searchRecipe.fxml"));
+    public void displaySearchRecipe(ActionEvent event) throws IOException, SQLException{
+        this.root = FXMLLoader.load(getClass().getResource("interface/searchRecipe.fxml"));
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
@@ -99,6 +121,7 @@ public class SearchRecipeController implements Initializable {
         root = FXMLLoader.load((getClass().getResource("interface/FXMLMainPage.fxml")));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
+
         stage.show();
     }
 
@@ -109,13 +132,33 @@ public class SearchRecipeController implements Initializable {
     }
 
 
-    public void refreshTableView( Event actionEvent) {
-        String diet = dietList.get(recipeDietComboBox.getSelectionModel().getSelectedIndex());
-        String type = typeList.get(recipeTypeComboBox.getSelectionModel().getSelectedIndex());
+    public void refreshTableView( Event actionEvent) throws SQLException{
+        int dietIndex = recipeDietComboBox.getSelectionModel().getSelectedIndex();
+        int typeIndex = recipeTypeComboBox.getSelectionModel().getSelectedIndex();
         int nbPerson = (int) numberOfPersonSpinner.getValue();
 
-        // TODO: get new recipe's list from Database
-        System.out.println(diet + " " + type +" " + nbPerson);
-        // TODO: refresh table
+        String dietCondition = null; //all diet
+        String typeCondition = null; //all type
+
+        // get new recipe's list from Database
+        if (dietIndex > 0) dietCondition = dietList.get(dietIndex);
+        if (typeIndex > 0) typeCondition = typeList.get(typeIndex);
+        if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;
+        this.recipeName = db.getRecipeWhere(dietCondition, typeCondition, nbPerson);
+        this.recipeTableView.getItems().clear();
+        this.fillTableView(this.recipeTableView, recipeName);
+
+    }
+
+    public void checkBoxEvent(MouseEvent mouseEvent) throws SQLException{
+        if (this.activateSpinnerCheckBox.isSelected()){
+            this.numberOfPersonSpinner.setVisible(true);
+
+        }
+        else{
+            this.numberOfPersonSpinner.setVisible(false);
+
+        }
+        this.refreshTableView(mouseEvent);
     }
 }
