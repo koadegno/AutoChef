@@ -308,7 +308,7 @@ public class Database {
         return getAllNameFromTable("Unite");
     }
 
-    public ArrayList<String> getAllTypeName() throws SQLException {
+    public ArrayList<String> getAllTypes() throws SQLException {
         return getAllNameFromTable("TypePlat");
     }
 
@@ -378,7 +378,7 @@ public class Database {
     }
 
     public Integer createAndGetIdShoppingList(String name) throws SQLException {
-        String[] values = {"null","'"+name+"'"};
+        String[] values = {"null",String.format("'%s'",name)};
         insert("ListeCourse",values);
         return getGeneratedID();
     }

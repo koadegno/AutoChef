@@ -35,9 +35,9 @@ class TestDatabase {
         db.insertRecipe(bolo);
         db.insertRecipe(carbo);
         db.insertRecipe(pesto);
-        db.createAndGetIdShoppingList("'Halloween'");
-        db.createAndGetIdShoppingList("'noel'");
-        db.createAndGetIdShoppingList("'ete'");
+        db.createAndGetIdShoppingList("Halloween");
+        db.createAndGetIdShoppingList("noel");
+        db.createAndGetIdShoppingList("ete");
         db.insertUnite("g");
         db.insertUnite("litres");
         db.insertFamilleAliment("Fruit");
@@ -92,10 +92,19 @@ class TestDatabase {
         assertEquals(3,shoppingListName.size());
     }
 
+    @Test
+    public void testSaveModifyShoppingListDelete() throws SQLException {
+        db.createAndGetIdShoppingList("delete");
+        ShoppingList rename = new ShoppingList("delete2",4);
+        db.saveModifyShoppingList(rename);
+        ArrayList<String> shoppingListName = db.getAllShoppingListName();
+        assertEquals(3,shoppingListName.size());
+    }
 
     @Test
     public void testSaveModifyShoppingList() throws SQLException {
         ShoppingList rename = new ShoppingList("hiver",3);
+        rename.add(new Product("peche"));
         db.saveModifyShoppingList(rename);
         ArrayList<String> shoppingListName = db.getAllShoppingListName();
         assertEquals("hiver",shoppingListName.get(2));
