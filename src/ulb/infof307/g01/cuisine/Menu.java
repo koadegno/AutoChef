@@ -2,6 +2,7 @@ package ulb.infof307.g01.cuisine;
 import ulb.infof307.g01.db.Database;
 
 import java.sql.SQLException;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
@@ -87,7 +88,13 @@ public class Menu {
         return allRecipesList;
     }
 
-    public void generateMenu(Database db) throws SQLException {
+    public void generateMenu(Database db, int nbVegetarian, int nbMeat, int nbFish) throws SQLException {
+
+        HashMap<String, Integer> categoriesWanted = new HashMap<>();
+
+        if (nbVegetarian > 0) {categoriesWanted.put("Végétarien", nbVegetarian);}
+        if (nbMeat > 0) {categoriesWanted.put("Viande", nbMeat);}
+        if (nbFish > 0) {categoriesWanted.put("Poisson", nbFish);}
 
         int index = 0;
         int nbMealDay = 2;
@@ -97,7 +104,7 @@ public class Menu {
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
-                List<Recipe> recipesChosed = AutoCompletion.generateMenu(recipesUsed, nbRecipesToAdd, db);
+                List<Recipe> recipesChosed = AutoCompletion.generateMenu(recipesUsed, categoriesWanted, nbRecipesToAdd,  null,  db);
                 menu.get(index).addAll(recipesChosed);
             }
             index++;
