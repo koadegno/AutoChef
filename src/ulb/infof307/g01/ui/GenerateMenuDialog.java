@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.jar.Attributes;
+
 public class GenerateMenuDialog extends Stage {
     private VBox dialogVbox;
     private HBox vegetarianBox,meatBox,fishBox,buttonBox;
@@ -27,6 +29,10 @@ public class GenerateMenuDialog extends Stage {
         this.fillBoxes();
         Scene dialogScene = new Scene(dialogVbox, 500, 300);
         this.setScene(dialogScene);
+    }
+
+    public Button getOkButton(){
+        return okButton;
     }
 
     private void fillBoxes(){
@@ -76,5 +82,15 @@ public class GenerateMenuDialog extends Stage {
         meatBox.setAlignment(Pos.CENTER);
         fishBox.setAlignment(Pos.CENTER);
         buttonBox.setAlignment(Pos.CENTER);
+    }
+
+    public Spinner<Integer> getVegetarianSpinner() {
+        return this.vegetarianSpinner;
+    }
+    public Spinner<Integer> getMeatSpinner() {
+        return this.meatSpinner;
+    }
+    public Spinner<Integer> getFishSpinner() {
+        return this.fishSpinner;
     }
 }

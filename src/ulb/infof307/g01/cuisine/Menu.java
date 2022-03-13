@@ -30,6 +30,8 @@ public class Menu {
         }
     }
 
+    public void setName(String name){this.name = name;}
+
     public int size() {
         int size = 0;
         for(Vector<Recipe> vector : menu){

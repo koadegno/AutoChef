@@ -48,6 +48,8 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
     TableColumn menuTableColumn;
     @FXML
     Button removeRecipeButton;
+    @FXML
+    TextField menuNameTextField;
 
     public CreateMenuController() throws SQLException {
         this.db = new Database("autochef.sqlite");
@@ -129,22 +131,21 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
         final GenerateMenuDialog dialog = new GenerateMenuDialog();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(this.stage);
-
-
-       /* okButton.setOnAction((event1)->{
-            int nbVegetarian = (int) vegetarianSpinner.getValue();
-            int nbMeat = (int) meatSpinner.getValue();
-            int nbFish = (int) fishSpinner.getValue();
+        dialog.initObject();
+        dialog.getOkButton().setOnAction((event1)->{
+            int nbVegetarian = (int) dialog.getVegetarianSpinner().getValue();
+            int nbMeat = (int) dialog.getMeatSpinner().getValue();
+            int nbFish = (int) dialog.getFishSpinner().getValue();
             dialog.close();
             try {
-                //TODO: add param in generate menu
-                myMenu.generateMenu(db);
+                myMenu.generateMenu(db, nbVegetarian, nbMeat, nbFish);
+                dialog.close();
                 this.refreshTableView();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-        });*/
-        dialog.initObject();
+        });
+
         dialog.show();
         //myMenu.generateMenu(db);
         //refreshTableView();
@@ -164,6 +165,14 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
     public void recipeSelectedEvent(Event event){
        int idx =  menuTableView.getSelectionModel().getSelectedIndex();
        if(idx>-1) this.removeRecipeButton.setVisible(true);
+    }
+
+    @FXML
+    public void saveMenu(){
+        myMenu.setName(this.menuNameTextField.getText());
+        try{
+            this.db.saveNewMenu(myMenu);
+        }catch(SQLException e){}
     }
 
 
