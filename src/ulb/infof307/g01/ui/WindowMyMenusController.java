@@ -73,7 +73,7 @@ public class WindowMyMenusController implements Initializable {
         try {
             allMenusNames = database.getAllMenuName();
             for (String name : allMenusNames){
-                menus.add(new Menu(name));
+                menus.add(database.getMenuFromName(name));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -83,8 +83,8 @@ public class WindowMyMenusController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
-        initializeMenusFromDB();
+        initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
+        //initializeMenusFromDB();
         TreeItem<Menu> rootItem =  new TreeItem<>();
         for (Menu menu : menus){
             TreeItem<Menu> menuName = new TreeItem<>(menu);
@@ -125,13 +125,15 @@ public class WindowMyMenusController implements Initializable {
                 new Recipe("recette 1"),
                 new Recipe("recette 2"),
                 new Recipe("recette 3"),
-                new Recipe("recette 34")
+                new Recipe("recette 4")
         );
         for (int i = 0; i < 7; i++) {
             for (Recipe recipe : recipes){
                 menu.addMealTo(Day.values()[i], recipe);
             }
         }
+        menu.addMealTo(Day.Monday, new Recipe("recette 5"));
+        menu.addMealTo(Day.Thursday, new Recipe("recette 9"));
 
         if (menus.contains(menu)){
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
@@ -139,6 +141,7 @@ public class WindowMyMenusController implements Initializable {
 
             WindowShowMenuController controller = loader.getController();
             controller.setMenu(menu);
+            controller.setDatabase(database);
 
             Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
             Scene scene =  new Scene(root);

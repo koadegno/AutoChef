@@ -9,19 +9,16 @@ import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.ResourceBundle;
+import java.util.*;
 
-import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.db.Database;
 
 /*class ObjectPointer {
@@ -33,12 +30,15 @@ import ulb.infof307.g01.db.Database;
 public class WindowShowMenuController implements Initializable {
 
     private Menu menu;
+    private static Database dataBase;
 
     @FXML
     Label menuName, nbOfdays;
     @FXML
     //TreeView<ObjectPointer> menuTreeView;
     TreeView<String> menuTreeView;
+    @FXML
+    HBox menuHBox;
 
     Database database = new Database("db");
 
@@ -68,20 +68,12 @@ public class WindowShowMenuController implements Initializable {
     @FXML
     public void displayMenuInfo(String name, int nbOfDays){
         this.menuName.setText(name);
-        this.nbOfdays.setText("Duration:"+ nbOfDays +"jours");
+        this.nbOfdays.setText("Duration: "+ nbOfDays +"jours");
     }
 
     @FXML
     public void displayMenuTable(ArrayList<Day> days){
-        /*
-        for (Day day : days){
-            TableColumn<Recipe, String> col = new TableColumn<>(day.name());
-            col.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-            List<Recipe> recipes = menu.getMealsfor(day);
-            menuTableView.getColumns().add(col);
-            menuTableView.getItems().add(recipes);
-        }*/
-
+     /*
         TreeItem<String> rootItem =  new TreeItem<>();
         menuTreeView.setRoot(rootItem);
 
@@ -94,45 +86,73 @@ public class WindowShowMenuController implements Initializable {
             }
             rootItem.getChildren().add(menuDay);
         }
-    }
-
-    @FXML
-    public void getSelectedItem(){
-        TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
-            for (Day day : Day.values()) {
-                if (day.name().equals(selectedItem.getValue())){
-                    System.out.println("selected: " + selectedItem.getValue());
-                }
-            }
+         */
+        for (Day day : days){
+            TableView<Recipe> dayTable = new TableView<>();
+            dayTable.getColumns().clear();
+            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.name());
+            dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+            List<Recipe> mealForDay = menu.getMealsfor(day);
+            dayTable.getColumns().add(dayCol);
+            dayTable.getItems().addAll(mealForDay);
+            dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
+            menuHBox.getChildren().add(dayTable);
         }
     }
 
     @FXML
-    public void goToSearchRecipe(ActionEvent event) throws IOException, SQLException {
+    public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
+
+        //TODO: Changer pour qu'il redirige vers la partie de modifier le menu
         SearchRecipeController search = new SearchRecipeController();
         search.displaySearchRecipe(event);
     }
 
     @FXML
-    public void displayMenu(MouseEvent mousePressed, String name){
-        try {
-            System.out.println("Menu existe");
+    public void generateShoppingList(ActionEvent event) throws IOException{
+        //WindowsCreateMyShoppingListController createShoppingList = new WindowsCreateMyShoppingListController();
+        //createShoppingList.nameMyCreateShoppingList.setText("LC de "+menu.getName());
+        //createShoppingList.
 
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));  //          Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-            stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-            scene =  new Scene(root);
-            stage.setTitle("Menu "+name);
-            stage.setScene(scene);
-            stage.show();
+        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        Parent root = loader.load();
+        WindowsCreateMyShoppingListController controller = loader.getController();
+        controller.nameMyCreateShoppingList.setText("LC de " + menu.getName());
+        controller.setDatabase(dataBase);
+        controller.initShoppingListElement();
+        controller.initComboBox();
 
-        }catch (Exception e){
-            e.printStackTrace();
+
+
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        stage.setScene( new Scene(root));
+        stage.show();
+    }
+
+    public void fillShoppingList(WindowsCreateMyShoppingListController controller){
+        //ShoppingList generatedShoppingList = menu.generateShoppingList();
+        //controller.fillShoppingListToSend(generatedShoppingList);
+        HashMap<Product, Integer> productsAndQuantity = new HashMap<>();
+        for (int i = 0; i <menu.getNbOfdays(); i++) {
+            for (Recipe meal : menu.getMealsfor(Day.values()[i])){
+                for (Product product : meal){
+                    if (productsAndQuantity.containsKey(product)){
+                        productsAndQuantity.replace(product, productsAndQuantity.get(product) + 1);
+                    }
+                    else {
+                        productsAndQuantity.put(product, 1);
+                    }
+                }
+            }
         }
+
     }
 
     public void back(ActionEvent event) throws IOException {
         WindowMyMenusController menu = new WindowMyMenusController();
         menu.displayMyMenus(event);
     }
+
+    public void setDatabase(Database db){
+        dataBase = db;}
 }
