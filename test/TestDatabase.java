@@ -1,9 +1,7 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
@@ -12,12 +10,15 @@ import java.nio.file.Path;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestDatabase {
     private static Database db;
-
+    static private Menu menu = new Menu("Menu Test");
+    static private Menu menu2 = new Menu("Menu Test2");
+    static private Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
     @BeforeAll
     static public void createDB() throws SQLException {
 
@@ -28,7 +29,7 @@ class TestDatabase {
 
         db.insertType("Plat");
         db.insertType("Mijoté");
-        Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+
         Recipe carbo = new Recipe("Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
         Recipe pesto = new Recipe("Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
 
@@ -43,6 +44,17 @@ class TestDatabase {
         db.insertFamilleAliment("Fruit");
         db.insertIngredient("peche","Fruit","g");
         db.insertIngredient("fraise","Fruit","g");
+
+        menu.addMealTo(Day.Monday, bolo);
+        menu.addMealTo(Day.Wednesday, carbo);
+        menu.addMealTo(Day.Monday,bolo);
+        menu.addMealTo(Day.Friday, pesto);
+
+        menu2.addMealTo(Day.Monday, carbo);
+        menu2.addMealTo(Day.Wednesday, pesto);
+        menu2.addMealTo(Day.Monday,pesto);
+        menu2.addMealTo(Day.Friday, bolo);
+
     }
 
     @AfterAll
@@ -148,6 +160,44 @@ class TestDatabase {
     public void testGetRecipeWhere2Null() throws SQLException {
         ArrayList<Recipe> res = db.getRecipeWhere(null,null,0);
         assertEquals(3 , res.size());
+    }
+
+    @Test
+    public void testInsertNewMenu()throws SQLException{
+        db.saveNewMenu(menu);
+        Menu newMenu = db.getMenuFromName("Menu Test");
+        for(Day day : Day.values()){
+            List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
+            List<Recipe> recipeFromMenu = menu.getMealsfor(day);
+            for(int i = 0; i < recipeFromMenu.size(); i++){
+                assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
+                assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
+                assertEquals(recipeFromMenu.get(i).getNbrPerson(),recipeFromNewMenu.get(i).getNbrPerson());
+                assertEquals(recipeFromMenu.get(i).getPreparation(),recipeFromNewMenu.get(i).getPreparation());
+                assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
+                assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
+            }
+        }
+    }
+
+    @Test
+    public void testInsertModifyMenu() throws SQLException {
+        db.saveNewMenu(menu2);
+        menu2.removeMealFrom(Day.Friday,bolo);
+        db.saveModifyMenu(menu2);
+        Menu newMenu = db.getMenuFromName("Menu Test2");
+        for(Day day : Day.values()){
+            List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
+            List<Recipe> recipeFromMenu = menu2.getMealsfor(day);
+            for(int i = 0; i < recipeFromMenu.size(); i++){
+                assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
+                assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
+                assertEquals(recipeFromMenu.get(i).getNbrPerson(),recipeFromNewMenu.get(i).getNbrPerson());
+                assertEquals(recipeFromMenu.get(i).getPreparation(),recipeFromNewMenu.get(i).getPreparation());
+                assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
+                assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
+            }
+        }
     }
 
 }

@@ -224,11 +224,6 @@ public class Database {
         insert("TypePlat", val);
     }
 
-    public void insertMenu(String name, int duration) throws SQLException{
-        String[] val = {"null",String.format("'%s'",name),String.format("'%d'",duration)};
-        insert("Menu",val);
-    }
-
     public void insertRecipe(Recipe recipe) throws SQLException {
         String name = String.format("'%s'", recipe.getName());
         String duration = String.format("%d", recipe.getDuration());
@@ -383,6 +378,12 @@ public class Database {
         return getGeneratedID();
     }
 
+    public Integer createAndGetIdMenu(String name, int duration) throws SQLException{
+        String[] val = {"null",String.format("'%s'",name),String.format("%d",duration)};
+        insert("Menu",val);
+        return getGeneratedID();
+    }
+
     public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
         int id = createAndGetIdShoppingList(shoppingList.getName());
         for(Product product : shoppingList){
@@ -407,5 +408,64 @@ public class Database {
 
        }
    }
+
+   public Menu getMenuFromName(String menuName) throws SQLException {
+       int idName = getIDFromName("Menu",menuName,"MenuID");
+       ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
+               " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
+               "FROM MenuRecette as M\n" +
+               "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
+               "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+               "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+               "WHERE M.MenuID = %d", idName));
+       Menu menu = new Menu(menuName);
+       while(querySelectMenu.next()){
+           int menuDay = querySelectMenu.getInt(1);
+           int menuHour = querySelectMenu.getInt(2);
+           int recetteID = querySelectMenu.getInt(3);
+           String recetteName = querySelectMenu.getString(4);
+           int recetteDuration = querySelectMenu.getInt(5);
+           int recetteNumberPersons = querySelectMenu.getInt(6);
+           String recettePreparation = querySelectMenu.getString(7);
+           String categoryName = querySelectMenu.getString(8);
+           String typeName = querySelectMenu.getString(9);
+           Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
+           menu.addMealToIndex(menuDay,menuHour,recipe);
+       }
+       return menu;
+   }
+
+   private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
+        String[] values = {String.format("%d",menuID),String.format("%d",day),String.format("%d",hour),String.format("%d",recipeID)};
+        insert("MenuRecette",values);
+   }
+
+   public void saveNewMenu(Menu menu) throws  SQLException{
+        int id = createAndGetIdMenu(menu.getName(),menu.getNbOfdays());
+        createMenuRecipe(menu, id);
+   }
+    public void saveModifyMenu(Menu menu) throws  SQLException{
+        ArrayList<String> constraint = new ArrayList<>();
+        int menuID = getIDFromName("Menu",menu.getName(),"MenuID");
+        constraint.add(String.format("%s = %d","MenuID",menuID));
+        delete("MenuRecette",constraint);
+        updateName("Menu", menu.getName(),constraint);
+        if(menu.size() == 0){
+            delete("Menu",constraint);
+        }
+        else {
+            createMenuRecipe(menu, menuID);
+        }
+    }
+
+    private void createMenuRecipe(Menu menu, int menuID) throws SQLException {
+        for(Day day : Day.values()){
+            List<Recipe> recipeOfDay = menu.getMealsfor(day);
+            for (int hour = 0; hour < recipeOfDay.size(); hour++) {
+                int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
+                insertRecetteInMenu(menuID, day.getIndex(), hour, idRecipe);
+            }
+        }
+    }
 
 }

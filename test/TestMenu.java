@@ -44,6 +44,7 @@ class TestMenu {
 
         db.insertCategory("Poisson");
         db.insertCategory("Viande");
+        db.insertCategory("Végétarien");
         db.insertCategory("Vegan");
         db.insertType("Plat");
         db.insertType("Mijoté");
@@ -183,7 +184,7 @@ class TestMenu {
     @Test
     void generateMenu() throws SQLException {
 
-        menu.generateMenu(db);
+        menu.generateMenu(db, 1, 3, 6);
 
         for (Day day: Day.values()) {
             List<Recipe> recipes = menu.getMealsfor(day);
