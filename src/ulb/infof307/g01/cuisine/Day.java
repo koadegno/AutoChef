@@ -1,8 +1,13 @@
 package ulb.infof307.g01.cuisine;
 
 public enum Day {
-    Monday(0), Tuesday(1), Wednesday(2),
-    Thursday(3), Friday(4), Saturday(5), Sunday(6);
+    Monday(0)    {@Override public String toString() {return "Lundi";}},
+    Tuesday(1)   {@Override public String toString() {return "Mardi";}},
+    Wednesday(2) {@Override public String toString() {return "Mercredi";}},
+    Thursday(3)  {@Override public String toString() {return "Jeudi";}},
+    Friday(4)    {@Override public String toString() {return "Vendredi";}},
+    Saturday(5)  {@Override public String toString() {return "Samedi";}},
+    Sunday(6)    {@Override public String toString() {return "Dimanche";}};
 
     final int index;
 

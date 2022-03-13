@@ -24,4 +24,7 @@ public class ShoppingList extends UniqueProductList {
     public boolean isArchived() {return isArchived;}
     public void setArchived(boolean isArchived) {this.isArchived = isArchived;}
 
+    public void setId(int id) {
+       this.id = id;
+    }
 }
