@@ -6,7 +6,7 @@ public class Recipe extends UniqueProductList {
     private String name;
     private int duration;
     private String category;   //Exemple vegan
-    private String type;       //Exemple plat, mijoté, quiche, entrée, boisson,
+    private String type;       //Exemple plat, entrée, boisson,
     private int nbrPerson;
     private String preparation;
 

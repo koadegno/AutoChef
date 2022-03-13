@@ -1,6 +1,7 @@
 package ulb.infof307.g01.cuisine;
 import ulb.infof307.g01.db.Database;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
@@ -19,6 +20,8 @@ public class Menu {
             menu.add(new Vector<>());
         }
     }
+
+    public int getNbOfdays() { return nbOfdays;}
 
     public List<Recipe> getMealsfor(Day day) {
        return Collections.unmodifiableList(menu.get(day.index));
@@ -61,19 +64,20 @@ public class Menu {
         return allRecipesList;
     }
 
-    public void generateMenu(Database db) {
+    public void generateMenu(Database db) throws SQLException {
 
         int index = 0;
         int nbMealDay = 2;
 
-        List<Recipe> recipesUsed   = getAllRecipes();
+        List<Recipe> recipesUsed = getAllRecipes();
 
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
                 List<Recipe> recipesChosed = AutoCompletion.generateMenu(recipesUsed, nbRecipesToAdd, db);
-                menu.get(index++).addAll(recipesChosed);
+                menu.get(index).addAll(recipesChosed);
             }
+            index++;
         }
     }
 }
