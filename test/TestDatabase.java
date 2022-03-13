@@ -17,6 +17,8 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestDatabase {
     private static Database db;
     static private Menu menu = new Menu("Menu Test");
+    static private Menu menu2 = new Menu("Menu Test2");
+    static private Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
     @BeforeAll
     static public void createDB() throws SQLException {
 
@@ -27,7 +29,7 @@ class TestDatabase {
 
         db.insertType("Plat");
         db.insertType("Mijoté");
-        Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+
         Recipe carbo = new Recipe("Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
         Recipe pesto = new Recipe("Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
 
@@ -47,6 +49,11 @@ class TestDatabase {
         menu.addMealTo(Day.Wednesday, carbo);
         menu.addMealTo(Day.Monday,bolo);
         menu.addMealTo(Day.Friday, pesto);
+
+        menu2.addMealTo(Day.Monday, carbo);
+        menu2.addMealTo(Day.Wednesday, pesto);
+        menu2.addMealTo(Day.Monday,pesto);
+        menu2.addMealTo(Day.Friday, bolo);
 
     }
 
@@ -162,6 +169,26 @@ class TestDatabase {
         for(Day day : Day.values()){
             List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
             List<Recipe> recipeFromMenu = menu.getMealsfor(day);
+            for(int i = 0; i < recipeFromMenu.size(); i++){
+                assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
+                assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
+                assertEquals(recipeFromMenu.get(i).getNbrPerson(),recipeFromNewMenu.get(i).getNbrPerson());
+                assertEquals(recipeFromMenu.get(i).getPreparation(),recipeFromNewMenu.get(i).getPreparation());
+                assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
+                assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
+            }
+        }
+    }
+
+    @Test
+    public void testInsertModifyMenu() throws SQLException {
+        db.saveNewMenu(menu2);
+        menu2.removeMealFrom(Day.Friday,bolo);
+        db.saveModifyMenu(menu2);
+        Menu newMenu = db.getMenuFromName("Menu Test2");
+        for(Day day : Day.values()){
+            List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
+            List<Recipe> recipeFromMenu = menu2.getMealsfor(day);
             for(int i = 0; i < recipeFromMenu.size(); i++){
                 assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
                 assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());

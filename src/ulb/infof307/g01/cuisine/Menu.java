@@ -29,6 +29,13 @@ public class Menu {
 
     public String getName() { return name; }
 
+    public int size() {
+        int size = 0;
+        for(Vector<Recipe> vector : menu){
+            size += vector.size();
+        }
+        return size;
+    }
     public void addMealTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
     }

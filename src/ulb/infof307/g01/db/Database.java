@@ -442,18 +442,30 @@ public class Database {
 
    public void saveNewMenu(Menu menu) throws  SQLException{
         int id = createAndGetIdMenu(menu.getName(),menu.getNbOfdays());
+        createMenuRecipe(menu, id);
+   }
+    public void saveModifyMenu(Menu menu) throws  SQLException{
+        ArrayList<String> constraint = new ArrayList<>();
+        int menuID = getIDFromName("Menu",menu.getName(),"MenuID");
+        constraint.add(String.format("%s = %d","MenuID",menuID));
+        delete("MenuRecette",constraint);
+        updateName("Menu", menu.getName(),constraint);
+        if(menu.size() == 0){
+            delete("Menu",constraint);
+        }
+        else {
+            createMenuRecipe(menu, menuID);
+        }
+    }
+
+    private void createMenuRecipe(Menu menu, int menuID) throws SQLException {
         for(Day day : Day.values()){
             List<Recipe> recipeOfDay = menu.getMealsfor(day);
-            for(int hour = 0; hour < recipeOfDay.size(); hour++ ){
-                int idRecipe = getIDFromName("Recette",recipeOfDay.get(hour).getName(),"RecetteID");
-                insertRecetteInMenu(id,day.getIndex(),hour,idRecipe);
+            for (int hour = 0; hour < recipeOfDay.size(); hour++) {
+                int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
+                insertRecetteInMenu(menuID, day.getIndex(), hour, idRecipe);
             }
         }
-   }
-
-
-
-
-
+    }
 
 }
