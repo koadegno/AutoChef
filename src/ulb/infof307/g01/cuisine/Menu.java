@@ -21,14 +21,27 @@ public class Menu {
         }
     }
 
-    public int getNbOfdays() { return nbOfdays;}
-
     public List<Recipe> getMealsfor(Day day) {
        return Collections.unmodifiableList(menu.get(day.index));
     }
 
+    public int getNbOfdays() { return nbOfdays; }
+
+    public String getName() { return name; }
+
+    public int size() {
+        int size = 0;
+        for(Vector<Recipe> vector : menu){
+            size += vector.size();
+        }
+        return size;
+    }
     public void addMealTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
+    }
+
+    public void addMealToIndex(int day, int index, Recipe meal){
+        menu.get(day).add(index,meal);
     }
 
     public void removeMealFrom(Day day, Recipe meal) {
