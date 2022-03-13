@@ -4,7 +4,6 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
@@ -47,9 +46,6 @@ public class MyShoppingListsControllerTools {
     private Stage stage;
 
     public void setDatabase(Database db) {
-        if (db == null) {
-            System.out.println("je suis null haha 2");
-        }
         dataBase = db;
     }
 
@@ -95,7 +91,7 @@ public class MyShoppingListsControllerTools {
         }
     }
 
-    private List<String> callBDDToComboBoxList(int numberOfComboBox) {
+    protected void fillComboBoxShoppingNameListWithBDD(ComboBox comboBoxNameList, int numberOfComboBox) {
         List<String> myListComboBox = new ArrayList<String>();
         switch (numberOfComboBox) {
             case 1 -> {
@@ -109,10 +105,10 @@ public class MyShoppingListsControllerTools {
                 myListComboBox.addAll(allUnitName);
             }
             default -> {
+                System.out.println("Rechercher à avoir un numberOfComboBox entre 1 à 3");
             }
-            //TODO:ERROR?
         }
-        return myListComboBox;
+        comboBoxNameList.setItems(FXCollections.observableArrayList(myListComboBox));
     }
 
 
@@ -128,35 +124,19 @@ public class MyShoppingListsControllerTools {
             myProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
             tableViewDisplayProductList.getItems().add(myProduct);
 
-            //Nettoyer les combobox et le spinner //TODO: peux mieux faire
+            //Nettoyer les combobox et le spinner
             comboBoxListProduct.getSelectionModel().clearSelection();
             comboBoxListUnity.getSelectionModel().clearSelection();
             spinnerValueFactory.setValue(0);
-            //TODO: Creer une liste? Ou attendre le bouton confirmé?
         } else {
             System.out.println((String)nameProductChoose +" " +  quantityOrNumberChoose+ " " + (String)nameUnityChoose);
             hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
     }
 
-    public void fillComboBoxShoppingNameList(ComboBox comboBoxNameList, int numberOfComboBoxList) {
-
-        comboBoxNameList.setItems(FXCollections.observableArrayList(callBDDToComboBoxList(numberOfComboBoxList)));
-        comboBoxNameList.getEditor().textProperty().addListener(observable -> {
-            System.out.println(comboBoxNameList.getEditor().textProperty().getValue());
-            String test = comboBoxNameList.getEditor().textProperty().getValue();
-            //TODO: afficher direct qd une lettre est noté?
-            //list.clear();
-            List<String> myProduct = callBDDToComboBoxList(numberOfComboBoxList); //TODO: remplacer par db en appelant la method en bas
-            //TODO;ERROR QD ON VEUT EFFACER
-            //comboBoxNameList.setItems(FXCollections.observableArrayList(myProduct));
-        });
-    }
-
     public void initComboBox() {
-
-        fillComboBoxShoppingNameList(comboBoxListProduct, 2);
-        fillComboBoxShoppingNameList(comboBoxListUnity, 3);
+        fillComboBoxShoppingNameListWithBDD(comboBoxListProduct, 2);
+        fillComboBoxShoppingNameListWithBDD(comboBoxListUnity, 3);
     }
 
 

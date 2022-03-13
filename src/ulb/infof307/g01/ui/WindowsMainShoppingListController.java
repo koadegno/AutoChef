@@ -21,9 +21,6 @@ public class WindowsMainShoppingListController {
     public void displayMenuShoppingListController(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         root = loader.load();
-
-        if( dataBase == null){System.out.println("je suis null haha 4");}
-
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
         stage.show();
@@ -49,7 +46,6 @@ public class WindowsMainShoppingListController {
         root = loader.load();
         WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = loader.getController();
         windowsCreateMyShoppingListController.setDatabase(dataBase);
-        if( dataBase == null){System.out.println("je suis null haha 34");}
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
 
@@ -67,7 +63,6 @@ public class WindowsMainShoppingListController {
     }
 
     public void setDataBase(Database db) {
-        if( db == null){System.out.println("je suis null haha");}
         dataBase = db;
     }
 }

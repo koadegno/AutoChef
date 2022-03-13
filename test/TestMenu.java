@@ -1,35 +1,69 @@
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ulb.infof307.g01.cuisine.*;
+import ulb.infof307.g01.db.Database;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestMenu {
 
     static private Menu menu = new Menu("Menu Test");
-
     static private Recipe[] recipes;
     static private Product[] products;
 
+    static Database db;
+
     @BeforeAll
-    static void setUp() {
+    static void setUp() throws SQLException {
         recipes  = new Recipe [2];
         products = new Product[2];
 
         products[0] = new Product("Abricot");
         products[1] = new Product("Fraise");
 
-        recipes[0] = new Recipe(0, "test1", 0, "", "", 0, "");
+        recipes[0] = new Recipe(4, "test1", 3, "Vegan", "Test", 2, "Avant le code");
         recipes[0].add(products[0]);
         recipes[0].add(products[0]);
 
-        recipes[1] = new Recipe(0, "test2", 0, "", "", 0, "");
+        recipes[1] = new Recipe(5, "test2", 5, "Vegan", "Test", 2, "Avant le code");
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
+
+        createDB();
+    }
+
+    static public void createDB() throws SQLException {
+
+        db = new Database("test.sqlite");
+
+        db.insertCategory("Poisson");
+        db.insertCategory("Viande");
+        db.insertCategory("Vegan");
+        db.insertType("Plat");
+        db.insertType("Mijoté");
+        db.insertType("Test");
+
+        Recipe bolo  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+        Recipe carbo = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
+        Recipe pesto = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+
+        db.insertRecipe(bolo);
+        db.insertRecipe(carbo);
+        db.insertRecipe(pesto);
+        db.insertRecipe(recipes[0]);
+        db.insertRecipe(recipes[1]);
+    }
+
+    @AfterAll
+    static public void deleteDB() throws IOException, SQLException {
+        db.closeConnection();
+        Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @BeforeEach
@@ -144,5 +178,16 @@ class TestMenu {
 
         assertEquals(5, productsCounter[0]);
         assertEquals(2, productsCounter[1]);
+    }
+
+    @Test
+    void generateMenu() throws SQLException {
+
+        menu.generateMenu(db);
+
+        for (Day day: Day.values()) {
+            List<Recipe> recipes = menu.getMealsfor(day);
+            assertEquals(2, recipes.size());
+        }
     }
 }
