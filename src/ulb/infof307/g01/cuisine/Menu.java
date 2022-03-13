@@ -93,15 +93,15 @@ public class Menu {
     public void generateMenu(Database db, int nbVegetarian, int nbMeat, int nbFish) throws SQLException {
 
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
+        List<Recipe> recipesUsed = getAllRecipes();
 
         if (nbVegetarian > 0) {categoriesWanted.put("Végétarien", nbVegetarian);}
         if (nbMeat > 0) {categoriesWanted.put("Viande", nbMeat);}
         if (nbFish > 0) {categoriesWanted.put("Poisson", nbFish);}
+        if (categoriesWanted.isEmpty()) { return;}
 
         int index = 0;
-        int nbMealDay = 2;
-
-        List<Recipe> recipesUsed = getAllRecipes();
+        int nbMealDay = (int) Math.ceil((double)(nbVegetarian + nbMeat + nbFish + recipesUsed.size())/ 7);
 
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
