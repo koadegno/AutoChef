@@ -112,4 +112,9 @@ public class Menu {
             index++;
         }
     }
+
+    @Override
+    public String toString(){
+        return this.name;
+    }
 }
