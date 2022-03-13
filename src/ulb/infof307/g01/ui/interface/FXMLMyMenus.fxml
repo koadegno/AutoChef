@@ -26,7 +26,7 @@
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
                <children>
                   <TextField fx:id="menuName" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
-                  <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#handleDisplayMenu" text="Afficher">
+                  <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController" text="Afficher">
                      <HBox.margin>
                         <Insets left="30.0" />
                      </HBox.margin>
@@ -41,7 +41,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
                <children>
-                  <Button fx:id="backBtn" alignment="CENTER" mnemonicParsing="false" onMousePressed="#backToMain" text="Retour" />
+                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToMainMenuController" text="Retour" />
                </children>
             </HBox>
          </children>

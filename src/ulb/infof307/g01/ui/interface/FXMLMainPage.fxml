@@ -7,6 +7,6 @@
    <children>
       <Button fx:id="shoppingListBtn" layoutX="107.0" layoutY="188.0" mnemonicParsing="false" onAction="#redirectToShoppingList" text="Liste de courses" />
       <Button fx:id="recipeBtn" layoutX="270.0" layoutY="188.0" mnemonicParsing="false" onAction="#redirectRecipe" text="Recettes" />
-      <Button fx:id="menuBtn" layoutX="379.0" layoutY="188.0" mnemonicParsing="false" onAction="#redirectMenuList" text="Menus" />
+      <Button fx:id="menuBtn" layoutX="379.0" layoutY="188.0" mnemonicParsing="false" onAction="#redirectToMenu" text="Menus" />
    </children>
 </AnchorPane>
