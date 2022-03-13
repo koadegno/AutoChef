@@ -15,19 +15,19 @@ public class Menu {
     public Menu(String name) {
         this.name = name;
 
+        initVector();
+    }
+
+    public Menu(){
+        initVector();
+    }
+
+    private void initVector() {
         menu = new Vector<>(10);
         for (int i = 0; i<nbOfdays; i++) {
             menu.add(new Vector<>());
         }
     }
-
-    public List<Recipe> getMealsfor(Day day) {
-       return Collections.unmodifiableList(menu.get(day.index));
-    }
-
-    public int getNbOfdays() { return nbOfdays; }
-
-    public String getName() { return name; }
 
     public int size() {
         int size = 0;
@@ -36,9 +36,19 @@ public class Menu {
         }
         return size;
     }
+
+    public int getNbOfdays() { return nbOfdays;}
+
+    public List<Recipe> getMealsfor(Day day) {
+       return Collections.unmodifiableList(menu.get(day.index));
+    }
+
     public void addMealTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
     }
+
+    public String getName() { return name; }
+
 
     public void addMealToIndex(int day, int index, Recipe meal){
         menu.get(day).add(index,meal);

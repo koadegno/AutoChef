@@ -53,7 +53,7 @@ public class WindowMainController {
     }
 
     @FXML
-    public void redirectMenuList(ActionEvent event) throws IOException {
+    public void redirectMenuList(ActionEvent event) throws IOException, SQLException {
         //WindowMyMenusController windowMyMenus = new WindowMyMenusController();
         //windowMyMenus.displayMenuList(event);
        CreateMenuController windowCreateMenu = new CreateMenuController();
@@ -62,8 +62,8 @@ public class WindowMainController {
 
     @FXML
     public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
-        SearchRecipeController displayRecipe =  new SearchRecipeController();
-        displayRecipe.displaySearchRecipe(event);
+        //SearchRecipeController displayRecipe =  new SearchRecipeController();
+        //displayRecipe.displaySearchRecipe(event);
 
     }
 }

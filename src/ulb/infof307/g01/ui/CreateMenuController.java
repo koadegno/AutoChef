@@ -6,31 +6,39 @@ import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
+import ulb.infof307.g01.cuisine.Day;
+import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
+import  ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;
+import java.nio.file.FileStore;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateMenuController implements Initializable{
+public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.SearchRecipeInterface {
     private Stage stage;
-    private Scene scene;
-    private Parent root;
-    private ArrayList<Recipe> mondayRecipe;
-    private ArrayList<Recipe> tuesdayRecipe;
-    private ArrayList<Recipe> fridayRecipe;
-    private ArrayList<Recipe> wednesdayRecipe;
-    private ArrayList<Recipe> thursdayRecipe;
-    private ArrayList<Recipe> sundayRecipe;
-    private ArrayList<Recipe> saturdayRecipe;
-    private ArrayList<String> daysname = new ArrayList<>();
+    private static Scene scene;
+    private static Parent root;
+    private Database db ;
+    private Menu myMenu;
+    private ArrayList<Day> daysName;
+    private ArrayList<Recipe> recipe;
 
     @FXML
     ComboBox daysComboBox ;
@@ -38,15 +46,21 @@ public class CreateMenuController implements Initializable{
     TableView menuTableView;
     @FXML
     TableColumn menuTableColumn;
+    @FXML
+    Button removeRecipeButton;
 
-    public CreateMenuController(){
-        daysname.add("Lundi");
-        daysname.add("Mardi");
-        daysname.add("Mercredi");
-        daysname.add("Jeudi");
-        daysname.add("Vendredi");
-        daysname.add("Samedi");
-        daysname.add("Dimanche");
+    public CreateMenuController() throws SQLException {
+        this.db = new Database("autochef.sqlite");
+        this.myMenu = new Menu();
+        this.daysName = new ArrayList<>();
+        for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
+        recipe = new ArrayList<>();
+
+    }
+
+    @Override
+    public void cancelSearchRecipe(){
+        stage.setScene(this.scene);
     }
 
     @FXML
@@ -68,19 +82,89 @@ public class CreateMenuController implements Initializable{
         stage.show();
     }
 
+    @FXML
+    public void  fillTableView(TableView table, List<Recipe> valueList){
+        for(int i =0; i < valueList.size(); i++){
+            table.getItems().add(valueList.get(i));
+        }
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for(String value: daysname) daysComboBox.getItems().add(value);
+        for( int i= 0; i < 7 ; i++) daysComboBox.getItems().add(daysName.get(i).toString());
         daysComboBox.getSelectionModel().selectFirst();
-        menuTableColumn.setText(daysname.get(0));
+        menuTableColumn.setText(daysName.get(0).toString());
+        menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(0)));
+        this.removeRecipeButton.setVisible(false);
     }
 
-    public void refreshTableView(Event event) throws IOException{
+    public void refreshTableView(){
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        menuTableColumn.setText(daysname.get(dayIndex));
+        menuTableColumn.setText(daysName.get(dayIndex).toString());
+        this.menuTableView.getItems().clear();
+        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(dayIndex)));
+
     }
     @FXML
-    public void generateMenu(ActionEvent event){
-
+    private void searchRecipe(ActionEvent event) throws SQLException, IOException {
+        FXMLLoader loader = new FXMLLoader(SearchRecipeController.class.getResource("interface/searchRecipe.fxml"));
+        Parent root = loader.load();
+        SearchRecipeController controller = loader.getController();
+        controller.setMainController(this);
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.stage.setScene( new Scene(root));
+        this.stage.show();
     }
+    @Override
+    public void addRecipe(Recipe recipe) {
+        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
+        myMenu.addMealTo(daysName.get(dayIndex), recipe);
+        this.refreshTableView();
+        this.stage.setScene(this.scene);
+    }
+
+    @FXML
+    public void generateMenu(ActionEvent event) throws SQLException {
+        final GenerateMenuDialog dialog = new GenerateMenuDialog();
+        dialog.initModality(Modality.APPLICATION_MODAL);
+        dialog.initOwner(this.stage);
+
+
+       /* okButton.setOnAction((event1)->{
+            int nbVegetarian = (int) vegetarianSpinner.getValue();
+            int nbMeat = (int) meatSpinner.getValue();
+            int nbFish = (int) fishSpinner.getValue();
+            dialog.close();
+            try {
+                //TODO: add param in generate menu
+                myMenu.generateMenu(db);
+                this.refreshTableView();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+        });*/
+        dialog.initObject();
+        dialog.show();
+        //myMenu.generateMenu(db);
+        //refreshTableView();
+    }
+
+
+    @FXML
+    public void removeRecipeAction(ActionEvent event){
+        Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
+        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
+        this.myMenu.removeMealFrom(daysName.get(dayIndex), recipeToRemove);
+        refreshTableView();
+        removeRecipeButton.setVisible(false);
+    }
+
+    @FXML
+    public void recipeSelectedEvent(Event event){
+       int idx =  menuTableView.getSelectionModel().getSelectedIndex();
+       if(idx>-1) this.removeRecipeButton.setVisible(true);
+    }
+
+
 }

@@ -2,33 +2,42 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="706.0" prefWidth="925.0" spacing="30.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.CreateMenuController">
    <children>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+         <children>
+            <Label fx:id="menuName" alignment="CENTER" prefHeight="45.0" prefWidth="130.0" text="Nom du menu : " />
+            <TextField fx:id="menuNameTextField" />
+         </children>
+      </HBox>
       <HBox alignment="CENTER_LEFT" prefHeight="499.0" prefWidth="925.0" spacing="200.0">
          <children>
-            <TableView fx:id="menuTableView" prefHeight="517.0" prefWidth="398.0">
+            <TableView fx:id="menuTableView" onMouseClicked="#recipeSelectedEvent" prefHeight="517.0" prefWidth="398.0">
                <columns>
                   <TableColumn fx:id="menuTableColumn" prefWidth="397.0" text="Menu" />
                </columns>
             </TableView>
-            <VBox alignment="CENTER" prefHeight="499.0" prefWidth="359.0" spacing="200.0">
+            <VBox alignment="CENTER" prefHeight="499.0" prefWidth="359.0" spacing="100.0">
                <children>
                   <ComboBox fx:id="daysComboBox" onAction="#refreshTableView" prefHeight="43.0" prefWidth="197.0" />
-                  <Button mnemonicParsing="false" prefHeight="50.0" prefWidth="208.0" text="Ajouter recette" />
+                  <Button fx:id="removeRecipeButton" mnemonicParsing="false" onAction="#removeRecipeAction" prefHeight="50.0" prefWidth="208.0" text="Supprimer recette" />
+                  <Button onAction="#searchRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="208.0" text="Ajouter recette" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="166.0" prefWidth="925.0" spacing="100.0">
          <children>
-            <Button  mnemonicParsing="false" prefHeight="26.0" prefWidth="205.0" text="Enregister" />
-            <Button mnemonicParsing="false" onAction="#generateMenu" prefHeight="32.0" prefWidth="215.0" text="Génerer Menu" />
-            <Button  mnemonicParsing="false" onAction="#returnMain" prefHeight="26.0" prefWidth="219.0" text="Retour" />
+            <Button mnemonicParsing="false" prefHeight="26.0" prefWidth="205.0" text="Enregister" />
+            <Button mnemonicParsing="false" onAction="#generateMenu" prefHeight="32.0" prefWidth="215.0" text="Génerer menu" />
+            <Button mnemonicParsing="false" onAction="#returnMain" prefHeight="26.0" prefWidth="219.0" text="Retour" />
          </children>
       </HBox>
    </children>
