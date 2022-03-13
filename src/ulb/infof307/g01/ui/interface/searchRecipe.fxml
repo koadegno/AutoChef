@@ -46,7 +46,7 @@
                   </HBox>
                </children>
             </VBox>
-            <TableView fx:id="recipeTableView" prefHeight="488.0" prefWidth="296.0">
+            <TableView fx:id="recipeTableView" onMouseClicked="#addRecipe" prefHeight="488.0" prefWidth="296.0">
               <columns>
                 <TableColumn fx:id="columnRecipeName" prefWidth="295.0" text="Recettes" />
               </columns>
