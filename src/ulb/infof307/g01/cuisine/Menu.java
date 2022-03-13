@@ -50,5 +50,13 @@ public class Menu {
         return shopList;
     }
 
+    public int getNbOfdays() {
+        return nbOfdays;
+    }
+
+    @Override
+    public String toString(){
+        return name;
+    }
 }
 

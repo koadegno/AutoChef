@@ -31,43 +31,42 @@ import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Day;
+import ulb.infof307.g01.db.Database;
+
+/*class ObjectPointer {
+    Object pointer;
+    String name;
+}*/
 
 
 public class WindowShowMenuController implements Initializable {
 
-    //private TempMenu menu;
     private Menu menu;
-    public void setMenu(String name){
-        this.menu= new Menu(name);
-        //TODO: Get from DB!
-        ObservableList<Recipe> recipes = FXCollections.observableArrayList(
-                new Recipe("recette 1"),
-                new Recipe("recette 2"),
-                new Recipe("recette 3")
-        );
-        ArrayList<Day> days = new ArrayList<>();
-        for (int i = 0; i < 7; i++) {
-            for (Recipe recipe : recipes){
-                this.menu.addMealTo(Day.values()[i], recipe);
-            }
-            days.add(Day.values()[i]);
-        }
-
-        displayMenuInfo(name);
-        displayMenuTable(days);
-    }
-
-
-    private Stage stage;
-    private Scene scene;
-    //private Parent root;
-
 
     @FXML
     Label menuName, nbOfdays;
-
     @FXML
+    //TreeView<ObjectPointer> menuTreeView;
     TreeView<String> menuTreeView;
+
+    Database database = new Database("db");
+
+
+    public void setMenu(Menu menu){
+        this.menu= menu;
+        //TODO: Get from DB!
+        ArrayList<Day> days = new ArrayList<>();
+        for (int i = 0; i < menu.getNbOfdays(); i++) {
+            days.add(Day.values()[i]);
+        }
+
+        displayMenuInfo(menu.toString(), menu.getNbOfdays());
+        displayMenuTable(days);
+    }
+
+    private Stage stage;
+    private Scene scene;
+
 
 
     @Override
@@ -76,10 +75,9 @@ public class WindowShowMenuController implements Initializable {
     }
 
     @FXML
-    public void displayMenuInfo(String name){
+    public void displayMenuInfo(String name, int nbOfDays){
         this.menuName.setText(name);
-        this.nbOfdays.setText("Duration: 7 jours");
-
+        this.nbOfdays.setText("Duration:"+ nbOfDays +"jours");
     }
 
     @FXML
@@ -111,7 +109,18 @@ public class WindowShowMenuController implements Initializable {
     public void getSelectedItem(){
         TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
+            for (Day day : Day.values()) {
+                if (day.name().equals(selectedItem.getValue())){
+                    System.out.println("selected: " + selectedItem.getValue());
+                }
+            }
         }
+    }
+
+    @FXML
+    public void goToSearchRecipe(ActionEvent event) throws IOException{
+        SearchRecipeController search = new SearchRecipeController();
+        search.displaySearchRecipe(event);
     }
 
     @FXML

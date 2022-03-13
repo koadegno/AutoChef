@@ -25,19 +25,20 @@
             <Label fx:id="nbOfdays" prefHeight="18.0" prefWidth="142.0" text="Label" />
             <HBox alignment="CENTER" prefHeight="308.0" prefWidth="600.0">
                <children>
-                  <TreeView fx:id="menuTreeView" prefHeight="238.0" prefWidth="188.0" showRoot="false" />
-                  <VBox alignment="CENTER" prefHeight="308.0" prefWidth="105.0">
+                  <TreeView fx:id="menuTreeView" onContextMenuRequested="#getSelectedItem" onMouseClicked="#getSelectedItem" prefHeight="238.0" prefWidth="188.0" showRoot="false" />
+                  <VBox alignment="CENTER" prefHeight="308.0" prefWidth="134.0" spacing="20.0">
                      <children>
-                        <HBox prefHeight="100.0" prefWidth="200.0">
-                           <children>
-                              <Button mnemonicParsing="false" text="Rajouter recette" />
-                           </children>
-                        </HBox>
+                        <Button mnemonicParsing="false" onAction="#goToSearchRecipe" text="Rajouter une recette" />
                      </children>
                   </VBox>
                </children>
             </HBox>
-            <Button mnemonicParsing="false" onAction="#back" text="Retour" />
+            <HBox alignment="TOP_CENTER" prefHeight="100.0" prefWidth="200.0" spacing="40.0">
+               <children>
+                  <Button mnemonicParsing="false" onAction="#back" text="Retour" />
+                  <Button mnemonicParsing="false" text="Generer Liste de Courses" />
+               </children>
+            </HBox>
          </children>
       </VBox>
    </children>

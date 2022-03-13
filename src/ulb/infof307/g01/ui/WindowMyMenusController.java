@@ -3,6 +3,8 @@ package ulb.infof307.g01.ui;
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -16,6 +18,9 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import ulb.infof307.g01.cuisine.Day;
+import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.cuisine.Recipe;
 
 import java.io.IOException;
 import java.time.LocalDate;
@@ -25,7 +30,7 @@ import java.util.ResourceBundle;
 
 public class WindowMyMenusController implements Initializable {
 
-    private ArrayList<String> menus = new ArrayList<>();
+    private ArrayList<Menu> menus = new ArrayList<>();
 
     public void displayMenuList(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
@@ -38,7 +43,6 @@ public class WindowMyMenusController implements Initializable {
 
     @FXML
     Button backBtn;
-
     public void backToMain(MouseEvent mousePressed)throws IOException {
         WindowMainController main = new WindowMainController();
         main.displayMain((Stage) ((Node) mousePressed.getSource()).getScene().getWindow());
@@ -46,8 +50,10 @@ public class WindowMyMenusController implements Initializable {
 
     public void initializeMenusFromTextFile(String filename){
         //Les catégories doivent être séparées par des virgules!
-        this.menus = readFromFile(filename);
-
+        ArrayList<String> menuNames = readFromFile(filename);
+        for (String name : menuNames){
+            menus.add(new Menu(name));
+        }
     }
 
     public void initializeMenusFromDB() {
@@ -62,19 +68,18 @@ public class WindowMyMenusController implements Initializable {
 
 
     @FXML
-    TreeView<String> menuTreeView;
+    TreeView<Menu> menuTreeView;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
 
-        TreeItem<String> rootItem =  new TreeItem<>("Tous les menus");
+        TreeItem<Menu> rootItem =  new TreeItem<>();
 
-        for (String category : this.menus){
-            TreeItem<String> categoryName = new TreeItem<>(category);
-            rootItem.getChildren().add(categoryName);
+        for (Menu menu : menus){
+            TreeItem<Menu> menuName = new TreeItem<>(menu);
+            rootItem.getChildren().add(menuName);
         }
-
         menuTreeView.setRoot(rootItem);
 
     }
@@ -104,16 +109,14 @@ public class WindowMyMenusController implements Initializable {
         return result;
     }
 
-    public String selectedMenu(){
-        TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
+    @FXML
+    public Menu selectedMenu(){
+        TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
-            System.out.println("selected Item: " + selectedItem.getValue());
-            if (!selectedItem.getValue().equals("Tous les menus")){
-                menuName.setText(selectedItem.getValue());
-            }
+            menuName.setText(selectedItem.getValue().toString());
             return selectedItem.getValue();
         }
-        return "";
+        return null;
     }
 
     @FXML
@@ -125,13 +128,26 @@ public class WindowMyMenusController implements Initializable {
     public void handleDisplayMenu(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
+        Menu menu = selectedMenu();
+        //TODO: Get from DB!
+        ObservableList<Recipe> recipes = FXCollections.observableArrayList(
+                new Recipe("recette 1"),
+                new Recipe("recette 2"),
+                new Recipe("recette 3"),
+                new Recipe("recette 34")
+        );
+        for (int i = 0; i < 7; i++) {
+            for (Recipe recipe : recipes){
+                menu.addMealTo(Day.values()[i], recipe);
+            }
+        }
 
-        if (menus.contains(name)){
+        if (menus.contains(menu)){
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
             Parent root = loader.load();
 
             WindowShowMenuController controller = loader.getController();
-            controller.setMenu(name);
+            controller.setMenu(menu);
 
             Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
             Scene scene =  new Scene(root);
