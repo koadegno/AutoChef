@@ -172,7 +172,7 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
         myMenu.setName(this.menuNameTextField.getText());
         try{
             this.db.saveNewMenu(myMenu);
-        }catch(SQLException e){}
+        }catch(SQLException e){System.out.println("non!");}
     }
 
 
