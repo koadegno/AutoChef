@@ -6,49 +6,52 @@ import java.util.*;
 
 public class AutoCompletion {
 
-    static public List<Recipe> generateMenu (List<Recipe> recipesAlreadyUsed, int nbRecipes, Database db) throws SQLException {
+    static public List<Recipe> generateMenu (List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
-        HashMap<String, Integer> categoriesRecipesUsed = new HashMap<>();
-        ArrayList<String> categories = db.getAllCategories();
-
-        for (String category : categories) {
-            categoriesRecipesUsed.put(category, 0);
-        }
-
-        for (Recipe recipe : recipesAlreadyUsed) {
-            String category = recipe.getCategory();
-            int val = categoriesRecipesUsed.get(category);
-            categoriesRecipesUsed.replace(category, ++val);
-        }
+        if (categoriesWanted.isEmpty()){ return menu;}
 
         for (int remainingRecipes = 0; remainingRecipes < nbRecipes; remainingRecipes++) {
 
-            String categoryMin = findMin(categoriesRecipesUsed);
-            ArrayList<Recipe> recipes = db.getRecipeWhere(categoryMin, null,  0);
+            String categoryMax = null;
+            ArrayList<Recipe> recipes =  new ArrayList<>();
+
+            while (recipes.size() == 0) {
+                categoryMax = findMax(categoriesWanted);
+                recipes     = db.getRecipeWhere(categoryMax, type,  0);
+
+                if (recipes.size() == 0) {
+                    categoriesWanted.remove(categoryMax);
+                    if (categoriesWanted.isEmpty()){ return menu;}
+                }
+            }
+
             Recipe choice = choiceRecipe(recipes, recipesAlreadyUsed);
             menu.add(choice);
             recipesAlreadyUsed.add(choice);
-            int val = categoriesRecipesUsed.get(categoryMin);
-            categoriesRecipesUsed.replace(categoryMin, ++val);
+            int val = categoriesWanted.get(categoryMax);
+            categoriesWanted.replace(categoryMax, --val);
         }
-
         return menu;
     }
 
 
-    static public String findMin (HashMap<String, Integer> categoriesRecipesUsed) {
+    static public String findMax (HashMap<String, Integer> categoriesRecipesUsed) {
 
-        Map.Entry<String, Integer> min = null;
+        if (categoriesRecipesUsed.isEmpty()) {return null;}
+
+        Map.Entry<String, Integer> max = null;
         for (Map.Entry<String, Integer> entry : categoriesRecipesUsed.entrySet()) {
-            if (min == null || min.getValue() > entry.getValue()) {
-                min = entry;
+            if (max == null || max.getValue() < entry.getValue()) {
+                max = entry;
             }
         }
-        return min.getKey();
+        return max.getKey();
     }
 
     static public Recipe choiceRecipe(List<Recipe> recipes, List<Recipe> recipesAlreadyUsed) {
+
+        if (recipes.size() == 0) { return null;}
 
         for (Recipe recipe: recipes) {
             boolean notFound = true;
@@ -58,7 +61,6 @@ public class AutoCompletion {
                     break;
                 }
             }
-
             if (notFound) { return recipe;}
         }
 
