@@ -31,20 +31,20 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable, ulb.infof307.g01.ui.SearchRecipeInterface {
+public class ModifyMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable  {
 
+    String menuName;
 
-
-    public CreateMenuController() throws SQLException {
+    public ModifyMenuController(String menuName) throws SQLException {
         this.db = new Database("autochef.sqlite");
-        this.myMenu = new Menu();
+        this.myMenu = new Menu(menuName);
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
     }
 
     @FXML
     public void displayEditMeal(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(CreateMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(ModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
         loader.setController(this);
         root = loader.load();
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -61,15 +61,14 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
         this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(0)));
         this.removeRecipeButton.setVisible(false);
-        this.generateMenuButton.setOnAction((event1) -> {
-                try{this.generateMenu(event1);}
-                catch (SQLException e){}
-            });
-
+        menuNameTextField.setVisible(false);
+        menuNameLabel.setVisible(false);
+        generateMenuButton.setVisible(false);
     }
+
     @Override
     @FXML
-    public void returnMain(ActionEvent event) throws IOException {
+    void returnMain(ActionEvent event) throws IOException {
         //TODO:  return to Elsbeth's page
         root = FXMLLoader.load(getClass().getResource("interface/FXMLMainPage.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -78,39 +77,11 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         stage.show();
     }
 
-
-    @FXML
-    public void generateMenu(ActionEvent event) throws SQLException {
-        final GenerateMenuDialog dialog = new GenerateMenuDialog();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(this.stage);
-        dialog.initObject();
-        dialog.getOkButton().setOnAction((event1)->{
-            int nbVegetarian = (int) dialog.getVegetarianSpinner().getValue();
-            int nbMeat = (int) dialog.getMeatSpinner().getValue();
-            int nbFish = (int) dialog.getFishSpinner().getValue();
-            dialog.close();
-            try {
-                myMenu.generateMenu(db, nbVegetarian, nbMeat, nbFish);
-                dialog.close();
-                this.refreshTableView();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-
-        dialog.show();
-        //myMenu.generateMenu(db);
-        //refreshTableView();
-    }
-
-
     @Override
     @FXML
     public void saveMenu(){
-        myMenu.setName(this.menuNameTextField.getText());
         try{
-            this.db.saveNewMenu(myMenu);
+            this.db.saveModifyMenu(myMenu);
         }catch(SQLException e){System.out.println("non!");}
     }
 
