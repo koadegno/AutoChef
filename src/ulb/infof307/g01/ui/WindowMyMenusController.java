@@ -120,7 +120,6 @@ public class WindowMyMenusController implements Initializable {
 
         String name = menuName.getText();
         Menu menu;
-        System.out.println(name);
         try{
             menu= database.getMenuFromName(name);
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));

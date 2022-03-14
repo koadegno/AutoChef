@@ -31,13 +31,18 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class ModifyMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable  {
+public class ModifyMenuController extends EditMenuController implements Initializable  {
     WindowShowMenuController mainController;
     public ModifyMenuController(Menu menuName) throws SQLException {
         this.db = new Database("autochef.sqlite");
         this.myMenu = menuName;
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
+    }
+
+    @FXML
+    public void setScene(Scene scene){
+        this.scene = scene;
     }
 
     @Override
@@ -61,7 +66,7 @@ public class ModifyMenuController extends ulb.infof307.g01.ui.EditMenuController
 
     @Override
     @FXML
-    public void saveMenu(){
+    public void saveMenu(ActionEvent event){
         try{
             //this.db.saveModifyMenu(myMenu);
             this.mainController.add(myMenu);

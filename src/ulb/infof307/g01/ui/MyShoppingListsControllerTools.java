@@ -39,6 +39,8 @@ public class MyShoppingListsControllerTools {
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
     protected TableView tableViewDisplayProductList;
+    @FXML
+    protected Button returnToMenu;
     protected ArrayList<String> allUnitName = null;
     protected ArrayList<String> allProduct = null;
     protected ArrayList<String> allShoppinListName = null;
@@ -80,6 +82,13 @@ public class MyShoppingListsControllerTools {
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
+    }
+
+    @FXML
+    public void returnToMyMenu(ActionEvent event) throws IOException {
+        WindowMyMenusController menusController = new WindowMyMenusController();
+        menusController.setDatabase(dataBase);
+        menusController.displayMyMenus(event);
     }
 
     protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {
@@ -140,12 +149,6 @@ public class MyShoppingListsControllerTools {
         }
     }
 
-    public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShppingList){
-        tableViewDisplayProductList.getItems().clear();
-        Vector<Product> temp =  (Vector<Product>) myExistentShppingList;
-        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
-        tableViewDisplayProductList.setItems(data);
-    }
     public void initComboBox() {
         fillComboBoxShoppingNameListWithBDD(comboBoxListProduct, 2);
         fillComboBoxShoppingNameListWithBDD(comboBoxListUnity, 3);

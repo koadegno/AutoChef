@@ -33,8 +33,6 @@ import java.util.ResourceBundle;
 
 public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable {
 
-
-
     public CreateMenuController() throws SQLException {
         this.db = new Database("autochef.sqlite");
         this.myMenu = new Menu();
@@ -48,7 +46,7 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         loader.setController(this);
         root = loader.load();
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        EditMenuController.scene = new Scene(root);
+        scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
     }
@@ -106,11 +104,16 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
 
     @Override
     @FXML
-    public void saveMenu(){
+    public void saveMenu(ActionEvent event){
         myMenu.setName(this.menuNameTextField.getText());
         try{
             this.db.saveNewMenu(myMenu);
-        }catch(SQLException e){System.out.println("non!");}
+            WindowMainMenuController mainMenuController = new WindowMainMenuController();
+            mainMenuController.setDataBase(db);
+            mainMenuController.displayMainMenuController(event);
+        }catch(SQLException e){System.out.println("non!");} catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

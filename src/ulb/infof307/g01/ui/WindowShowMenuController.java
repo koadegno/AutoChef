@@ -91,7 +91,9 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         loader.setController(modifyMenu);
         this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = loader.load();
-        this.stage.setScene(new Scene(root));
+        Scene myscene = new Scene(root);
+        modifyMenu.setScene(myscene);
+        this.stage.setScene(myscene);
         this.stage.show();
     }
 

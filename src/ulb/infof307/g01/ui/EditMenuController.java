@@ -46,7 +46,7 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
 
     @Override
     public void cancel() {
-        stage.setScene(ulb.infof307.g01.ui.EditMenuController.scene);
+        stage.setScene(scene);
     }
 
     @Override
@@ -54,7 +54,8 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         myMenu.addMealTo(daysName.get(dayIndex), recipe);
         this.refreshTableView();
-        this.stage.setScene(ulb.infof307.g01.ui.EditMenuController.scene);
+        System.out.println("scene is null " + (scene == null));
+        this.stage.setScene(this.scene);
     }
 
     @FXML
@@ -104,5 +105,5 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
     }
 
     @FXML
-    public void saveMenu(){}
+    public void saveMenu(ActionEvent event){}
 }
