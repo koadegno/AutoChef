@@ -45,7 +45,7 @@ public class WindowMainController extends Application {
             URL ressource = getClass().getResource("interface/FXMLMainPage.fxml");
             Parent root = FXMLLoader.load(Objects.requireNonNull(ressource));
             Scene scene =  new Scene(root);
-            primaryStage.setTitle("Page principale");
+            primaryStage.setTitle("Autochef");
             primaryStage.setScene(scene);
             primaryStage.show();
 

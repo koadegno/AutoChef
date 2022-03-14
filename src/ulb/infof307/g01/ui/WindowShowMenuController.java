@@ -135,7 +135,6 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         try{
             Parent root = loader.load();
             Scene scene =  new Scene(root);
-            stage.setTitle("Menu "+menu.getName());
             stage.setScene(scene);
             stage.show();
         }catch (IOException e){}

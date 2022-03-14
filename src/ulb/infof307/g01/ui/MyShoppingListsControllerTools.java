@@ -62,7 +62,6 @@ public class MyShoppingListsControllerTools {
 
     public void confirmMyCreateShoppingList(){}
     public void initShoppingListElement() {
-
         try { //TODO gerer l'erreur
             allProduct = dataBase.getAllProductName();
             allUnitName = dataBase.getAllUniteName();
@@ -76,7 +75,6 @@ public class MyShoppingListsControllerTools {
 
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(WindowsMainShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         Parent root = loader.load();
         WindowsMainShoppingListController controller = loader.getController();
@@ -112,7 +110,6 @@ public class MyShoppingListsControllerTools {
         List<String> myListComboBox = new ArrayList<String>();
         switch (numberOfComboBox) {
             case 1 -> {
-
                 myListComboBox.addAll(allShoppinListName);
             }
             case 2 -> { // PRODUIT
@@ -146,7 +143,6 @@ public class MyShoppingListsControllerTools {
             comboBoxListUnity.getSelectionModel().clearSelection();
             spinnerValueFactory.setValue(0);
         } else {
-            System.out.println((String)nameProductChoose +" " +  quantityOrNumberChoose+ " " + (String)nameUnityChoose);
             hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
     }

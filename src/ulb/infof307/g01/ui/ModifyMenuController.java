@@ -68,9 +68,10 @@ public class ModifyMenuController extends EditMenuController implements Initiali
     @FXML
     public void saveMenu(ActionEvent event){
         try{
-            //this.db.saveModifyMenu(myMenu);
+            this.db.saveModifyMenu(myMenu);
             this.mainController.add(myMenu);
-        }catch(Exception e){System.out.println(e);}
+        }catch(Exception e){System.out.println(e);
+        }
     }
 
 
