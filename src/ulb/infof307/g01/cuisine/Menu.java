@@ -42,26 +42,26 @@ public class Menu {
 
     public int getNbOfdays() { return nbOfdays;}
 
-    public List<Recipe> getMealsfor(Day day) {
+    public List<Recipe> getRecipesfor(Day day) {
        return Collections.unmodifiableList(menu.get(day.index));
     }
 
-    public void addMealTo(Day day, Recipe meal) {
+    public void addRecipeTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
     }
 
     public String getName() { return name; }
 
 
-    public void addMealToIndex(int day, int index, Recipe meal){
+    public void addRecipeToIndex(int day, int index, Recipe meal){
         menu.get(day).add(index,meal);
     }
 
-    public void removeMealFrom(Day day, Recipe meal) {
+    public void removeRecipeFrom(Day day, Recipe meal) {
         menu.get(day.index).remove(meal);
     }
 
-    public void replaceMeal(Day day, Recipe oldMeal, Recipe newMeal) {
+    public void replaceRecipe(Day day, Recipe oldMeal, Recipe newMeal) {
         final int oldIndex = menu.get(day.index).indexOf(oldMeal);
         menu.get(day.index).set(oldIndex, newMeal);
     }
@@ -72,11 +72,12 @@ public class Menu {
 
     public ShoppingList generateShoppingList() {
         ShoppingList shopList = new ShoppingList(name);
-        for (Vector<Recipe> menuDay : menu) {
-            for (Recipe meal : menuDay)
+        for(int i = 0; i < menu.size(); i++){
+            for(Recipe meal: menu.get(i)){
                 for (Product p : meal) {
                     shopList.add(p);
                 }
+            }
         }
         return shopList;
     }
