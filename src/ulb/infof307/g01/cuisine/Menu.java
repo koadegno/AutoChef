@@ -107,7 +107,7 @@ public class Menu {
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
-                List<Recipe> recipesChosed = AutoCompletion.generateMenu(recipesUsed, categoriesWanted, nbRecipesToAdd,  null,  db);
+                List<Recipe> recipesChosed = AutoCompletion.generaRecipesList(recipesUsed, categoriesWanted, nbRecipesToAdd,  null,  db);
                 menu.get(index).addAll(recipesChosed);
             }
             index++;

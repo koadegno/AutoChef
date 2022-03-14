@@ -4,9 +4,24 @@ import ulb.infof307.g01.db.Database;
 import java.sql.SQLException;
 import java.util.*;
 
+
+/**
+ * Classe static permettant de générer une liste de recettes
+ */
+
 public class AutoCompletion {
 
-    static public List<Recipe> generateMenu (List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
+    /**
+     *  Méthode static permettant générer une liste de recette à partir d'une base de donnée
+     * @param recipesAlreadyUsed List<Recipe> contenant les recettes déjà utilisées
+     * @param categoriesWanted   HashMap<String, Integer> contenant les categories souhaitées et en quelle quantité
+     * @param nbRecipes          int indiquant le nombre de recettes souhaitées
+     * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
+     * @param db                 Database contenant les recettes
+     * @return                   List<Recipe>
+     */
+
+    static public List<Recipe> generaRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
         if (categoriesWanted.isEmpty()){ return menu;}
@@ -20,12 +35,15 @@ public class AutoCompletion {
                 categoryMax = findMax(categoriesWanted);
                 recipes     = db.getRecipeWhere(categoryMax, type,  0);
 
+                // Si aucune recette trouvée correspondante à la catégorie souhaitée, la catégorie est supprimée
                 if (recipes.size() == 0) {
                     categoriesWanted.remove(categoryMax);
+                    // Si parmi les catégories souhaitées aucune recette n'est trouvée, on retourne une liste vide
                     if (categoriesWanted.isEmpty()){ return menu;}
                 }
             }
 
+            // Ajoute la recette trouvée et décrémente sa catégorie
             Recipe choice = choiceRecipe(recipes, recipesAlreadyUsed);
             menu.add(choice);
             recipesAlreadyUsed.add(choice);
@@ -35,6 +53,12 @@ public class AutoCompletion {
         return menu;
     }
 
+
+    /**
+     * Méthode static renvoyant la clé ayant la valeur la plus haute
+     * @param   categoriesRecipesUsed HashMap<String, Integer>
+     * @return  String de la key ayant la valeur la plus haute
+     */
 
     static public String findMax (HashMap<String, Integer> categoriesRecipesUsed) {
 
@@ -49,10 +73,19 @@ public class AutoCompletion {
         return max.getKey();
     }
 
+
+    /**
+     * Méthode static essayant de renvoyer une recette inutilisée
+     * @param   recipes             List<Recipe> contenant les recettes à choisir
+     * @param   recipesAlreadyUsed  List<Recipe> contenant les recettes déjà utilisées
+     * @return  Recipe
+     */
+
     static public Recipe choiceRecipe(List<Recipe> recipes, List<Recipe> recipesAlreadyUsed) {
 
         if (recipes.size() == 0) { return null;}
 
+        // Parcours les recettes à la recherche de recette inutilisée
         for (Recipe recipe: recipes) {
             boolean notFound = true;
             for (Recipe choice: recipesAlreadyUsed) {
@@ -64,8 +97,9 @@ public class AutoCompletion {
             if (notFound) { return recipe;}
         }
 
+        // Si toutes les recettes sont déjà utilisées en renvoie une random
         Random random = new Random();
-        int nb = random.nextInt(recipes.size());
-        return recipes.get(nb);
+        int index = random.nextInt(recipes.size());
+        return recipes.get(index);
     }
 }

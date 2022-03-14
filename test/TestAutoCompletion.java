@@ -43,14 +43,16 @@ class TestAutoCompletion {
         db.insertRecipe(tiramisu);
     }
 
+
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
         db.closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
+
     @Test
-    public void TestGenerateMenu() throws SQLException {
+    public void TestGenerateRecipesList() throws SQLException {
 
         ArrayList<Recipe> recipesAllReadyUsed     = new ArrayList<>();
         HashMap<String, Integer> testRecipes      = new HashMap<>();
@@ -67,9 +69,9 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        List<Recipe> recipes = AutoCompletion.generateMenu(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
+        List<Recipe> recipes = AutoCompletion.generaRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
 
-        // Enumere les categories et les recettes utilises dans la HashMap
+        // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {
             String category = recipe.getCategory();
             String name     = recipe.getName();
