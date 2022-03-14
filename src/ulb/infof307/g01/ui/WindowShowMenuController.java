@@ -22,7 +22,16 @@ import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.db.Database;
 
 
-
+/**
+ * La classe WindowShowMenuController représente le controleur
+ * pour la page qui affiche le contenu du menu selectionné. Elle
+ * permet aux utilisateurs de le modifier, et de générer une liste
+ * de courses.
+ * Elle implémente la classe Initializable pour pouvoir
+ * acceder aux composants FXML.
+ * @see ulb.infof307.g01.cuisine.Menu
+ * @see WindowShowMenuController
+ * */
 public class WindowShowMenuController implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
@@ -34,28 +43,30 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     @FXML
     Label menuName, nbOfdays;
     @FXML
-    //TreeView<ObjectPointer> menuTreeView;
-    TreeView<String> menuTreeView;
-    @FXML
     HBox menuHBox;
 
 
+    /**
+     * Récupère le menu envoyé par la page précédente, affiche son
+     * nom, sa duration et son contenu dans un tableau*/
     public void setMenu(Menu menu){
         this.menu= menu;
         ArrayList<Day> days = new ArrayList<>();
         for (int i = 0; i < menu.getNbOfdays(); i++) {
             days.add(Day.values()[i]);
         }
-
         displayMenuInfo(menu.toString(), menu.getNbOfdays());
         displayMenuTable(days);
     }
 
-
+    /**
+     * Initialise le controleur
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         this.menuName.setText(" ");
     }
+
 
     @FXML
     public void displayMenuInfo(String name, int nbOfDays){
@@ -63,12 +74,15 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         this.nbOfdays.setText("Duration: "+ nbOfDays +"jours");
     }
 
+    /**
+     * Affiche le contenu du menu, avec la liste des recettes
+     * par jour.*/
     @FXML
     public void displayMenuTable(ArrayList<Day> days){
         for (Day day : days){
             TableView<Recipe> dayTable = new TableView<>();
             dayTable.getColumns().clear();
-            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.name());
+            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
             dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
             List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
@@ -78,6 +92,10 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         }
     }
 
+    /**
+     * Affiche la page pour modifier le menu.
+     * @throws IOException : si le fichier CreateDisplayMenu.fxml n'existe pas
+     * @throws  SQLException : si le menu envoyé ne se trouve pas dans la base de données*/
     @FXML
     public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
         ModifyMenuController modifyMenu = new ModifyMenuController(this.menu);
@@ -92,6 +110,12 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         this.stage.show();
     }
 
+    /**
+     * Redirige vers la page de creation d'une liste de courses
+     * où le tableau sera rempli avec les ingrédients qui se trouvent
+     * dans chaque recette du menu
+     * @throws IOException : si le fichier FXMLCreateMyShoppingList.fxml n'existe pas
+     * */
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
         WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
@@ -108,13 +132,15 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         stage.show();
     }
 
+
     public void fillShoppingList(WindowsCreateMyShoppingListController controller){
         ShoppingList myShoppingList = menu.generateShoppingList();
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
-
-
     }
 
+    /**
+     * Affiche la page avec la liste des menus
+     * */
     public void back(ActionEvent event) throws IOException {
         WindowMyMenusController menu = new WindowMyMenusController();
         menu.displayMyMenus(event);

@@ -30,6 +30,16 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * La classe WindowMyMenusController représente le controleur
+ * pour la page qui affiche la liste des menus existants dans
+ * la base de données. Elle permet à l'utilisateur de selectioner
+ * un menu pour l'afficher, ou de tapper manuellement le nom du
+ * menu. Elle implémente la classe Initializable pour pouvoir
+ * acceder aux composants FXML.
+ * @see ulb.infof307.g01.cuisine.Menu
+ * @see WindowShowMenuController
+ * */
 public class WindowMyMenusController implements Initializable {
 
     private final ArrayList<Menu> menus = new ArrayList<>();
@@ -41,34 +51,11 @@ public class WindowMyMenusController implements Initializable {
     TreeView<Menu> menuTreeView;
 
 
-    public void initializeMenusFromTextFile(String filename){
-        //Les catégories doivent être séparées par des virgules!
-        ArrayList<String> menuNames = readFromFile(filename);
-        menuNames.forEach(name -> {menus.add(new Menu(name));});
-    }
-    public ArrayList<String> readFromFile(String filename){
-        ArrayList<String> result = new ArrayList<>();
-
-        try (FileReader reader = new FileReader(filename)) {
-            StringBuffer buffer = new StringBuffer();
-            while (reader.ready()) {
-                char c = (char) reader.read();
-                if (c == ',') {
-                    result.add(buffer.toString());
-                    buffer = new StringBuffer();
-                } else {
-                    buffer.append(c);
-                }
-            }
-            if (buffer.length() > 0) {
-                result.add(buffer.toString());
-            }
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-        return result;
-    }
-
+    /**
+     * Intérroge la base de données passée par la page précedente
+     * et récupère la liste de tous les menus
+     * @throws SQLException
+     * */
     public void initializeMenusFromDB() {
         try {
             allMenusNames = database.getAllMenuName();
@@ -81,6 +68,10 @@ public class WindowMyMenusController implements Initializable {
     }
 
 
+    /**
+     * Initialisation du controleur: initialise la liste de menus
+     * et rempli le TreeView avec cette liste de menus
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMenusFromDB();
@@ -96,6 +87,10 @@ public class WindowMyMenusController implements Initializable {
         menuTreeView.setRoot(rootItem);
     }
 
+    /**
+     * Retourne le menu selectionné sur le
+     * TreeView menuTreeView et l'affiche dans le TextField menuName
+     * */
     @FXML
     public void selectedMenu(){
         TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
@@ -106,6 +101,11 @@ public class WindowMyMenusController implements Initializable {
     }
 
 
+    /**
+     * Lit le contenu introduit par l'utilisateur dans le
+     * TextField menuName et affiche dans le TreeView
+     * que les éléments qui commencent par le texte introduit.
+     * */
     @FXML
     public void keyTyped(KeyEvent keyEvent){
         menuName.setStyle(null);
@@ -122,6 +122,10 @@ public class WindowMyMenusController implements Initializable {
         }
     }
 
+    /**
+     * Affiche la page avec la liste des menus
+     * @throws IOException : si le fichier FXMLMyMenus n'existe pas
+     * */
     public void displayMyMenus(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
@@ -129,11 +133,18 @@ public class WindowMyMenusController implements Initializable {
         stage.setScene(scene);
         stage.show();
     }
+
+    /**
+     * Affiche la page principale des menus*/
     public void backToMainMenuController(ActionEvent event)throws IOException {
         WindowMainMenuController mainMenuController = new WindowMainMenuController();
         mainMenuController.displayMainMenuController(event);
     }
 
+    /**
+     * Affiche la page qui montre le menu selectionné. Il passe à la classe
+     * l'objet Menu, et la database.
+     * @throws IOException : si le fichier FXMLShowMenu*/
     public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();

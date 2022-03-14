@@ -31,8 +31,13 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+
+/**
+ * Permet de modifier un menu existant
+ */
 public class ModifyMenuController extends EditMenuController implements Initializable  {
     WindowShowMenuController mainController;
+
     public ModifyMenuController(Menu menuName) throws SQLException {
         this.db = new Database("autochef.sqlite");
         this.myMenu = menuName;
@@ -58,12 +63,21 @@ public class ModifyMenuController extends EditMenuController implements Initiali
         generateMenuButton.setVisible(false);
     }
 
+    /**
+     * Que faire quand l'utilisateur annule la modification?
+     * @param event l'utilisateur a annulé l'édition
+     * @throws IOException
+     */
     @Override
     @FXML
     void returnMain(ActionEvent event) throws IOException {
         this.mainController.cancel();
     }
 
+    /**
+     * Enregistre les modifications dan la base de données
+     * @param event Bouton enregistré à été cliqué
+     */
     @Override
     @FXML
     public void saveMenu(ActionEvent event){

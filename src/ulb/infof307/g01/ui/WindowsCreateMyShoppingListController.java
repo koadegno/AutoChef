@@ -16,10 +16,11 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
+ */
 
 public class WindowsCreateMyShoppingListController extends MyShoppingListsControllerTools implements Initializable {
-
-    private Vector<Product> myListProduct = new Vector<>();
 
     @FXML
     TextField nameMyCreateShoppingList;
@@ -49,6 +50,9 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
 
     }
 
+    /**
+     * Methode qui rend visible les boutons utilisée
+     */
     private void activeElementVisibility() {
         btnAddNewProduct.setVisible(true);
         nameMyCreateShoppingList.setVisible(true);
@@ -59,6 +63,9 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         btnConfirm.setVisible(true);
     }
 
+    /**
+     * Methode permettant de creer une liste de courses dans la base de donnee
+     */
     @FXML
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         removeBorderColor();
@@ -87,11 +94,15 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         }
     }
 
+    /**Methode permettant de remplir le tableau des elements d'une liste de courses
+     * @param myExistentShppingList : liste de shopping contenant la liste de courses
+     */
     public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShppingList){
         tableViewDisplayProductList.getItems().clear();
         Vector<Product> temp =  (Vector<Product>) myExistentShppingList;
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
         tableViewDisplayProductList.setItems(data);
+        //Retour mesure precedent : MainShoppingList
         returnToMenu.setOnAction((event) ->{
             try {
                 returnToMyMenu(event);

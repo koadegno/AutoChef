@@ -51,6 +51,11 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         stage.show();
     }
 
+    /**
+     * Permet d'initialiser les différents objets utilisées de la fenêtre
+     * @param location
+     * @param resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         for (int i = 0; i < 7; i++) daysComboBox.getItems().add(daysName.get(i).toString());
@@ -62,9 +67,15 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         this.generateMenuButton.setOnAction((event1) -> {
                 try{this.generateMenu(event1);}
                 catch (SQLException e){}
-            });
-
+        });
     }
+
+    /**
+     * returnMain est la methode connectée au bouton qui permet de retourner
+     *  au menu principal
+     * @param event l'utilisateur a annulé l'édition
+     * @throws IOException
+     */
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
@@ -75,7 +86,11 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         stage.show();
     }
 
-
+    /**
+     * Cette fonction permet la génération automatique de menu
+     * @param event
+     * @throws SQLException
+     */
     @FXML
     public void generateMenu(ActionEvent event) throws SQLException {
         final GenerateMenuDialog dialog = new GenerateMenuDialog();
@@ -95,32 +110,32 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
                 e.printStackTrace();
             }
         });
-
         dialog.show();
         //myMenu.generateMenu(db);
         //refreshTableView();
     }
 
+    /**
+     * Cette méthode permet de sauvegarder un menu dans la base de données
+     * @param event Bouton enregistré à été cliqué
+     */
     @Override
     @FXML
     public void saveMenu(ActionEvent event){
         myMenu.setName(this.menuNameTextField.getText());
         try{
-            if(myMenu.size() == 0){
+            if(myMenu.size() == 0) {
                 menuTableView.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-            }
-            else {
+            } else {
                 this.db.saveNewMenu(myMenu);
                 WindowMainMenuController mainMenuController = new WindowMainMenuController();
                 mainMenuController.setDataBase(db);
                 mainMenuController.displayMainMenuController(event);
             }
-        }catch(SQLException e){
+        } catch(SQLException e) {
             menuNameTextField.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
-
 }
