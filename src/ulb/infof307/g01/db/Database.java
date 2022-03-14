@@ -486,7 +486,7 @@ public class Database {
     public Menu getMenuFromName(String menuName) throws SQLException {
         Menu menu = fillMenuWithRecipes(menuName);
         for(Day day : Day.values()){
-            List<Recipe> recipesFromMenu = menu.getMealsfor(day);
+            List<Recipe> recipesFromMenu = menu.getRecipesfor(day);
             for(Recipe recipe : recipesFromMenu){
                 fillRecipeWithProducts(recipe);
             }
