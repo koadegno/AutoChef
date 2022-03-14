@@ -31,100 +31,50 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.SearchRecipeInterface {
-    private Stage stage;
-    private static Scene scene;
-    private static Parent root;
-    private Database db ;
-    private Menu myMenu;
-    private ArrayList<Day> daysName;
-    private ArrayList<Recipe> recipe;
-
-    @FXML
-    ComboBox daysComboBox ;
-    @FXML
-    TableView menuTableView;
-    @FXML
-    TableColumn menuTableColumn;
-    @FXML
-    Button removeRecipeButton;
-    @FXML
-    TextField menuNameTextField;
+public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable {
 
     public CreateMenuController() throws SQLException {
         this.db = new Database("autochef.sqlite");
         this.myMenu = new Menu();
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
-        recipe = new ArrayList<>();
-
-    }
-
-    @Override
-    public void cancelSearchRecipe(){
-        stage.setScene(this.scene);
     }
 
     @FXML
     public void displayEditMeal(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("interface/CreateDisplayMenu.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        FXMLLoader loader = new FXMLLoader(CreateMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
+        loader.setController(this);
+        root = loader.load();
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
         stage.show();
-    }
-
-    @FXML
-    public void returnMain(ActionEvent event) throws IOException {
-        //TODO:  return to Elsbeth's page
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainPage.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
-    @FXML
-    public void  fillTableView(TableView table, List<Recipe> valueList){
-        for(int i =0; i < valueList.size(); i++){
-            table.getItems().add(valueList.get(i));
-        }
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for( int i= 0; i < 7 ; i++) daysComboBox.getItems().add(daysName.get(i).toString());
+        for (int i = 0; i < 7; i++) daysComboBox.getItems().add(daysName.get(i).toString());
         daysComboBox.getSelectionModel().selectFirst();
         menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(0)));
+        this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(0)));
         this.removeRecipeButton.setVisible(false);
-    }
+        this.generateMenuButton.setOnAction((event1) -> {
+                try{this.generateMenu(event1);}
+                catch (SQLException e){}
+            });
 
-    public void refreshTableView(){
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        menuTableColumn.setText(daysName.get(dayIndex).toString());
-        this.menuTableView.getItems().clear();
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(dayIndex)));
-
-    }
-    @FXML
-    private void searchRecipe(ActionEvent event) throws SQLException, IOException {
-        FXMLLoader loader = new FXMLLoader(SearchRecipeController.class.getResource("interface/searchRecipe.fxml"));
-        Parent root = loader.load();
-        SearchRecipeController controller = loader.getController();
-        controller.setMainController(this);
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        this.stage.setScene( new Scene(root));
-        this.stage.show();
     }
     @Override
-    public void addRecipe(Recipe recipe) {
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        myMenu.addMealTo(daysName.get(dayIndex), recipe);
-        this.refreshTableView();
-        this.stage.setScene(this.scene);
+    @FXML
+    public void returnMain(ActionEvent event) throws IOException {
+        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainMenu.fxml"));
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
     }
+
 
     @FXML
     public void generateMenu(ActionEvent event) throws SQLException {
@@ -151,28 +101,25 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
         //refreshTableView();
     }
 
-
+    @Override
     @FXML
-    public void removeRecipeAction(ActionEvent event){
-        Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        this.myMenu.removeMealFrom(daysName.get(dayIndex), recipeToRemove);
-        refreshTableView();
-        removeRecipeButton.setVisible(false);
-    }
-
-    @FXML
-    public void recipeSelectedEvent(Event event){
-       int idx =  menuTableView.getSelectionModel().getSelectedIndex();
-       if(idx>-1) this.removeRecipeButton.setVisible(true);
-    }
-
-    @FXML
-    public void saveMenu(){
+    public void saveMenu(ActionEvent event){
         myMenu.setName(this.menuNameTextField.getText());
         try{
-            this.db.saveNewMenu(myMenu);
-        }catch(SQLException e){System.out.println("non!");}
+            if(myMenu.size() == 0){
+                menuTableView.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            }
+            else {
+                this.db.saveNewMenu(myMenu);
+                WindowMainMenuController mainMenuController = new WindowMainMenuController();
+                mainMenuController.setDataBase(db);
+                mainMenuController.displayMainMenuController(event);
+            }
+        }catch(SQLException e){
+            menuNameTextField.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

@@ -16,7 +16,6 @@ import java.util.Scanner;
  */
 public class Database {
 
-    private String dbName;
     private Connection connection;
     private Statement request;
 
@@ -26,7 +25,7 @@ public class Database {
      * @param nameDB nom de la base de données que l'ont veut charger/créer.
      */
     public Database(String nameDB) {
-        dbName = "jdbc:sqlite:" + nameDB;
+        String dbName = "jdbc:sqlite:" + nameDB;
         File file = new File(nameDB);
         boolean fileExist = file.exists();
         try {
@@ -65,15 +64,13 @@ public class Database {
     /**
      * Requete de la base de données uniquement pour la creation de table
      * @param query requete sql
-     * @return return True si la requete est effectuee, False sinon
      */
-    public boolean sendRequest(String query) {
+    public void sendRequest(String query) {
         try {
-            return request.execute(query);
+            request.execute(query);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        return false;
     }
 
     /**
@@ -133,15 +130,19 @@ public class Database {
      * @param constraintToAppend liste de toute les contraintes à ajouter
      * @return Resultat de la query
      */
-    private ResultSet select(String nameTable, List<String> constraintToAppend){
+    private ResultSet select(String nameTable, List<String> constraintToAppend,String orderBy){
         StringBuilder req;
         String query;
         if (constraintToAppend.size() > 0){
             req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
             query = appendValuesToWhere(req,constraintToAppend);
         } else {
-            query = String.format("SELECT * FROM %s;", nameTable);
+            query = String.format("SELECT * FROM %s ", nameTable);
         }
+        if(orderBy != null){
+            query += orderBy;
+        }
+        query += ";";
         return sendQuery(query);
     }
 
@@ -151,12 +152,17 @@ public class Database {
         sendQueryUpdate(stringQuery);
     }
 
+    /**
+     * Remplissage automatique d'une requête avec des contraintes
+     * @param query requete à contraindre
+     * @param constraintToAppend contraintes à ajouter à requête
+     * @return requete avec contrainte
+     */
     private String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
         for (String s : constraintToAppend) {
             query.append(s).append(" AND ");
         }
         query.delete(query.length()-4, query.length());
-        query.append(";");
         return String.valueOf(query);
     }
 
@@ -176,12 +182,11 @@ public class Database {
      * @param id ID correspondant au nom
      * @param nameIDColumn nom de la colonne contenant l'ID
      * @return Nom correspondant à l'ID
-     * @throws SQLException
      */
     private String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
-        ResultSet res = select(table,constraint);
+        ResultSet res = select(table,constraint,null);
         res.next();
         return res.getString("Nom");
     }
@@ -192,7 +197,7 @@ public class Database {
     private int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s='%s'","Nom",name));
-        ResultSet res = select(table,constraint);
+        ResultSet res = select(table,constraint,null);
         res.next();
         return res.getInt(nameIDColumn);
     }
@@ -201,7 +206,6 @@ public class Database {
      * Methode remplissant une ArrayList a partir d'un objet ResultSet contenant des Recipes
      * @param result ResultSet qui contient le resultat de la requete
      * @return ArrayList d'objets Recipes correctement remplis
-     * @throws SQLException
      */
     private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
         ArrayList<Recipe> recipes = new ArrayList<>();
@@ -216,7 +220,39 @@ public class Database {
             Recipe recipe = new Recipe(recipeID, nom, duration, category, type, nbPersons, method);
             recipes.add(recipe);
         }
+        for(Recipe rec: recipes){
+            fillRecipeWithProducts(rec);
+        }
         return recipes;
+    }
+
+    /**
+     * @param idProduct ID de l'ingredient que l'on cherche
+     * @return objet Product trouvé
+     */
+    private Product getProduct(int idProduct) throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("%s = %d","IngredientID",idProduct));
+        ResultSet querySelectProduct = select("Ingredient",constraint,null);
+        querySelectProduct.next();
+        String nameProduct = querySelectProduct.getString("Nom");
+        String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
+        String uniteProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
+        return new Product(nameProduct,1,uniteProduct,familleProduct);
+    }
+
+    /**
+     *
+     * @param orderBy si non nul, ajoute la contrainte de triée par
+     */
+    private ArrayList<String> getAllNameFromTable(String table,String orderBy) throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        ResultSet queryAllTableName = select(table, constraint,orderBy);
+        ArrayList<String> allProductName = new ArrayList<>();
+        while(queryAllTableName.next()){
+            allProductName.add(queryAllTableName.getString("Nom"));
+        }
+        return allProductName;
     }
 
     /**
@@ -243,6 +279,14 @@ public class Database {
 
         String[] val = {"null", name, duration, nbPerson, type, category, preparation};
         insert("Recette", val);
+        String recipeID = String.format("%d", getGeneratedID());
+
+        for (Product p: recipe) {
+            String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
+            String quantity =  String.format("%d", p.getQuantity());
+            String[] productVal = {recipeID, productID, quantity};
+            insert("RecetteIngredient", productVal);
+        }
     }
 
     public void insertUnite(String name) throws SQLException {
@@ -255,7 +299,11 @@ public class Database {
         insert("FamilleAliment",values);
     }
 
-    public void insertIngredient(String name,String famille,String unite) throws SQLException {
+    public void insertIngredient(Product product) throws SQLException {
+        insertIngredient(product.getName(), product.getFamillyProduct(), product.getNameUnity());
+    }
+
+    private void insertIngredient(String name,String famille,String unite) throws SQLException {
         int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
         int idUnite = getIDFromName("Unite",unite,"UniteID");
         String stringIdFamille = String.format("%d", idFamille);
@@ -266,58 +314,31 @@ public class Database {
     }
 
     /**
-     * @param idProduct ID de l'ingredient que l'on cherche
-     * @return objet Product trouvé
-     * @throws SQLException
-     */
-    private Product getProduct(int idProduct) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %d","IngredientID",idProduct));
-        ResultSet querySelectProduct = select("Ingredient",constraint);
-        querySelectProduct.next();
-        String nameProduct = querySelectProduct.getString("Nom");
-        String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
-        String uniteProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
-        return new Product(nameProduct,1,uniteProduct,familleProduct);
-    }
-
-    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        ResultSet queryAllTableName = select(table, constraint);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllTableName.next()){
-            allProductName.add(queryAllTableName.getString("Nom"));
-        }
-        return allProductName;
-    }
-
-    /**
      * @return ArrayList contenant le nom de toutes les categories
-     * @throws SQLException
      */
     public ArrayList<String> getAllCategories() throws SQLException {
-        return getAllNameFromTable("Categorie");
+        return getAllNameFromTable("Categorie",null);
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
 
-        return getAllNameFromTable("ListeCourse");
+        return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
     }
 
     public ArrayList<String> getAllProductName() throws SQLException {
-        return getAllNameFromTable("Ingredient");
+        return getAllNameFromTable("Ingredient","ORDER BY Nom ASC");
     }
 
     public ArrayList<String> getAllUniteName() throws SQLException {
-        return getAllNameFromTable("Unite");
+        return getAllNameFromTable("Unite",null);
     }
 
     public ArrayList<String> getAllTypes() throws SQLException {
-        return getAllNameFromTable("TypePlat");
+        return getAllNameFromTable("TypePlat",null);
     }
 
     public ArrayList<String> getAllMenuName() throws SQLException {
-        return getAllNameFromTable("Menu");
+        return getAllNameFromTable("Menu","ORDER BY Nom ASC");
     }
 
 
@@ -346,11 +367,8 @@ public class Database {
      * @param nameCategory contrainte pour le nom de la categorie
      * @param nameType contrainte pour le nom du type
      * @param nbPerson contrainte pour le nombre de personne
-     * @return
-     * @throws SQLException
      */
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
-
         ArrayList<String> constraint = new ArrayList<>();
         String stringQuery;
         StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
@@ -369,7 +387,6 @@ public class Database {
         if (nbPerson > 0){
             constraint.add(String.format("R.NbPersonnes = %d", nbPerson));
         }
-
         if (constraint.size() > 0){
             query.append(" Where ");
             stringQuery = appendValuesToWhere(query,constraint);
@@ -401,6 +418,9 @@ public class Database {
         }
     }
 
+    /**
+     * Sauvegarde une liste de course modifiée, et la supprime si la liste ne contient rien
+     */
     public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
@@ -418,15 +438,34 @@ public class Database {
         }
     }
 
-    public Menu getMenuFromName(String menuName) throws SQLException {
+    private void fillRecipeWithProducts(Recipe recipe) throws SQLException {
+        ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, F.Nom, U.Nom, R.Quantite\n" +
+                "FROM RecetteIngredient as R\n" +
+                "INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID \n" +
+                "INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID\n" +
+                "INNER JOIN Unite as U ON U.UniteID = I.UniteID\n" +
+                "WHERE R.RecetteID = %d", recipe.getId()));
+
+        while(querySelectProduct.next()){
+            String productName = querySelectProduct.getString(1);
+            String familyName = querySelectProduct.getString(2);
+            String unityName = querySelectProduct.getString(3);
+            int quantity = querySelectProduct.getInt(4);
+
+            Product product = new Product(productName, quantity, unityName,familyName);
+            recipe.add(product);
+        }
+    }
+
+    private Menu fillMenuWithRecipes(String menuName) throws SQLException {
         int idName = getIDFromName("Menu",menuName,"MenuID");
         ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
-               " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
-               "FROM MenuRecette as M\n" +
-               "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
-               "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-               "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-               "WHERE M.MenuID = %d", idName));
+                " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
+                "FROM MenuRecette as M\n" +
+                "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE M.MenuID = %d", idName));
         Menu menu = new Menu(menuName);
         while(querySelectMenu.next()){
            int menuDay = querySelectMenu.getInt(1);
@@ -439,12 +478,23 @@ public class Database {
            String categoryName = querySelectMenu.getString(8);
            String typeName = querySelectMenu.getString(9);
            Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
-           menu.addMealToIndex(menuDay,menuHour,recipe);
+           menu.addRecipeToIndex(menuDay,menuHour,recipe);
         }
         return menu;
     }
 
-    private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
+    public Menu getMenuFromName(String menuName) throws SQLException {
+        Menu menu = fillMenuWithRecipes(menuName);
+        for(Day day : Day.values()){
+            List<Recipe> recipesFromMenu = menu.getRecipesfor(day);
+            for(Recipe recipe : recipesFromMenu){
+                fillRecipeWithProducts(recipe);
+            }
+        }
+        return menu;
+    }
+
+    private void insertRecipeInMenu(int menuID, int day, int hour, int recipeID) throws SQLException {
         String[] values = {String.format("%d",menuID),String.format("%d",day),String.format("%d",hour),String.format("%d",recipeID)};
         insert("MenuRecette",values);
     }
@@ -453,6 +503,10 @@ public class Database {
         int id = createAndGetIdMenu(menu.getName(),menu.getNbOfdays());
         createMenuRecipe(menu, id);
     }
+
+    /**
+     * Sauvegarde un menu modifiée, et le supprime si il ne contient rien
+     */
     public void saveModifyMenu(Menu menu) throws  SQLException{
         ArrayList<String> constraint = new ArrayList<>();
         int menuID = getIDFromName("Menu",menu.getName(),"MenuID");
@@ -469,10 +523,10 @@ public class Database {
 
     private void createMenuRecipe(Menu menu, int menuID) throws SQLException {
         for(Day day : Day.values()){
-            List<Recipe> recipeOfDay = menu.getMealsfor(day);
+            List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
-                insertRecetteInMenu(menuID, day.getIndex(), hour, idRecipe);
+                insertRecipeInMenu(menuID, day.getIndex(), hour, idRecipe);
             }
         }
     }

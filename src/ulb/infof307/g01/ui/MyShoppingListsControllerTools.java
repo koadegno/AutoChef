@@ -1,6 +1,7 @@
 package ulb.infof307.g01.ui;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 public class MyShoppingListsControllerTools {
     public static Database dataBase;
@@ -34,9 +36,13 @@ public class MyShoppingListsControllerTools {
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct;
+    @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
     protected TableView tableViewDisplayProductList;
+    @FXML
+    protected Button returnToMenu;
     protected ArrayList<String> allUnitName = null;
     protected ArrayList<String> allProduct = null;
     protected ArrayList<String> allShoppinListName = null;
@@ -54,9 +60,9 @@ public class MyShoppingListsControllerTools {
         hBoxToCreateProduct.setStyle("");
     }
 
+    public void confirmMyCreateShoppingList(){}
     public void initShoppingListElement() {
-
-        try { //TODO gerer l'erreur
+        try {
             allProduct = dataBase.getAllProductName();
             allUnitName = dataBase.getAllUniteName();
             allUnitName.removeAll(List.of(unitToRemove));
@@ -69,7 +75,6 @@ public class MyShoppingListsControllerTools {
 
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
-
         FXMLLoader loader = new FXMLLoader(WindowsMainShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         Parent root = loader.load();
         WindowsMainShoppingListController controller = loader.getController();
@@ -80,11 +85,17 @@ public class MyShoppingListsControllerTools {
         stage.show();
     }
 
+    @FXML
+    public void returnToMyMenu(ActionEvent event) throws IOException {
+        WindowMyMenusController menusController = new WindowMyMenusController();
+        menusController.setDatabase(dataBase);
+        menusController.displayMyMenus(event);
+    }
+
     protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {
         // ajout de chaque produit de la table dans une nvl shoppingList
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
             Product product = (Product) tableViewDisplayProductList.getItems().get(i);
-            System.out.println(product.getName());
             shoppingListToSend.add(product);
         }
     }
@@ -95,12 +106,10 @@ public class MyShoppingListsControllerTools {
             spinnerValueFactory.setValue(0);
         }
     }
-
     protected void fillComboBoxShoppingNameListWithBDD(ComboBox comboBoxNameList, int numberOfComboBox) {
         List<String> myListComboBox = new ArrayList<String>();
         switch (numberOfComboBox) {
             case 1 -> {
-
                 myListComboBox.addAll(allShoppinListName);
             }
             case 2 -> { // PRODUIT
@@ -134,7 +143,6 @@ public class MyShoppingListsControllerTools {
             comboBoxListUnity.getSelectionModel().clearSelection();
             spinnerValueFactory.setValue(0);
         } else {
-            System.out.println((String)nameProductChoose +" " +  quantityOrNumberChoose+ " " + (String)nameUnityChoose);
             hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
     }

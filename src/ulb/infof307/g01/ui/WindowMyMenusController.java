@@ -3,6 +3,8 @@ package ulb.infof307.g01.ui;
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -23,26 +25,15 @@ import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
-import java.security.PublicKey;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
-/**
- * La classe WindowMyMenusController représente le controlleur
- * pour la page qui affiche la liste des menus existants dans
- * la base de données. Elle permet à l'utilisateur de selectioner
- * un menu pour l'afficher, ou de tapper manuellement le nom du
- * menu. Elle implémente la classe Initializable pour pouvoir
- * acceder aux composants FXML.
- * @see ulb.infof307.g01.cuisine.Menu
- * @see WindowShowMenuController
- * @author _
- * */
 public class WindowMyMenusController implements Initializable {
 
     private final ArrayList<Menu> menus = new ArrayList<>();
+    private ArrayList<String> allMenusNames = new ArrayList<>();
     private static Database database = null;
     @FXML
     TextField menuName;
@@ -77,41 +68,26 @@ public class WindowMyMenusController implements Initializable {
         }
         return result;
     }
-    public void addDummyMenus(){
-        ArrayList<String> menuNames = new ArrayList<>();
-        menuNames.add("menu vege");menuNames.add("weekend");menuNames.add("menu random");menuNames.add("repas noel");menuNames.add("anniversaire");
-        menuNames.forEach(name -> {menus.add(new Menu(name));});
-    }
 
-    /**
-     * Intérroge la base de données passée par la page précedente
-     * et récupère la liste de tous les menus
-     **/
     public void initializeMenusFromDB() {
         try {
-            for (String name : database.getAllMenuName()){menus.add(database.getMenuFromName(name));}
-            addDummyMenus();
+            allMenusNames = database.getAllMenuName();
+            for (String name : allMenusNames){
+                menus.add(database.getMenuFromName(name));
+            }
         }catch (SQLException e){
             e.printStackTrace();
         }
     }
 
 
-    /**Initialisation du controlleur: initialise la liste
-     * des menus, et rempli le composant TreeView avec les
-     * données récupérées.
-     * @see Initializable
-     * @see TreeView
-     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMenusFromDB();
         fillTreeView(this.menus);
     }
 
-    /**Rempli l'élément TreeViw avec chaque menu qu'il
-     * lit de la liste de menus.*/
-    public void fillTreeView(ArrayList<Menu> menus){
+    public void fillTreeView(ArrayList<Menu> menus) {
         TreeItem<Menu> rootItem =  new TreeItem<>();
         menus.forEach(menu -> {
             TreeItem<Menu> menuName = new TreeItem<>(menu);
@@ -120,39 +96,18 @@ public class WindowMyMenusController implements Initializable {
         menuTreeView.setRoot(rootItem);
     }
 
-    /**La méthode prend l'élément du TreeView qui à été
-     * seléctionné, affiche le nom du menu dans le TextField
-     * menuName et retourne un objet de type Menu
-     * La méthode est appelé lorsque les suivants événements
-     * sont détectés dans le TreeView:
-     * <ul>
-     *     <li>onContextMenuRequested</li>
-     *     <li>onMouseClicked</li>
-     * </ul>
-     * Affiche le nom du menu sélectionné dans le TextField
-     * et le retourne.
-     * @return Menu
-     */
     @FXML
-    public Menu selectedMenu(){
+    public void selectedMenu(){
         TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
             menuName.setText(selectedItem.getValue().toString());
             menuName.setStyle(null);
-            return selectedItem.getValue();
         }
-        return null;
     }
 
-    /**
-     * La méthode lit le texte du TextField menuName introduit
-     * par l'utilisateur et ne montre que les éléments du
-     * TreeView qui commencent par le texte introduit. Si le
-     * texte est remis à vide, alors la liste d'éléments est
-     * remise à celle par défaut
-     * */
+
     @FXML
-    public void keyTyped(){
+    public void keyTyped(KeyEvent keyEvent){
         menuName.setStyle(null);
         if (Objects.equals(menuName.getText(), "")){
             menuTreeView.setRoot(null);
@@ -167,10 +122,8 @@ public class WindowMyMenusController implements Initializable {
         }
     }
 
-    /**La méthode */
     public void displayMyMenus(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
-
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = new Scene(root);
         stage.setScene(scene);
@@ -181,48 +134,28 @@ public class WindowMyMenusController implements Initializable {
         mainMenuController.displayMainMenuController(event);
     }
 
-    public void fill(Menu menu){
-        Recipe recipe1 = new Recipe("recette 1");
-        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
-        recipe1.add(new Product("Artichaut, cuit"));
-        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
-        Recipe recipe2 = new Recipe("recette 2");
-        recipe2.add(new Product("Artichaut, cuit"));
-        recipe2.add(new Product("Aubergine, cuite"));
-        recipe2.add(new Product("Artichaut, cuit"));
-        Recipe recipe3 = new Recipe("recette 3");
-        recipe3.add(new Product("Salade de thon et légumes, appertisée"));
-        recipe3.add(new Product("Artichaut, cuit"));
-        recipe3.add(new Product("Aubergine, cuite"));
-        menu.addRecipeTo(Day.Monday, recipe1);
-        menu.addRecipeTo(Day.Monday, recipe2);
-        menu.addRecipeTo(Day.Thursday, recipe2);
-        menu.addRecipeTo(Day.Friday, recipe3);
-    }
+    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
 
-    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException, SQLException{
-        try{
-            Menu menu = database.getMenuFromName(menuName.getText());
-            fill(menu);
-            FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-            Parent root = loader.load();
+        String name = menuName.getText();
+        if (!(Objects.equals(name, ""))){
+            try{
+                Menu menu = database.getMenuFromName(name);
+                FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
+                Parent root = loader.load();
 
-            WindowShowMenuController controller = loader.getController();
-            controller.setMenu(menu);
-            controller.setDatabase(database);
+                WindowShowMenuController controller = loader.getController();
+                controller.setMenu(menu);
+                controller.setDatabase(database);
 
-            Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-            Scene scene =  new Scene(root);
-            stage.setTitle("Menu "+menu.getName());
-            stage.setScene(scene);
-            stage.show();
-
-        }catch (SQLException exception){
-            System.out.println("Menu n'existe pas!");
-            menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-
+                Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
+                Scene scene =  new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
         }
+
     }
+
 
     public void setDatabase(Database db){database = db;}
 }

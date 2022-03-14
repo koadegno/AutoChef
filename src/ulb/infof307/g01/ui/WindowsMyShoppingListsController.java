@@ -20,13 +20,14 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     @FXML
     Button btnConfirm, btnAddNewProduct;
+    @FXML
+    ComboBox comboBoxShoppingNameList;
 
     @FXML
      public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
          Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
 
          if(Objects.equals(nameMyShoppingList, null)){
-             //TODO: afficher une erreur partie 2
              isVisibleElementToModifyMyShoppingList(false);
          }
          else{
@@ -71,6 +72,8 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        activeElementVisibility();
+
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -81,6 +84,27 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+
+        returnToMenu.setOnAction((event) ->{
+            try {
+                returnShoppingList(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void activeElementVisibility() {
+        comboBoxShoppingNameList.setVisible(true);
+        btnConfirm.setText("Enregistrer");
+        btnSeeShoppingList.setVisible(true);
+        btnSeeShoppingList.setOnAction(e-> {
+            try {
+                seeMyShoppingListTableView(e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @Override

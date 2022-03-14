@@ -4,23 +4,27 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
-<VBox prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowsMainShoppingListController">
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowsMainShoppingListController">
     <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="121.0" prefWidth="750.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="46.0" prefWidth="275.0" text="Ma fenêtre de liste de courses" textAlignment="RIGHT" textFill="#383434" textOverrun="WORD_ELLIPSIS" />
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="111.0" prefWidth="463.0" text="Menu liste de courses" textAlignment="RIGHT" textFill="#383434" textOverrun="WORD_ELLIPSIS">
+               <font>
+                  <Font size="28.0" />
+               </font></Label>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="205.0" prefWidth="600.0" spacing="80.0">
+      <HBox alignment="CENTER" prefHeight="313.0" prefWidth="750.0" spacing="80.0">
          <children>
-              <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#displayMyShoppingListController" prefHeight="25.0" prefWidth="152.0" text="Mes listes de courses" />
-              <Button fx:id="createShoppingListBtn" mnemonicParsing="false" onAction="#displayCreateShoppingListController" text="Créer une liste de courses" />
+              <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#displayMyShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Mes listes de courses" />
+              <Button fx:id="createShoppingListBtn" mnemonicParsing="false" onAction="#displayCreateShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Créer une liste de courses" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
          <children>
-              <Button fx:id="returnBtn" mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="294.0" text="Retour" />
+              <Button fx:id="returnBtn" mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="48.0" prefWidth="415.0" text="Retour" />
          </children>
       </HBox>
     </children>
