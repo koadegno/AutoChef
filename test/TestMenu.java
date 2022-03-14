@@ -20,7 +20,7 @@ class TestMenu {
     @BeforeAll
     static void setUp() throws SQLException {
 
-        recipes  = new Recipe [5];
+        recipes  = new Recipe [7];
         products = new Product[2];
 
         products[0] = new Product("Abricot");
@@ -37,6 +37,8 @@ class TestMenu {
         recipes[2]  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
         recipes[3]  = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
         recipes[4]  = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+        recipes[5]  = new Recipe(6, "test1", 3, "Vegan", "Test", 2, "Avant le code");
+        recipes[6]  = new Recipe(7, "test2", 5, "Vegan", "Test", 2, "Avant le code");
 
         createDB();
     }
@@ -54,8 +56,8 @@ class TestMenu {
         db.insertType("Mijoté");
         db.insertType("Test");
 
-        db.insertRecipe(recipes[0]);
-        db.insertRecipe(recipes[1]);
+        db.insertRecipe(recipes[5]);
+        db.insertRecipe(recipes[6]);
         db.insertRecipe(recipes[2]);
         db.insertRecipe(recipes[3]);
         db.insertRecipe(recipes[4]);
@@ -165,7 +167,6 @@ class TestMenu {
 
         ShoppingList generatedShoppingList = menu.generateShoppingList();
 
-        System.out.println(generatedShoppingList);
         assertEquals(2, generatedShoppingList.size());
 
         int[] productsCounter = {0, 0};
@@ -173,7 +174,6 @@ class TestMenu {
         int i = 0;
         for (Product p : generatedShoppingList) {
             productsCounter[i] = p.getQuantity();
-            System.out.println(p.getQuantity());
             i++;
         }
 
