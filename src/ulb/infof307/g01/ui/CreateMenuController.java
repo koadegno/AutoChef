@@ -68,7 +68,6 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
-        //TODO:  return to Elsbeth's page
         root = FXMLLoader.load(getClass().getResource("interface/FXMLMainMenu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);

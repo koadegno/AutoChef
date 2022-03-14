@@ -1,4 +1,4 @@
-//TODO: DOSSIER RESSOURCES!!!!
+
 package ulb.infof307.g01.ui;
 
 import javafx.event.ActionEvent;
@@ -21,10 +21,6 @@ import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.db.Database;
 
-/*class ObjectPointer {
-    Object pointer;
-    String name;
-}*/
 
 
 public class WindowShowMenuController implements Initializable, UtilisationContrat<Menu> {
@@ -46,7 +42,6 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
 
     public void setMenu(Menu menu){
         this.menu= menu;
-        //TODO: Get from DB!
         ArrayList<Day> days = new ArrayList<>();
         for (int i = 0; i < menu.getNbOfdays(); i++) {
             days.add(Day.values()[i]);

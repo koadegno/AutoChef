@@ -62,7 +62,7 @@ public class MyShoppingListsControllerTools {
 
     public void confirmMyCreateShoppingList(){}
     public void initShoppingListElement() {
-        try { //TODO gerer l'erreur
+        try {
             allProduct = dataBase.getAllProductName();
             allUnitName = dataBase.getAllUniteName();
             allUnitName.removeAll(List.of(unitToRemove));
