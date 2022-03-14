@@ -13,12 +13,11 @@ public class AutoCompletion {
 
     /**
      *  Méthode static permettant générer une liste de recette à partir d'une base de donnée
-     * @param recipesAlreadyUsed List<Recipe> contenant les recettes déjà utilisées
-     * @param categoriesWanted   HashMap<String, Integer> contenant les categories souhaitées et en quelle quantité
+     * @param recipesAlreadyUsed Liste contenant les recettes déjà utilisées
+     * @param categoriesWanted   HashMap contenant les categories souhaitées et en quelle quantité
      * @param nbRecipes          int indiquant le nombre de recettes souhaitées
      * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
      * @param db                 Database contenant les recettes
-     * @return                   List<Recipe>
      */
 
     static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
@@ -56,7 +55,6 @@ public class AutoCompletion {
 
     /**
      * Méthode static renvoyant la clé ayant la valeur la plus haute
-     * @param   categoriesRecipesUsed HashMap<String, Integer>
      * @return  String de la key ayant la valeur la plus haute
      */
 
@@ -76,9 +74,8 @@ public class AutoCompletion {
 
     /**
      * Méthode static essayant de renvoyer une recette inutilisée
-     * @param   recipes             List<Recipe> contenant les recettes à choisir
-     * @param   recipesAlreadyUsed  List<Recipe> contenant les recettes déjà utilisées
-     * @return  Recipe
+     * @param   recipes             Liste contenant les recettes à choisir
+     * @param   recipesAlreadyUsed  Liste contenant les recettes déjà utilisées
      */
 
     static public Recipe choiceRecipe(List<Recipe> recipes, List<Recipe> recipesAlreadyUsed) {

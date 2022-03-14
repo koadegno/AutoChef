@@ -54,7 +54,6 @@ public class WindowMyMenusController implements Initializable {
     /**
      * Intérroge la base de données passée par la page précedente
      * et récupère la liste de tous les menus
-     * @throws SQLException
      * */
     public void initializeMenusFromDB() {
         try {

@@ -58,7 +58,6 @@ public class WindowMainController extends Application {
     /**
      * Affiche la page principale de l'application.
      * @see ulb.infof307.g01.Main
-     * @throws IOException : Si le fichier FXMLMainPage n'existe pas
      * */
     @FXML
     public void displayMain(Stage primaryStage){
