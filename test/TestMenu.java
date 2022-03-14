@@ -16,12 +16,12 @@ class TestMenu {
     static private Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
-
     static Database db;
 
     @BeforeAll
     static void setUp() throws SQLException {
-        recipes  = new Recipe [2];
+
+        recipes  = new Recipe [5];
         products = new Product[2];
 
         products[0] = new Product("Abricot");
@@ -35,6 +35,10 @@ class TestMenu {
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
 
+        recipes[2]  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+        recipes[3]  = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
+        recipes[4]  = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+
         createDB();
     }
 
@@ -46,19 +50,16 @@ class TestMenu {
         db.insertCategory("Viande");
         db.insertCategory("Végétarien");
         db.insertCategory("Vegan");
+
         db.insertType("Plat");
         db.insertType("Mijoté");
         db.insertType("Test");
 
-        Recipe bolo  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-        Recipe carbo = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
-        Recipe pesto = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
-
-        db.insertRecipe(bolo);
-        db.insertRecipe(carbo);
-        db.insertRecipe(pesto);
         db.insertRecipe(recipes[0]);
         db.insertRecipe(recipes[1]);
+        db.insertRecipe(recipes[2]);
+        db.insertRecipe(recipes[3]);
+        db.insertRecipe(recipes[4]);
     }
 
     @AfterAll

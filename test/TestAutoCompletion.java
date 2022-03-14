@@ -18,6 +18,11 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestAutoCompletion {
 
     static Database db;
+    static Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+    static Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
+    static Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+    static Recipe tiramisu = new Recipe(4, "Tiramisu", 20, "Végétarien", "Dessert",3, "Preparer la mascarpone");
+
 
     @BeforeAll
     static public void createDB() throws SQLException {
@@ -31,11 +36,6 @@ class TestAutoCompletion {
 
         db.insertType("Plat");
         db.insertType("Dessert");
-
-        Recipe bolo     = new Recipe(1, "Bolognaise", 60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-        Recipe carbo    = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
-        Recipe pesto    = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
-        Recipe tiramisu = new Recipe(4, "Tiramisu", 20, "Végétarien", "Dessert",3, "Preparer la mascarpone");
 
         db.insertRecipe(bolo);
         db.insertRecipe(carbo);
@@ -52,15 +52,13 @@ class TestAutoCompletion {
     @Test
     public void TestGenerateMenu() throws SQLException {
 
-        ArrayList<Recipe> recipesAllReadyUsed = new ArrayList<>();
-        List<Recipe> recipes;
-        HashMap<String, Integer> testRecipes  = new HashMap<>();
+        ArrayList<Recipe> recipesAllReadyUsed     = new ArrayList<>();
+        HashMap<String, Integer> testRecipes      = new HashMap<>();
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
 
         categoriesWanted.put("Végétarien", 3);
         categoriesWanted.put("Viande", 2);
         categoriesWanted.put("Poisson", 2);
-
         testRecipes.put("Viande", 0);
         testRecipes.put("Poisson", 0);
         testRecipes.put("Végétarien", 0);
@@ -69,74 +67,58 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        recipes = AutoCompletion.generateMenu(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
+        List<Recipe> recipes = AutoCompletion.generateMenu(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
 
+        // Enumere les categories et les recettes utilises dans la HashMap
         for (Recipe recipe : recipes) {
-
             String category = recipe.getCategory();
             String name     = recipe.getName();
-
             int valCategory = testRecipes.get(category);
             int valName     = testRecipes.get(name);
-
             testRecipes.replace(category, ++valCategory);
             testRecipes.replace(name, ++valName);
         }
 
-        assertEquals(2, testRecipes.get("Viande"));
-        assertEquals(2, testRecipes.get("Poisson"));
-        assertEquals(3, testRecipes.get("Végétarien"));
-
-        assertEquals(2, testRecipes.get("Bolognaise"));
-        assertEquals(1, testRecipes.get("Carbonara"));
-        assertEquals(1, testRecipes.get("Pesto"));
-        assertEquals(3, testRecipes.get("Tiramisu"));
+        assertEquals(2, testRecipes.get("Viande"),     "Test si nombre de categries adequat");
+        assertEquals(2, testRecipes.get("Poisson"),    "Test si nombre de categories adequat");
+        assertEquals(3, testRecipes.get("Végétarien"), "Test si nombre de categories adequat");
+        assertEquals(2, testRecipes.get("Bolognaise"), "Test si recette utilise autant de fois que necessaire");
+        assertEquals(1, testRecipes.get("Carbonara"),  "Test si recette utilise autant de fois que necessaire");
+        assertEquals(1, testRecipes.get("Pesto"),      "Test si recette utilise autant de fois que necessaire");
+        assertEquals(3, testRecipes.get("Tiramisu"),   "Test si recette utilise autant de fois que necessaire");
     }
+
 
     @Test
     void TestFindMax() {
 
-        HashMap<String, Integer> empty = new HashMap<>();
         HashMap<String, Integer> recipes = new HashMap<>();
+        assertNull(AutoCompletion.findMax(recipes), "Test si HashMap donne est vide");
+
         recipes.put("Poisson", 1);
         recipes.put("Viande", 10);
         recipes.put("Vegetarien", 3);
         recipes.put("Poulet", 7);
-
-        assertNull(AutoCompletion.findMax(empty));
-        assertEquals("Viande",AutoCompletion.findMax(recipes));
+        assertEquals("Viande",AutoCompletion.findMax(recipes), "Test si bonne Key trouver");
     }
+
 
     @Test
     public void TestChoiceRecipe() {
 
-        ArrayList<Recipe> recipes = new ArrayList<>();
+        ArrayList<Recipe> recipes             = new ArrayList<>();
         ArrayList<Recipe> recipesAllReadyUsed = new ArrayList<>();
-        ArrayList<Recipe> empty = new ArrayList<>();
+        ArrayList<Recipe> empty               = new ArrayList<>();
 
-        Recipe bolognaise = new Recipe(1, "Bolognaise", 45, "Viande",
-                "Plat principal", 1, "Faire le test avant le code");
-        Recipe bolognaiseVegan = new Recipe(2, "Bolognaise", 45, "Vegan",
-                "Plat principal", 1, "Faire le test avant le code");
-        Recipe soupePotiron = new Recipe(3, "Soupe potiron", 15, "Vegan",
-                "Soupe", 2, "Faire le test avant le code");
-        Recipe margherita = new Recipe(4, "Margherita", 45, "Vegan",
-                "Plat principal", 1, "Faire le test avant le code");
-        Recipe lasagne = new Recipe(5, "lasagne", 45, "Viande",
-                "Plat principal", 1, "Faire le test avant le code");
+        recipes.add(bolo);
+        recipes.add(tiramisu);
+        recipes.add(carbo);
+        recipes.add(pesto);
+        recipesAllReadyUsed.add(bolo);
+        recipesAllReadyUsed.add(tiramisu);
+        recipesAllReadyUsed.add(carbo);
 
-        recipes.add(bolognaise);
-        recipes.add(bolognaiseVegan);
-        recipes.add(soupePotiron);
-        recipes.add(margherita);
-        recipes.add(lasagne);
-
-        recipesAllReadyUsed.add(bolognaise);
-        recipesAllReadyUsed.add(bolognaiseVegan);
-        recipesAllReadyUsed.add(soupePotiron);
-        recipesAllReadyUsed.add(margherita);
-
-        assertNull(AutoCompletion.choiceRecipe(empty, recipesAllReadyUsed));
-        assertEquals(lasagne, AutoCompletion.choiceRecipe(recipes, recipesAllReadyUsed));
+        assertNull(AutoCompletion.choiceRecipe(empty, recipesAllReadyUsed),            "Test si choix de recette vide");
+        assertEquals(pesto, AutoCompletion.choiceRecipe(recipes, recipesAllReadyUsed), "Test si choix de la bonne recette");
     }
 }
