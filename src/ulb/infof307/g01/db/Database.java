@@ -220,6 +220,9 @@ public class Database {
             Recipe recipe = new Recipe(recipeID, nom, duration, category, type, nbPersons, method);
             recipes.add(recipe);
         }
+        for(Recipe rec: recipes){
+            fillRecipeWithProducts(rec);
+        }
         return recipes;
     }
 
@@ -276,6 +279,14 @@ public class Database {
 
         String[] val = {"null", name, duration, nbPerson, type, category, preparation};
         insert("Recette", val);
+        String recipeID = String.format("%d", getGeneratedID());
+
+        for (Product p: recipe) {
+            String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
+            String quantity =  String.format("%d", p.getQuantity());
+            String[] productVal = {recipeID, productID, quantity};
+            insert("RecetteIngredient", productVal);
+        }
     }
 
     public void insertUnite(String name) throws SQLException {
@@ -288,7 +299,11 @@ public class Database {
         insert("FamilleAliment",values);
     }
 
-    public void insertIngredient(String name,String famille,String unite) throws SQLException {
+    public void insertIngredient(Product product) throws SQLException {
+        insertIngredient(product.getName(), product.getFamillyProduct(), product.getNameUnity());
+    }
+
+    private void insertIngredient(String name,String famille,String unite) throws SQLException {
         int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
         int idUnite = getIDFromName("Unite",unite,"UniteID");
         String stringIdFamille = String.format("%d", idFamille);
@@ -423,15 +438,34 @@ public class Database {
         }
     }
 
-    public Menu getMenuFromName(String menuName) throws SQLException {
+    private void fillRecipeWithProducts(Recipe recipe) throws SQLException {
+        ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, F.Nom, U.Nom, R.Quantite\n" +
+                "FROM RecetteIngredient as R\n" +
+                "INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID \n" +
+                "INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID\n" +
+                "INNER JOIN Unite as U ON U.UniteID = I.UniteID\n" +
+                "WHERE R.RecetteID = %d", recipe.getId()));
+
+        while(querySelectProduct.next()){
+            String productName = querySelectProduct.getString(1);
+            String familyName = querySelectProduct.getString(2);
+            String unityName = querySelectProduct.getString(3);
+            int quantity = querySelectProduct.getInt(4);
+
+            Product product = new Product(productName, quantity, unityName,familyName);
+            recipe.add(product);
+        }
+    }
+
+    private Menu fillMenuWithRecipes(String menuName) throws SQLException {
         int idName = getIDFromName("Menu",menuName,"MenuID");
         ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
-               " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
-               "FROM MenuRecette as M\n" +
-               "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
-               "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-               "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-               "WHERE M.MenuID = %d", idName));
+                " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
+                "FROM MenuRecette as M\n" +
+                "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE M.MenuID = %d", idName));
         Menu menu = new Menu(menuName);
         while(querySelectMenu.next()){
            int menuDay = querySelectMenu.getInt(1);
@@ -449,7 +483,18 @@ public class Database {
         return menu;
     }
 
-    private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
+    public Menu getMenuFromName(String menuName) throws SQLException {
+        Menu menu = fillMenuWithRecipes(menuName);
+        for(Day day : Day.values()){
+            List<Recipe> recipesFromMenu = menu.getRecipesfor(day);
+            for(Recipe recipe : recipesFromMenu){
+                fillRecipeWithProducts(recipe);
+            }
+        }
+        return menu;
+    }
+
+    private void insertRecipeInMenu(int menuID, int day, int hour, int recipeID) throws SQLException {
         String[] values = {String.format("%d",menuID),String.format("%d",day),String.format("%d",hour),String.format("%d",recipeID)};
         insert("MenuRecette",values);
     }
@@ -481,7 +526,7 @@ public class Database {
             List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
-                insertRecetteInMenu(menuID, day.getIndex(), hour, idRecipe);
+                insertRecipeInMenu(menuID, day.getIndex(), hour, idRecipe);
             }
         }
     }
