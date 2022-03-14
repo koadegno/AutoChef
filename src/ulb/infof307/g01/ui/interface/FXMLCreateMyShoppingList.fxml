@@ -32,7 +32,7 @@
         <HBox alignment="CENTER" prefHeight="77.0" prefWidth="600.0" spacing="60.0">
             <children>
                 <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#confirmMyCreateShoppingList" prefHeight="25.0" prefWidth="113.0" text="Archiver" visible="false" />
-                <Button fx:id="btnReturn" mnemonicParsing="false" onAction="#returnShoppingList" prefHeight="25.0" prefWidth="116.0" text="Retour" />
+                <Button fx:id="returnToMenu" mnemonicParsing="false" onAction="#returnShoppingList" prefHeight="25.0" prefWidth="116.0" text="Retour" />
             </children>
         </HBox>
     </children>

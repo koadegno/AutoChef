@@ -58,7 +58,6 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         comboBoxListProduct.setVisible(true);
         spinnerQuantityOrNumber.setVisible(true);
         btnConfirm.setVisible(true);
-        btnReturn.setVisible(true);
     }
 
     @FXML

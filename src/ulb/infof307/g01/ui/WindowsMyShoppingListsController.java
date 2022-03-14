@@ -74,7 +74,7 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         activeElementVisibility();
-        btnReturn.setVisible(true);
+
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -85,6 +85,14 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+
+        returnToMenu.setOnAction((event) ->{
+            try {
+                returnShoppingList(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
     }
 
     private void activeElementVisibility() {
