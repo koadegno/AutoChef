@@ -36,6 +36,8 @@ public class MyShoppingListsControllerTools {
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct;
+    @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
     protected TableView tableViewDisplayProductList;
@@ -58,6 +60,7 @@ public class MyShoppingListsControllerTools {
         hBoxToCreateProduct.setStyle("");
     }
 
+    public void confirmMyCreateShoppingList(){}
     public void initShoppingListElement() {
 
         try { //TODO gerer l'erreur
@@ -105,7 +108,6 @@ public class MyShoppingListsControllerTools {
             spinnerValueFactory.setValue(0);
         }
     }
-
     protected void fillComboBoxShoppingNameListWithBDD(ComboBox comboBoxNameList, int numberOfComboBox) {
         List<String> myListComboBox = new ArrayList<String>();
         switch (numberOfComboBox) {

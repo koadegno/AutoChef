@@ -26,9 +26,11 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
     TextField nameMyCreateShoppingList;
     @FXML
     TableColumn columnProduct, columnQuantityOrNumber, columnUnity, columnDelete;
-
+    @FXML
+    Label labelNameShoppingList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        activeElementVisibility();
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -46,6 +48,16 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
             }
         });
 
+    }
+
+    private void activeElementVisibility() {
+        btnAddNewProduct.setVisible(true);
+        nameMyCreateShoppingList.setVisible(true);
+        labelNameShoppingList.setVisible(true);
+        comboBoxListUnity.setVisible(true);
+        comboBoxListProduct.setVisible(true);
+        spinnerQuantityOrNumber.setVisible(true);
+        btnConfirm.setVisible(true);
     }
 
     @FXML
@@ -77,7 +89,8 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
                 return;
             }
             // else tout ce passe bien
-            returnShoppingList(event);
+            returnToMenu.fire();
+            //returnShoppingList(event);
         }
     }
 

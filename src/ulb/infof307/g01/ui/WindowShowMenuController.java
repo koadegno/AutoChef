@@ -99,15 +99,15 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
 
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
+        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        loader.setController(windowsCreateMyShoppingListController);
         Parent root = loader.load();
-        WindowsCreateMyShoppingListController controller = loader.getController();
-        controller.setDatabase(dataBase);
-        controller.initShoppingListElement();
-        controller.initComboBox();
+        windowsCreateMyShoppingListController.setDatabase(dataBase);
+        windowsCreateMyShoppingListController.initShoppingListElement();
+        windowsCreateMyShoppingListController.initComboBox();
+        fillShoppingList(windowsCreateMyShoppingListController);
 
-
-        fillShoppingList(controller);
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
