@@ -40,51 +40,36 @@ public class WindowMainController {
 
 
     /**
-     * Crée un node parent à partir du fichier FXMLMainPage.fxml
-     * qui sera associé à une nouvelle scene. Cette scene sera
-     * par la suite rajoutée dans le primaryStage, ce qui permettra
-     * l'affichage de la page principale de l'application.
+     * Affiche la page principale de l'application.
      * @see ulb.infof307.g01.Main
-     * @see Parent
-     * @see Scene
-     * @see Stage
-     * @throws IOException*/
+     * @throws IOException : Si le fichier FXMLMainPage n'existe pas
+     * */
     @FXML
-    public void displayMain(Stage primaryStage){
-        try{
-            URL ressource = getClass().getResource("interface/FXMLMainPage.fxml");
-            Parent root = FXMLLoader.load(Objects.requireNonNull(ressource));
-            Scene scene =  new Scene(root);
-            primaryStage.setTitle("Page principale");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-        }catch (IOException e ){
-            e.printStackTrace();
-        }
-
+    public void displayMain(Stage primaryStage)throws IOException{
+        URL ressource = getClass().getResource("interface/FXMLMainPage.fxml");
+        Parent root = FXMLLoader.load(Objects.requireNonNull(ressource));
+        Scene scene =  new Scene(root);
+        primaryStage.setTitle("Page principale");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
     /**
-     * Crée une nouvelle instance de la classe WindowsMainShoppingListController
-     * pour ensuite appeler la méthode qui affiche la page qui lui
-     * correspond, à savoir, la page principale des Listes de Courses.
+     * Affiche la page principale des Listes de Courses.
      * @see WindowsMainShoppingListController
-     * @throws IOException
+     * @throws IOException : Si le fichier FXMLMainShoppingList n'existe pas
      * */
     @FXML
     public void redirectToShoppingList(ActionEvent event) throws IOException {
         WindowsMainShoppingListController windowsShoppingListController = new WindowsMainShoppingListController();
         windowsShoppingListController.setDataBase(dataBase);
         windowsShoppingListController.displayMenuShoppingListController(event);
-
     }
 
     /**
-     * Crée une nouvelle instance de la classe WindowMainMenuController
-     * pour ensuite appeler la méthode qui affiche la page qui lui
-     * correspond, à savoir, la page principale des Menus.
+     * Affiche la page principale des Menus.
      * @see WindowMainMenuController
-     * @throws IOException
+     * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      * */
     @FXML
     public void redirectToMenu(ActionEvent event) throws IOException{
@@ -94,13 +79,11 @@ public class WindowMainController {
     }
 
     /**
-     *
-     * @throws IOException
-     * @throws SQLException*/
+     *TODO: Doc pour la méthode de la page d'Aissa
+     * */
     @FXML
     public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
         CreateMenuController createMenuController = new CreateMenuController();
         createMenuController.displayEditMeal(event);
-
     }
 }

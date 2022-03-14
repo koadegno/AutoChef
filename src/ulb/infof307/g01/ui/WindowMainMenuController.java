@@ -23,10 +23,7 @@ public class WindowMainMenuController {
     private static Database dataBase = null;
 
     /**
-     * Crée un node parent à partir du fichier FXMLMainMenu.fxml
-     * qui sera associé à une nouvelle scene. Cette scene sera
-     * par la suite rajoutée dans le primaryStage, ce qui permettra
-     * l'affichage de la page principale des Menus.
+     * Affiche la page principale des Menus.
      *
      * @throws IOException
      * @see Parent
@@ -42,21 +39,17 @@ public class WindowMainMenuController {
     }
 
     /**
-     * Crée une nouvelle instance de la classe WindowMainController
-     * pour ensuite appeler la méthode qui affiche la page qui lui
-     * correspond, à savoir, la page principale de l'application.
+     * Affiche la page principale de l'application.
      * @see WindowMainController
      * @throws IOException
      * */
-    public void backToMainController(ActionEvent event){
+    public void backToMainController(ActionEvent event)throws IOException{
         WindowMainController mainController = new WindowMainController();
         mainController.displayMain((Stage)((Node)event.getSource()).getScene().getWindow());
     }
 
     /**
-     * Crée une nouvelle instance de la classe WindowMyMenusController
-     * pour ensuite appeler la méthode qui affiche la page qui lui
-     * correspond, à savoir, la page avec la liste des menus.
+     * Affiche la page qui contient la liste des menus.
      * @see WindowMyMenusController
      * @throws IOException
      * */
@@ -67,7 +60,7 @@ public class WindowMainMenuController {
     }
 
 
-    //TODO: Rediriger vers la création des menus
+    //TODO: Rediriger vers la création des menus -->Aissa!
     /**
      * */
     public void redirectToCreateMenuController(ActionEvent event){
@@ -77,7 +70,6 @@ public class WindowMainMenuController {
 
     /**
      * Prend la base de donnée envoyée par la page précédente
-     *
      * @see Database
      */
     public void setDataBase(Database db) {

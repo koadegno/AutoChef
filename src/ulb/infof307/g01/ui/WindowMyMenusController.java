@@ -84,8 +84,8 @@ public class WindowMyMenusController implements Initializable {
     }
 
     /**
-     * La méthode intérroge la base de données passée par la page précedente
-     * et récupère la liste de tous les menus dans l'attribut menus
+     * Intérroge la base de données passée par la page précedente
+     * et récupère la liste de tous les menus
      * @throws SQLException
      * */
     public void initializeMenusFromDB() {
@@ -98,8 +98,8 @@ public class WindowMyMenusController implements Initializable {
     }
 
 
-    /**La méthode initialise le controlleur en initialisant la liste
-     * des menus, et en remplissant le composant TreeView avec les
+    /**Initialisation du controlleur: initialise la liste
+     * des menus, et rempli le composant TreeView avec les
      * données récupérées.
      * @see Initializable
      * @see TreeView
@@ -110,9 +110,8 @@ public class WindowMyMenusController implements Initializable {
         fillTreeView(this.menus);
     }
 
-    /**La méthode crée l'élément parent du TreeView et lui
-     * rajoute un élément fils pour chaque menu qu'il lit
-     * de la liste de menus.*/
+    /**Rempli l'élément TreeViw avec chaque menu qu'il
+     * lit de la liste de menus.*/
     public void fillTreeView(ArrayList<Menu> menus){
         TreeItem<Menu> rootItem =  new TreeItem<>();
         menus.forEach(menu -> {
@@ -131,6 +130,9 @@ public class WindowMyMenusController implements Initializable {
      *     <li>onContextMenuRequested</li>
      *     <li>onMouseClicked</li>
      * </ul>
+     * Affiche le nom du menu sélectionné dans le TextField
+     * et le retourne.
+     * @return Menu
      */
     @FXML
     public Menu selectedMenu(){
@@ -193,10 +195,10 @@ public class WindowMyMenusController implements Initializable {
         recipe3.add(new Product("Salade de thon et légumes, appertisée"));
         recipe3.add(new Product("Artichaut, cuit"));
         recipe3.add(new Product("Aubergine, cuite"));
-        menu.addMealTo(Day.Monday, recipe1);
-        menu.addMealTo(Day.Monday, recipe2);
-        menu.addMealTo(Day.Thursday, recipe2);
-        menu.addMealTo(Day.Friday, recipe3);
+        menu.addRecipeTo(Day.Monday, recipe1);
+        menu.addRecipeTo(Day.Monday, recipe2);
+        menu.addRecipeTo(Day.Thursday, recipe2);
+        menu.addRecipeTo(Day.Friday, recipe3);
     }
 
     public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException, SQLException{
