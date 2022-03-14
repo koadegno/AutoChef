@@ -77,5 +77,9 @@ public class Product {
 
         return this.getName().equals(product.getName());
     }
+
+    public void setNameUnity(String nameUnity) {
+        this.nameUnity = nameUnity;
+    }
 }
 

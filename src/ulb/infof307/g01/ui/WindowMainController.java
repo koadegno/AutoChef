@@ -59,15 +59,9 @@ public class WindowMainController {
     }
 
     @FXML
-    public void redirectMenuList(ActionEvent event) throws IOException {
-        WindowMyMenusController windowMyMenus = new WindowMyMenusController();
-        windowMyMenus.displayMyMenus(event);
-    }
-
-    @FXML
     public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
-        SearchRecipeController displayRecipe =  new SearchRecipeController();
-        displayRecipe.displaySearchRecipe(event);
+        CreateMenuController createMenuController = new CreateMenuController();
+        createMenuController.displayEditMeal(event);
 
     }
 }

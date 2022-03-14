@@ -40,7 +40,7 @@ public class WindowShowMenuController implements Initializable {
     @FXML
     HBox menuHBox;
 
-    Database database = new Database("db");
+    //Database database = new Database("db");
 
 
     public void setMenu(Menu menu){
@@ -104,8 +104,8 @@ public class WindowShowMenuController implements Initializable {
     public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
 
         //TODO: Changer pour qu'il redirige vers la partie de modifier le menu
-        SearchRecipeController search = new SearchRecipeController();
-        search.displaySearchRecipe(event);
+        //SearchRecipeController search = new SearchRecipeController();
+        //search.displaySearchRecipe(event);
     }
 
     @FXML
@@ -121,31 +121,35 @@ public class WindowShowMenuController implements Initializable {
         controller.setDatabase(dataBase);
         controller.initShoppingListElement();
         controller.initComboBox();
-
-
+        fillShoppingList(controller);
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void fillShoppingList(WindowsCreateMyShoppingListController controller){
-        //ShoppingList generatedShoppingList = menu.generateShoppingList();
-        //controller.fillShoppingListToSend(generatedShoppingList);
-        HashMap<Product, Integer> productsAndQuantity = new HashMap<>();
+        Collection<Product> products = new ArrayList<>();
+        getAllProducts(products);
+        //controller.tableViewDisplayProductList.getItems().add(new Product("random", 5, "u " ));
+        controller.tableViewDisplayProductList.getItems().addAll(products);
+
+
+    }
+
+    public void getAllProducts(Collection<Product> products){
         for (int i = 0; i <menu.getNbOfdays(); i++) {
             for (Recipe meal : menu.getMealsfor(Day.values()[i])){
                 for (Product product : meal){
-                    if (productsAndQuantity.containsKey(product)){
-                        productsAndQuantity.replace(product, productsAndQuantity.get(product) + 1);
-                    }
-                    else {
-                        productsAndQuantity.put(product, 1);
+                    product.setNameUnity("u");
+                    if (products.contains(product)){
+                        product.increase();
+                    }else {
+                        products.add(product);
                     }
                 }
             }
         }
-
     }
 
     public void back(ActionEvent event) throws IOException {

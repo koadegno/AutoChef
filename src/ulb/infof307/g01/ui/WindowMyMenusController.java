@@ -19,6 +19,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.db.Database;
 
@@ -83,8 +84,8 @@ public class WindowMyMenusController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
-        //initializeMenusFromDB();
+        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
+        initializeMenusFromDB();
         TreeItem<Menu> rootItem =  new TreeItem<>();
         for (Menu menu : menus){
             TreeItem<Menu> menuName = new TreeItem<>(menu);
@@ -121,6 +122,7 @@ public class WindowMyMenusController implements Initializable {
         String name = menuName.getText();
         Menu menu = selectedMenu();
         //TODO: Get from DB!
+        /*
         ObservableList<Recipe> recipes = FXCollections.observableArrayList(
                 new Recipe("recette 1"),
                 new Recipe("recette 2"),
@@ -131,9 +133,24 @@ public class WindowMyMenusController implements Initializable {
             for (Recipe recipe : recipes){
                 menu.addMealTo(Day.values()[i], recipe);
             }
-        }
-        menu.addMealTo(Day.Monday, new Recipe("recette 5"));
-        menu.addMealTo(Day.Thursday, new Recipe("recette 9"));
+        }*/
+
+       Recipe recipe1 = new Recipe("recette 1");
+        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
+        recipe1.add(new Product("Artichaut, cuitArtichaut, cuit"));
+        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
+        Recipe recipe2 = new Recipe("recette 2");
+        recipe2.add(new Product("Artichaut, cuit"));
+        recipe2.add(new Product("Aubergine, cuite"));
+        recipe2.add(new Product("Artichaut, cuit"));
+        Recipe recipe3 = new Recipe("recette 3");
+        recipe3.add(new Product("Salade de thon et légumes, appertisée"));
+        recipe3.add(new Product("Artichaut, cuit"));
+        recipe3.add(new Product("Aubergine, cuite"));
+        menu.addMealTo(Day.Monday, recipe1);
+        menu.addMealTo(Day.Monday, recipe2);
+        menu.addMealTo(Day.Thursday, recipe2);
+        menu.addMealTo(Day.Friday, recipe3);
 
         if (menus.contains(menu)){
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
