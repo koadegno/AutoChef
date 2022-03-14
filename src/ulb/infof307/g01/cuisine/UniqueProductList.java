@@ -2,8 +2,17 @@ package ulb.infof307.g01.cuisine;
 
 import java.util.Vector;
 
+/**
+ * Classe Abstraite représentant un Vecteur de {@code Product}, dans laquelle il n'y a pas de doublon possible
+ * @see Product
+ */
 abstract class UniqueProductList extends Vector<Product> {
 
+    /**
+     *  Ajoute le {@code Product} p à la liste, si p est déjà dans la liste, le {@code Product} n'est pas ajouté en double,
+     *  sa quantité est seulement incrémentée
+     * @return Toujours True
+     */
     @Override
     public boolean add(Product p) {
         int indexProduct = this.indexOf(p);
@@ -25,21 +34,35 @@ abstract class UniqueProductList extends Vector<Product> {
             this.get(indexProduct).increase();
     }
 
+    /**
+     *  Méthode inaccessible
+     */
     @Override
     public void copyInto(Object[] anArray) {
         throw new RuntimeException("Not usable");
     }
 
+    /**
+     *  Méthode inaccessible
+     */
     @Override
     public void insertElementAt(Product p, int index) {
         throw new RuntimeException("Not usable");
     }
 
+    /**
+     *  Méthode inaccessible
+     */
     @Override
     public Product remove(int index) {
         throw new RuntimeException("Not usable");
     }
 
+    /**
+     * Si la quantité du produit est supérieure à 1, la quantité est décrémentée
+     * si la quantité est à 1, le {@code Product} est supprimé de la liste
+     * @return True si le produit était dans la liste, False sinon
+     */
     @Override
     public boolean remove(Object p) {
         int indexProduct = this.indexOf(p);

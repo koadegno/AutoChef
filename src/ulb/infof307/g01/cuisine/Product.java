@@ -81,10 +81,10 @@ public class Product {
 
     public String getNameUnity(){return nameUnity;}
 
-    @Override
     /**
-     * Compare 2 objets {@code Product} en fonction de leur nom
+     * Compare 2 objets
      */
+    @Override
     public boolean equals(Object other) {
 
         if (this == other)

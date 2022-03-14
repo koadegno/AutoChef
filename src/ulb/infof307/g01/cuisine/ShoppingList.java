@@ -1,7 +1,9 @@
 package ulb.infof307.g01.cuisine;
 
-import java.util.Vector;
 
+/**
+ * Classe représentant une Liste de Course
+ */
 public class ShoppingList extends UniqueProductList {
 
     private int id;
