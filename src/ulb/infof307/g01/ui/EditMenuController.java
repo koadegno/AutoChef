@@ -52,7 +52,7 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
     @Override
     public void add(Recipe recipe) {
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        myMenu.addMealTo(daysName.get(dayIndex), recipe);
+        myMenu.addRecipeTo(daysName.get(dayIndex), recipe);
         this.refreshTableView();
         System.out.println("scene is null " + (scene == null));
         this.stage.setScene(this.scene);
@@ -73,7 +73,7 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         menuTableColumn.setText(daysName.get(dayIndex).toString());
         this.menuTableView.getItems().clear();
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(dayIndex)));
+        this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(dayIndex)));
 
     }
 
@@ -93,7 +93,7 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
     public void removeRecipeAction(ActionEvent event) {
         Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        this.myMenu.removeMealFrom(daysName.get(dayIndex), recipeToRemove);
+        this.myMenu.removeRecipeFrom(daysName.get(dayIndex), recipeToRemove);
         refreshTableView();
         removeRecipeButton.setVisible(false);
     }

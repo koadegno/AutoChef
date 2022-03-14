@@ -57,7 +57,7 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         daysComboBox.getSelectionModel().selectFirst();
         menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(0)));
+        this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(0)));
         this.removeRecipeButton.setVisible(false);
         this.generateMenuButton.setOnAction((event1) -> {
                 try{this.generateMenu(event1);}

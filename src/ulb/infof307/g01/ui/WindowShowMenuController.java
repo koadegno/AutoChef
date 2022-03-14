@@ -75,7 +75,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
             dayTable.getColumns().clear();
             TableColumn<Recipe, String> dayCol = new TableColumn<>(day.name());
             dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-            List<Recipe> mealForDay = menu.getMealsfor(day);
+            List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
             dayTable.getItems().addAll(mealForDay);
             dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
