@@ -89,7 +89,8 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
                 return;
             }
             // else tout ce passe bien
-            returnShoppingList(event);
+            returnToMenu.fire();
+            //returnShoppingList(event);
         }
     }
 

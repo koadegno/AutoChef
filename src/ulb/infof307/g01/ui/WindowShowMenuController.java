@@ -103,12 +103,10 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
         loader.setController(windowsCreateMyShoppingListController);
         Parent root = loader.load();
-        WindowsCreateMyShoppingListController controller = loader.getController();
-        controller.nameMyCreateShoppingList.setText("LC de " + menu.getName());
-        controller.setDatabase(dataBase);
-        controller.initShoppingListElement();
-        controller.initComboBox();
-        fillShoppingList(controller);
+        windowsCreateMyShoppingListController.setDatabase(dataBase);
+        windowsCreateMyShoppingListController.initShoppingListElement();
+        windowsCreateMyShoppingListController.initComboBox();
+        fillShoppingList(windowsCreateMyShoppingListController);
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));

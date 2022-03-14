@@ -36,7 +36,7 @@ public class MyShoppingListsControllerTools {
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
-    protected Button btnConfirm, btnReturn, btnSeeShoppingList, btnAddNewProduct;
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct;
     @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
