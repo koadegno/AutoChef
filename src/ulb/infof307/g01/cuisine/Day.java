@@ -1,5 +1,7 @@
 package ulb.infof307.g01.cuisine;
 
+/** Enumeration représentant les jours de la semaine
+*/
 public enum Day {
     Monday(0)    {@Override public String toString() {return "Lundi";}},
     Tuesday(1)   {@Override public String toString() {return "Mardi";}},
