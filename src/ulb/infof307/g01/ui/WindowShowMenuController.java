@@ -92,7 +92,7 @@ public class WindowShowMenuController implements Initializable {
             dayTable.getColumns().clear();
             TableColumn<Recipe, String> dayCol = new TableColumn<>(day.name());
             dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-            List<Recipe> mealForDay = menu.getMealsfor(day);
+            List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
             dayTable.getItems().addAll(mealForDay);
             dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
@@ -139,7 +139,7 @@ public class WindowShowMenuController implements Initializable {
 
     public void getAllProducts(Collection<Product> products){
         for (int i = 0; i <menu.getNbOfdays(); i++) {
-            for (Recipe recipe : menu.getMealsfor(Day.values()[i])){
+            for (Recipe recipe : menu.getRecipesfor(Day.values()[i])){
                 for (Product product : recipe){
                     product.setNameUnity("u");
                     if (products.contains(product)){

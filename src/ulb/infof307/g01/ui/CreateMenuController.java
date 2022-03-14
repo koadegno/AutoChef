@@ -1,19 +1,14 @@
 package ulb.infof307.g01.ui;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -21,11 +16,9 @@ import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
 import  ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.FileStore;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -97,7 +90,7 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
         daysComboBox.getSelectionModel().selectFirst();
         menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(0)));
+        this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(0)));
         this.removeRecipeButton.setVisible(false);
     }
 
@@ -105,7 +98,7 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         menuTableColumn.setText(daysName.get(dayIndex).toString());
         this.menuTableView.getItems().clear();
-        this.fillTableView(menuTableView, myMenu.getMealsfor(daysName.get(dayIndex)));
+        this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(dayIndex)));
 
     }
     @FXML
@@ -121,7 +114,7 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
     @Override
     public void addRecipe(Recipe recipe) {
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        myMenu.addMealTo(daysName.get(dayIndex), recipe);
+        myMenu.addRecipeTo(daysName.get(dayIndex), recipe);
         this.refreshTableView();
         this.stage.setScene(this.scene);
     }
@@ -156,7 +149,7 @@ public class CreateMenuController implements Initializable, ulb.infof307.g01.ui.
     public void removeRecipeAction(ActionEvent event){
         Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        this.myMenu.removeMealFrom(daysName.get(dayIndex), recipeToRemove);
+        this.myMenu.removeRecipeFrom(daysName.get(dayIndex), recipeToRemove);
         refreshTableView();
         removeRecipeButton.setVisible(false);
     }

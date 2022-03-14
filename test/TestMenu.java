@@ -7,7 +7,6 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Vector;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -71,11 +70,11 @@ class TestMenu {
     private void reset() {
         new Menu("Menu Test");
 
-        menu.addMealTo(Day.Monday, recipes[0]);
-        menu.addMealTo(Day.Wednesday, recipes[0]);
+        menu.addRecipeTo(Day.Monday, recipes[0]);
+        menu.addRecipeTo(Day.Wednesday, recipes[0]);
 
-        menu.addMealTo(Day.Monday, recipes[1]);
-        menu.addMealTo(Day.Friday, recipes[1]);
+        menu.addRecipeTo(Day.Monday, recipes[1]);
+        menu.addRecipeTo(Day.Friday, recipes[1]);
     }
 
     @AfterEach
@@ -87,19 +86,19 @@ class TestMenu {
 
 
     @Test
-    void getMealsfor() {
+    void getRecipesfor() {
         int i =0;
-        for (Recipe recipeTest : menu.getMealsfor(Day.Monday)) {
+        for (Recipe recipeTest : menu.getRecipesfor(Day.Monday)) {
                 assertEquals(recipes[i], recipeTest);
                 i++;
         }
     }
 
     @Test
-    void addMealTo() {
-        menu.addMealTo(Day.Monday, recipes[1]);
+    void addRecipesTo() {
+        menu.addRecipeTo(Day.Monday, recipes[1]);
 
-        List<Recipe> recipesList = menu.getMealsfor(Day.Monday);
+        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
 
         int counter = 0;
 
@@ -110,14 +109,14 @@ class TestMenu {
 
         assertEquals(2, counter);
         // Reset
-        menu.removeMealFrom(Day.Monday, recipes[1]);
+        menu.removeRecipeFrom(Day.Monday, recipes[1]);
     }
 
     @Test
-    void removeMealFrom() {
-        menu.removeMealFrom(Day.Monday, recipes[1]);
+    void removeRecipesFrom() {
+        menu.removeRecipeFrom(Day.Monday, recipes[1]);
 
-        List<Recipe> recipesList = menu.getMealsfor(Day.Monday);
+        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
         int counter = 0;
         for (Recipe r : recipesList) {
             if (r == recipes[1])
@@ -126,16 +125,16 @@ class TestMenu {
 
         assertEquals(0, counter);
         // Reset
-        menu.addMealTo(Day.Monday, recipes[1]);
+        menu.addRecipeTo(Day.Monday, recipes[1]);
     }
 
     @Test
-    void replaceMeal() {
+    void replaceRecipes() {
 
-        menu.addMealTo(Day.Monday, recipes[1]);
-        menu.replaceMeal(Day.Monday, recipes[1], recipes[0]);
+        menu.addRecipeTo(Day.Monday, recipes[1]);
+        menu.replaceRecipe(Day.Monday, recipes[1], recipes[0]);
 
-        List<Recipe> recipesList = menu.getMealsfor(Day.Monday);
+        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
 
         int counterRecipe0 = 0;
         int counterRecipe1 = 0;
@@ -151,13 +150,13 @@ class TestMenu {
     void clearDay() {
 
         menu.clearDay(Day.Monday);
-        assertEquals(0, menu.getMealsfor(Day.Monday).size());
+        assertEquals(0, menu.getRecipesfor(Day.Monday).size());
 
         menu.clearDay(Day.Wednesday);
-        assertEquals(0, menu.getMealsfor(Day.Wednesday).size());
+        assertEquals(0, menu.getRecipesfor(Day.Wednesday).size());
 
         menu.clearDay(Day.Friday);
-        assertEquals(0, menu.getMealsfor(Day.Friday).size());
+        assertEquals(0, menu.getRecipesfor(Day.Friday).size());
     }
 
     @Test
@@ -187,7 +186,7 @@ class TestMenu {
         menu.generateMenu(db, 6, 4, 6);
 
         for (Day day: Day.values()) {
-            List<Recipe> recipes = menu.getMealsfor(day);
+            List<Recipe> recipes = menu.getRecipesfor(day);
             assertEquals(3, recipes.size());
         }
     }

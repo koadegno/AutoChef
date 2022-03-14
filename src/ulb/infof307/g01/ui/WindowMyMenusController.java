@@ -23,7 +23,6 @@ import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
-import java.security.PublicKey;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -155,10 +154,10 @@ public class WindowMyMenusController implements Initializable {
         recipe3.add(new Product("Salade de thon et légumes, appertisée"));
         recipe3.add(new Product("Artichaut, cuit"));
         recipe3.add(new Product("Aubergine, cuite"));
-        menu.addMealTo(Day.Monday, recipe1);
-        menu.addMealTo(Day.Monday, recipe2);
-        menu.addMealTo(Day.Thursday, recipe2);
-        menu.addMealTo(Day.Friday, recipe3);
+        menu.addRecipeTo(Day.Monday, recipe1);
+        menu.addRecipeTo(Day.Monday, recipe2);
+        menu.addRecipeTo(Day.Thursday, recipe2);
+        menu.addRecipeTo(Day.Friday, recipe3);
     }
 
     public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException, SQLException{
