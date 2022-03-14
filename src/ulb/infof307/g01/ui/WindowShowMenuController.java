@@ -139,8 +139,8 @@ public class WindowShowMenuController implements Initializable {
 
     public void getAllProducts(Collection<Product> products){
         for (int i = 0; i <menu.getNbOfdays(); i++) {
-            for (Recipe meal : menu.getMealsfor(Day.values()[i])){
-                for (Product product : meal){
+            for (Recipe recipe : menu.getMealsfor(Day.values()[i])){
+                for (Product product : recipe){
                     product.setNameUnity("u");
                     if (products.contains(product)){
                         product.increase();
