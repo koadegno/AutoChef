@@ -22,6 +22,10 @@ import java.util.List;
 import java.util.Objects;
 import java.util.Vector;
 
+/**
+ * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
+ */
+
 public class MyShoppingListsControllerTools {
     public static Database dataBase;
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
@@ -61,6 +65,10 @@ public class MyShoppingListsControllerTools {
     }
 
     public void confirmMyCreateShoppingList(){}
+
+    /**
+     * Inialise les ComboBox avec les elements de la bdd dans une liste : produit, unité, nom de liste de courses
+     */
     public void initShoppingListElement() {
         try {
             allProduct = dataBase.getAllProductName();
@@ -73,6 +81,11 @@ public class MyShoppingListsControllerTools {
         }
     }
 
+    /**
+     * Retour au menu precedent : le menu principal de la liste de courses
+     * @param event relier au bouton return
+     * @throws IOException
+     */
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(WindowsMainShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
@@ -85,6 +98,10 @@ public class MyShoppingListsControllerTools {
         stage.show();
     }
 
+    /**
+     * Retour au menu precedent : ShowMenu
+     * @param event : lie au bouton return
+     */
     @FXML
     public void returnToMyMenu(ActionEvent event) throws IOException {
         WindowMyMenusController menusController = new WindowMyMenusController();
@@ -100,12 +117,22 @@ public class MyShoppingListsControllerTools {
         }
     }
 
+    /**
+     * Empeche d'ecrire autre chose qu'un int dans le textField
+     * @param newValue : string recup du textField
+     */
     protected void OnlyIntOrFloatTextFieldUnity(String newValue) {
         if (!newValue.matches("^\\d*")) {
             spinnerQuantityOrNumber.getEditor().setText("0");
             spinnerValueFactory.setValue(0);
         }
     }
+
+    /**
+     * Remplis les combobox des elements recup de la dataBase
+     * @param comboBoxNameList combobox produit, unite et nom de liste de courses
+     * @param numberOfComboBox int pour le switch case pour savoir quel combobox remplir
+     */
     protected void fillComboBoxShoppingNameListWithBDD(ComboBox comboBoxNameList, int numberOfComboBox) {
         List<String> myListComboBox = new ArrayList<String>();
         switch (numberOfComboBox) {
@@ -126,15 +153,20 @@ public class MyShoppingListsControllerTools {
     }
 
 
+    /**
+     * Rajoute les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
+     */
     @FXML
     public void addElementOfListToComboBoxProduct() {
         this.removeBorderColor();
+        //Recuper les elements choisi pour un produit
         Object nameProductChoose = comboBoxListProduct.getSelectionModel().getSelectedItem();
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
         Product myProduct;
 
         if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
+            //Cree le produit pour le mettre dans le tableView
             myProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
             tableViewDisplayProductList.getItems().add(myProduct);
 

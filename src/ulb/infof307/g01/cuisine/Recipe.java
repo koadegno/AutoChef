@@ -1,12 +1,16 @@
 package ulb.infof307.g01.cuisine;
 
+/**
+ * Classe représentant les recettes
+ */
+
 public class Recipe extends UniqueProductList {
     
     private int id;
     private String name;
     private int duration;
-    private String category;   //Exemple vegan
-    private String type;       //Exemple plat, entrée, boisson,
+    private String category;
+    private String type;
     private int nbrPerson;
     private String preparation;
 
@@ -35,7 +39,14 @@ public class Recipe extends UniqueProductList {
     public String getType() { return type; }
     public int getNbrPerson() { return nbrPerson; }
     public String getPreparation() { return preparation;}
-    
+
+
+    /**
+     * Compare les recettes en fonction de leur Name
+     * @param  other  Recipe
+     * @return boolean
+     */
+
     @Override
     public boolean equals(Object other) {
 
@@ -45,6 +56,6 @@ public class Recipe extends UniqueProductList {
         if (other == null || this.getClass() != other.getClass())
             return false;
 
-        return this.getId() == ((Recipe) other).getId();
+        return this.getName().equals(((Recipe) other).getName());
     }
 }
