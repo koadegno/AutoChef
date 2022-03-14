@@ -72,6 +72,7 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
                 return;
 
             } catch (SQLException e) {
+                System.out.println("ERREUR HERE");
                 e.printStackTrace();
                 return;
             }
