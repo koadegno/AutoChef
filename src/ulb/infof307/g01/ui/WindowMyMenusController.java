@@ -29,10 +29,20 @@ import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
+/**
+ * La classe WindowMyMenusController représente le controlleur
+ * pour la page qui affiche la liste des menus existants dans
+ * la base de données. Elle permet à l'utilisateur de selectioner
+ * un menu pour l'afficher, ou de tapper manuellement le nom du
+ * menu. Elle implémente la classe Initializable pour pouvoir
+ * acceder aux composants FXML.
+ * @see ulb.infof307.g01.cuisine.Menu
+ * @see WindowShowMenuController
+ * @author _
+ * */
 public class WindowMyMenusController implements Initializable {
 
     private final ArrayList<Menu> menus = new ArrayList<>();
-    private ArrayList<String> allMenusNames = new ArrayList<>();
     private static Database database = null;
     @FXML
     TextField menuName;
@@ -67,31 +77,42 @@ public class WindowMyMenusController implements Initializable {
         }
         return result;
     }
-
-    public void initializeMenusFromDB() {
-        try {
-            allMenusNames = database.getAllMenuName();
-            for (String name : allMenusNames){menus.add(database.getMenuFromName(name));}
-            addDummyMenus();
-        }catch (SQLException e){
-            e.printStackTrace();
-        }
-    }
-
     public void addDummyMenus(){
         ArrayList<String> menuNames = new ArrayList<>();
         menuNames.add("menu vege");menuNames.add("weekend");menuNames.add("menu random");menuNames.add("repas noel");menuNames.add("anniversaire");
         menuNames.forEach(name -> {menus.add(new Menu(name));});
     }
 
+    /**
+     * La méthode intérroge la base de données passée par la page précedente
+     * et récupère la liste de tous les menus dans l'attribut menus
+     * @throws SQLException
+     * */
+    public void initializeMenusFromDB() {
+        try {
+            for (String name : database.getAllMenuName()){menus.add(database.getMenuFromName(name));}
+            addDummyMenus();
+        }catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
 
+
+    /**La méthode initialise le controlleur en initialisant la liste
+     * des menus, et en remplissant le composant TreeView avec les
+     * données récupérées.
+     * @see Initializable
+     * @see TreeView
+     * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
         initializeMenusFromDB();
         fillTreeView(this.menus);
     }
 
+    /**La méthode crée l'élément parent du TreeView et lui
+     * rajoute un élément fils pour chaque menu qu'il lit
+     * de la liste de menus.*/
     public void fillTreeView(ArrayList<Menu> menus){
         TreeItem<Menu> rootItem =  new TreeItem<>();
         menus.forEach(menu -> {
@@ -101,6 +122,16 @@ public class WindowMyMenusController implements Initializable {
         menuTreeView.setRoot(rootItem);
     }
 
+    /**La méthode prend l'élément du TreeView qui à été
+     * seléctionné, affiche le nom du menu dans le TextField
+     * menuName et retourne un objet de type Menu
+     * La méthode est appelé lorsque les suivants événements
+     * sont détectés dans le TreeView:
+     * <ul>
+     *     <li>onContextMenuRequested</li>
+     *     <li>onMouseClicked</li>
+     * </ul>
+     */
     @FXML
     public Menu selectedMenu(){
         TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
@@ -112,10 +143,16 @@ public class WindowMyMenusController implements Initializable {
         return null;
     }
 
+    /**
+     * La méthode lit le texte du TextField menuName introduit
+     * par l'utilisateur et ne montre que les éléments du
+     * TreeView qui commencent par le texte introduit. Si le
+     * texte est remis à vide, alors la liste d'éléments est
+     * remise à celle par défaut
+     * */
     @FXML
-    public void keyTyped(KeyEvent keyEvent){
+    public void keyTyped(){
         menuName.setStyle(null);
-        System.out.println("pressed: " + menuName.getText());
         if (Objects.equals(menuName.getText(), "")){
             menuTreeView.setRoot(null);
             fillTreeView(menus);
@@ -129,6 +166,7 @@ public class WindowMyMenusController implements Initializable {
         }
     }
 
+    /**La méthode */
     public void displayMyMenus(ActionEvent event) throws IOException {
         Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
 

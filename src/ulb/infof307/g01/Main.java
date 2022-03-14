@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import ulb.infof307.g01.ui.WindowMainController;
 
 import java.util.Objects;
 
@@ -16,11 +17,8 @@ public class Main extends Application {
     public void start(Stage primaryStage){
 
         try{
-            Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("ui/interface/FXMLMainPage.fxml")));
-            Scene scene =  new Scene(root);
-            primaryStage.setTitle("Page principale");
-            primaryStage.setScene(scene);
-            primaryStage.show();
+            WindowMainController mainController = new WindowMainController();
+            mainController.displayMain(primaryStage);
 
         }catch (Exception e ){
             e.printStackTrace();
