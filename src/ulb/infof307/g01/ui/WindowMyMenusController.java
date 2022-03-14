@@ -3,6 +3,8 @@ package ulb.infof307.g01.ui;
 import java.io.FileReader;
 import java.net.URL;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -10,77 +12,41 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
+import ulb.infof307.g01.cuisine.Day;
+import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
-import java.time.LocalDate;
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class WindowMyMenusController implements Initializable {
 
-    private ArrayList<String> menus = new ArrayList<>();
-
-    public void displayMenuList(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
-
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
-    }
-
+    private final ArrayList<Menu> menus = new ArrayList<>();
+    private ArrayList<String> allMenusNames = new ArrayList<>();
+    private static Database database = null;
     @FXML
-    Button backBtn;
+    TextField menuName;
+    @FXML
+    TreeView<Menu> menuTreeView;
 
-    public void backToMain(MouseEvent mousePressed)throws IOException {
-        WindowMainController main = new WindowMainController();
-        main.displayMain((Stage) ((Node) mousePressed.getSource()).getScene().getWindow());
-    }
 
     public void initializeMenusFromTextFile(String filename){
         //Les catégories doivent être séparées par des virgules!
-        this.menus = readFromFile(filename);
-
-    }
-
-    public void initializeMenusFromDB() {
-        //TODO: Relier avec BDD --> requetes (nomMenu)
-        //db = new Database("test.sqlite");
-        //db.creationTableMenus();
-        //String query = "SELECT * FROM Menus;"; --> get all the info of one menu
-        //if (db.sendRequest(query)){
-        //  fill this.menus with the query
-        //}
-    }
-
-
-    @FXML
-    TreeView<String> menuTreeView;
-
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
-
-        TreeItem<String> rootItem =  new TreeItem<>("Tous les menus");
-
-        for (String category : this.menus){
-            TreeItem<String> categoryName = new TreeItem<>(category);
-            rootItem.getChildren().add(categoryName);
+        ArrayList<String> menuNames = readFromFile(filename);
+        for (String name : menuNames){
+            menus.add(new Menu(name));
         }
-
-        menuTreeView.setRoot(rootItem);
-
     }
-
-
-
     public ArrayList<String> readFromFile(String filename){
         ArrayList<String> result = new ArrayList<>();
 
@@ -104,34 +70,95 @@ public class WindowMyMenusController implements Initializable {
         return result;
     }
 
-    public String selectedMenu(){
-        TreeItem<String> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
-            System.out.println("selected Item: " + selectedItem.getValue());
-            if (!selectedItem.getValue().equals("Tous les menus")){
-                menuName.setText(selectedItem.getValue());
+    public void initializeMenusFromDB() {
+        try {
+            allMenusNames = database.getAllMenuName();
+            for (String name : allMenusNames){
+                menus.add(database.getMenuFromName(name));
             }
-            return selectedItem.getValue();
+        }catch (SQLException e){
+            e.printStackTrace();
         }
-        return "";
+    }
+
+
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
+        initializeMenusFromDB();
+        TreeItem<Menu> rootItem =  new TreeItem<>();
+        for (Menu menu : menus){
+            TreeItem<Menu> menuName = new TreeItem<>(menu);
+            rootItem.getChildren().add(menuName);
+        }
+        menuTreeView.setRoot(rootItem);
     }
 
     @FXML
-    TextField menuName;
+    public Menu selectedMenu(){
+        TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
+        if (selectedItem != null){
+            menuName.setText(selectedItem.getValue().toString());
+            return selectedItem.getValue();
+        }
+        return null;
+    }
 
-    @FXML
-    Button btnDisplayMenu;
+    public void displayMyMenus(ActionEvent event) throws IOException {
+        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
 
-    public void handleDisplayMenu(MouseEvent mousePressed)throws IOException{
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Scene scene = new Scene(root);
+        stage.setScene(scene);
+        stage.show();
+    }
+    public void backToMainMenuController(ActionEvent event)throws IOException {
+        WindowMainMenuController mainMenuController = new WindowMainMenuController();
+        mainMenuController.displayMainMenuController(event);
+    }
+
+    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
+        Menu menu = selectedMenu();
+        //TODO: Get from DB!
+        /*
+        ObservableList<Recipe> recipes = FXCollections.observableArrayList(
+                new Recipe("recette 1"),
+                new Recipe("recette 2"),
+                new Recipe("recette 3"),
+                new Recipe("recette 4")
+        );
+        for (int i = 0; i < 7; i++) {
+            for (Recipe recipe : recipes){
+                menu.addMealTo(Day.values()[i], recipe);
+            }
+        }*/
 
-        if (menus.contains(name)){
+       Recipe recipe1 = new Recipe("recette 1");
+        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
+        recipe1.add(new Product("Artichaut, cuitArtichaut, cuit"));
+        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
+        Recipe recipe2 = new Recipe("recette 2");
+        recipe2.add(new Product("Artichaut, cuit"));
+        recipe2.add(new Product("Aubergine, cuite"));
+        recipe2.add(new Product("Artichaut, cuit"));
+        Recipe recipe3 = new Recipe("recette 3");
+        recipe3.add(new Product("Salade de thon et légumes, appertisée"));
+        recipe3.add(new Product("Artichaut, cuit"));
+        recipe3.add(new Product("Aubergine, cuite"));
+        menu.addMealTo(Day.Monday, recipe1);
+        menu.addMealTo(Day.Monday, recipe2);
+        menu.addMealTo(Day.Thursday, recipe2);
+        menu.addMealTo(Day.Friday, recipe3);
+
+        if (menus.contains(menu)){
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
             Parent root = loader.load();
 
             WindowShowMenuController controller = loader.getController();
-            controller.setMenu(name);
+            controller.setMenu(menu);
+            controller.setDatabase(database);
 
             Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
             Scene scene =  new Scene(root);
@@ -144,4 +171,6 @@ public class WindowMyMenusController implements Initializable {
         }
 
     }
+
+    public void setDatabase(Database db){database = db;}
 }

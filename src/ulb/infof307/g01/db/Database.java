@@ -9,13 +9,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Scanner;
 
-
+/**
+ * Classe représentant la Base de Données
+ * Permet la création d'une nouvelle base de données ou d'en charger
+ * une existante en donnant son nom en paramètre du constructeur
+ */
 public class Database {
 
     private String dbName;
     private Connection connection;
     private Statement request;
 
+    /**
+     * Constructeur qui charge une base de données existante si le paramètre nameDB
+     * est un fichier de base de données existante. Sinon en créée une nouvelle.
+     * @param nameDB nom de la base de données que l'ont veut charger/créer.
+     */
     public Database(String nameDB) {
         dbName = "jdbc:sqlite:" + nameDB;
         File file = new File(nameDB);
@@ -31,6 +40,10 @@ public class Database {
         }
     }
 
+    /**
+     * Méthode de création de la base de données qui lit et execute
+     * ligne par ligne le fichier bdd.txt qui représente le ddl.
+     */
     private void createDB(){
         try{
             FileInputStream fileDb =new FileInputStream("bdd.txt");
@@ -50,7 +63,7 @@ public class Database {
     }
 
     /**
-     * Uniquement pour la creation de table
+     * Requete de la base de données uniquement pour la creation de table
      * @param query requete sql
      * @return return True si la requete est effectuee, False sinon
      */
@@ -64,7 +77,7 @@ public class Database {
     }
 
     /**
-     * Requete lecture de la database
+     * Requete d'accès en lecture de la base de données
      * @param query requete sql
      * @return resultat de la requete, ou null si la requete echoue
      */
@@ -78,7 +91,7 @@ public class Database {
     }
 
     /**
-     * Requete ecriture de la database
+     * Requete d'accès en écriture de la base de données
      * @param query requete sql
      */
     private void sendQueryUpdate(String query) throws SQLException {
@@ -86,7 +99,7 @@ public class Database {
     }
 
     /**
-     * @return un id genere par la database, null si l'id n'est pas cree
+     * @return un id généré par la base de données, null si l'id n'est pas créé
      */
     private Integer getGeneratedID(){
         try {
@@ -121,7 +134,6 @@ public class Database {
      * @return Resultat de la query
      */
     private ResultSet select(String nameTable, List<String> constraintToAppend){
-
         StringBuilder req;
         String query;
         if (constraintToAppend.size() > 0){
@@ -133,20 +145,19 @@ public class Database {
         return sendQuery(query);
     }
 
-    private String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
+    private void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
+        StringBuilder req = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
+        String stringQuery = appendValuesToWhere(req, constraintToAppend);
+        sendQueryUpdate(stringQuery);
+    }
 
+    private String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
         for (String s : constraintToAppend) {
             query.append(s).append(" AND ");
         }
         query.delete(query.length()-4, query.length());
         query.append(";");
         return String.valueOf(query);
-    }
-
-    private void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
-        StringBuilder req = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        String stringQuery = appendValuesToWhere(req, constraintToAppend);
-        sendQueryUpdate(stringQuery);
     }
 
     private void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
@@ -168,7 +179,6 @@ public class Database {
      * @throws SQLException
      */
     private String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
-
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
         ResultSet res = select(table,constraint);
@@ -194,7 +204,6 @@ public class Database {
      * @throws SQLException
      */
     private ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
-
         ArrayList<Recipe> recipes = new ArrayList<>();
         while (result.next()){
             int recipeID = result.getInt(1);
@@ -389,37 +398,37 @@ public class Database {
         for(Product product : shoppingList){
             int idProduct = getIDFromName("Ingredient", product.getName(),"IngredientID");
             insertIngredientInShoppingList(id,idProduct, product.getQuantity());
-       }
-   }
+        }
+    }
 
-   public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
-       ArrayList<String> constraint = new ArrayList<>();
-       constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
-       delete("ListeCourseIngredient",constraint);
-       updateName("ListeCourse", shoppingList.getName(),constraint );
-       if(shoppingList.size() == 0){
+    public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
+        delete("ListeCourseIngredient",constraint);
+        updateName("ListeCourse", shoppingList.getName(),constraint );
+        if(shoppingList.size() == 0){
            delete("ListeCourse",constraint);
-       }
-       else{
+        }
+        else{
            for (Product product : shoppingList) {
                int idProduct = getIDFromName("Ingredient", product.getName(), "IngredientID");
                insertIngredientInShoppingList(shoppingList.getId(), idProduct, product.getQuantity());
            }
 
-       }
-   }
+        }
+    }
 
-   public Menu getMenuFromName(String menuName) throws SQLException {
-       int idName = getIDFromName("Menu",menuName,"MenuID");
-       ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
+    public Menu getMenuFromName(String menuName) throws SQLException {
+        int idName = getIDFromName("Menu",menuName,"MenuID");
+        ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
                " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
                "FROM MenuRecette as M\n" +
                "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
                "WHERE M.MenuID = %d", idName));
-       Menu menu = new Menu(menuName);
-       while(querySelectMenu.next()){
+        Menu menu = new Menu(menuName);
+        while(querySelectMenu.next()){
            int menuDay = querySelectMenu.getInt(1);
            int menuHour = querySelectMenu.getInt(2);
            int recetteID = querySelectMenu.getInt(3);
@@ -430,41 +439,20 @@ public class Database {
            String categoryName = querySelectMenu.getString(8);
            String typeName = querySelectMenu.getString(9);
            Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
-           recipe = addProductToRecipe(recipe);
            menu.addMealToIndex(menuDay,menuHour,recipe);
-       }
-       return menu;
-   }
+        }
+        return menu;
+    }
 
-   private Recipe addProductToRecipe(Recipe recipe) throws SQLException {
-       ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, U.Nom, RI.Quantite, FamilleAliment.Nom\n" +
-               "FROM Ingredient as I\n" +
-               "INNER JOIN FamilleAliment ON FamilleAliment.FamilleAlimentID = I.FamilleAlimentID\n"+
-               "INNER JOIN Unite as U ON U.UniteID = I.UniteID \n" +
-               "INNER JOIN RecetteIngredient as RI ON RI.IngredientID = I.IngredientID\n"+
-               "INNER JOIN Recette as R ON RI.RecetteID = R.RecetteID \n"+
-               "WHERE RI.RecetteID = %d", recipe.getId()));
-       while(querySelectProduct.next()){
-           String ingredientName = querySelectProduct.getString(1);
-           int ingredientQuantity = querySelectProduct.getInt(2);
-           String uniteName = querySelectProduct.getString(3);
-           String productTypeName = querySelectProduct.getString(4);
-           Product product = new Product(ingredientName,ingredientQuantity,uniteName,productTypeName);
-           System.out.println(product);
-           //recipe.add(product);
-       }
-       return recipe;
-   }
-
-   private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
+    private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
         String[] values = {String.format("%d",menuID),String.format("%d",day),String.format("%d",hour),String.format("%d",recipeID)};
         insert("MenuRecette",values);
-   }
+    }
 
-   public void saveNewMenu(Menu menu) throws  SQLException{
+    public void saveNewMenu(Menu menu) throws  SQLException{
         int id = createAndGetIdMenu(menu.getName(),menu.getNbOfdays());
         createMenuRecipe(menu, id);
-   }
+    }
     public void saveModifyMenu(Menu menu) throws  SQLException{
         ArrayList<String> constraint = new ArrayList<>();
         int menuID = getIDFromName("Menu",menu.getName(),"MenuID");
