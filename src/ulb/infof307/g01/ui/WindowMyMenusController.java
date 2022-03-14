@@ -109,7 +109,6 @@ public class WindowMyMenusController implements Initializable {
     @FXML
     public void keyTyped(KeyEvent keyEvent){
         menuName.setStyle(null);
-        System.out.println("pressed: " + menuName.getText());
         if (Objects.equals(menuName.getText(), "")){
             menuTreeView.setRoot(null);
             fillTreeView(menus);
@@ -138,22 +137,23 @@ public class WindowMyMenusController implements Initializable {
     public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
-        Menu menu;
-        try{
-            menu= database.getMenuFromName(name);
-            FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-            Parent root = loader.load();
+        if (!(Objects.equals(name, ""))){
+            try{
+                Menu menu = database.getMenuFromName(name);
+                FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
+                Parent root = loader.load();
 
-            WindowShowMenuController controller = loader.getController();
-            controller.setMenu(menu);
-            controller.setDatabase(database);
+                WindowShowMenuController controller = loader.getController();
+                controller.setMenu(menu);
+                controller.setDatabase(database);
 
-            Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-            Scene scene =  new Scene(root);
-            stage.setTitle("Menu "+name);
-            stage.setScene(scene);
-            stage.show();
-        } catch (SQLException e){System.out.println(e);}
+                Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
+                Scene scene =  new Scene(root);
+                stage.setScene(scene);
+                stage.show();
+            } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
+        }
+
     }
 
 

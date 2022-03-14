@@ -16,7 +16,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import static java.lang.System.exit;
 
 public class WindowsCreateMyShoppingListController extends MyShoppingListsControllerTools implements Initializable {
 
@@ -65,7 +64,6 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
 
-        System.out.println(shoppingListName);
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
             nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
         }
@@ -80,17 +78,12 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
             }
             catch (SQLiteException e) { //Erreur de doublon
                 nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-                System.out.println(e.getMessage());
-                return;
 
             } catch (SQLException e) {
-                System.out.println("ERREUR HERE");
                 e.printStackTrace();
-                return;
             }
             // else tout ce passe bien
             returnToMenu.fire();
-            //returnShoppingList(event);
         }
     }
 

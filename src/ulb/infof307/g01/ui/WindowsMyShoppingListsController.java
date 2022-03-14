@@ -28,7 +28,6 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
          Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
 
          if(Objects.equals(nameMyShoppingList, null)){
-             //TODO: afficher une erreur partie 2
              isVisibleElementToModifyMyShoppingList(false);
          }
          else{

@@ -5,46 +5,44 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="577.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowMyMenusController">
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowMyMenusController">
    <children>
-      <VBox prefHeight="577.0" prefWidth="600.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <HBox prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Label alignment="CENTER" prefHeight="100.0" prefWidth="601.0" text="Liste de Menus">
-                     <font>
-                        <Font size="40.0" />
-                     </font>
-                  </Label>
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
-               <children>
-                  <TextField fx:id="menuName" onKeyTyped="#keyTyped" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
-                  <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController" text="Afficher">
-                     <HBox.margin>
-                        <Insets left="30.0" />
-                     </HBox.margin>
-                  </Button>
-               </children>
-            </HBox>
-            <Label alignment="CENTER" prefHeight="50.0" prefWidth="600.0" text="Quel menu souhaitez vous afficher?" />
-            <HBox alignment="CENTER" prefHeight="278.0" prefWidth="600.0">
-               <children>
-                  <TreeView fx:id="menuTreeView" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu" prefHeight="282.0" prefWidth="230.0" showRoot="false" />
-               </children>
-            </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-               <children>
-                  <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToMainMenuController" text="Retour" />
-               </children>
-            </HBox>
+            <Label alignment="CENTER" prefHeight="100.0" prefWidth="601.0" text="Liste de Menus">
+               <font>
+                  <Font size="40.0" />
+               </font>
+            </Label>
          </children>
-      </VBox>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
+         <children>
+            <TextField fx:id="menuName" onKeyTyped="#keyTyped" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
+            <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController" prefHeight="31.0" prefWidth="75.0" text="Afficher">
+               <HBox.margin>
+                  <Insets left="30.0" />
+               </HBox.margin>
+            </Button>
+         </children>
+      </HBox>
+      <Label alignment="CENTER" prefHeight="50.0" prefWidth="694.0" text="Quel menu souhaitez vous afficher?">
+         <font>
+            <Font size="18.0" />
+         </font></Label>
+      <HBox alignment="CENTER" prefHeight="278.0" prefWidth="600.0">
+         <children>
+            <TreeView fx:id="menuTreeView" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu" prefHeight="278.0" prefWidth="313.0" showRoot="false" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToMainMenuController" prefHeight="34.0" prefWidth="339.0" text="Retour" />
+         </children>
+      </HBox>
    </children>
-</AnchorPane>
+</VBox>

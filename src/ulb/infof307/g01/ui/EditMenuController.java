@@ -54,7 +54,6 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         myMenu.addRecipeTo(daysName.get(dayIndex), recipe);
         this.refreshTableView();
-        System.out.println("scene is null " + (scene == null));
         this.stage.setScene(this.scene);
     }
 
@@ -70,6 +69,7 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
 
 
     public void refreshTableView() {
+        menuTableView.setStyle("");
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         menuTableColumn.setText(daysName.get(dayIndex).toString());
         this.menuTableView.getItems().clear();

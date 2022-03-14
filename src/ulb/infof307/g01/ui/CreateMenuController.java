@@ -68,7 +68,6 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
-        //TODO:  return to Elsbeth's page
         root = FXMLLoader.load(getClass().getResource("interface/FXMLMainMenu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
@@ -107,11 +106,18 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
     public void saveMenu(ActionEvent event){
         myMenu.setName(this.menuNameTextField.getText());
         try{
-            this.db.saveNewMenu(myMenu);
-            WindowMainMenuController mainMenuController = new WindowMainMenuController();
-            mainMenuController.setDataBase(db);
-            mainMenuController.displayMainMenuController(event);
-        }catch(SQLException e){System.out.println("non!");} catch (IOException e) {
+            if(myMenu.size() == 0){
+                menuTableView.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            }
+            else {
+                this.db.saveNewMenu(myMenu);
+                WindowMainMenuController mainMenuController = new WindowMainMenuController();
+                mainMenuController.setDataBase(db);
+                mainMenuController.displayMainMenuController(event);
+            }
+        }catch(SQLException e){
+            menuNameTextField.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+        } catch (IOException e) {
             e.printStackTrace();
         }
     }

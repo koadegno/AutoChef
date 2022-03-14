@@ -8,8 +8,6 @@ import javafx.scene.control.TableView;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.Product;
 
-import java.util.ArrayList;
-
 public class CreateColWithButtonDelete {
 
     public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
