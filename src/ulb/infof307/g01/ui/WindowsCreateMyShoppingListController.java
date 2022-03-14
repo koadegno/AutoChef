@@ -1,4 +1,6 @@
 package ulb.infof307.g01.ui;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -36,6 +38,14 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+        returnToMenu.setOnAction((event) ->{
+            try {
+                returnShoppingList(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+
     }
 
     @FXML
@@ -71,6 +81,19 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         }
     }
 
+    public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShppingList){
+        tableViewDisplayProductList.getItems().clear();
+        Vector<Product> temp =  (Vector<Product>) myExistentShppingList;
+        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
+        tableViewDisplayProductList.setItems(data);
+        returnToMenu.setOnAction((event) ->{
+            try {
+                returnToMyMenu(event);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
+        });
+    }
     @Override
     protected void removeBorderColor() {
         super.removeBorderColor();

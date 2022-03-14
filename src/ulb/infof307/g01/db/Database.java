@@ -444,7 +444,7 @@ public class Database {
            String categoryName = querySelectMenu.getString(8);
            String typeName = querySelectMenu.getString(9);
            Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
-           menu.addMealToIndex(menuDay,menuHour,recipe);
+           menu.addRecipeToIndex(menuDay,menuHour,recipe);
         }
         return menu;
     }
@@ -478,7 +478,7 @@ public class Database {
 
     private void createMenuRecipe(Menu menu, int menuID) throws SQLException {
         for(Day day : Day.values()){
-            List<Recipe> recipeOfDay = menu.getMealsfor(day);
+            List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
                 insertRecetteInMenu(menuID, day.getIndex(), hour, idRecipe);

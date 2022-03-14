@@ -13,7 +13,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class WindowMainController {
+public class WindowMainController{
 
     private Parent root;
     private Stage stage;
@@ -52,16 +52,10 @@ public class WindowMainController {
     }
 
     @FXML
-    public void redirectToMenu(ActionEvent event) throws IOException{
+    public void redirectToMenu(ActionEvent event) throws IOException, SQLException {
         WindowMainMenuController mainMenuController = new WindowMainMenuController();
         mainMenuController.setDataBase(dataBase);
         mainMenuController.displayMainMenuController(event);
     }
 
-    @FXML
-    public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
-        CreateMenuController createMenuController = new CreateMenuController();
-        createMenuController.displayEditMeal(event);
-
-    }
 }
