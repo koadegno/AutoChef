@@ -119,14 +119,14 @@ class TestDatabase {
         rename.add(new Product("peche"));
         db.saveModifyShoppingList(rename);
         ArrayList<String> shoppingListName = db.getAllShoppingListName();
-        assertEquals("hiver",shoppingListName.get(2));
+        assertEquals("hiver",shoppingListName.get(1));
     }
 
     @Test
     public void testGetAllProductName() throws SQLException {
         ArrayList<String> names = db.getAllProductName();
         assertEquals(2,names.size(),"test nombre produit");
-        assertEquals("peche",names.get(0));
+        assertEquals("peche",names.get(1));
 
     }
 

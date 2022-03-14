@@ -133,15 +133,19 @@ public class Database {
      * @param constraintToAppend liste de toute les contraintes à ajouter
      * @return Resultat de la query
      */
-    private ResultSet select(String nameTable, List<String> constraintToAppend){
+    private ResultSet select(String nameTable, List<String> constraintToAppend,String orderBy){
         StringBuilder req;
         String query;
         if (constraintToAppend.size() > 0){
             req = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
             query = appendValuesToWhere(req,constraintToAppend);
         } else {
-            query = String.format("SELECT * FROM %s;", nameTable);
+            query = String.format("SELECT * FROM %s ", nameTable);
         }
+        if(orderBy != null){
+            query += orderBy;
+        }
+        query += ";";
         return sendQuery(query);
     }
 
@@ -156,7 +160,6 @@ public class Database {
             query.append(s).append(" AND ");
         }
         query.delete(query.length()-4, query.length());
-        query.append(";");
         return String.valueOf(query);
     }
 
@@ -181,7 +184,7 @@ public class Database {
     private String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
-        ResultSet res = select(table,constraint);
+        ResultSet res = select(table,constraint,null);
         res.next();
         return res.getString("Nom");
     }
@@ -192,7 +195,7 @@ public class Database {
     private int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s='%s'","Nom",name));
-        ResultSet res = select(table,constraint);
+        ResultSet res = select(table,constraint,null);
         res.next();
         return res.getInt(nameIDColumn);
     }
@@ -273,7 +276,7 @@ public class Database {
     private Product getProduct(int idProduct) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s = %d","IngredientID",idProduct));
-        ResultSet querySelectProduct = select("Ingredient",constraint);
+        ResultSet querySelectProduct = select("Ingredient",constraint,null);
         querySelectProduct.next();
         String nameProduct = querySelectProduct.getString("Nom");
         String familleProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
@@ -281,9 +284,9 @@ public class Database {
         return new Product(nameProduct,1,uniteProduct,familleProduct);
     }
 
-    private ArrayList<String> getAllNameFromTable(String table) throws SQLException {
+    private ArrayList<String> getAllNameFromTable(String table,String orderBy) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        ResultSet queryAllTableName = select(table, constraint);
+        ResultSet queryAllTableName = select(table, constraint,orderBy);
         ArrayList<String> allProductName = new ArrayList<>();
         while(queryAllTableName.next()){
             allProductName.add(queryAllTableName.getString("Nom"));
@@ -296,28 +299,28 @@ public class Database {
      * @throws SQLException
      */
     public ArrayList<String> getAllCategories() throws SQLException {
-        return getAllNameFromTable("Categorie");
+        return getAllNameFromTable("Categorie",null);
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
 
-        return getAllNameFromTable("ListeCourse");
+        return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
     }
 
     public ArrayList<String> getAllProductName() throws SQLException {
-        return getAllNameFromTable("Ingredient");
+        return getAllNameFromTable("Ingredient","ORDER BY Nom ASC");
     }
 
     public ArrayList<String> getAllUniteName() throws SQLException {
-        return getAllNameFromTable("Unite");
+        return getAllNameFromTable("Unite",null);
     }
 
     public ArrayList<String> getAllTypes() throws SQLException {
-        return getAllNameFromTable("TypePlat");
+        return getAllNameFromTable("TypePlat",null);
     }
 
     public ArrayList<String> getAllMenuName() throws SQLException {
-        return getAllNameFromTable("Menu");
+        return getAllNameFromTable("Menu","ORDER BY Nom ASC");
     }
 
 
