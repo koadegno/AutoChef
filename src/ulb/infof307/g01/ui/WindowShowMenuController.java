@@ -60,7 +60,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     @FXML
     public void displayMenuInfo(String name, int nbOfDays){
         this.menuName.setText(name);
-        this.nbOfdays.setText("Duration: "+ nbOfDays +"jours");
+        this.nbOfdays.setText("Durée : "+ nbOfDays +"jours");
     }
 
     @FXML
@@ -68,7 +68,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
         for (Day day : days){
             TableView<Recipe> dayTable = new TableView<>();
             dayTable.getColumns().clear();
-            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.name());
+            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
             dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
             List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
