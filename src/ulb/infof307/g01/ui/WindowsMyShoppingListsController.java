@@ -20,6 +20,8 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     @FXML
     Button btnConfirm, btnAddNewProduct;
+    @FXML
+    ComboBox comboBoxShoppingNameList;
 
     @FXML
      public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
@@ -71,6 +73,8 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        activeElementVisibility();
+        btnReturn.setVisible(true);
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -81,6 +85,19 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+    }
+
+    private void activeElementVisibility() {
+        comboBoxShoppingNameList.setVisible(true);
+        btnConfirm.setText("Enregistrer");
+        btnSeeShoppingList.setVisible(true);
+        btnSeeShoppingList.setOnAction(e-> {
+            try {
+                seeMyShoppingListTableView(e);
+            } catch (IOException ex) {
+                ex.printStackTrace();
+            }
+        });
     }
 
     @Override

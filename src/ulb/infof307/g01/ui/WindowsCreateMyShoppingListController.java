@@ -24,9 +24,11 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
     TextField nameMyCreateShoppingList;
     @FXML
     TableColumn columnProduct, columnQuantityOrNumber, columnUnity, columnDelete;
-
+    @FXML
+    Label labelNameShoppingList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        activeElementVisibility();
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -36,6 +38,17 @@ public class WindowsCreateMyShoppingListController extends MyShoppingListsContro
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
+    }
+
+    private void activeElementVisibility() {
+        btnAddNewProduct.setVisible(true);
+        nameMyCreateShoppingList.setVisible(true);
+        labelNameShoppingList.setVisible(true);
+        comboBoxListUnity.setVisible(true);
+        comboBoxListProduct.setVisible(true);
+        spinnerQuantityOrNumber.setVisible(true);
+        btnConfirm.setVisible(true);
+        btnReturn.setVisible(true);
     }
 
     @FXML

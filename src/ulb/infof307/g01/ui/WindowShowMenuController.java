@@ -114,7 +114,9 @@ public class WindowShowMenuController implements Initializable {
         //createShoppingList.nameMyCreateShoppingList.setText("LC de "+menu.getName());
         //createShoppingList.
 
+        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        loader.setController(windowsCreateMyShoppingListController);
         Parent root = loader.load();
         WindowsCreateMyShoppingListController controller = loader.getController();
         controller.nameMyCreateShoppingList.setText("LC de " + menu.getName());

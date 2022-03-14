@@ -29,30 +29,33 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayMyShoppingListController(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLMyShoppingLists.fxml"));
-        root = loader.load();
-        WindowsMyShoppingListsController windowsMyShoppingListsController = loader.getController();
+        WindowsMyShoppingListsController windowsMyShoppingListsController = new WindowsMyShoppingListsController();
+        FXMLLoader loader = new FXMLLoader(MyShoppingListsControllerTools.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        loader.setController(windowsMyShoppingListsController);
+        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Parent root = loader.load();
         windowsMyShoppingListsController.setDatabase(dataBase);
         windowsMyShoppingListsController.initShoppingListElement();
         windowsMyShoppingListsController.initComboBox();
-
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
-        stage.show();
+        Scene myscene = new Scene(root);
+        this.stage.setScene(myscene);
+        this.stage.show();
     }
 
     @FXML
     public void displayCreateShoppingListController(ActionEvent event) throws IOException{
-        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        root = loader.load();
-        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = loader.getController();
+        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
+        FXMLLoader loader = new FXMLLoader(WindowsCreateMyShoppingListController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        loader.setController(windowsCreateMyShoppingListController);
+        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Parent root = loader.load();
         windowsCreateMyShoppingListController.setDatabase(dataBase);
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
+        Scene myscene = new Scene(root);
+        this.stage.setScene(myscene);
+        this.stage.show();
 
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
-        stage.show();
     }
 
     @FXML
