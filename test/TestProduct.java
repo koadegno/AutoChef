@@ -42,10 +42,10 @@ public class TestProduct {
 
     @Test
     public void testChangeQuantity() {
-        productTest.changeQuantity(50);
+        productTest.setQuantity(50);
         assertEquals(50, productTest.getQuantity(), "La quantité n'a pas été modifié correctement");
 
-        productTest.changeQuantity(-50);
+        productTest.setQuantity(-50);
         assertEquals(1, productTest.getQuantity(), "La quantité n'a pas été réduite à sa valeur " +
                 "minimale avec une reduction négative");
     }
