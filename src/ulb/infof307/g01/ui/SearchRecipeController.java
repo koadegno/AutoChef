@@ -20,7 +20,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-
+/**
+ * Permet de rechercher une recette sur base de filtre
+ * @param <T> Le type de la window qui fait appelle à nous
+ * Retourne la recette choisie par l'utilisateur sinon previent que
+ * la recherche est annuler
+ */
 public class SearchRecipeController <T extends UtilisationContrat<Recipe>> implements Initializable {
     private Stage stage;
     private Parent root;
@@ -28,11 +33,8 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
     private ArrayList<String> dietList ;
     private ArrayList<String> typeList ;
     private ArrayList<Recipe>  recipeName;
-    private  T mainController;
+    private  T mainController; //l'objet appelant qui implement les methodes add et cancel
 
-    /*private ArrayList<String> dietList = new ArrayList<>(Arrays.asList("Végétarien","Viande", "Poisson", "Halal"));
-    private ArrayList<String>  typeList = new ArrayList<>(Arrays.asList("Desserts", "Entrées", "Plats", "Boissons"));
-    private ArrayList<Recipe>  recipeName = new ArrayList<>(Arrays.asList(new Recipe("Gateau"), new Recipe("Muffins"), new Recipe("Lasagne"), new  Recipe("Gratin dauphinois")));*/
     @FXML
     ComboBox recipeDietComboBox, recipeTypeComboBox;
     @FXML
@@ -45,8 +47,6 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
     Button cancelSearchRecipeButton;
     @FXML
     CheckBox activateSpinnerCheckBox;
-
-
 
     public SearchRecipeController() throws SQLException {
         this.db = new Database("autochef.sqlite");
@@ -69,10 +69,9 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
         }
     }
 
+    //override par les enfant mais pas abstract car par défaut le bouton qui lui est connecté ne fait rien
     @FXML
-    public void confirmRecipe(ActionEvent event) throws IOException {
-
-    }
+    public void confirmRecipe(ActionEvent event) throws IOException {}
 
     @FXML
     private void onlyIntValue(){
@@ -103,11 +102,21 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
         this.numberOfPersonSpinner.setVisible(false);
     }
 
-
+    /**
+     * L'user à annuler la recherche d'une recette , on previent l'appelant que le contrat est fini
+     * @param event bouton retour à été cliqué
+     * @throws IOException
+     */
     public void returnToCreateMenu(ActionEvent event) throws IOException {
         this.mainController.cancel();
     }
 
+    /**
+     * On previent l'appelant que le contrat est fini
+     * @param event Une recette à été selection dans la tableView
+     * @throws IOException
+     * Donne l'objet demander et construit pas l'utilisateur
+     */
     public void addRecipe(Event event) throws IOException{
         int idx = recipeTableView.getSelectionModel().getSelectedIndex();
         if(idx > -1) this.mainController.add(this.recipeName.get(idx));
@@ -144,6 +153,10 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
         this.refreshTableView(mouseEvent);
     }
 
+    /**
+     *
+     * @param mainControler Un pointeur vers l'objet appelant qui s'est mis en attente
+     */
     public void setMainController(T mainControler) {
         this.mainController = mainControler;
     }

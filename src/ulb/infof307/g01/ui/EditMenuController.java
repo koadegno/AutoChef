@@ -23,6 +23,11 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
+/**
+ * Classe permettant l'edition d'un menu mais qui ne fait rien quand à quoi faire de ce menu
+ * Il laisse cela aux enfants
+ *
+ */
 public class EditMenuController implements UtilisationContrat<Recipe>{
     static Scene scene;
     static Parent root;
@@ -44,11 +49,22 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
     Label menuNameLabel;
 
 
+    /**
+     * Methode de l'interface Utilisation contract qu'on a promis d'implementer pour
+     * pouvoir utiliser la window qui permet la recherche d'une recette sur base de filtre
+     * Elle permet à la classe appler de nous prevenir que l'utilisateur à annuller la recherche
+     */
     @Override
     public void cancel() {
         stage.setScene(scene);
     }
 
+    /**
+     * Methode de l'interface Utilisation contract qu'on a promis d'implementer pour
+     * pouvoir utiliser la window qui permet la recherche d'une recette sur base de filtre
+     * Elle permet à la classe appler de nous prevenir que l'utilisateur à fini sa recherche et
+     * nous remettre la recette sélectionnée
+     */
     @Override
     public void add(Recipe recipe) {
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
@@ -57,6 +73,11 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         this.stage.setScene(this.scene);
     }
 
+    /**
+     * Doi être override par les classe héritière.
+     * @param event l'utilisateur a annulé l'édition
+     * @throws IOException
+     */
     @FXML
     void returnMain(ActionEvent event) throws IOException{}
 
@@ -77,6 +98,12 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
 
     }
 
+    /**
+     * Permet de faire appelle à la classe SearchRecipeController
+     * @param event L'
+     * @throws SQLException
+     * @throws IOException
+     */
     @FXML
     private void searchRecipe(ActionEvent event) throws SQLException, IOException {
         FXMLLoader loader = new FXMLLoader(SearchRecipeController.class.getResource("interface/searchRecipe.fxml"));
@@ -88,7 +115,10 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         this.stage.show();
     }
 
-
+    /**
+     *
+     * @param event bouton supprimer recette de la liste
+     */
     @FXML
     public void removeRecipeAction(ActionEvent event) {
         Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
@@ -98,12 +128,20 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
         removeRecipeButton.setVisible(false);
     }
 
+    /**
+     * Rend visible le bouton supprimer
+     * @param event recette à été selectionner dans la tableview
+     */
     @FXML
     public void recipeSelectedEvent(Event event) {
         int idx = menuTableView.getSelectionModel().getSelectedIndex();
         if (idx > -1) this.removeRecipeButton.setVisible(true);
     }
 
+    /**
+     * Doit être géré par les enfants...Que faire quand l'utilisateur à terminer d'éditer un menu?
+     * @param event Bouton enregistré à été cliqué
+     */
     @FXML
     public void saveMenu(ActionEvent event){}
 }

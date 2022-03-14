@@ -23,11 +23,15 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
     @FXML
     ComboBox comboBoxShoppingNameList;
 
+    /**
+     * Permet d'afficher sur le tableView les listes de courses a partir d'un nom d'une
+     * liste de courses
+     */
     @FXML
      public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
          Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
 
-         if(Objects.equals(nameMyShoppingList, null)){
+         if(Objects.equals(nameMyShoppingList, null)){ //nom est null
              isVisibleElementToModifyMyShoppingList(false);
          }
          else{
@@ -45,12 +49,18 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
 
     }
 
+    /**
+     * Permet d'enregistrer une liste de courses que l'utilisateur aurait modifie
+     * @param event : Methode liee a au bouton confirmBtn
+     */
     @FXML
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         try {
+            //Recupere liste de courses chez la bdd
             ShoppingList shoppingListInDataBase = dataBase.getShoppingListFromName(currentShoppingListname);
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
+            //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
             dataBase.saveModifyShoppingList(shoppingListToSend);
             returnShoppingList(event);
@@ -70,6 +80,9 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         btnAddNewProduct.setVisible(isVisible);
     }
 
+    /**
+     * Inialise les elements du fichier FXML
+     */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         activeElementVisibility();
@@ -77,10 +90,12 @@ public class WindowsMyShoppingListsController extends MyShoppingListsControllerT
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
-
+        //Inialise les colonne avec la classe de Product
         columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
+
+        //Cree les boutons delete dans chaque ligne de la tableView
         CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
