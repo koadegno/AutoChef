@@ -7,7 +7,7 @@ import java.util.List;
 import java.util.Vector;
 import java.util.Collections;
 
-/*
+/**
 * Classe représentant un Menu Hebdomadaire
 *
 */
