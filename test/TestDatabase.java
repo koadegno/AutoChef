@@ -28,6 +28,7 @@ class TestDatabase {
 
     @BeforeAll
     static public void createDB() throws SQLException {
+
         db = new Database("test.sqlite");
 
         db.insertCategory("Poisson");
@@ -56,15 +57,15 @@ class TestDatabase {
         db.createAndGetIdShoppingList("noel");
         db.createAndGetIdShoppingList("ete");
 
-        menu.addMealTo(Day.Monday, bolo);
-        menu.addMealTo(Day.Monday,bolo);
-        menu.addMealTo(Day.Wednesday, carbo);
-        menu.addMealTo(Day.Friday, pesto);
+        menu.addRecipeTo(Day.Monday, bolo);
+        menu.addRecipeTo(Day.Wednesday, carbo);
+        menu.addRecipeTo(Day.Monday,bolo);
+        menu.addRecipeTo(Day.Friday, pesto);
 
-        menu2.addMealTo(Day.Monday, carbo);
-        menu2.addMealTo(Day.Monday,pesto);
-        menu2.addMealTo(Day.Wednesday, pesto);
-        menu2.addMealTo(Day.Friday, bolo);
+        menu2.addRecipeTo(Day.Monday, carbo);
+        menu2.addRecipeTo(Day.Wednesday, pesto);
+        menu2.addRecipeTo(Day.Monday,pesto);
+        menu2.addRecipeTo(Day.Friday, bolo);
 
     }
 
@@ -174,8 +175,8 @@ class TestDatabase {
         db.saveNewMenu(menu);
         Menu newMenu = db.getMenuFromName("Menu Test");
         for(Day day : Day.values()){
-            List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
-            List<Recipe> recipeFromMenu = menu.getMealsfor(day);
+            List<Recipe> recipeFromNewMenu = newMenu.getRecipesfor(day);
+            List<Recipe> recipeFromMenu = menu.getRecipesfor(day);
             for(int i = 0; i < recipeFromMenu.size(); i++){
                 assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
                 assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
@@ -197,12 +198,12 @@ class TestDatabase {
     @Test
     public void testInsertModifyMenu() throws SQLException {
         db.saveNewMenu(menu2);
-        menu2.removeMealFrom(Day.Friday,bolo);
+        menu2.removeRecipeFrom(Day.Friday,bolo);
         db.saveModifyMenu(menu2);
         Menu newMenu = db.getMenuFromName("Menu Test2");
         for(Day day : Day.values()){
-            List<Recipe> recipeFromNewMenu = newMenu.getMealsfor(day);
-            List<Recipe> recipeFromMenu = menu2.getMealsfor(day);
+            List<Recipe> recipeFromNewMenu = newMenu.getRecipesfor(day);
+            List<Recipe> recipeFromMenu = menu2.getRecipesfor(day);
             for(int i = 0; i < recipeFromMenu.size(); i++){
                 assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
                 assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());

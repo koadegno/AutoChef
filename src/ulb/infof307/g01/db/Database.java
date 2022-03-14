@@ -468,17 +468,17 @@ public class Database {
                 "WHERE M.MenuID = %d", idName));
         Menu menu = new Menu(menuName);
         while(querySelectMenu.next()){
-            int menuDay = querySelectMenu.getInt(1);
-            int menuHour = querySelectMenu.getInt(2);
-            int recetteID = querySelectMenu.getInt(3);
-            String recetteName = querySelectMenu.getString(4);
-            int recetteDuration = querySelectMenu.getInt(5);
-            int recetteNumberPersons = querySelectMenu.getInt(6);
-            String recettePreparation = querySelectMenu.getString(7);
-            String categoryName = querySelectMenu.getString(8);
-            String typeName = querySelectMenu.getString(9);
-            Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
-            menu.addMealToIndex(menuDay,menuHour,recipe);
+           int menuDay = querySelectMenu.getInt(1);
+           int menuHour = querySelectMenu.getInt(2);
+           int recetteID = querySelectMenu.getInt(3);
+           String recetteName = querySelectMenu.getString(4);
+           int recetteDuration = querySelectMenu.getInt(5);
+           int recetteNumberPersons = querySelectMenu.getInt(6);
+           String recettePreparation = querySelectMenu.getString(7);
+           String categoryName = querySelectMenu.getString(8);
+           String typeName = querySelectMenu.getString(9);
+           Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
+           menu.addRecipeToIndex(menuDay,menuHour,recipe);
         }
         return menu;
     }
@@ -523,7 +523,7 @@ public class Database {
 
     private void createMenuRecipe(Menu menu, int menuID) throws SQLException {
         for(Day day : Day.values()){
-            List<Recipe> recipeOfDay = menu.getMealsfor(day);
+            List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int idRecipe = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
                 insertRecipeInMenu(menuID, day.getIndex(), hour, idRecipe);

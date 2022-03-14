@@ -9,6 +9,7 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class WindowMainMenuController {
     private Stage stage;
@@ -35,9 +36,9 @@ public class WindowMainMenuController {
         menusController.setDatabase(dataBase);
         menusController.displayMyMenus(event);
     }
-    public void redirectToCreateMenuController(ActionEvent event){
-        //TODO: Go to create menu
-        System.out.println("creation menu");
+    public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {
+        CreateMenuController createMenu = new CreateMenuController();
+        createMenu.displayEditMeal(event);
     }
 
 
