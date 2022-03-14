@@ -21,7 +21,7 @@ public class AutoCompletion {
      * @return                   List<Recipe>
      */
 
-    static public List<Recipe> generaRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
+    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
         if (categoriesWanted.isEmpty()){ return menu;}

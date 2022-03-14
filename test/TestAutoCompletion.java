@@ -69,7 +69,7 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        List<Recipe> recipes = AutoCompletion.generaRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
+        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
 
         // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {
