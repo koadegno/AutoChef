@@ -4,7 +4,6 @@ import ulb.infof307.g01.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
@@ -53,15 +52,16 @@ public class WindowMainController {
     }
 
     @FXML
-    public void redirectMenuList(ActionEvent event) throws IOException {
-        WindowMyMenusController windowMyMenus = new WindowMyMenusController();
-        windowMyMenus.displayMenuList(event);
+    public void redirectToMenu(ActionEvent event) throws IOException{
+        WindowMainMenuController mainMenuController = new WindowMainMenuController();
+        mainMenuController.setDataBase(dataBase);
+        mainMenuController.displayMainMenuController(event);
     }
 
     @FXML
     public void redirectRecipe(ActionEvent event) throws IOException, SQLException {
-        SearchRecipeController displayRecipe =  new SearchRecipeController();
-        displayRecipe.displaySearchRecipe(event);
+        CreateMenuController createMenuController = new CreateMenuController();
+        createMenuController.displayEditMeal(event);
 
     }
 }

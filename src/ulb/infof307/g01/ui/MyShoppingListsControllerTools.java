@@ -69,8 +69,13 @@ public class MyShoppingListsControllerTools {
 
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainShoppingList.fxml"));
-        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        FXMLLoader loader = new FXMLLoader(WindowsMainShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
+        Parent root = loader.load();
+        WindowsMainShoppingListController controller = loader.getController();
+        controller.setDataBase(dataBase);
+
+        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
     }

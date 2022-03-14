@@ -4,7 +4,6 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
@@ -13,8 +12,6 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.InputMethodEvent;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Recipe;
@@ -24,16 +21,17 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.ResourceBundle;
 
-public class SearchRecipeController implements Initializable {
+
+public class SearchRecipeController <T extends SearchRecipeInterface> implements Initializable {
     private Stage stage;
     private Parent root;
     private Database db ;
     private ArrayList<String> dietList ;
     private ArrayList<String> typeList ;
     private ArrayList<Recipe>  recipeName;
+    private  T mainController;
 
     /*private ArrayList<String> dietList = new ArrayList<>(Arrays.asList("Végétarien","Viande", "Poisson", "Halal"));
     private ArrayList<String>  typeList = new ArrayList<>(Arrays.asList("Desserts", "Entrées", "Plats", "Boissons"));
@@ -60,8 +58,6 @@ public class SearchRecipeController implements Initializable {
         this.recipeName = db.getRecipeWhere(null, null, 0);
         this.dietList.add(0, "Tout");
         this.typeList.add(0, "Tout");
-
-
     }
     @FXML
     public void fillComboBox(ComboBox box, ArrayList<String> valueList){
@@ -110,25 +106,14 @@ public class SearchRecipeController implements Initializable {
         this.numberOfPersonSpinner.setVisible(false);
     }
 
-    public void displaySearchRecipe(ActionEvent event) throws IOException, SQLException{
-        this.root = FXMLLoader.load(getClass().getResource("interface/searchRecipe.fxml"));
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
-        stage.show();
-    }
 
     public void returnToCreateMenu(ActionEvent event) throws IOException {
-        root = FXMLLoader.load((getClass().getResource("interface/FXMLMainPage.fxml")));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-
-        stage.show();
+        this.mainController.cancelSearchRecipe();
     }
 
-    public Recipe addRecipe(ActionEvent event) throws IOException{
+    public void addRecipe(Event event) throws IOException{
         int idx = recipeTableView.getSelectionModel().getSelectedIndex();
-        System.out.println(recipeName.get(idx).getName());
-        return this.recipeName.get(idx);
+        if(idx > -1) this.mainController.addRecipe(this.recipeName.get(idx));
     }
 
 
@@ -160,5 +145,9 @@ public class SearchRecipeController implements Initializable {
 
         }
         this.refreshTableView(mouseEvent);
+    }
+
+    public void setMainController(T mainControler) {
+        this.mainController = mainControler;
     }
 }

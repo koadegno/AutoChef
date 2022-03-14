@@ -184,11 +184,11 @@ class TestMenu {
     @Test
     void generateMenu() throws SQLException {
 
-        menu.generateMenu(db, 1, 3, 6);
+        menu.generateMenu(db, 6, 4, 6);
 
         for (Day day: Day.values()) {
             List<Recipe> recipes = menu.getMealsfor(day);
-            assertEquals(2, recipes.size());
+            assertEquals(3, recipes.size());
         }
     }
 }

@@ -16,19 +16,21 @@ public class Menu {
     public Menu(String name) {
         this.name = name;
 
+        initVector();
+    }
+
+    public Menu(){
+        initVector();
+    }
+
+    private void initVector() {
         menu = new Vector<>(10);
         for (int i = 0; i<nbOfdays; i++) {
             menu.add(new Vector<>());
         }
     }
 
-    public List<Recipe> getMealsfor(Day day) {
-       return Collections.unmodifiableList(menu.get(day.index));
-    }
-
-    public int getNbOfdays() { return nbOfdays; }
-
-    public String getName() { return name; }
+    public void setName(String name){this.name = name;}
 
     public int size() {
         int size = 0;
@@ -37,9 +39,19 @@ public class Menu {
         }
         return size;
     }
+
+    public int getNbOfdays() { return nbOfdays;}
+
+    public List<Recipe> getMealsfor(Day day) {
+       return Collections.unmodifiableList(menu.get(day.index));
+    }
+
     public void addMealTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
     }
+
+    public String getName() { return name; }
+
 
     public void addMealToIndex(int day, int index, Recipe meal){
         menu.get(day).add(index,meal);
@@ -81,15 +93,15 @@ public class Menu {
     public void generateMenu(Database db, int nbVegetarian, int nbMeat, int nbFish) throws SQLException {
 
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
+        List<Recipe> recipesUsed = getAllRecipes();
 
         if (nbVegetarian > 0) {categoriesWanted.put("Végétarien", nbVegetarian);}
         if (nbMeat > 0) {categoriesWanted.put("Viande", nbMeat);}
         if (nbFish > 0) {categoriesWanted.put("Poisson", nbFish);}
+        if (categoriesWanted.isEmpty()) { return;}
 
         int index = 0;
-        int nbMealDay = 2;
-
-        List<Recipe> recipesUsed = getAllRecipes();
+        int nbMealDay = (int) Math.ceil((double)(nbVegetarian + nbMeat + nbFish + recipesUsed.size())/ 7);
 
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
@@ -99,5 +111,10 @@ public class Menu {
             }
             index++;
         }
+    }
+
+    @Override
+    public String toString(){
+        return this.name;
     }
 }
