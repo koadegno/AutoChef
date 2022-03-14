@@ -1,0 +1,1 @@
+packageSearchIndex = [{"l":"All Packages","u":"allpackages-index.html"},{"l":"ulb.infof307.g01"},{"l":"ulb.infof307.g01.cuisine"},{"l":"ulb.infof307.g01.db"},{"l":"ulb.infof307.g01.ui"}];updateSearchResults();
