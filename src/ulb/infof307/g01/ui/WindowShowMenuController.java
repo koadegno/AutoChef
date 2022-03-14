@@ -43,8 +43,6 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     @FXML
     HBox menuHBox;
 
-    Database database = new Database("db");
-
 
     public void setMenu(Menu menu){
         this.menu= menu;
@@ -98,44 +96,41 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     }
 
     @FXML
-    public void generateShoppingList(ActionEvent event) throws IOException{
-        //WindowsCreateMyShoppingListController createShoppingList = new WindowsCreateMyShoppingListController();
-        //createShoppingList.nameMyCreateShoppingList.setText("LC de "+menu.getName());
-        //createShoppingList.
-
+    public void generateShoppingList(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        root = loader.load();
+        Parent root = loader.load();
         WindowsCreateMyShoppingListController controller = loader.getController();
-        controller.nameMyCreateShoppingList.setText("LC de " + menu.getName());
         controller.setDatabase(dataBase);
         controller.initShoppingListElement();
         controller.initComboBox();
 
 
-
+        fillShoppingList(controller);
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        this.scene = new Scene(root);
-        stage.setScene( this.scene);
+        stage.setScene(new Scene(root));
         stage.show();
     }
 
     public void fillShoppingList(WindowsCreateMyShoppingListController controller){
-        //ShoppingList generatedShoppingList = menu.generateShoppingList();
-        //controller.fillShoppingListToSend(generatedShoppingList);
-        HashMap<Product, Integer> productsAndQuantity = new HashMap<>();
-        for (int i = 0; i <menu.getNbOfdays(); i++) {
-            for (Recipe meal : menu.getMealsfor(Day.values()[i])){
-                for (Product product : meal){
-                    if (productsAndQuantity.containsKey(product)){
-                        productsAndQuantity.replace(product, productsAndQuantity.get(product) + 1);
-                    }
-                    else {
-                        productsAndQuantity.put(product, 1);
+        ShoppingList myShoppingList = menu.generateShoppingList();
+        controller.fillTableViewWithExistentShoppingList(myShoppingList);
+
+
+    }
+
+    public void getAllProducts(Collection<Product> products) {
+        for (int i = 0; i < menu.getNbOfdays(); i++) {
+            for (Recipe meal : menu.getMealsfor(Day.values()[i])) {
+                for (Product product : meal) {
+                    product.setNameUnity("u");
+                    if (products.contains(product)) {
+                        product.increase();
+                    } else {
+                        products.add(product);
                     }
                 }
             }
         }
-
     }
 
     public void back(ActionEvent event) throws IOException {

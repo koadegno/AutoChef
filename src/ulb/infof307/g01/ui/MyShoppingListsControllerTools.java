@@ -1,6 +1,7 @@
 package ulb.infof307.g01.ui;
 
 import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -19,6 +20,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
+import java.util.Vector;
 
 public class MyShoppingListsControllerTools {
     public static Database dataBase;
@@ -84,7 +86,6 @@ public class MyShoppingListsControllerTools {
         // ajout de chaque produit de la table dans une nvl shoppingList
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
             Product product = (Product) tableViewDisplayProductList.getItems().get(i);
-            System.out.println(product.getName());
             shoppingListToSend.add(product);
         }
     }
@@ -139,6 +140,12 @@ public class MyShoppingListsControllerTools {
         }
     }
 
+    public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShppingList){
+        tableViewDisplayProductList.getItems().clear();
+        Vector<Product> temp =  (Vector<Product>) myExistentShppingList;
+        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
+        tableViewDisplayProductList.setItems(data);
+    }
     public void initComboBox() {
         fillComboBoxShoppingNameListWithBDD(comboBoxListProduct, 2);
         fillComboBoxShoppingNameListWithBDD(comboBoxListUnity, 3);

@@ -84,7 +84,6 @@ public class WindowMyMenusController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
         initializeMenusFromDB();
         TreeItem<Menu> rootItem =  new TreeItem<>();
         for (Menu menu : menus){
@@ -120,39 +119,10 @@ public class WindowMyMenusController implements Initializable {
     public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
 
         String name = menuName.getText();
-        Menu menu = selectedMenu();
-        //TODO: Get from DB!
-        /*
-        ObservableList<Recipe> recipes = FXCollections.observableArrayList(
-                new Recipe("recette 1"),
-                new Recipe("recette 2"),
-                new Recipe("recette 3"),
-                new Recipe("recette 4")
-        );
-        for (int i = 0; i < 7; i++) {
-            for (Recipe recipe : recipes){
-                menu.addMealTo(Day.values()[i], recipe);
-            }
-        }*/
-
-       Recipe recipe1 = new Recipe("recette 1");
-        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
-        recipe1.add(new Product("Artichaut, cuitArtichaut, cuit"));
-        recipe1.add(new Product("Salade de thon et légumes, appertisée"));
-        Recipe recipe2 = new Recipe("recette 2");
-        recipe2.add(new Product("Artichaut, cuit"));
-        recipe2.add(new Product("Aubergine, cuite"));
-        recipe2.add(new Product("Artichaut, cuit"));
-        Recipe recipe3 = new Recipe("recette 3");
-        recipe3.add(new Product("Salade de thon et légumes, appertisée"));
-        recipe3.add(new Product("Artichaut, cuit"));
-        recipe3.add(new Product("Aubergine, cuite"));
-        menu.addMealTo(Day.Monday, recipe1);
-        menu.addMealTo(Day.Monday, recipe2);
-        menu.addMealTo(Day.Thursday, recipe2);
-        menu.addMealTo(Day.Friday, recipe3);
-
-        if (menus.contains(menu)){
+        Menu menu;
+        System.out.println(name);
+        try{
+            menu= database.getMenuFromName(name);
             FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
             Parent root = loader.load();
 
@@ -165,11 +135,7 @@ public class WindowMyMenusController implements Initializable {
             stage.setTitle("Menu "+name);
             stage.setScene(scene);
             stage.show();
-
-        }else {
-            System.out.println("Menu n'existe pas!");
-        }
-
+        } catch (SQLException e){System.out.println(e);}
     }
 
     public void setDatabase(Database db){database = db;}
