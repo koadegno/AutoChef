@@ -51,8 +51,10 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         stage.show();
     }
 
-    /***
+    /**
      * Permet d'initialiser les différents objets utilisées de la fenêtre
+     * @param location
+     * @param resources
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -68,9 +70,11 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         });
     }
 
-    /***
+    /**
      * returnMain est la methode connectée au bouton qui permet de retourner
-     * au menu principal
+     *  au menu principal
+     * @param event l'utilisateur a annulé l'édition
+     * @throws IOException
      */
     @Override
     @FXML
@@ -82,8 +86,10 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         stage.show();
     }
 
-    /***
+    /**
      * Cette fonction permet la génération automatique de menu
+     * @param event
+     * @throws SQLException
      */
     @FXML
     public void generateMenu(ActionEvent event) throws SQLException {
@@ -109,8 +115,9 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         //refreshTableView();
     }
 
-    /***
+    /**
      * Cette méthode permet de sauvegarder un menu dans la base de données
+     * @param event Bouton enregistré à été cliqué
      */
     @Override
     @FXML
