@@ -72,20 +72,6 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
 
     @FXML
     public void displayMenuTable(ArrayList<Day> days){
-     /*
-        TreeItem<String> rootItem =  new TreeItem<>();
-        menuTreeView.setRoot(rootItem);
-
-        for (Day day : days){
-            TreeItem<String> menuDay = new TreeItem<String>(day.toString());
-            List<Recipe> mealForDay = menu.getMealsfor(day);
-            for (Recipe recipe : mealForDay){
-                TreeItem<String> recipeForMeal = new TreeItem<String>(recipe.getName());
-                menuDay.getChildren().add(recipeForMeal);
-            }
-            rootItem.getChildren().add(menuDay);
-        }
-         */
         for (Day day : days){
             TableView<Recipe> dayTable = new TableView<>();
             dayTable.getColumns().clear();
