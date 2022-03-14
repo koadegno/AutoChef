@@ -18,20 +18,35 @@ class TestDatabase {
     private static Database db;
     static private Menu menu = new Menu("Menu Test");
     static private Menu menu2 = new Menu("Menu Test2");
+
     static private Recipe bolo = new Recipe("Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
     static private Recipe carbo = new Recipe("Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
     static private Recipe pesto = new Recipe("Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
 
+    static private Product peche = new Product("peche", 1,"g", "Fruit");
+    static private Product fraise = new Product( "fraise", 1,"g", "Fruit");
+
     @BeforeAll
     static public void createDB() throws SQLException {
-
         db = new Database("test.sqlite");
 
         db.insertCategory("Poisson");
         db.insertCategory("Viande");
 
+        db.insertFamilleAliment("Fruit");
+
+        db.insertUnite("g");
+        db.insertUnite("litres");
+
         db.insertType("Plat");
         db.insertType("Mijoté");
+
+        db.insertIngredient(peche);
+        db.insertIngredient(fraise);
+
+        bolo.add(peche);
+        carbo.add(fraise);
+        pesto.add(fraise);
 
         db.insertRecipe(bolo);
         db.insertRecipe(carbo);
@@ -40,14 +55,6 @@ class TestDatabase {
         db.createAndGetIdShoppingList("Halloween");
         db.createAndGetIdShoppingList("noel");
         db.createAndGetIdShoppingList("ete");
-
-        db.insertUnite("g");
-        db.insertUnite("litres");
-
-        db.insertFamilleAliment("Fruit");
-
-        db.insertIngredient("peche","Fruit","g");
-        db.insertIngredient("fraise","Fruit","g");
 
         menu.addMealTo(Day.Monday, bolo);
         menu.addMealTo(Day.Monday,bolo);
@@ -149,6 +156,11 @@ class TestDatabase {
     public void testGetRecipeWhere() throws SQLException {
         ArrayList<Recipe> res = db.getRecipeWhere("Poisson", "Plat", 3);
         assertEquals(1 , res.size());
+        for (int i = 0; i < res.size(); i++) {
+            for (int j = 0; j < res.get(i).size(); j++) {
+                assertEquals(pesto.get(j).getName(), res.get(i).get(j).getName());
+            }
+        }
     }
 
     @Test
@@ -171,6 +183,13 @@ class TestDatabase {
                 assertEquals(recipeFromMenu.get(i).getPreparation(),recipeFromNewMenu.get(i).getPreparation());
                 assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
                 assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
+
+                for (int j = 0; j < recipeFromMenu.get(i).size(); j++) {
+                    assertEquals(recipeFromMenu.get(i).get(j).getName(),recipeFromNewMenu.get(i).get(j).getName());
+                    assertEquals(recipeFromMenu.get(i).get(j).getNameUnity(),recipeFromNewMenu.get(i).get(j).getNameUnity());
+                    assertEquals(recipeFromMenu.get(i).get(j).getFamillyProduct(),recipeFromNewMenu.get(i).get(j).getFamillyProduct());
+                    assertEquals(recipeFromMenu.get(i).get(j).getQuantity(),recipeFromNewMenu.get(i).get(j).getQuantity());
+                }
             }
         }
     }
@@ -191,6 +210,13 @@ class TestDatabase {
                 assertEquals(recipeFromMenu.get(i).getPreparation(),recipeFromNewMenu.get(i).getPreparation());
                 assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
                 assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
+
+                for (int j = 0; j < recipeFromMenu.get(i).size(); j++) {
+                    assertEquals(recipeFromMenu.get(i).get(j).getName(),recipeFromNewMenu.get(i).get(j).getName());
+                    assertEquals(recipeFromMenu.get(i).get(j).getNameUnity(),recipeFromNewMenu.get(i).get(j).getNameUnity());
+                    assertEquals(recipeFromMenu.get(i).get(j).getFamillyProduct(),recipeFromNewMenu.get(i).get(j).getFamillyProduct());
+                    assertEquals(recipeFromMenu.get(i).get(j).getQuantity(),recipeFromNewMenu.get(i).get(j).getQuantity());
+                }
             }
         }
     }

@@ -220,6 +220,9 @@ public class Database {
             Recipe recipe = new Recipe(recipeID, nom, duration, category, type, nbPersons, method);
             recipes.add(recipe);
         }
+        for(Recipe rec: recipes){
+            fillRecipeWithProducts(rec);
+        }
         return recipes;
     }
 
@@ -276,6 +279,14 @@ public class Database {
 
         String[] val = {"null", name, duration, nbPerson, type, category, preparation};
         insert("Recette", val);
+        String recipeID = String.format("%d", getGeneratedID());
+
+        for (Product p: recipe) {
+            String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
+            String quantity =  String.format("%d", p.getQuantity());
+            String[] productVal = {recipeID, productID, quantity};
+            insert("RecetteIngredient", productVal);
+        }
     }
 
     public void insertUnite(String name) throws SQLException {
@@ -288,7 +299,11 @@ public class Database {
         insert("FamilleAliment",values);
     }
 
-    public void insertIngredient(String name,String famille,String unite) throws SQLException {
+    public void insertIngredient(Product product) throws SQLException {
+        insertIngredient(product.getName(), product.getFamillyProduct(), product.getNameUnity());
+    }
+
+    private void insertIngredient(String name,String famille,String unite) throws SQLException {
         int idFamille = getIDFromName("FamilleAliment",famille,"FamilleAlimentID");
         int idUnite = getIDFromName("Unite",unite,"UniteID");
         String stringIdFamille = String.format("%d", idFamille);
