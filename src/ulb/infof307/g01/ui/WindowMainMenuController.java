@@ -38,7 +38,6 @@ public class WindowMainMenuController {
     /**
      * Affiche la page principale de l'application.
      * @see WindowMainController
-     * @throws IOException : Si le fichier FXMLMainPage n'existe pas
      * */
     public void backToMainController(ActionEvent event){
         WindowMainController mainController = new WindowMainController();

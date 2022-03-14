@@ -71,7 +71,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     @FXML
     public void displayMenuInfo(String name, int nbOfDays){
         this.menuName.setText(name);
-        this.nbOfdays.setText("Duration: "+ nbOfDays +"jours");
+        this.nbOfdays.setText("Durée : "+ nbOfDays +"jours");
     }
 
     /**
