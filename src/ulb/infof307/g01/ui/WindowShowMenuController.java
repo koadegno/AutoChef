@@ -27,10 +27,13 @@ import ulb.infof307.g01.db.Database;
 }*/
 
 
-public class WindowShowMenuController implements Initializable {
+public class WindowShowMenuController implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
     private static Database dataBase;
+    static Scene scene;
+    static Parent root;
+    private Stage stage;
 
     @FXML
     Label menuName, nbOfdays;
@@ -54,10 +57,6 @@ public class WindowShowMenuController implements Initializable {
         displayMenuInfo(menu.toString(), menu.getNbOfdays());
         displayMenuTable(days);
     }
-
-    private Stage stage;
-    private Scene scene;
-
 
 
     @Override
@@ -102,10 +101,14 @@ public class WindowShowMenuController implements Initializable {
 
     @FXML
     public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
-
-        //TODO: Changer pour qu'il redirige vers la partie de modifier le menu
-        SearchRecipeController search = new SearchRecipeController();
-        search.displaySearchRecipe(event);
+        ModifyMenuController modifyMenu = new ModifyMenuController(this.menu);
+        modifyMenu.setMainController(this);
+        FXMLLoader loader = new FXMLLoader(ModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
+        loader.setController(modifyMenu);
+        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Parent root = loader.load();
+        this.stage.setScene(new Scene(root));
+        this.stage.show();
     }
 
     @FXML
@@ -115,7 +118,7 @@ public class WindowShowMenuController implements Initializable {
         //createShoppingList.
 
         FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        Parent root = loader.load();
+        root = loader.load();
         WindowsCreateMyShoppingListController controller = loader.getController();
         controller.nameMyCreateShoppingList.setText("LC de " + menu.getName());
         controller.setDatabase(dataBase);
@@ -125,7 +128,8 @@ public class WindowShowMenuController implements Initializable {
 
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
+        this.scene = new Scene(root);
+        stage.setScene( this.scene);
         stage.show();
     }
 
@@ -154,5 +158,31 @@ public class WindowShowMenuController implements Initializable {
     }
 
     public void setDatabase(Database db){
-        dataBase = db;}
+        dataBase = db;
+    }
+
+    @Override
+    public void add(Menu menu) {
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
+        try{
+            Parent root = loader.load();
+            Scene scene =  new Scene(root);
+            stage.setTitle("Menu "+menu.getName());
+            stage.setScene(scene);
+            stage.show();
+        }catch (IOException e){}
+
+        WindowShowMenuController controller = loader.getController();
+        controller.setMenu(menu);
+        controller.setDatabase(dataBase);
+    }
+
+    @Override
+    public void cancel() {
+
+        try{
+            add(this.dataBase.getMenuFromName(this.menu.getName()));
+        }
+        catch (SQLException e){System.out.println(e);}
+    }
 }

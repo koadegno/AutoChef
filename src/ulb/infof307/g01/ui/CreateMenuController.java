@@ -31,7 +31,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable, ulb.infof307.g01.ui.SearchRecipeInterface {
+public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable {
 
 
 
@@ -71,7 +71,7 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
         //TODO:  return to Elsbeth's page
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainPage.fxml"));
+        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainMenu.fxml"));
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root);
         stage.setScene(scene);
@@ -103,7 +103,6 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
         //myMenu.generateMenu(db);
         //refreshTableView();
     }
-
 
     @Override
     @FXML

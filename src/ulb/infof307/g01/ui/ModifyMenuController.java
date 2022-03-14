@@ -32,25 +32,12 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class ModifyMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable  {
-
-    String menuName;
-
-    public ModifyMenuController(String menuName) throws SQLException {
+    WindowShowMenuController mainController;
+    public ModifyMenuController(Menu menuName) throws SQLException {
         this.db = new Database("autochef.sqlite");
-        this.myMenu = new Menu(menuName);
+        this.myMenu = menuName;
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
-    }
-
-    @FXML
-    public void displayEditMeal(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(ModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
-        loader.setController(this);
-        root = loader.load();
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        EditMenuController.scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
     }
 
     @Override
@@ -69,21 +56,20 @@ public class ModifyMenuController extends ulb.infof307.g01.ui.EditMenuController
     @Override
     @FXML
     void returnMain(ActionEvent event) throws IOException {
-        //TODO:  return to Elsbeth's page
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainPage.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.mainController.cancel();
     }
 
     @Override
     @FXML
     public void saveMenu(){
         try{
-            this.db.saveModifyMenu(myMenu);
-        }catch(SQLException e){System.out.println("non!");}
+            //this.db.saveModifyMenu(myMenu);
+            this.mainController.add(myMenu);
+        }catch(Exception e){System.out.println(e);}
     }
 
 
+    public void setMainController(WindowShowMenuController mainController) {
+        this.mainController = mainController;
+    }
 }

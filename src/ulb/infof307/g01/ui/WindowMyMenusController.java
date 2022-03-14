@@ -83,8 +83,8 @@ public class WindowMyMenusController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
-        //initializeMenusFromDB();
+        //initializeMenusFromTextFile("src\\ulb\\infof307\\g01\\ui\\menus");
+        initializeMenusFromDB();
         TreeItem<Menu> rootItem =  new TreeItem<>();
         for (Menu menu : menus){
             TreeItem<Menu> menuName = new TreeItem<>(menu);

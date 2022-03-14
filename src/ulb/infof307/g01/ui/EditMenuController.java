@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
-public class EditMenuController implements ulb.infof307.g01.ui.SearchRecipeInterface {
+public class EditMenuController implements UtilisationContrat<Recipe>{
     static Scene scene;
     static Parent root;
     protected Stage stage;
@@ -44,8 +44,17 @@ public class EditMenuController implements ulb.infof307.g01.ui.SearchRecipeInter
     Label menuNameLabel;
 
 
-    public void cancelSearchRecipe() {
+    @Override
+    public void cancel() {
         stage.setScene(ulb.infof307.g01.ui.EditMenuController.scene);
+    }
+
+    @Override
+    public void add(Recipe recipe) {
+        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
+        myMenu.addMealTo(daysName.get(dayIndex), recipe);
+        this.refreshTableView();
+        this.stage.setScene(ulb.infof307.g01.ui.EditMenuController.scene);
     }
 
     @FXML
@@ -78,12 +87,6 @@ public class EditMenuController implements ulb.infof307.g01.ui.SearchRecipeInter
         this.stage.show();
     }
 
-    public void addRecipe(Recipe recipe) {
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
-        myMenu.addMealTo(daysName.get(dayIndex), recipe);
-        this.refreshTableView();
-        this.stage.setScene(ulb.infof307.g01.ui.EditMenuController.scene);
-    }
 
     @FXML
     public void removeRecipeAction(ActionEvent event) {
