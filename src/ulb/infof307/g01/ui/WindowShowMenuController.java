@@ -120,21 +120,6 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
 
     }
 
-    public void getAllProducts(Collection<Product> products) {
-        for (int i = 0; i < menu.getNbOfdays(); i++) {
-            for (Recipe meal : menu.getMealsfor(Day.values()[i])) {
-                for (Product product : meal) {
-                    product.setNameUnity("u");
-                    if (products.contains(product)) {
-                        product.increase();
-                    } else {
-                        products.add(product);
-                    }
-                }
-            }
-        }
-    }
-
     public void back(ActionEvent event) throws IOException {
         WindowMyMenusController menu = new WindowMyMenusController();
         menu.displayMyMenus(event);

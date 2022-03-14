@@ -72,11 +72,12 @@ public class Menu {
 
     public ShoppingList generateShoppingList() {
         ShoppingList shopList = new ShoppingList(name);
-        for (Vector<Recipe> menuDay : menu) {
-            for (Recipe meal : menuDay)
+        for(int i = 0; i < menu.size(); i++){
+            for(Recipe meal: menu.get(i)){
                 for (Product p : meal) {
                     shopList.add(p);
                 }
+            }
         }
         return shopList;
     }
