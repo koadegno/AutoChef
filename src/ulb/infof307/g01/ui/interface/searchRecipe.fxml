@@ -11,18 +11,18 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="688.0" prefWidth="736.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.SearchRecipeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.SearchRecipeController">
    <children>
-      <HBox prefHeight="100.0" prefWidth="200.0">
+      <HBox prefHeight="118.0" prefWidth="750.0">
          <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="744.0" text="Rechercher une recette" textAlignment="CENTER">
+            <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="70.0" prefWidth="744.0" text="Rechercher une recette" textAlignment="CENTER">
                <font>
                   <Font size="21.0" />
                </font>
             </Label>
          </children>
       </HBox>
-      <HBox prefHeight="511.0" prefWidth="736.0" spacing="30.0">
+      <HBox prefHeight="478.0" prefWidth="750.0" spacing="30.0">
          <children>
             <VBox alignment="CENTER" prefHeight="488.0" prefWidth="398.0" spacing="10.0">
                <children>

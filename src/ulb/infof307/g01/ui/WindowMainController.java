@@ -1,5 +1,6 @@
 package ulb.infof307.g01.ui;
 
+import javafx.application.Application;
 import ulb.infof307.g01.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -13,20 +14,30 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class WindowMainController{
-
-    private Parent root;
-    private Stage stage;
-    private Scene scene;
+public class WindowMainController extends Application {
 
     private Database dataBase;
     private String dataBaseName = "autochef.sqlite";
+    private static Stage primaryStage;
 
     public WindowMainController() {
         dataBase = new Database(dataBaseName);
     }
 
+    public void launchApp(String[] args) {launch(args);}
 
+    @Override
+    public void start(Stage primaryStage){
+
+        try{
+            this.primaryStage = primaryStage;
+            displayMain(this.primaryStage);
+
+        }catch (Exception e ){
+            e.printStackTrace();
+        }
+
+    }
 
     @FXML
     public void displayMain(Stage primaryStage){
@@ -56,6 +67,11 @@ public class WindowMainController{
         WindowMainMenuController mainMenuController = new WindowMainMenuController();
         mainMenuController.setDataBase(dataBase);
         mainMenuController.displayMainMenuController(event);
+    }
+
+    @FXML
+    public void closeApplication(){
+        primaryStage.close();
     }
 
 }

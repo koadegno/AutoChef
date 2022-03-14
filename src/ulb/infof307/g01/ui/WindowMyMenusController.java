@@ -153,7 +153,7 @@ public class WindowMyMenusController implements Initializable {
             stage.setTitle("Menu "+name);
             stage.setScene(scene);
             stage.show();
-        } catch (SQLException e){System.out.println(e);}
+        } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
     }
 
 
