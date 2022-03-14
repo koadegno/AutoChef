@@ -25,7 +25,7 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
                <children>
-                  <TextField fx:id="menuName" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
+                  <TextField fx:id="menuName" onKeyTyped="#keyTyped" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
                   <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController" text="Afficher">
                      <HBox.margin>
                         <Insets left="30.0" />

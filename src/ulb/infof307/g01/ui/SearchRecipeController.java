@@ -5,11 +5,8 @@ import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
@@ -24,7 +21,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 
-public class SearchRecipeController <T extends SearchRecipeInterface> implements Initializable {
+public class SearchRecipeController <T extends UtilisationContrat<Recipe>> implements Initializable {
     private Stage stage;
     private Parent root;
     private Database db ;
@@ -108,12 +105,12 @@ public class SearchRecipeController <T extends SearchRecipeInterface> implements
 
 
     public void returnToCreateMenu(ActionEvent event) throws IOException {
-        this.mainController.cancelSearchRecipe();
+        this.mainController.cancel();
     }
 
     public void addRecipe(Event event) throws IOException{
         int idx = recipeTableView.getSelectionModel().getSelectedIndex();
-        if(idx > -1) this.mainController.addRecipe(this.recipeName.get(idx));
+        if(idx > -1) this.mainController.add(this.recipeName.get(idx));
     }
 
 
