@@ -430,9 +430,30 @@ public class Database {
            String categoryName = querySelectMenu.getString(8);
            String typeName = querySelectMenu.getString(9);
            Recipe recipe = new Recipe(recetteID,recetteName,recetteDuration,categoryName,typeName,recetteNumberPersons,recettePreparation);
+           recipe = addProductToRecipe(recipe);
            menu.addMealToIndex(menuDay,menuHour,recipe);
        }
        return menu;
+   }
+
+   private Recipe addProductToRecipe(Recipe recipe) throws SQLException {
+       ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, U.Nom, RI.Quantite, FamilleAliment.Nom\n" +
+               "FROM Ingredient as I\n" +
+               "INNER JOIN FamilleAliment ON FamilleAliment.FamilleAlimentID = I.FamilleAlimentID\n"+
+               "INNER JOIN Unite as U ON U.UniteID = I.UniteID \n" +
+               "INNER JOIN RecetteIngredient as RI ON RI.IngredientID = I.IngredientID\n"+
+               "INNER JOIN Recette as R ON RI.RecetteID = R.RecetteID \n"+
+               "WHERE RI.RecetteID = %d", recipe.getId()));
+       while(querySelectProduct.next()){
+           String ingredientName = querySelectProduct.getString(1);
+           int ingredientQuantity = querySelectProduct.getInt(2);
+           String uniteName = querySelectProduct.getString(3);
+           String productTypeName = querySelectProduct.getString(4);
+           Product product = new Product(ingredientName,ingredientQuantity,uniteName,productTypeName);
+           System.out.println(product);
+           //recipe.add(product);
+       }
+       return recipe;
    }
 
    private void insertRecetteInMenu(int menuID,int day, int hour, int recipeID) throws SQLException {
