@@ -105,7 +105,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         //Retour mesure precedent : MainShoppingList
         returnToMenu.setOnAction((event) ->{
             try {
-                returnToMyMenu(event);
+                returnToMyMenu();
             } catch (IOException e) {
                 e.printStackTrace();
             }

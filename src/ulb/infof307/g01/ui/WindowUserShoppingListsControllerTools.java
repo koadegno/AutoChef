@@ -95,9 +95,9 @@ public class WindowUserShoppingListsControllerTools extends Window {
      * @param event : lie au bouton return
      */
     @FXML
-    public void returnToMyMenu(ActionEvent event) throws IOException {
+    public void returnToMyMenu() throws IOException {
         WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus(event);
+        menusController.displayMyMenus();
     }
 
     protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {

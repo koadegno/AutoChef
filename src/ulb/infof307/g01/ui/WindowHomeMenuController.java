@@ -26,12 +26,8 @@ public class WindowHomeMenuController extends Window {
      * Affiche la page principale des Menus.
      * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      */
-    public void displayMainMenuController(ActionEvent event)throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLMainMenu.fxml"));
-        root = loader.load();
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
-        stage.show();
+    public void displayMainMenuController() {
+        this.loadFXML("interface/FXMLMainMenu.fxml");
     }
 
     /**
@@ -55,7 +51,7 @@ public class WindowHomeMenuController extends Window {
      * */
     public void redirectToMyMenusController(ActionEvent event) throws IOException{
         WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus(event);
+        menusController.displayMyMenus();
     }
 
     /**

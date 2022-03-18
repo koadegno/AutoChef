@@ -35,9 +35,6 @@ import ulb.infof307.g01.db.Database;
 public class WindowShowMenuController extends Window implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
-    static Scene scene;
-    static Parent root;
-    private Stage stage;
 
     @FXML
     Label menuName, nbOfdays;
@@ -93,20 +90,12 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
     /**
      * Affiche la page pour modifier le menu.
-     * @throws IOException : si le fichier CreateDisplayMenu.fxml n'existe pas
      * @throws  SQLException : si le menu envoyé ne se trouve pas dans la base de données*/
     @FXML
-    public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
+    public void goToModifyMenu() throws SQLException {
         WindowModifyMenuController modifyMenu = new WindowModifyMenuController(this.menu);
         modifyMenu.setMainController(this);
-        FXMLLoader loader = new FXMLLoader(WindowModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
-        loader.setController(modifyMenu);
-        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent root = loader.load();
-        Scene myscene = new Scene(root);
-        modifyMenu.setScene(myscene);
-        this.stage.setScene(myscene);
-        this.stage.show();
+        this.loadFXML(modifyMenu,"interface/CreateDisplayMenu.fxml" );
     }
 
     /**
@@ -118,16 +107,11 @@ public class WindowShowMenuController extends Window implements Initializable, U
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
         WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        loader.setController(windowsCreateMyShoppingListController);
-        Parent root = loader.load();
+        this.loadFXML(windowsCreateMyShoppingListController, "interface/FXMLCreateMyShoppingList.fxml");
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
         fillShoppingList(windowsCreateMyShoppingListController);
 
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
     }
 
 
@@ -141,20 +125,12 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * */
     public void back(ActionEvent event) throws IOException {
         WindowUserMenuListController menu = new WindowUserMenuListController();
-        menu.displayMyMenus(event);
+        menu.displayMyMenus();
     }
 
     @Override
     public void add(Menu menu) {
-        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-        try{
-            Parent root = loader.load();
-            Scene scene =  new Scene(root);
-            stage.setScene(scene);
-            stage.show();
-        }catch (IOException e){}
-
-        WindowShowMenuController controller = loader.getController();
+        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("interface/FXMLShowMenu.fxml");
         controller.setMenu(menu);
     }
 

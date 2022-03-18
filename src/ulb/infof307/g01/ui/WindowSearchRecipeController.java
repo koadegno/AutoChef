@@ -27,9 +27,6 @@ import java.util.ResourceBundle;
  * la recherche est annuler
  */
 public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> extends Window implements Initializable {
-    private Stage stage;
-    private Parent root;
-    private Database db ;
     private ArrayList<String> dietList ;
     private ArrayList<String> typeList ;
     private ArrayList<Recipe>  recipeName;

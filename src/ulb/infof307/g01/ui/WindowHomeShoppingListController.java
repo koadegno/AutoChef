@@ -18,59 +18,32 @@ import java.util.Objects;
  */
 
 public class WindowHomeShoppingListController extends Window {
-    private Stage stage;
-    private Parent root;
-
-    public void displayMenuShoppingListController(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLMainShoppingList.fxml"));
-        root = loader.load();
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene( new Scene(root));
-        stage.show();
+    public void displayMenuShoppingListController() {
+        this.loadFXML("interface/FXMLMainShoppingList.fxml");
     }
 
     @FXML
-    public void displayMyShoppingListController(ActionEvent event) throws IOException{
+    public void displayMyShoppingListController(){
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
-        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsControllerTools.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        loader.setController(windowsMyShoppingListsController); //controler pour affichage de liste de courses
-        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent root = loader.load();
+        this.loadFXML(windowsMyShoppingListsController, "interface/FXMLCreateMyShoppingList.fxml");
 
         //Initialise la page avec les informations de la bdd
         windowsMyShoppingListsController.initShoppingListElement();
         windowsMyShoppingListsController.initComboBox();
 
-        //afficher la fenetre la liste de courses
-        Scene myscene = new Scene(root);
-        this.stage.setScene(myscene);
-        this.stage.show();
     }
 
     @FXML
-    public void displayCreateShoppingListController(ActionEvent event) throws IOException{
+    public void displayCreateShoppingListController(){
         WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        FXMLLoader loader = new FXMLLoader(WindowCreateUserShoppingListController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
-        loader.setController(windowsCreateMyShoppingListController); //controler pour affichage d'une creation de liste de courses
-        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Parent root = loader.load();
-
+        this.loadFXML(windowsCreateMyShoppingListController, "interface/FXMLCreateMyShoppingList.fxml");
         //Initialise la page avec les informations de la bdd
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
-
-        //afficher la fenetre de la creation de liste de courses
-        Scene myscene = new Scene(root);
-        this.stage.setScene(myscene);
-        this.stage.show();
-
     }
 
     @FXML
-    public void returnMainMenu(ActionEvent event) throws IOException {
-        root = FXMLLoader.load((Objects.requireNonNull(getClass().getResource("interface/FXMLMainPage.fxml"))));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
+    public void returnMainMenu() {
+        this.loadFXML("interface/FXMLMainPage.fxml");
     }
 }

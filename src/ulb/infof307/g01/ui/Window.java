@@ -22,12 +22,18 @@ public class Window  {
 
 
 
-    public Window loadFXML(String filename) throws IOException {
+    public Window loadFXML(String filename) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource(filename)));
-        Parent root = loader.load();
+        setNewScene(loader);
         Window controller = loader.getController();
-        this.setNewScene(root);
         return controller;
+    }
+
+
+    public void loadFXML(Window controller, String filename) {
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource(filename)));
+        loader.setController(controller);
+        setNewScene(loader);
     }
 
 
@@ -37,7 +43,13 @@ public class Window  {
         }
     }
 
-    public void setNewScene(Parent root){
+    public void setNewScene(FXMLLoader loader) {
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
         primaryStage.setTitle("Autochef");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

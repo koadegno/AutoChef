@@ -119,17 +119,16 @@ public class WindowUserMenuListController extends Window implements Initializabl
 
     /**
      * Affiche la page avec la liste des menus
-     * @throws IOException : si le fichier FXMLMyMenus n'existe pas
      * */
-    public void displayMyMenus(ActionEvent event) throws IOException {
-        this.<WindowUserMenuListController>loadFXML("interface/FXMLMyMenus.fxml");
+    public void displayMyMenus() {
+        this.loadFXML("interface/FXMLMyMenus.fxml");
     }
 
     /**
      * Affiche la page principale des menus*/
-    public void backToMainMenuController(ActionEvent event)throws IOException {
+    public void backToMainMenuController() {
         WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-        mainMenuController.displayMainMenuController(event);
+        mainMenuController.displayMainMenuController();
     }
 
     /**

@@ -43,25 +43,25 @@ public class WindowHomeController extends Window{
 
     /**
      * Affiche la page principale des Listes de Courses.
-     * @see WindowsMainShoppingListController
+     * @see WindowHomeShoppingListController
      * @throws IOException : Si le fichier FXMLMainShoppingList n'existe pas
      * */
     @FXML
     public void redirectToShoppingList(ActionEvent event) throws IOException {
         WindowHomeShoppingListController windowsShoppingListController = new WindowHomeShoppingListController();
-        windowsShoppingListController.displayMenuShoppingListController(event);
+        windowsShoppingListController.displayMenuShoppingListController();
 
     }
 
     /**
      * Affiche la page principale des Menus.
-     * @see WindowMainMenuController
+     * @see WindowHomeMenuController
      * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      * */
     @FXML
-    public void redirectToMenu(ActionEvent event) throws IOException, SQLException {
+    public void redirectToMenu(){
         WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-        mainMenuController.displayMainMenuController(event);
+        mainMenuController.displayMainMenuController();
     }
 
     @FXML

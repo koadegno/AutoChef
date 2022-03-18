@@ -32,13 +32,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
 
     @FXML
     public void displayEditMeal(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowCreateMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
-        loader.setController(this);
-        root = loader.load();
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.loadFXML(this, "interface/CreateDisplayMenu.fxml");
     }
 
     /**
@@ -69,11 +63,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
-        root = FXMLLoader.load(getClass().getResource("interface/FXMLMainMenu.fxml"));
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.loadFXML("interface/FXMLMainMenu.fxml");
     }
 
     /**
@@ -85,7 +75,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     public void generateMenu(ActionEvent event) throws SQLException {
         final GenerateMenuDialog dialog = new GenerateMenuDialog();
         dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(this.stage);
+        dialog.initOwner(this.primaryStage);
         dialog.initObject();
         dialog.getOkButton().setOnAction((event1)->{
             int nbVegetarian = (int) dialog.getVegetarianSpinner().getValue();
@@ -117,12 +107,10 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
             } else {
                 this.applicationConfiguration.getCurrent().getDatabase().saveNewMenu(myMenu);
                 WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-                mainMenuController.displayMainMenuController(event);
+                mainMenuController.displayMainMenuController();
             }
         } catch(SQLException e) {
             menuNameTextField.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-        } catch (IOException e) {
-            e.printStackTrace();
         }
     }
 }

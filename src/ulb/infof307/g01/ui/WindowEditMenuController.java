@@ -26,8 +26,6 @@ import java.util.List;
  */
 public class WindowEditMenuController extends Window implements UtilisationContrat<Recipe>{
     static Scene scene;
-    static Parent root;
-    protected Stage stage;
     protected Menu myMenu;
     protected ArrayList<Day> daysName;
     @FXML
@@ -51,7 +49,7 @@ public class WindowEditMenuController extends Window implements UtilisationContr
      */
     @Override
     public void cancel() {
-        stage.setScene(scene);
+        this.primaryStage.setScene(scene);
     }
 
     /**
@@ -65,7 +63,7 @@ public class WindowEditMenuController extends Window implements UtilisationContr
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         myMenu.addRecipeTo(daysName.get(dayIndex), recipe);
         this.refreshTableView();
-        this.stage.setScene(this.scene);
+        this.primaryStage.setScene(this.scene);
     }
 
     /**
@@ -95,12 +93,10 @@ public class WindowEditMenuController extends Window implements UtilisationContr
 
     /**
      * Permet de faire appelle à la classe SearchRecipeController
-     * @param event L'
-     * @throws SQLException
-     * @throws IOException
      */
     @FXML
-    private void searchRecipe(ActionEvent event) throws SQLException, IOException {
+    private void searchRecipe() {
+        this.scene = this.primaryStage.getScene();
         WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("interface/searchRecipe.fxml");
         controller.setMainController(this);
     }
