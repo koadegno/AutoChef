@@ -12,7 +12,6 @@ import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.ShoppingList;
-import ulb.infof307.g01.db.*;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -49,12 +48,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
     protected ArrayList<String> allShoppinListName = null;
     protected String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
     protected String currentShoppingListname;
-    private Parent root;
-    private Stage stage;
 
     protected void removeBorderColor() {
-        tableViewDisplayProductList.setStyle("");
-        hBoxToCreateProduct.setStyle("");
+        this.setNodeColor(tableViewDisplayProductList,false);
+        this.setNodeColor(hBoxToCreateProduct, false);
     }
 
     public void confirmMyCreateShoppingList(){}
@@ -76,23 +73,16 @@ public class WindowUserShoppingListsControllerTools extends Window {
 
     /**
      * Retour au menu precedent : le menu principal de la liste de courses
-     * @param event relier au bouton return
      * @throws IOException
      */
     @FXML
-    public void returnShoppingList(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowHomeShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
-        Parent root = loader.load();
-        WindowHomeShoppingListController controller = loader.getController();
+    public void returnShoppingList() throws IOException {
+        this.loadFXML("interface/FXMLMainShoppingList.fxml");
 
-        this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        stage.setScene(new Scene(root));
-        stage.show();
     }
 
     /**
      * Retour au menu precedent : ShowMenu
-     * @param event : lie au bouton return
      */
     @FXML
     public void returnToMyMenu() throws IOException {
@@ -120,31 +110,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
     }
 
     /**
-     * Remplis les combobox des elements recup de la dataBase
-     * @param comboBoxNameList combobox produit, unite et nom de liste de courses
-     * @param numberOfComboBox int pour le switch case pour savoir quel combobox remplir
-     */
-    protected void fillComboBoxShoppingNameListWithBDD(ComboBox comboBoxNameList, int numberOfComboBox) {
-        List<String> myListComboBox = new ArrayList<String>();
-        switch (numberOfComboBox) {
-            case 1 -> {
-                myListComboBox.addAll(allShoppinListName);
-            }
-            case 2 -> { // PRODUIT
-                myListComboBox.addAll(allProduct);
-            }
-            case 3 -> { // Unité
-                myListComboBox.addAll(allUnitName);
-            }
-            default -> {
-                System.out.println("Rechercher à avoir un numberOfComboBox entre 1 à 3");
-            }
-        }
-        comboBoxNameList.setItems(FXCollections.observableArrayList(myListComboBox));
-    }
-
-
-    /**
      * Rajoute les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
      */
     @FXML
@@ -166,13 +131,13 @@ public class WindowUserShoppingListsControllerTools extends Window {
             comboBoxListUnity.getSelectionModel().clearSelection();
             spinnerValueFactory.setValue(0);
         } else {
-            hBoxToCreateProduct.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            setNodeColor(hBoxToCreateProduct,true);
         }
     }
 
     public void initComboBox() {
-        fillComboBoxShoppingNameListWithBDD(comboBoxListProduct, 2);
-        fillComboBoxShoppingNameListWithBDD(comboBoxListUnity, 3);
+        comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
+        comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
     }
 
 

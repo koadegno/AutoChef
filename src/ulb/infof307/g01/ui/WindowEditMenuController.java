@@ -83,7 +83,7 @@ public class WindowEditMenuController extends Window implements UtilisationContr
 
 
     public void refreshTableView() {
-        menuTableView.setStyle("");
+        this.setNodeColor(menuTableView, false);
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         menuTableColumn.setText(daysName.get(dayIndex).toString());
         this.menuTableView.getItems().clear();

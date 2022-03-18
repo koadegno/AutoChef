@@ -42,7 +42,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         columnDelete.setCellFactory(cellFactory);
         returnToMenu.setOnAction((event) ->{
             try {
-                returnShoppingList(event);
+                returnShoppingList();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -72,10 +72,10 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         String shoppingListName = nameMyCreateShoppingList.getText();
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
-            nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            this.setNodeColor(nameMyCreateShoppingList,true);
         }
         else if(tableViewDisplayProductList.getItems().size() == 0){ // table view est vide
-            tableViewDisplayProductList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            this.setNodeColor(tableViewDisplayProductList,true);
         }
         else {
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListName);
@@ -84,8 +84,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
                 this.applicationConfiguration.getCurrent().getDatabase().saveNewShoppingList(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
-                nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-
+                this.setNodeColor(nameMyCreateShoppingList,true);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -114,7 +113,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
     @Override
     protected void removeBorderColor() {
         super.removeBorderColor();
-        nameMyCreateShoppingList.setStyle("");
+        this.setNodeColor(nameMyCreateShoppingList, false);
     }
 
 }

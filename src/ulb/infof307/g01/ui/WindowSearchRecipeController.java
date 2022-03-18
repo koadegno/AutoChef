@@ -2,6 +2,7 @@ package ulb.infof307.g01.ui;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
@@ -52,18 +53,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
         this.dietList.add(0, "Tout");
         this.typeList.add(0, "Tout");
     }
-    @FXML
-    public void fillComboBox(ComboBox box, ArrayList<String> valueList){
-        for(String value: valueList)
-            box.getItems().add(value);
-    }
 
-    @FXML
-    public void  fillTableView(TableView table, ArrayList<Recipe> valueList){
-        for(int i =0; i < valueList.size(); i++){
-            table.getItems().add(valueList.get(i));
-        }
-    }
 
     //override par les enfant mais pas abstract car par défaut le bouton qui lui est connecté ne fait rien
     @FXML
@@ -85,9 +75,9 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         columnRecipeName.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-        fillComboBox(this.recipeDietComboBox, dietList);
-        fillComboBox(this.recipeTypeComboBox, typeList);
-        fillTableView(this.recipeTableView, recipeName);
+        recipeDietComboBox.setItems(FXCollections.observableArrayList(dietList));
+        recipeTypeComboBox.setItems(FXCollections.observableArrayList(typeList));
+        this.recipeTableView.getItems().addAll(recipeName);
         recipeDietComboBox.getSelectionModel().selectFirst();
         recipeTypeComboBox.getSelectionModel().selectFirst();
         recipeDietComboBox.setVisibleRowCount(10);
@@ -133,7 +123,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
         if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;
         this.recipeName = this.applicationConfiguration.getCurrent().getDatabase().getRecipeWhere(dietCondition, typeCondition, nbPerson);
         this.recipeTableView.getItems().clear();
-        this.fillTableView(this.recipeTableView, recipeName);
+        this.recipeTableView.getItems().addAll(recipeName);
 
     }
 

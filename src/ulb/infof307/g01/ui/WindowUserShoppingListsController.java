@@ -63,7 +63,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
             //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
             this.applicationConfiguration.getCurrent().getDatabase().saveModifyShoppingList(shoppingListToSend);
-            returnShoppingList(event);
+            returnShoppingList();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -102,7 +102,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
 
         returnToMenu.setOnAction((event) ->{
             try {
-                returnShoppingList(event);
+                returnShoppingList();
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -125,7 +125,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
     @Override
     public void initComboBox(){
         super.initComboBox();
-        fillComboBoxShoppingNameListWithBDD(comboBoxShoppingNameList, 1);
+        comboBoxShoppingNameList.setItems(FXCollections.observableArrayList(allShoppinListName));
     }
 
 }

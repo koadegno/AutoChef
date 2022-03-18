@@ -2,24 +2,14 @@ package ulb.infof307.g01.ui;
 
 import java.net.URL;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
-import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -91,7 +81,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
         TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
         if (selectedItem != null){
             menuName.setText(selectedItem.getValue().toString());
-            menuName.setStyle(null);
+            this.setNodeColor(menuName, false);
         }
     }
 
@@ -103,7 +93,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * */
     @FXML
     public void keyTyped(KeyEvent keyEvent){
-        menuName.setStyle(null);
+        this.setNodeColor(menuName, false);
         if (Objects.equals(menuName.getText(), "")){
             menuTreeView.setRoot(null);
             fillTreeView(menus);
@@ -135,19 +125,20 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * Affiche la page qui montre le menu selectionné. Il passe à la classe
      * l'objet Menu, et la database.
      * @throws IOException : si le fichier FXMLShowMenu*/
-    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException{
+    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException {
 
         String name = menuName.getText();
-        if (!(Objects.equals(name, ""))){
-            try{
+        if (!(Objects.equals(name, ""))) {
+            try {
                 Menu menu = this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(name);
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("interface/FXMLShowMenu.fxml");
                 controller.setMenu(menu);
 
-            } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
+            } catch (SQLException e) {
+                this.setNodeColor(menuName,true);
+            }
+
         }
-
     }
-
 }

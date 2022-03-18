@@ -1,5 +1,6 @@
 package ulb.infof307.g01.ui;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -38,7 +39,7 @@ public class WindowModifyMenuController extends WindowEditMenuController impleme
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (int i = 0; i < 7; i++) daysComboBox.getItems().add(daysName.get(i).toString());
+        daysComboBox.setItems(FXCollections.observableArrayList(daysName));
         daysComboBox.getSelectionModel().selectFirst();
         menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));

@@ -19,8 +19,6 @@ import java.sql.SQLException;
  * @see WindowHomeMenuController
  * */
 public class WindowHomeMenuController extends Window {
-    private Stage stage;
-    private Parent root;
 
     /**
      * Affiche la page principale des Menus.
@@ -32,7 +30,7 @@ public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page principale de l'application.
-     * @see WindowMainController
+     * @see WindowHomeController
      * */
     public void backToMainController(ActionEvent event){
         WindowHomeController mainController = new WindowHomeController();
@@ -46,7 +44,7 @@ public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page qui contient la liste des menus.
-     * @see WindowMyMenusController
+     * @see WindowUserMenuListController
      * @throws IOException
      * */
     public void redirectToMyMenusController(ActionEvent event) throws IOException{
@@ -56,7 +54,7 @@ public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page pour créer un menu.
-     * @see WindowMyMenusController
+     * @see WindowUserMenuListController
      * @throws IOException
      * */
     public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {

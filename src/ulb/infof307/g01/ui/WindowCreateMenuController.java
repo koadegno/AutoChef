@@ -1,20 +1,14 @@
 package ulb.infof307.g01.ui;
 
+import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Modality;
-import javafx.stage.Stage;
-import javafx.scene.Scene;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
-import  ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;
@@ -42,7 +36,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        for (int i = 0; i < 7; i++) daysComboBox.getItems().add(daysName.get(i).toString());
+        daysComboBox.setItems(FXCollections.observableArrayList(daysName));
         daysComboBox.getSelectionModel().selectFirst();
         menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
@@ -103,14 +97,14 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
         myMenu.setName(this.menuNameTextField.getText());
         try{
             if(myMenu.size() == 0) {
-                menuTableView.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
-            } else {
+                this.setNodeColor(menuTableView, true);
+             } else {
                 this.applicationConfiguration.getCurrent().getDatabase().saveNewMenu(myMenu);
                 WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
                 mainMenuController.displayMainMenuController();
             }
         } catch(SQLException e) {
-            menuNameTextField.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
+            this.setNodeColor(menuNameTextField,true);
         }
     }
 }
