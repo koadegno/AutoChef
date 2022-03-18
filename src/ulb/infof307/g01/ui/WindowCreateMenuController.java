@@ -117,7 +117,6 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
             } else {
                 this.applicationConfiguration.getCurrent().getDatabase().saveNewMenu(myMenu);
                 WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-                mainMenuController.setDataBase(this.applicationConfiguration.getCurrent().getDatabase());
                 mainMenuController.displayMainMenuController(event);
             }
         } catch(SQLException e) {

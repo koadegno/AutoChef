@@ -81,7 +81,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListName);
             fillShoppingListToSend(shoppingListToSend);
             try {
-                dataBase.saveNewShoppingList(shoppingListToSend);
+                this.applicationConfiguration.getCurrent().getDatabase().saveNewShoppingList(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
                 nameMyCreateShoppingList.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");

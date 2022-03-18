@@ -49,10 +49,9 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
     CheckBox activateSpinnerCheckBox;
 
     public WindowSearchRecipeController() throws SQLException {
-        this.db = new Database("autochef.sqlite");
-        this.dietList = db.getAllCategories();
-        this.typeList = db.getAllTypes();
-        this.recipeName = db.getRecipeWhere(null, null, 0);
+        this.dietList = this.applicationConfiguration.getCurrent().getDatabase().getAllCategories();
+        this.typeList = this.applicationConfiguration.getCurrent().getDatabase().getAllTypes();
+        this.recipeName = this.applicationConfiguration.getCurrent().getDatabase().getRecipeWhere(null, null, 0);
         this.dietList.add(0, "Tout");
         this.typeList.add(0, "Tout");
     }
@@ -135,7 +134,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
         if (dietIndex > 0) dietCondition = dietList.get(dietIndex);
         if (typeIndex > 0) typeCondition = typeList.get(typeIndex);
         if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;
-        this.recipeName = db.getRecipeWhere(dietCondition, typeCondition, nbPerson);
+        this.recipeName = this.applicationConfiguration.getCurrent().getDatabase().getRecipeWhere(dietCondition, typeCondition, nbPerson);
         this.recipeTableView.getItems().clear();
         this.fillTableView(this.recipeTableView, recipeName);
 

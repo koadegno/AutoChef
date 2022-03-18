@@ -16,12 +16,11 @@ import java.sql.SQLException;
  * pour la page principale des Menus. Elle permet à l'utilisateur
  * de voir ses Menus et d'en créer un nouveau
  * @see ulb.infof307.g01.cuisine.Menu
- * @see WindowMyMenusController
+ * @see WindowHomeMenuController
  * */
-public class WindowHomeMenuController {
+public class WindowHomeMenuController extends Window {
     private Stage stage;
     private Parent root;
-    private static Database dataBase = null;
 
     /**
      * Affiche la page principale des Menus.
@@ -48,7 +47,6 @@ public class WindowHomeMenuController {
      * Prend la base de donnée envoyée par la page précédente
      * @see Database
      */
-    public void setDataBase(Database db){dataBase = db;}
 
     /**
      * Affiche la page qui contient la liste des menus.
@@ -57,7 +55,6 @@ public class WindowHomeMenuController {
      * */
     public void redirectToMyMenusController(ActionEvent event) throws IOException{
         WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.setDatabase(dataBase);
         menusController.displayMyMenus(event);
     }
 

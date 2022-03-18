@@ -41,7 +41,6 @@ public class WindowUserMenuListController extends Window implements Initializabl
 
     private final ArrayList<Menu> menus = new ArrayList<>();
     private ArrayList<String> allMenusNames = new ArrayList<>();
-    private static Database database = null;
     @FXML
     TextField menuName;
     @FXML
@@ -54,9 +53,9 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * */
     public void initializeMenusFromDB() {
         try {
-            allMenusNames = database.getAllMenuName();
+            allMenusNames = this.applicationConfiguration.getCurrent().getDatabase().getAllMenuName();
             for (String name : allMenusNames){
-                menus.add(database.getMenuFromName(name));
+                menus.add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(name));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -142,17 +141,14 @@ public class WindowUserMenuListController extends Window implements Initializabl
         String name = menuName.getText();
         if (!(Objects.equals(name, ""))){
             try{
-                Menu menu = database.getMenuFromName(name);
+                Menu menu = this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(name);
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("interface/FXMLShowMenu.fxml");
                 controller.setMenu(menu);
-                controller.setDatabase(database);
 
             } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
         }
 
     }
 
-
-    public void setDatabase(Database db){database = db;}
 }

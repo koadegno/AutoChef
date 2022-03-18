@@ -49,7 +49,6 @@ public class WindowHomeController extends Window{
     @FXML
     public void redirectToShoppingList(ActionEvent event) throws IOException {
         WindowHomeShoppingListController windowsShoppingListController = new WindowHomeShoppingListController();
-        windowsShoppingListController.setDataBase(applicationConfiguration.getCurrent().getDatabase());
         windowsShoppingListController.displayMenuShoppingListController(event);
 
     }
@@ -62,7 +61,6 @@ public class WindowHomeController extends Window{
     @FXML
     public void redirectToMenu(ActionEvent event) throws IOException, SQLException {
         WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-        mainMenuController.setDataBase(applicationConfiguration.getCurrent().getDatabase());
         mainMenuController.displayMainMenuController(event);
     }
 

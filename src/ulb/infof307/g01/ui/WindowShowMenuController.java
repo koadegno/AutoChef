@@ -35,7 +35,6 @@ import ulb.infof307.g01.db.Database;
 public class WindowShowMenuController extends Window implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
-    private static Database dataBase;
     static Scene scene;
     static Parent root;
     private Stage stage;
@@ -122,7 +121,6 @@ public class WindowShowMenuController extends Window implements Initializable, U
         FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
         loader.setController(windowsCreateMyShoppingListController);
         Parent root = loader.load();
-        windowsCreateMyShoppingListController.setDatabase(dataBase);
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
         fillShoppingList(windowsCreateMyShoppingListController);
@@ -146,10 +144,6 @@ public class WindowShowMenuController extends Window implements Initializable, U
         menu.displayMyMenus(event);
     }
 
-    public void setDatabase(Database db){
-        dataBase = db;
-    }
-
     @Override
     public void add(Menu menu) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
@@ -162,14 +156,13 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
         WindowShowMenuController controller = loader.getController();
         controller.setMenu(menu);
-        controller.setDatabase(dataBase);
     }
 
     @Override
     public void cancel() {
 
         try{
-            add(this.dataBase.getMenuFromName(this.menu.getName()));
+            add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
     }

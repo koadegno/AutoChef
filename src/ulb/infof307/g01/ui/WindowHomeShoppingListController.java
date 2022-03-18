@@ -17,10 +17,9 @@ import java.util.Objects;
  * qui dirige chacun vers une autre sous fenetre de liste de courses
  */
 
-public class WindowHomeShoppingListController {
+public class WindowHomeShoppingListController extends Window {
     private Stage stage;
     private Parent root;
-    private static Database dataBase;
 
     public void displayMenuShoppingListController(ActionEvent event) throws IOException {
         FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLMainShoppingList.fxml"));
@@ -39,7 +38,6 @@ public class WindowHomeShoppingListController {
         Parent root = loader.load();
 
         //Initialise la page avec les informations de la bdd
-        windowsMyShoppingListsController.setDatabase(dataBase);
         windowsMyShoppingListsController.initShoppingListElement();
         windowsMyShoppingListsController.initComboBox();
 
@@ -58,7 +56,6 @@ public class WindowHomeShoppingListController {
         Parent root = loader.load();
 
         //Initialise la page avec les informations de la bdd
-        windowsCreateMyShoppingListController.setDatabase(dataBase);
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
 
@@ -75,9 +72,5 @@ public class WindowHomeShoppingListController {
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
         stage.show();
-    }
-
-    public void setDataBase(Database db) {
-        dataBase = db;
     }
 }

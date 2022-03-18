@@ -52,10 +52,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
     private Parent root;
     private Stage stage;
 
-    public void setDatabase(Database db) {
-        dataBase = db;
-    }
-
     protected void removeBorderColor() {
         tableViewDisplayProductList.setStyle("");
         hBoxToCreateProduct.setStyle("");
@@ -68,10 +64,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
      */
     public void initShoppingListElement() {
         try {
-            allProduct = dataBase.getAllProductName();
-            allUnitName = dataBase.getAllUniteName();
+            allProduct = this.applicationConfiguration.getCurrent().getDatabase().getAllProductName();
+            allUnitName = this.applicationConfiguration.getCurrent().getDatabase().getAllUniteName();
             allUnitName.removeAll(List.of(unitToRemove));
-            allShoppinListName = dataBase.getAllShoppingListName();
+            allShoppinListName = this.applicationConfiguration.getCurrent().getDatabase().getAllShoppingListName();
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -88,7 +84,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
         FXMLLoader loader = new FXMLLoader(WindowHomeShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         Parent root = loader.load();
         WindowHomeShoppingListController controller = loader.getController();
-        controller.setDataBase(dataBase);
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene(new Scene(root));
@@ -102,7 +97,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
     @FXML
     public void returnToMyMenu(ActionEvent event) throws IOException {
         WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.setDatabase(dataBase);
         menusController.displayMyMenus(event);
     }
 

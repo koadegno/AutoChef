@@ -37,7 +37,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
          else{
              currentShoppingListname = (String) nameMyShoppingList;
              try { // afficher les produits de la liste de course dans la table
-                 ShoppingList shoppingList = dataBase.getShoppingListFromName(currentShoppingListname);
+                 ShoppingList shoppingList = this.applicationConfiguration.getCurrent().getDatabase().getShoppingListFromName(currentShoppingListname);
                  Vector<Product> temp =  (Vector<Product>) shoppingList;
                  final ObservableList<Product> data = FXCollections.observableArrayList(temp);
                  tableViewDisplayProductList.setItems(data);
@@ -57,12 +57,12 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         try {
             //Recupere liste de courses chez la bdd
-            ShoppingList shoppingListInDataBase = dataBase.getShoppingListFromName(currentShoppingListname);
+            ShoppingList shoppingListInDataBase = this.applicationConfiguration.getCurrent().getDatabase().getShoppingListFromName(currentShoppingListname);
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
-            dataBase.saveModifyShoppingList(shoppingListToSend);
+            this.applicationConfiguration.getCurrent().getDatabase().saveModifyShoppingList(shoppingListToSend);
             returnShoppingList(event);
 
         } catch (SQLException e) {
