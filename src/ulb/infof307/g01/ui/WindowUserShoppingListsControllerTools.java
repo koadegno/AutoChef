@@ -1,7 +1,6 @@
 package ulb.infof307.g01.ui;
 
 import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -20,14 +19,12 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Vector;
 
 /**
  * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
  */
 
-public class MyShoppingListsControllerTools {
-    public static Database dataBase;
+public class WindowUserShoppingListsControllerTools extends Window {
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
     @FXML
     protected HBox hBoxToCreateProduct;
@@ -88,9 +85,9 @@ public class MyShoppingListsControllerTools {
      */
     @FXML
     public void returnShoppingList(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowsMainShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
+        FXMLLoader loader = new FXMLLoader(WindowHomeShoppingListController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         Parent root = loader.load();
-        WindowsMainShoppingListController controller = loader.getController();
+        WindowHomeShoppingListController controller = loader.getController();
         controller.setDataBase(dataBase);
 
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -104,7 +101,7 @@ public class MyShoppingListsControllerTools {
      */
     @FXML
     public void returnToMyMenu(ActionEvent event) throws IOException {
-        WindowMyMenusController menusController = new WindowMyMenusController();
+        WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.setDatabase(dataBase);
         menusController.displayMyMenus(event);
     }

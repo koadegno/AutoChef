@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowsMainShoppingListController">
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowHomeShoppingListController">
     <children>
       <HBox alignment="CENTER" prefHeight="121.0" prefWidth="750.0">
          <children>

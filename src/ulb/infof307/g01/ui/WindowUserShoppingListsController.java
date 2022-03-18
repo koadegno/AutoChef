@@ -15,7 +15,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-public class WindowsMyShoppingListsController extends MyShoppingListsControllerTools implements Initializable {
+public class WindowUserShoppingListsController extends WindowUserShoppingListsControllerTools implements Initializable {
     private Vector<Product> myVectorProduct = new Vector<>();
 
     @FXML

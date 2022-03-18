@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
  * Retourne la recette choisie par l'utilisateur sinon previent que
  * la recherche est annuler
  */
-public class SearchRecipeController <T extends UtilisationContrat<Recipe>> implements Initializable {
+public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> extends Window implements Initializable {
     private Stage stage;
     private Parent root;
     private Database db ;
@@ -48,7 +48,7 @@ public class SearchRecipeController <T extends UtilisationContrat<Recipe>> imple
     @FXML
     CheckBox activateSpinnerCheckBox;
 
-    public SearchRecipeController() throws SQLException {
+    public WindowSearchRecipeController() throws SQLException {
         this.db = new Database("autochef.sqlite");
         this.dietList = db.getAllCategories();
         this.typeList = db.getAllTypes();

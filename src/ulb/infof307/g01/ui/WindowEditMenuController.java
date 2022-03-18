@@ -4,12 +4,10 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
@@ -17,22 +15,19 @@ import ulb.infof307.g01.cuisine.Recipe;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
-import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.ResourceBundle;
 
 /**
  * Classe permettant l'edition d'un menu mais qui ne fait rien quand à quoi faire de ce menu
  * Il laisse cela aux enfants
  *
  */
-public class EditMenuController implements UtilisationContrat<Recipe>{
+public class WindowEditMenuController extends Window implements UtilisationContrat<Recipe>{
     static Scene scene;
     static Parent root;
     protected Stage stage;
-    protected Database db;
     protected Menu myMenu;
     protected ArrayList<Day> daysName;
     @FXML
@@ -106,13 +101,8 @@ public class EditMenuController implements UtilisationContrat<Recipe>{
      */
     @FXML
     private void searchRecipe(ActionEvent event) throws SQLException, IOException {
-        FXMLLoader loader = new FXMLLoader(SearchRecipeController.class.getResource("interface/searchRecipe.fxml"));
-        Parent root = loader.load();
-        SearchRecipeController controller = loader.getController();
+        WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("interface/searchRecipe.fxml");
         controller.setMainController(this);
-        this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        this.stage.setScene(new Scene(root));
-        this.stage.show();
     }
 
     /**

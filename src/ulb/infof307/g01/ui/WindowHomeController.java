@@ -1,6 +1,7 @@
 package ulb.infof307.g01.ui;
 
 import javafx.application.Application;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -23,37 +24,8 @@ import java.util.Objects;
  * @see ulb.infof307.g01.cuisine.Recipe
  * @see ulb.infof307.g01.cuisine.Menu
  * */
-public class WindowMainController extends Application {
-
-    private Database dataBase;
-    private String dataBaseName = "autochef.sqlite";
-    private static Stage primaryStage;
-
-    /**
-     * Crée une nouvelle base de données qui sera initialisée
-     * dans la classe Database.
-     * @see Database
-     * @see ulb.infof307.g01.cuisine.Menu
-     * */
-    public WindowMainController() {
-        dataBase = new Database(dataBaseName);
-    }
-
-    public void launchApp(String[] args) {launch(args);}
-
-
-    @Override
-    public void start(Stage primaryStage){
-
-        try{
-            this.primaryStage = primaryStage;
-            displayMain(this.primaryStage);
-
-        }catch (Exception e ){
-            e.printStackTrace();
-        }
-
-    }
+public class WindowHomeController extends Window{
+    public WindowHomeController() {}
 
     /**
      * Affiche la page principale de l'application.
@@ -62,13 +34,8 @@ public class WindowMainController extends Application {
     @FXML
     public void displayMain(Stage primaryStage){
         try{
-            URL ressource = getClass().getResource("interface/FXMLMainPage.fxml");
-            Parent root = FXMLLoader.load(Objects.requireNonNull(ressource));
-            Scene scene =  new Scene(root);
-            primaryStage.setTitle("Autochef");
-            primaryStage.setScene(scene);
-            primaryStage.show();
-
+            this.setStage(primaryStage);
+            this.loadFXML("interface/FXMLMainPage.fxml");
         }catch (Exception e ){
             e.printStackTrace();
         }
@@ -81,8 +48,8 @@ public class WindowMainController extends Application {
      * */
     @FXML
     public void redirectToShoppingList(ActionEvent event) throws IOException {
-        WindowsMainShoppingListController windowsShoppingListController = new WindowsMainShoppingListController();
-        windowsShoppingListController.setDataBase(dataBase);
+        WindowHomeShoppingListController windowsShoppingListController = new WindowHomeShoppingListController();
+        windowsShoppingListController.setDataBase(applicationConfiguration.getCurrent().getDatabase());
         windowsShoppingListController.displayMenuShoppingListController(event);
 
     }
@@ -94,14 +61,14 @@ public class WindowMainController extends Application {
      * */
     @FXML
     public void redirectToMenu(ActionEvent event) throws IOException, SQLException {
-        WindowMainMenuController mainMenuController = new WindowMainMenuController();
-        mainMenuController.setDataBase(dataBase);
+        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
+        mainMenuController.setDataBase(applicationConfiguration.getCurrent().getDatabase());
         mainMenuController.displayMainMenuController(event);
     }
 
     @FXML
     public void closeApplication(){
-        primaryStage.close();
+        this.primaryStage.close();
     }
 
 }

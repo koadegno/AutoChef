@@ -4,7 +4,7 @@
 <?import javafx.scene.layout.VBox?>
 
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="75.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowMainController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="75.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowHomeController">
    <children>
       <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList" prefHeight="50.0" prefWidth="170.0" text="Liste de courses" />
       <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0" prefWidth="170.0" text="Menus" />

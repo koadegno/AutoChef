@@ -32,7 +32,7 @@ import ulb.infof307.g01.db.Database;
  * @see ulb.infof307.g01.cuisine.Menu
  * @see WindowShowMenuController
  * */
-public class WindowShowMenuController implements Initializable, UtilisationContrat<Menu> {
+public class WindowShowMenuController extends Window implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
     private static Database dataBase;
@@ -98,9 +98,9 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
      * @throws  SQLException : si le menu envoyé ne se trouve pas dans la base de données*/
     @FXML
     public void goToModifyMenu(ActionEvent event) throws IOException, SQLException {
-        ModifyMenuController modifyMenu = new ModifyMenuController(this.menu);
+        WindowModifyMenuController modifyMenu = new WindowModifyMenuController(this.menu);
         modifyMenu.setMainController(this);
-        FXMLLoader loader = new FXMLLoader(ModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(WindowModifyMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
         loader.setController(modifyMenu);
         this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = loader.load();
@@ -118,8 +118,8 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
      * */
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
-        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
-        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
+        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
         loader.setController(windowsCreateMyShoppingListController);
         Parent root = loader.load();
         windowsCreateMyShoppingListController.setDatabase(dataBase);
@@ -133,7 +133,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
     }
 
 
-    public void fillShoppingList(WindowsCreateMyShoppingListController controller){
+    public void fillShoppingList(WindowCreateUserShoppingListController controller){
         ShoppingList myShoppingList = menu.generateShoppingList();
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
     }
@@ -142,7 +142,7 @@ public class WindowShowMenuController implements Initializable, UtilisationContr
      * Affiche la page avec la liste des menus
      * */
     public void back(ActionEvent event) throws IOException {
-        WindowMyMenusController menu = new WindowMyMenusController();
+        WindowUserMenuListController menu = new WindowUserMenuListController();
         menu.displayMyMenus(event);
     }
 

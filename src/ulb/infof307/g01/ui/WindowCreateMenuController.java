@@ -1,19 +1,12 @@
 package ulb.infof307.g01.ui;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
 import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
@@ -25,16 +18,13 @@ import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.FileStore;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
-public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController implements Initializable {
+public class WindowCreateMenuController extends WindowEditMenuController implements Initializable {
 
-    public CreateMenuController() throws SQLException {
-        this.db = new Database("autochef.sqlite");
+    public WindowCreateMenuController() throws SQLException {
         this.myMenu = new Menu();
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
@@ -42,7 +32,7 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
 
     @FXML
     public void displayEditMeal(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(CreateMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(WindowCreateMenuController.class.getResource("interface/CreateDisplayMenu.fxml"));
         loader.setController(this);
         root = loader.load();
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
@@ -103,7 +93,7 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
             int nbFish = (int) dialog.getFishSpinner().getValue();
             dialog.close();
             try {
-                myMenu.generateMenu(db, nbVegetarian, nbMeat, nbFish);
+                myMenu.generateMenu(this.applicationConfiguration.getCurrent().getDatabase(), nbVegetarian, nbMeat, nbFish);
                 dialog.close();
                 this.refreshTableView();
             } catch (SQLException e) {
@@ -111,8 +101,6 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
             }
         });
         dialog.show();
-        //myMenu.generateMenu(db);
-        //refreshTableView();
     }
 
     /**
@@ -127,9 +115,9 @@ public class CreateMenuController extends ulb.infof307.g01.ui.EditMenuController
             if(myMenu.size() == 0) {
                 menuTableView.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");
             } else {
-                this.db.saveNewMenu(myMenu);
-                WindowMainMenuController mainMenuController = new WindowMainMenuController();
-                mainMenuController.setDataBase(db);
+                this.applicationConfiguration.getCurrent().getDatabase().saveNewMenu(myMenu);
+                WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
+                mainMenuController.setDataBase(this.applicationConfiguration.getCurrent().getDatabase());
                 mainMenuController.displayMainMenuController(event);
             }
         } catch(SQLException e) {

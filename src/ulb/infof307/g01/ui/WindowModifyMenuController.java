@@ -1,21 +1,10 @@
 package ulb.infof307.g01.ui;
 
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Pos;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
-import javafx.scene.text.Text;
-import javafx.stage.Modality;
-import javafx.stage.Stage;
 import javafx.scene.Scene;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
@@ -25,21 +14,18 @@ import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;
-import java.nio.file.FileStore;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.ResourceBundle;
 
 
 /**
  * Permet de modifier un menu existant
  */
-public class ModifyMenuController extends EditMenuController implements Initializable  {
+public class WindowModifyMenuController extends WindowEditMenuController implements Initializable  {
     WindowShowMenuController mainController;
 
-    public ModifyMenuController(Menu menuName) throws SQLException {
-        this.db = new Database("autochef.sqlite");
+    public WindowModifyMenuController(Menu menuName) throws SQLException {
         this.myMenu = menuName;
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);
@@ -82,7 +68,7 @@ public class ModifyMenuController extends EditMenuController implements Initiali
     @FXML
     public void saveMenu(ActionEvent event){
         try{
-            this.db.saveModifyMenu(myMenu);
+            this.applicationConfiguration.getCurrent().getDatabase().saveModifyMenu(myMenu);
             this.mainController.add(myMenu);
         }catch(Exception e){System.out.println(e);
         }

@@ -18,7 +18,7 @@ import java.sql.SQLException;
  * @see ulb.infof307.g01.cuisine.Menu
  * @see WindowMyMenusController
  * */
-public class WindowMainMenuController {
+public class WindowHomeMenuController {
     private Stage stage;
     private Parent root;
     private static Database dataBase = null;
@@ -28,7 +28,7 @@ public class WindowMainMenuController {
      * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      */
     public void displayMainMenuController(ActionEvent event)throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLMainMenu.fxml"));
+        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLMainMenu.fxml"));
         root = loader.load();
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
@@ -40,7 +40,7 @@ public class WindowMainMenuController {
      * @see WindowMainController
      * */
     public void backToMainController(ActionEvent event){
-        WindowMainController mainController = new WindowMainController();
+        WindowHomeController mainController = new WindowHomeController();
         mainController.displayMain((Stage)((Node)event.getSource()).getScene().getWindow());
     }
 
@@ -56,7 +56,7 @@ public class WindowMainMenuController {
      * @throws IOException
      * */
     public void redirectToMyMenusController(ActionEvent event) throws IOException{
-        WindowMyMenusController menusController = new WindowMyMenusController();
+        WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.setDatabase(dataBase);
         menusController.displayMyMenus(event);
     }
@@ -67,7 +67,7 @@ public class WindowMainMenuController {
      * @throws IOException
      * */
     public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {
-        CreateMenuController createMenu = new CreateMenuController();
+        WindowCreateMenuController createMenu = new WindowCreateMenuController();
         createMenu.displayEditMeal(event);
     }
 

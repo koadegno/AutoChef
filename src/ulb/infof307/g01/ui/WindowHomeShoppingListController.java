@@ -6,7 +6,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.SubScene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.*;
 
@@ -18,13 +17,13 @@ import java.util.Objects;
  * qui dirige chacun vers une autre sous fenetre de liste de courses
  */
 
-public class WindowsMainShoppingListController {
+public class WindowHomeShoppingListController {
     private Stage stage;
     private Parent root;
     private static Database dataBase;
 
     public void displayMenuShoppingListController(ActionEvent event) throws IOException {
-        FXMLLoader loader = new FXMLLoader(WindowsMyShoppingListsController.class.getResource("interface/FXMLMainShoppingList.fxml"));
+        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsController.class.getResource("interface/FXMLMainShoppingList.fxml"));
         root = loader.load();
         this.stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         stage.setScene( new Scene(root));
@@ -33,8 +32,8 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayMyShoppingListController(ActionEvent event) throws IOException{
-        WindowsMyShoppingListsController windowsMyShoppingListsController = new WindowsMyShoppingListsController();
-        FXMLLoader loader = new FXMLLoader(MyShoppingListsControllerTools.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
+        FXMLLoader loader = new FXMLLoader(WindowUserShoppingListsControllerTools.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
         loader.setController(windowsMyShoppingListsController); //controler pour affichage de liste de courses
         this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = loader.load();
@@ -52,8 +51,8 @@ public class WindowsMainShoppingListController {
 
     @FXML
     public void displayCreateShoppingListController(ActionEvent event) throws IOException{
-        WindowsCreateMyShoppingListController windowsCreateMyShoppingListController = new WindowsCreateMyShoppingListController();
-        FXMLLoader loader = new FXMLLoader(WindowsCreateMyShoppingListController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
+        WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
+        FXMLLoader loader = new FXMLLoader(WindowCreateUserShoppingListController.class.getResource("interface/FXMLCreateMyShoppingList.fxml"));
         loader.setController(windowsCreateMyShoppingListController); //controler pour affichage d'une creation de liste de courses
         this.stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Parent root = loader.load();

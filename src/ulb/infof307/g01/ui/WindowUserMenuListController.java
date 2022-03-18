@@ -1,10 +1,7 @@
 package ulb.infof307.g01.ui;
 
-import java.io.FileReader;
 import java.net.URL;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -40,7 +37,7 @@ import java.util.ResourceBundle;
  * @see ulb.infof307.g01.cuisine.Menu
  * @see WindowShowMenuController
  * */
-public class WindowMyMenusController implements Initializable {
+public class WindowUserMenuListController extends Window implements Initializable {
 
     private final ArrayList<Menu> menus = new ArrayList<>();
     private ArrayList<String> allMenusNames = new ArrayList<>();
@@ -126,17 +123,13 @@ public class WindowMyMenusController implements Initializable {
      * @throws IOException : si le fichier FXMLMyMenus n'existe pas
      * */
     public void displayMyMenus(ActionEvent event) throws IOException {
-        Parent root = FXMLLoader.load(Objects.requireNonNull(getClass().getResource("interface/FXMLMyMenus.fxml")));
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = new Scene(root);
-        stage.setScene(scene);
-        stage.show();
+        this.<WindowUserMenuListController>loadFXML("interface/FXMLMyMenus.fxml");
     }
 
     /**
      * Affiche la page principale des menus*/
     public void backToMainMenuController(ActionEvent event)throws IOException {
-        WindowMainMenuController mainMenuController = new WindowMainMenuController();
+        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
         mainMenuController.displayMainMenuController(event);
     }
 
@@ -150,17 +143,11 @@ public class WindowMyMenusController implements Initializable {
         if (!(Objects.equals(name, ""))){
             try{
                 Menu menu = database.getMenuFromName(name);
-                FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(getClass().getResource("interface/FXMLShowMenu.fxml")));
-                Parent root = loader.load();
 
-                WindowShowMenuController controller = loader.getController();
+                WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("interface/FXMLShowMenu.fxml");
                 controller.setMenu(menu);
                 controller.setDatabase(database);
 
-                Stage stage = (Stage) ((Node)mousePressed.getSource()).getScene().getWindow();
-                Scene scene =  new Scene(root);
-                stage.setScene(scene);
-                stage.show();
             } catch (SQLException e){menuName.setStyle("-fx-border-color: #e01818 ; -fx-border-width: 2px ;");}
         }
 
