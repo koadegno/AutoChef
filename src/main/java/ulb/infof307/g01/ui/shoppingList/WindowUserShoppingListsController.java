@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.shoppingList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -9,6 +9,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.*;
+import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
+import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
 import java.io.IOException;
 import java.net.URL;

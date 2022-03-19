@@ -1,6 +1,8 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.shoppingList;
 
 import javafx.fxml.FXML;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.WindowHomeController;
 
 /**
  * Classe qui permet d'afficher la fenetre principal de la liste de courses avec deux boutons
@@ -34,6 +36,8 @@ public class WindowHomeShoppingListController extends Window {
 
     @FXML
     public void returnMainMenu() {
-        this.loadFXML("FXMLMainPage.fxml");
+        WindowHomeController windowHomeController = new WindowHomeController();
+        windowHomeController.displayMain(this.primaryStage);
+        //this.loadFXML("FXMLMainPage.fxml");
     }
 }

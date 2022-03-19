@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;

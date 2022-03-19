@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.ui.tools.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;

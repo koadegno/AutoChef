@@ -1,5 +1,5 @@
 
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -15,6 +15,9 @@ import java.util.*;
 
 import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.shoppingList.WindowCreateUserShoppingListController;
+import ulb.infof307.g01.ui.tools.UtilisationContrat;
 
 
 /**
@@ -101,11 +104,11 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * */
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
-        WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowsCreateMyShoppingListController, "FXMLCreateMyShoppingList.fxml");
-        windowsCreateMyShoppingListController.initShoppingListElement();
-        windowsCreateMyShoppingListController.initComboBox();
-        fillShoppingList(windowsCreateMyShoppingListController);
+        WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
+        this.loadFXML(windowCreateUserShoppingListController, "FXMLCreateMyShoppingList.fxml");
+        windowCreateUserShoppingListController.initShoppingListElement();
+        windowCreateUserShoppingListController.initComboBox();
+        fillShoppingList(windowCreateUserShoppingListController);
 
     }
 

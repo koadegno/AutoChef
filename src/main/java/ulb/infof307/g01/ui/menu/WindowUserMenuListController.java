@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import java.net.URL;
 
@@ -10,6 +10,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.ui.Window;
 
 import java.io.IOException;
 import java.sql.SQLException;

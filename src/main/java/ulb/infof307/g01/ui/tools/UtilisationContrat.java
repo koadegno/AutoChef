@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.tools;
 
 /**
  * Cette interface est une sorte de contrat entre une windowController qui veut en utiliser une autre

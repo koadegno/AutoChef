@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowShowMenuController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="20.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.menu.WindowShowMenuController">
    <children>
       <Label alignment="CENTER" prefHeight="47.0" prefWidth="596.0" text="Bienvenue au Menu: ">
          <font>

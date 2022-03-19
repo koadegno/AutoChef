@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.tools;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
@@ -6,6 +6,8 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
 
 import java.io.IOException;
 import java.sql.SQLException;

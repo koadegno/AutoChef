@@ -1,9 +1,11 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.WindowHomeController;
 
 import java.io.IOException;
 import java.sql.SQLException;

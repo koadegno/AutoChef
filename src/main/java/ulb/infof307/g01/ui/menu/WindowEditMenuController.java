@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.menu;
 
 import javafx.event.ActionEvent;
 import javafx.event.Event;
@@ -8,6 +8,9 @@ import javafx.scene.control.*;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.recipe.WindowSearchRecipeController;
+import ulb.infof307.g01.ui.tools.UtilisationContrat;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -18,7 +21,7 @@ import java.util.List;
  * Il laisse cela aux enfants
  *
  */
-public class WindowEditMenuController extends Window implements UtilisationContrat<Recipe>{
+public class WindowEditMenuController extends Window implements UtilisationContrat<Recipe> {
     static Scene scene;
     protected Menu myMenu;
     protected ArrayList<Day> daysName;

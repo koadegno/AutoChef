@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.tools;
 
 import javafx.event.ActionEvent;
 import javafx.scene.control.Button;

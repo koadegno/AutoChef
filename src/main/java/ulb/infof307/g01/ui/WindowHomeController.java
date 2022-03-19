@@ -3,6 +3,8 @@ package ulb.infof307.g01.ui;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import ulb.infof307.g01.ui.menu.WindowHomeMenuController;
+import ulb.infof307.g01.ui.shoppingList.WindowHomeShoppingListController;
 
 import java.io.IOException;
 

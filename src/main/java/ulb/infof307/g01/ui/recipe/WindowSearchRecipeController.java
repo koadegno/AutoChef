@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui;
+package ulb.infof307.g01.ui.recipe;
 
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -11,6 +11,8 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.tools.UtilisationContrat;
 
 import java.io.IOException;
 import java.net.URL;
