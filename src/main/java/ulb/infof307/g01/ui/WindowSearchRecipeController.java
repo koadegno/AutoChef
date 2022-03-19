@@ -7,13 +7,10 @@ import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Recipe;
-import  ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.net.URL;

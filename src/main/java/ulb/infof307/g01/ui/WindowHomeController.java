@@ -1,19 +1,10 @@
 package ulb.infof307.g01.ui;
 
-import javafx.application.Application;
-import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 
 import java.io.IOException;
-import java.net.URL;
-import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * La classe WindowMainController représente le controleur
@@ -35,7 +26,7 @@ public class WindowHomeController extends Window{
     public void displayMain(Stage primaryStage){
         try{
             this.setStage(primaryStage);
-            this.loadFXML("interface/FXMLMainPage.fxml");
+            this.loadFXML("FXMLMainPage.fxml");
         }catch (Exception e ){
             e.printStackTrace();
         }

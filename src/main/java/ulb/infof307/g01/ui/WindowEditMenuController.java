@@ -3,19 +3,13 @@ package ulb.infof307.g01.ui;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
-import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -97,7 +91,7 @@ public class WindowEditMenuController extends Window implements UtilisationContr
     @FXML
     private void searchRecipe() {
         this.scene = this.primaryStage.getScene();
-        WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("interface/searchRecipe.fxml");
+        WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("searchRecipe.fxml");
         controller.setMainController(this);
     }
 

@@ -4,14 +4,11 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Scene;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
-import  ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.ui.GenerateMenuDialog;
 
 import java.io.IOException;
 import java.net.URL;

@@ -1,15 +1,9 @@
 package ulb.infof307.g01.ui;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.ShoppingList;
 
@@ -77,7 +71,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
      */
     @FXML
     public void returnShoppingList() throws IOException {
-        this.loadFXML("interface/FXMLMainShoppingList.fxml");
+        this.loadFXML("FXMLMainShoppingList.fxml");
 
     }
 

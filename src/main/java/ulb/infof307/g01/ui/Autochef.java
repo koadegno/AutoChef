@@ -1,7 +1,6 @@
 package ulb.infof307.g01.ui;
 
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.stage.Stage;
 
 public class Autochef extends Application {

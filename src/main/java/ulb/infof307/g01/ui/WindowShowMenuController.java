@@ -3,15 +3,11 @@ package ulb.infof307.g01.ui;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.stage.Stage;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -19,7 +15,6 @@ import java.util.*;
 
 import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.db.Database;
 
 
 /**
@@ -95,7 +90,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     public void goToModifyMenu() throws SQLException {
         WindowModifyMenuController modifyMenu = new WindowModifyMenuController(this.menu);
         modifyMenu.setMainController(this);
-        this.loadFXML(modifyMenu,"interface/CreateDisplayMenu.fxml" );
+        this.loadFXML(modifyMenu,"CreateDisplayMenu.fxml" );
     }
 
     /**
@@ -107,7 +102,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
         WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowsCreateMyShoppingListController, "interface/FXMLCreateMyShoppingList.fxml");
+        this.loadFXML(windowsCreateMyShoppingListController, "FXMLCreateMyShoppingList.fxml");
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
         fillShoppingList(windowsCreateMyShoppingListController);
@@ -130,7 +125,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
     @Override
     public void add(Menu menu) {
-        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("interface/FXMLShowMenu.fxml");
+        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("FXMLShowMenu.fxml");
         controller.setMenu(menu);
     }
 

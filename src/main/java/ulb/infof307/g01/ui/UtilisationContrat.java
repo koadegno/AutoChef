@@ -1,7 +1,5 @@
 package ulb.infof307.g01.ui;
 
-import ulb.infof307.g01.cuisine.Recipe;
-
 /**
  * Cette interface est une sorte de contrat entre une windowController qui veut en utiliser une autre
  * tout en gardant son état.

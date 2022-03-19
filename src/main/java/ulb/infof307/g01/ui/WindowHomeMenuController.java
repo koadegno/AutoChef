@@ -1,10 +1,7 @@
 package ulb.infof307.g01.ui;
 
 import javafx.event.ActionEvent;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.Database;
 
@@ -25,7 +22,7 @@ public class WindowHomeMenuController extends Window {
      * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      */
     public void displayMainMenuController() {
-        this.loadFXML("interface/FXMLMainMenu.fxml");
+        this.loadFXML("FXMLMainMenu.fxml");
     }
 
     /**

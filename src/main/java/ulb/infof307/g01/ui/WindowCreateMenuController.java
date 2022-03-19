@@ -26,7 +26,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
 
     @FXML
     public void displayEditMeal(ActionEvent event) throws IOException {
-        this.loadFXML(this, "interface/CreateDisplayMenu.fxml");
+        this.loadFXML(this, "CreateDisplayMenu.fxml");
     }
 
     /**
@@ -57,7 +57,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
-        this.loadFXML("interface/FXMLMainMenu.fxml");
+        this.loadFXML("FXMLMainMenu.fxml");
     }
 
     /**
