@@ -9,7 +9,7 @@ import ulb.infof307.g01.ui.shoppingList.WindowHomeShoppingListController;
 import java.io.IOException;
 
 /**
- * La classe WindowMainController représente le controleur
+ * La classe WindowHomeController représente le controleur
  * pour la page principale de l'application qui s'affiche
  * lorsque le programme est lancé. Elle permet à l'utilisateur d'être redirigé vers
  * la page des Listes de Courses, Recettes ou Menus.
@@ -37,10 +37,9 @@ public class WindowHomeController extends Window{
     /**
      * Affiche la page principale des Listes de Courses.
      * @see WindowHomeShoppingListController
-     * @throws IOException : Si le fichier FXMLMainShoppingList n'existe pas
      * */
     @FXML
-    public void redirectToShoppingList(ActionEvent event) throws IOException {
+    public void redirectToShoppingList(ActionEvent event){
         WindowHomeShoppingListController windowsShoppingListController = new WindowHomeShoppingListController();
         windowsShoppingListController.displayMenuShoppingListController();
 
@@ -49,7 +48,6 @@ public class WindowHomeController extends Window{
     /**
      * Affiche la page principale des Menus.
      * @see WindowHomeMenuController
-     * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      * */
     @FXML
     public void redirectToMenu(){

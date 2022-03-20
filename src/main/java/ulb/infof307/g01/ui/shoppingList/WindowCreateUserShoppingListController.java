@@ -96,11 +96,11 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
     }
 
     /**Methode permettant de remplir le tableau des elements d'une liste de courses
-     * @param myExistentShppingList : liste de shopping contenant la liste de courses
+     * @param myExistentShoppingList : liste de shopping contenant la liste de courses
      */
-    public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShppingList){
+    public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShoppingList){
         tableViewDisplayProductList.getItems().clear();
-        Vector<Product> temp =  (Vector<Product>) myExistentShppingList;
+        Vector<Product> temp =  (Vector<Product>) myExistentShoppingList;
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
         tableViewDisplayProductList.setItems(data);
         //Retour mesure precedent : MainShoppingList

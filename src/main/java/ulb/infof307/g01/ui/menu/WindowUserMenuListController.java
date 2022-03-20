@@ -10,6 +10,7 @@ import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.Window;
 
 import java.io.IOException;
@@ -39,14 +40,15 @@ public class WindowUserMenuListController extends Window implements Initializabl
 
 
     /**
-     * Intérroge la base de données passée par la page précedente
-     * et récupère la liste de tous les menus
+     * Prend la base de données qui a été configurée et
+     * récupère la liste de tous les menus
+     * @see Configuration
      * */
     public void initializeMenusFromDB() {
         try {
-            allMenusNames = this.applicationConfiguration.getCurrent().getDatabase().getAllMenuName();
+            allMenusNames = Configuration.getCurrent().getDatabase().getAllMenuName();
             for (String name : allMenusNames){
-                menus.add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(name));
+                menus.add(Configuration.getCurrent().getDatabase().getMenuFromName(name));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -125,21 +127,24 @@ public class WindowUserMenuListController extends Window implements Initializabl
     /**
      * Affiche la page qui montre le menu selectionné. Il passe à la classe
      * l'objet Menu, et la database.
-     * @throws IOException : si le fichier FXMLShowMenu*/
-    public void redirectToShowMenuController(MouseEvent mousePressed)throws IOException {
+     * */
+    public void redirectToShowMenuController(MouseEvent mousePressed){
 
         String name = menuName.getText();
         if (!(Objects.equals(name, ""))) {
             try {
-                Menu menu = this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(name);
+                Menu menu = Configuration.getCurrent().getDatabase().getMenuFromName(name);
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("FXMLShowMenu.fxml");
                 controller.setMenu(menu);
+                controller.displayMenu();
 
             } catch (SQLException e) {
                 this.setNodeColor(menuName,true);
             }
-
+        }
+        else {
+            setNodeColor(menuName, true);
         }
     }
 }

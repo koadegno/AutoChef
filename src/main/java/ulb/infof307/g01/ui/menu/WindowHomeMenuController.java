@@ -11,17 +11,15 @@ import java.io.IOException;
 import java.sql.SQLException;
 
 /**
- * La classe WindowMainMenuController représente le controleur
+ * La classe WindowHomeMenuController représente le controleur
  * pour la page principale des Menus. Elle permet à l'utilisateur
  * de voir ses Menus et d'en créer un nouveau
  * @see ulb.infof307.g01.cuisine.Menu
- * @see WindowHomeMenuController
  * */
 public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page principale des Menus.
-     * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      */
     public void displayMainMenuController() {
         this.loadFXML("FXMLMainMenu.fxml");
@@ -37,16 +35,10 @@ public class WindowHomeMenuController extends Window {
     }
 
     /**
-     * Prend la base de donnée envoyée par la page précédente
-     * @see Database
-     */
-
-    /**
      * Affiche la page qui contient la liste des menus.
      * @see WindowUserMenuListController
-     * @throws IOException
      * */
-    public void redirectToMyMenusController(ActionEvent event) throws IOException{
+    public void redirectToMyMenusController(ActionEvent event){
         WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.displayMyMenus();
     }
