@@ -119,9 +119,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
     }
 
-    /**
-     * Affiche la page avec la liste des menus
-     * */
+
     public void back(ActionEvent event){
         WindowUserMenuListController menu = new WindowUserMenuListController();
         menu.displayMyMenus();
