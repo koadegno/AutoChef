@@ -100,12 +100,12 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * Redirige vers la page de creation d'une liste de courses
      * où le tableau sera rempli avec les ingrédients qui se trouvent
      * dans chaque recette du menu
-     * @throws IOException : si le fichier FXMLCreateMyShoppingList.fxml n'existe pas
+     * @throws IOException : si le fichier CreateUserShoppingList.fxml n'existe pas
      * */
     @FXML
     public void generateShoppingList(ActionEvent event) throws IOException {
         WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowCreateUserShoppingListController, "FXMLCreateMyShoppingList.fxml");
+        this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
         windowCreateUserShoppingListController.initShoppingListElement();
         windowCreateUserShoppingListController.initComboBox();
         fillShoppingList(windowCreateUserShoppingListController);
@@ -128,7 +128,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
     @Override
     public void add(Menu menu) {
-        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("FXMLShowMenu.fxml");
+        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
         controller.setMenu(menu);
     }
 

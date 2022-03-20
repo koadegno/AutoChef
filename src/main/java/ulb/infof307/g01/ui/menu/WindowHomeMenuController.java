@@ -21,10 +21,9 @@ public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page principale des Menus.
-     * @throws IOException : Si le fichier FXMLMainMenu n'existe pas
      */
     public void displayMainMenuController() {
-        this.loadFXML("FXMLMainMenu.fxml");
+        this.loadFXML("HomeMenu.fxml");
     }
 
     /**
@@ -37,28 +36,20 @@ public class WindowHomeMenuController extends Window {
     }
 
     /**
-     * Prend la base de donnée envoyée par la page précédente
-     * @see Database
-     */
-
-    /**
      * Affiche la page qui contient la liste des menus.
      * @see WindowUserMenuListController
-     * @throws IOException
      * */
-    public void redirectToMyMenusController(ActionEvent event) throws IOException{
+    public void redirectToMyMenusController(){
         WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.displayMyMenus();
     }
 
     /**
      * Affiche la page pour créer un menu.
-     * @see WindowUserMenuListController
-     * @throws IOException
-     * */
-    public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {
+     * @see WindowUserMenuListController */
+    public void redirectToCreateMenuController() throws SQLException {
         WindowCreateMenuController createMenu = new WindowCreateMenuController();
-        createMenu.displayEditMeal(event);
+        createMenu.displayEditMeal();
     }
 
 

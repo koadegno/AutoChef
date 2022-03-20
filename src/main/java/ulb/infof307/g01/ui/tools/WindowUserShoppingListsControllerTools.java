@@ -73,7 +73,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
      */
     @FXML
     public void returnShoppingList() throws IOException {
-        this.loadFXML("FXMLMainShoppingList.fxml");
+        this.loadFXML("HomeShoppingList.fxml");
 
     }
 
