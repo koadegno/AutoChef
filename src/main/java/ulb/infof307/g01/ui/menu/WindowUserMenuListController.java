@@ -114,7 +114,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * Affiche la page avec la liste des menus
      * */
     public void displayMyMenus() {
-        this.loadFXML("FXMLMyMenus.fxml");
+        this.loadFXML("UserMenuList.fxml");
     }
 
     /**
@@ -135,7 +135,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
             try {
                 Menu menu = Configuration.getCurrent().getDatabase().getMenuFromName(name);
 
-                WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("FXMLShowMenu.fxml");
+                WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
                 controller.setMenu(menu);
                 controller.displayMenu();
 

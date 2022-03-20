@@ -15,6 +15,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.ResourceBundle;
 
 public class WindowCreateMenuController extends WindowEditMenuController implements Initializable {
@@ -26,7 +27,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     }
 
     @FXML
-    public void displayEditMeal(ActionEvent event) throws IOException {
+    public void displayEditMeal() {
         this.loadFXML(this, "CreateDisplayMenu.fxml");
     }
 
@@ -58,7 +59,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     @Override
     @FXML
     public void returnMain(ActionEvent event) throws IOException {
-        this.loadFXML("FXMLMainMenu.fxml");
+        this.loadFXML("HomeMenu.fxml");
     }
 
     /**

@@ -28,7 +28,7 @@ public class WindowHomeController extends Window{
     public void displayMain(Stage primaryStage){
         try{
             this.setStage(primaryStage);
-            this.loadFXML("FXMLMainPage.fxml");
+            this.loadFXML("HomePage.fxml");
         }catch (Exception e ){
             e.printStackTrace();
         }

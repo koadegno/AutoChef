@@ -11,13 +11,13 @@ import ulb.infof307.g01.ui.WindowHomeController;
 
 public class WindowHomeShoppingListController extends Window {
     public void displayMenuShoppingListController() {
-        this.loadFXML("FXMLMainShoppingList.fxml");
+        this.loadFXML("HomeShoppingList.fxml");
     }
 
     @FXML
     public void displayMyShoppingListController(){
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
-        this.loadFXML(windowsMyShoppingListsController, "FXMLCreateMyShoppingList.fxml");
+        this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
 
         //Initialise la page avec les informations de la bdd
         windowsMyShoppingListsController.initShoppingListElement();
@@ -28,7 +28,7 @@ public class WindowHomeShoppingListController extends Window {
     @FXML
     public void displayCreateShoppingListController(){
         WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowsCreateMyShoppingListController, "FXMLCreateMyShoppingList.fxml");
+        this.loadFXML(windowsCreateMyShoppingListController, "CreateUserShoppingList.fxml");
         //Initialise la page avec les informations de la bdd
         windowsCreateMyShoppingListController.initShoppingListElement();
         windowsCreateMyShoppingListController.initComboBox();
@@ -38,6 +38,5 @@ public class WindowHomeShoppingListController extends Window {
     public void returnMainMenu() {
         WindowHomeController windowHomeController = new WindowHomeController();
         windowHomeController.displayMain(this.primaryStage);
-        //this.loadFXML("FXMLMainPage.fxml");
     }
 }

@@ -94,7 +94,7 @@ public class WindowEditMenuController extends Window implements UtilisationContr
     @FXML
     private void searchRecipe() {
         this.scene = this.primaryStage.getScene();
-        WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("searchRecipe.fxml");
+        WindowSearchRecipeController controller = (WindowSearchRecipeController) this.loadFXML("SearchRecipe.fxml");
         controller.setMainController(this);
     }
 

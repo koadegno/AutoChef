@@ -40,9 +40,8 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
              currentShoppingListname = (String) nameMyShoppingList;
              try { // afficher les produits de la liste de course dans la table
                  ShoppingList shoppingList = this.applicationConfiguration.getCurrent().getDatabase().getShoppingListFromName(currentShoppingListname);
-                 Vector<Product> temp =  (Vector<Product>) shoppingList;
-                 final ObservableList<Product> data = FXCollections.observableArrayList(temp);
-                 tableViewDisplayProductList.setItems(data);
+                 Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
+                 tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
                  isVisibleElementToModifyMyShoppingList(true);
              } catch (SQLException e) {
                  e.printStackTrace();
