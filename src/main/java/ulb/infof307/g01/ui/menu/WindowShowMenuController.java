@@ -107,7 +107,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     @FXML
     public void generateShoppingList(ActionEvent event){
         WindowCreateUserShoppingListController controller = new WindowCreateUserShoppingListController();
-        this.loadFXML(controller, "FXMLCreateMyShoppingList.fxml");
+        this.loadFXML(controller, "CreateUserShoppingList.fxml");
         controller.initShoppingListElement();
         controller.initComboBox();
         fillShoppingList(controller);
@@ -127,7 +127,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
     @Override
     public void add(Menu menu) {
-        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("FXMLShowMenu.fxml");
+        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
         controller.setMenu(menu);
     }
 

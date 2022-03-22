@@ -22,7 +22,7 @@ public class WindowHomeMenuController extends Window {
      * Affiche la page principale des Menus.
      */
     public void displayMainMenuController() {
-        this.loadFXML("FXMLMainMenu.fxml");
+        this.loadFXML("HomeMenu.fxml");
     }
 
     /**
@@ -50,7 +50,7 @@ public class WindowHomeMenuController extends Window {
      * */
     public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {
         WindowCreateMenuController createMenu = new WindowCreateMenuController();
-        createMenu.displayEditMeal(event);
+        createMenu.displayEditMeal();
     }
 
 
