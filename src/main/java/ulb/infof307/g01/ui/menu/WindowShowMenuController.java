@@ -15,7 +15,6 @@ import java.util.*;
 
 import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowCreateUserShoppingListController;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
@@ -41,17 +40,12 @@ public class WindowShowMenuController extends Window implements Initializable, U
     HBox menuHBox;
 
 
-
-    public void setMenu(Menu menu){this.menu= menu;}
-
     /**
-     * Affiche le nom, la duration et
-     * le contenu du menu dans un tableau*/
-    public void displayMenu(){
-        ArrayList<Day> days = new ArrayList<>();
-        for (int i = 0; i < menu.getNbOfdays(); i++) {
-            days.add(Day.values()[i]);
-        }
+     * Récupère le menu envoyé par la page précédente, affiche son
+     * nom, sa duration et son contenu dans un tableau*/
+    public void setMenu(Menu menu){
+        this.menu= menu;
+        ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, menu.getNbOfdays()));
         displayMenuInfo(menu.toString(), menu.getNbOfdays());
         displayMenuTable(days);
     }
@@ -76,15 +70,12 @@ public class WindowShowMenuController extends Window implements Initializable, U
         for (Day day : days){
             TableView<Recipe> dayTable = new TableView<>();
             dayTable.getColumns().clear();
-
             TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
             dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-
             List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
             dayTable.getItems().addAll(mealForDay);
             dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
-
             menuHBox.getChildren().add(dayTable);
         }
     }
@@ -103,14 +94,16 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * Redirige vers la page de creation d'une liste de courses
      * où le tableau sera rempli avec les ingrédients qui se trouvent
      * dans chaque recette du menu
+     * @throws IOException : si le fichier CreateUserShoppingList.fxml n'existe pas
      * */
     @FXML
-    public void generateShoppingList(ActionEvent event){
-        WindowCreateUserShoppingListController controller = new WindowCreateUserShoppingListController();
-        this.loadFXML(controller, "CreateUserShoppingList.fxml");
-        controller.initShoppingListElement();
-        controller.initComboBox();
-        fillShoppingList(controller);
+    public void generateShoppingList(ActionEvent event) throws IOException {
+        WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
+        this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
+        windowCreateUserShoppingListController.initShoppingListElement();
+        windowCreateUserShoppingListController.initComboBox();
+        fillShoppingList(windowCreateUserShoppingListController);
+
     }
 
 
@@ -135,7 +128,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     public void cancel() {
 
         try{
-            add(Configuration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
+            add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
     }

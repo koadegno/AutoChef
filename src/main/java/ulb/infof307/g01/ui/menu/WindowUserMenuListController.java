@@ -137,7 +137,6 @@ public class WindowUserMenuListController extends Window implements Initializabl
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
                 controller.setMenu(menu);
-                controller.displayMenu();
 
             } catch (SQLException e) {
                 this.setNodeColor(menuName,true);
