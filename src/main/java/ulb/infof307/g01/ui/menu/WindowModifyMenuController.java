@@ -47,24 +47,19 @@ public class WindowModifyMenuController extends WindowEditMenuController impleme
         generateMenuButton.setVisible(false);
     }
 
-    /**
-     * Que faire quand l'utilisateur annule la modification?
-     * @param event l'utilisateur a annulé l'édition
-     * @throws IOException
-     */
+
     @Override
     @FXML
-    void returnMain(ActionEvent event) throws IOException {
+    void returnMain() {
         this.mainController.cancel();
     }
 
     /**
      * Enregistre les modifications dan la base de données
-     * @param event Bouton enregistré à été cliqué
      */
     @Override
     @FXML
-    public void saveMenu(ActionEvent event){
+    public void saveMenu(){
         try{
             this.applicationConfiguration.getCurrent().getDatabase().saveModifyMenu(myMenu);
             this.mainController.add(myMenu);

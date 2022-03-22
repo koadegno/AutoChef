@@ -56,7 +56,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
 
     //override par les enfant mais pas abstract car par défaut le bouton qui lui est connecté ne fait rien
     @FXML
-    public void confirmRecipe(ActionEvent event) throws IOException {}
+    public void confirmRecipe() {}
 
     @FXML
     private void onlyIntValue(){
@@ -89,20 +89,16 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
 
     /**
      * L'user à annuler la recherche d'une recette , on previent l'appelant que le contrat est fini
-     * @param event bouton retour à été cliqué
-     * @throws IOException
      */
-    public void returnToCreateMenu(ActionEvent event) throws IOException {
+    public void returnToCreateMenu() {
         this.mainController.cancel();
     }
 
     /**
      * On previent l'appelant que le contrat est fini
-     * @param event Une recette à été selection dans la tableView
-     * @throws IOException
      * Donne l'objet demander et construit pas l'utilisateur
      */
-    public void addRecipe(Event event) throws IOException{
+    public void addRecipe(){
         int idx = recipeTableView.getSelectionModel().getSelectedIndex();
         if(idx > -1) this.mainController.add(this.recipeName.get(idx));
     }
@@ -127,14 +123,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
     }
 
     public void checkBoxEvent(MouseEvent mouseEvent) throws SQLException{
-        if (this.activateSpinnerCheckBox.isSelected()){
-            this.numberOfPersonSpinner.setVisible(true);
-
-        }
-        else{
-            this.numberOfPersonSpinner.setVisible(false);
-
-        }
+        this.numberOfPersonSpinner.setVisible(this.activateSpinnerCheckBox.isSelected());
         this.refreshTableView(mouseEvent);
     }
 

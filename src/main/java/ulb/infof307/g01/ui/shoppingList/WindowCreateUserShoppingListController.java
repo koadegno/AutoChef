@@ -69,7 +69,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
      * Methode permettant de creer une liste de courses dans la base de donnee
      */
     @FXML
-    public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
+    public void confirmMyCreateShoppingList() {
         removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
 
@@ -103,13 +103,9 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         Vector<Product> temp =  (Vector<Product>) myExistentShoppingList;
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
         tableViewDisplayProductList.setItems(data);
-        //Retour mesure precedent : MainShoppingList
+        //Retour menu precedent : MainShoppingList
         returnToMenu.setOnAction((event) ->{
-            try {
-                returnToMyMenu();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            returnToMyMenu();
         });
     }
     @Override

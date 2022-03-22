@@ -30,7 +30,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
      * liste de courses
      */
     @FXML
-     public void seeMyShoppingListTableView(ActionEvent event) throws IOException {
+     public void seeMyShoppingListTableView() {
          Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
 
          if(Objects.equals(nameMyShoppingList, null)){ //nom est null
@@ -114,13 +114,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         comboBoxShoppingNameList.setVisible(true);
         btnConfirm.setText("Enregistrer");
         btnSeeShoppingList.setVisible(true);
-        btnSeeShoppingList.setOnAction(e-> {
-            try {
-                seeMyShoppingListTableView(e);
-            } catch (IOException ex) {
-                ex.printStackTrace();
-            }
-        });
+        btnSeeShoppingList.setOnAction(e-> {seeMyShoppingListTableView();});
     }
 
     @Override

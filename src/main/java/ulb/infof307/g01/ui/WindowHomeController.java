@@ -1,12 +1,9 @@
 package ulb.infof307.g01.ui;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import ulb.infof307.g01.ui.menu.WindowHomeMenuController;
 import ulb.infof307.g01.ui.shoppingList.WindowHomeShoppingListController;
-
-import java.io.IOException;
 
 /**
  * La classe WindowHomeController représente le controleur
@@ -39,7 +36,7 @@ public class WindowHomeController extends Window{
      * @see WindowHomeShoppingListController
      * */
     @FXML
-    public void redirectToShoppingList(ActionEvent event){
+    public void redirectToShoppingList(){
         WindowHomeShoppingListController windowsShoppingListController = new WindowHomeShoppingListController();
         windowsShoppingListController.displayMenuShoppingListController();
 

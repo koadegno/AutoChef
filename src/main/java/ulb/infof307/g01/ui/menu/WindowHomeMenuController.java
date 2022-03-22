@@ -38,7 +38,7 @@ public class WindowHomeMenuController extends Window {
      * Affiche la page qui contient la liste des menus.
      * @see WindowUserMenuListController
      * */
-    public void redirectToMyMenusController(ActionEvent event){
+    public void redirectToMyMenusController(){
         WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.displayMyMenus();
     }
@@ -48,7 +48,7 @@ public class WindowHomeMenuController extends Window {
      * @see WindowUserMenuListController
      * @throws IOException
      * */
-    public void redirectToCreateMenuController(ActionEvent event) throws IOException, SQLException {
+    public void redirectToCreateMenuController() throws IOException, SQLException {
         WindowCreateMenuController createMenu = new WindowCreateMenuController();
         createMenu.displayEditMeal();
     }

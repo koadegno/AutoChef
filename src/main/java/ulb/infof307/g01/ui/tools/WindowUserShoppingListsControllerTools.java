@@ -81,7 +81,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
      * Retour au menu precedent : ShowMenu
      */
     @FXML
-    public void returnToMyMenu() throws IOException {
+    public void returnToMyMenu() {
         WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.displayMyMenus();
     }

@@ -1,7 +1,6 @@
 
 package ulb.infof307.g01.ui.menu;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -97,7 +96,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * @throws IOException : si le fichier CreateUserShoppingList.fxml n'existe pas
      * */
     @FXML
-    public void generateShoppingList(ActionEvent event) throws IOException {
+    public void generateShoppingList() {
         WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
         this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
         windowCreateUserShoppingListController.initShoppingListElement();
@@ -113,7 +112,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     }
 
 
-    public void back(ActionEvent event){
+    public void back(){
         WindowUserMenuListController menu = new WindowUserMenuListController();
         menu.displayMyMenus();
     }

@@ -1,7 +1,5 @@
 package ulb.infof307.g01.ui.menu;
 
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -65,11 +63,10 @@ public class WindowEditMenuController extends Window implements UtilisationContr
 
     /**
      * Doi être override par les classe héritière.
-     * @param event l'utilisateur a annulé l'édition
      * @throws IOException
      */
     @FXML
-    void returnMain(ActionEvent event) throws IOException{}
+    void returnMain(){}
 
     @FXML
     public void fillTableView(TableView table, List<Recipe> valueList) {
@@ -98,12 +95,9 @@ public class WindowEditMenuController extends Window implements UtilisationContr
         controller.setMainController(this);
     }
 
-    /**
-     *
-     * @param event bouton supprimer recette de la liste
-     */
+
     @FXML
-    public void removeRecipeAction(ActionEvent event) {
+    public void removeRecipeAction() {
         Recipe recipeToRemove = (Recipe) menuTableView.getSelectionModel().getSelectedItem();
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         this.myMenu.removeRecipeFrom(daysName.get(dayIndex), recipeToRemove);
@@ -113,18 +107,16 @@ public class WindowEditMenuController extends Window implements UtilisationContr
 
     /**
      * Rend visible le bouton supprimer
-     * @param event recette à été selectionner dans la tableview
      */
     @FXML
-    public void recipeSelectedEvent(Event event) {
+    public void recipeSelectedEvent() {
         int idx = menuTableView.getSelectionModel().getSelectedIndex();
         if (idx > -1) this.removeRecipeButton.setVisible(true);
     }
 
     /**
      * Doit être géré par les enfants...Que faire quand l'utilisateur à terminer d'éditer un menu?
-     * @param event Bouton enregistré à été cliqué
      */
     @FXML
-    public void saveMenu(ActionEvent event){}
+    public void saveMenu(){}
 }

@@ -44,8 +44,8 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
         this.fillTableView(menuTableView, myMenu.getRecipesfor(daysName.get(0)));
         this.removeRecipeButton.setVisible(false);
-        this.generateMenuButton.setOnAction((event1) -> {
-                try{this.generateMenu(event1);}
+        this.generateMenuButton.setOnAction((event) -> {
+                try{this.generateMenu();}
                 catch (SQLException e){}
         });
     }
@@ -53,22 +53,19 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     /**
      * returnMain est la methode connectée au bouton qui permet de retourner
      *  au menu principal
-     * @param event l'utilisateur a annulé l'édition
-     * @throws IOException
      */
     @Override
     @FXML
-    public void returnMain(ActionEvent event) throws IOException {
+    public void returnMain() {
         this.loadFXML("HomeMenu.fxml");
     }
 
     /**
      * Cette fonction permet la génération automatique de menu
-     * @param event
      * @throws SQLException
      */
     @FXML
-    public void generateMenu(ActionEvent event) throws SQLException {
+    public void generateMenu() throws SQLException {
         final GenerateMenuDialog dialog = new GenerateMenuDialog();
         dialog.initModality(Modality.APPLICATION_MODAL);
         dialog.initOwner(this.primaryStage);
@@ -91,11 +88,10 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
 
     /**
      * Cette méthode permet de sauvegarder un menu dans la base de données
-     * @param event Bouton enregistré à été cliqué
      */
     @Override
     @FXML
-    public void saveMenu(ActionEvent event){
+    public void saveMenu(){
         myMenu.setName(this.menuNameTextField.getText());
         try{
             if(myMenu.size() == 0) {
