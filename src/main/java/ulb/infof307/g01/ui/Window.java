@@ -4,11 +4,14 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.Configuration;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Window  {
     protected static Configuration applicationConfiguration;
@@ -57,6 +60,14 @@ public class Window  {
         primaryStage.setTitle("Autochef");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    protected ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        Optional<ButtonType> alertResult = alert.showAndWait();
+        return alertResult.get();
     }
 
 }
