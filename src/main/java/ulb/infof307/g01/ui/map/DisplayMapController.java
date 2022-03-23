@@ -9,47 +9,46 @@ import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
-import javafx.application.Application;
+import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
+import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
+import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuBar;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
-import javafx.stage.Stage;
 import ulb.infof307.g01.ui.Window;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.concurrent.ExecutionException;
 
 public class DisplayMapController extends Window implements Initializable {
 
-    private static final int ONCE_CLIKED = 1;
-    private static final int DOUBLE_CLIKED = 2;
+    private static final int ONCE_CLICKED = 1;
+    private static final int DOUBLE_CLICKED = 2;
+    private GeocodeParameters geocodeParameters;
+    private LocatorTask locatorTask;
+    private MapView mapView;
+    private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+
     @FXML
     private Pane mapViewStackPane;
 
     @FXML
-    private MenuBar menuBar;
-
-    @FXML
     private TextField textFieldMenuBar;
 
-    private MapView mapView;
-    private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+    @FXML
+    private TextField searchBox;
+
+
+
 
     @FXML
     void showSearchResult(KeyEvent event) {
@@ -69,24 +68,33 @@ public class DisplayMapController extends Window implements Initializable {
         this.loadFXML("DisplayMap.fxml");
     }
 
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMap();
         initializeMapEvent();
+        setupTextField();
+
+        createLocatorTaskAndDefaultParameters();
+
+        searchBox.setOnAction(event -> {
+            String address = searchBox.getText();
+            if (!address.isBlank()) {
+                performGeocode(address);
+            }
+        });
         //TODO fonction pour charger les magasins sur l'overlay
         mapViewStackPane.getChildren().add(mapView);
         mapView.getGraphicsOverlays().add(graphicsOverlay);
     }
 
     /**
-     * Methode initialisant les evenement sur la map
+     * Methode initialisant les evenements sur la map
      */
     private void initializeMapEvent() {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
             // selectionner un point
-            if(mouseEvent.getClickCount() ==  ONCE_CLIKED){
+            if(mouseEvent.getClickCount() == ONCE_CLICKED){
                 /* TODO Popup avec les info et les produits du magasin
 
                 */
@@ -99,7 +107,7 @@ public class DisplayMapController extends Window implements Initializable {
             }
             // ajouter un point sur la map ou suppression si on double
             // clique sur un point deja sur la map
-            else if(mouseEvent.getClickCount() == DOUBLE_CLIKED) {
+            else if(mouseEvent.getClickCount() == DOUBLE_CLICKED) {
                 boolean isPointAdded = false;
                 Point2D cursorPoint2D = new Point2D( mouseEvent.getX(),mouseEvent.getY());
 
@@ -131,8 +139,6 @@ public class DisplayMapController extends Window implements Initializable {
 
         });
     }
-
-
 
     /**
      * Pour un point donné la methode met en evidence ce point sur la carte
@@ -195,5 +201,59 @@ public class DisplayMapController extends Window implements Initializable {
         //TODO changer ces nombres magique
         mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
 
+    }
+
+
+    private void setupTextField() {
+        searchBox.setMaxWidth(400);
+        searchBox.setPromptText("Search for an address");
+    }
+
+
+    private void createLocatorTaskAndDefaultParameters() {
+        locatorTask = new LocatorTask("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+
+        geocodeParameters = new GeocodeParameters();
+        geocodeParameters.getResultAttributeNames().add("*");
+        geocodeParameters.setMaxResults(1);
+        geocodeParameters.setOutputSpatialReference(mapView.getSpatialReference());
+    }
+
+    private void performGeocode(String address) {
+        ListenableFuture<List<GeocodeResult>> geocodeResults = locatorTask.geocodeAsync(address, geocodeParameters);
+
+        geocodeResults.addDoneListener(() -> {
+            try {
+                List<GeocodeResult> geocodes = geocodeResults.get();
+                if (geocodes.size() > 0) {
+                    GeocodeResult result = geocodes.get(0);
+
+                    displayResult(result);
+
+                } else {
+                    new Alert(Alert.AlertType.INFORMATION, "No results found.").show();
+                }
+            } catch (InterruptedException | ExecutionException e) {
+                new Alert(Alert.AlertType.ERROR, "Error getting result.").show();
+                e.printStackTrace();
+            }
+        });
+    }
+
+    private void displayResult(GeocodeResult geocodeResult) {
+        graphicsOverlay.getGraphics().clear(); // clears the overlay of any previous result
+
+        // create a graphic to display the address text
+        String label = geocodeResult.getLabel();
+        TextSymbol textSymbol = new TextSymbol(18, label, 0xFF000000, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+        Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
+        graphicsOverlay.getGraphics().add(textGraphic);
+
+        // create a graphic to display the location as a red square
+        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, 0xFFFF0000, 12.0f);
+        Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
+        graphicsOverlay.getGraphics().add(markerGraphic);
+
+        mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
     }
 }

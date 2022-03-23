@@ -6,17 +6,23 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.StackPane?>
 
+<?import javafx.scene.layout.Pane?>
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.map.DisplayMapController">
-   <children>
-      <MenuBar fx:id="menuBar" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <menus>
-          <Menu mnemonicParsing="false" text="Search">
-               <graphic>
-                  <TextField fx:id="textFieldMenuBar" onKeyReleased="#showSearchResult" />
-               </graphic>
-          </Menu>
-        </menus>
-      </MenuBar>
-      <StackPane fx:id="mapViewStackPane" layoutY="33.0" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
-   </children>
+    <children>
+        <MenuBar fx:id="menuBar" layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Chercher un magasin">
+                    <graphic>
+                        <TextField fx:id="textFieldMenuBar" onKeyReleased="#showSearchResult" />
+                    </graphic>
+                </Menu>
+                <Menu mnemonicParsing="false" text="Chercher une adresse">
+                    <graphic>
+                        <TextField fx:id="searchBox" />
+                    </graphic>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <StackPane fx:id="mapViewStackPane" layoutY="33.0" prefHeight="367.0" prefWidth="600.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="33.0" />
+    </children>
 </AnchorPane>
