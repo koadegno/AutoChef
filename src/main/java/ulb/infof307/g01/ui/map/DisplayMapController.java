@@ -108,29 +108,28 @@ public class DisplayMapController extends Window implements Initializable {
             // ajouter un point sur la map ou suppression si on double
             // clique sur un point deja sur la map
             else if(mouseEvent.getClickCount() == DOUBLE_CLICKED) {
-                boolean isPointAdded = false;
+                boolean isPointRemoved = false;
                 Point2D cursorPoint2D = new Point2D( mouseEvent.getX(),mouseEvent.getY());
 
-                SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, 0xFFFF0000, 10);
                 Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-                Graphic pierGraphic = new Graphic(mapPoint, redCircleSymbol);
 
-                for(int i =0; i < graphicsOverlay.getGraphics().size(); i++){
+                for(int i =0; i < graphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
 
-                    Graphic pointOnMap = graphicsOverlay.getGraphics().get(i);
-                    System.out.println("sur la carte "+pointOnMap.getGeometry());
+                    Graphic colorPointOnMap = graphicsOverlay.getGraphics().get(i);
+                    Graphic textPointOnMap = graphicsOverlay.getGraphics().get(i+1); // recuperer le suivant
 
-                    if(pointOnMap.getGeometry().equals(pierGraphic.getGeometry(),100)){
-                        // TODO POP up avant de del
+                    if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
+                        // TODO POP up avant de del avec les info du magasin
                         ButtonType alertResult = showAlert(Alert.AlertType.CONFIRMATION,"Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                         if(alertResult == ButtonType.OK){
-                            removePointFromOverlay(pointOnMap);
-                            isPointAdded = true;
+                            removePointFromOverlay(textPointOnMap);
+                            removePointFromOverlay(colorPointOnMap);
+                            isPointRemoved = true;
                         }
-                        break;
+
                     }
                 }
-                if(!isPointAdded){
+                if(!isPointRemoved){
                     //TODO fenetre pour mettre les infos du magasin
                     addPointToOverlay(mapPoint);
                 }
@@ -148,15 +147,18 @@ public class DisplayMapController extends Window implements Initializable {
      */
     private void highlightGraphicPoint(Point2D mapViewPoint) throws ExecutionException, InterruptedException {
         ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(graphicsOverlay,
-                mapViewPoint, 10, false,1);
+                mapViewPoint, 10, false,2);
 
         identifyFuture.addDoneListener(() -> {
             try {
                 // get the list of graphics returned by identify
                 List<Graphic> identifiedGraphics = identifyFuture.get().getGraphics();
                 if(!identifiedGraphics.isEmpty()){
+
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
+                    identifiedGraphics.get(1).setSelected(true);
+
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
@@ -182,13 +184,17 @@ public class DisplayMapController extends Window implements Initializable {
         // create a graphic from the point and  TExt symbol
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        10, "Santa Monica Pier", 1,
-                        TextSymbol.HorizontalAlignment.LEFT, TextSymbol.VerticalAlignment.BOTTOM);
+                        10, "Santa Monica Pier", 0xFF000000,
+                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
 
-        Graphic pierGraphic = new Graphic(mapPoint, redCircleSymbol);
+        Graphic circlePoint = new Graphic(mapPoint, redCircleSymbol);
+        Graphic textPoint = new Graphic(mapPoint, pierTextSymbol);
+
 
         // add the graphic to the graphics overlay
-        graphicsOverlay.getGraphics().add(pierGraphic);
+        graphicsOverlay.getGraphics().add(circlePoint);
+        graphicsOverlay.getGraphics().add(textPoint);
+
     }
 
     private void initializeMap(){
@@ -202,7 +208,6 @@ public class DisplayMapController extends Window implements Initializable {
         mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
 
     }
-
 
     private void setupTextField() {
         searchBox.setMaxWidth(400);
