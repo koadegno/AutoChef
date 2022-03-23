@@ -58,7 +58,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
     public void initShoppingListElement() {
         try {
             allProduct = this.applicationConfiguration.getCurrent().getDatabase().getAllProductName();
-            allUnitName = this.applicationConfiguration.getCurrent().getDatabase().getAllUniteName();
+            allUnitName = this.applicationConfiguration.getCurrent().getDatabase().getAllUnityName();
             allUnitName.removeAll(List.of(unitToRemove));
             allShoppinListName = this.applicationConfiguration.getCurrent().getDatabase().getAllShoppingListName();
 

@@ -82,7 +82,7 @@ class TestDatabase {
 
     @Test
     public void testGetAllTypes() throws SQLException {
-        ArrayList<String> res = db.getAllTypes();
+        ArrayList<String> res = db.getAllTypeName();
         assertEquals(2, res.size());
     }
 
@@ -103,7 +103,7 @@ class TestDatabase {
 
     @Test
     public void testGetAllUniteName() throws SQLException {
-        ArrayList<String> names = db.getAllUniteName();
+        ArrayList<String> names = db.getAllUnityName();
         assertEquals(2,names.size(),"test nombre produit");
         assertEquals("g",names.get(0),"test 1ere unite");
     }

@@ -13,8 +13,8 @@ public class Configuration {
         return current;
     }
 
-    public void setDatabase(String dbPAth){
-        this.database = new Database(dbPAth);
+    public void setDatabase(String dbPath){
+        this.database = new Database(dbPath);
     }
 
     public Database getDatabase(){
