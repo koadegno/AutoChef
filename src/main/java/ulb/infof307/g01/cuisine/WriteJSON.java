@@ -9,7 +9,7 @@ public class WriteJSON
     @SuppressWarnings("unchecked")
     public static void main( String[] args )
     {
-        //First Employee
+        //Recette
         JSONObject recette = new JSONObject();
         recette.put("Nom", "testRecette");
         recette.put("Duree", 11);
