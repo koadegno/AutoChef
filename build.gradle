@@ -95,6 +95,6 @@ jar {
     from {
         configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    baseName 'g01-iteration'
+    archivesBaseName = 'g01-iteration'
     destinationDirectory.set(file("$rootDir/dist"))
 }
