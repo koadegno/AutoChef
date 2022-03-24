@@ -42,8 +42,13 @@ application {
 
 dependencies {
 
+    // Database
+
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0'
+
+    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
+    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.0'
 
     // JavaFX
 
@@ -75,9 +80,11 @@ dependencies {
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: '17.0.2', classifier: "win"
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: '17.0.2', classifier: "mac"
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: '17.0.2', classifier: "linux"
-    // https://mvnrepository.com/artifact/org.apache.poi/poi-ooxml
-    implementation group: 'org.apache.poi', name: 'poi-ooxml', version: '5.2.0'
 
+    // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
+    implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
+
+    // Test
     // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
