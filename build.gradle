@@ -7,26 +7,17 @@ plugins {
 group 'ulb.infof307.g01'
 version '2'
 
-repositories {
-    mavenCentral()
-}
+repositories {mavenCentral()}
 
-java {
-    toolchain {
-        languageVersion.set(JavaLanguageVersion.of(17))
-    }
-}
+java {toolchain {languageVersion.set(JavaLanguageVersion.of(17))}}
 
 test {
     useJUnitPlatform()
+    testLogging {events "passed", "skipped", "failed"}
 }
-sourceSets {
-    test {
-        java {
-            srcDirs = ["test/"]
-        }
-    }
-}
+
+sourceSets {test {java {srcDirs = ["test/"]}}}
+javadoc {setDocsDirName("doc/")}
 
 javafx {
     version = "17.0.2"
@@ -34,9 +25,7 @@ javafx {
 }
 
 
-application {
-    mainClass = 'ulb.infof307.g01.Main'
-}
+application {mainClass = 'ulb.infof307.g01.Main'}
 
 
 
