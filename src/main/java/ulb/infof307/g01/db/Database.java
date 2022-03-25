@@ -202,30 +202,6 @@ public class Database {
     }
 
     /**
-     * Methode remplissant une ArrayList a partir d'un objet ResultSet contenant des Recipes
-     * @param result ResultSet qui contient le resultat de la requete
-     * @return ArrayList d'objets Recipes correctement remplis
-     */
-    protected ArrayList<Recipe> getRecipes(ResultSet result) throws SQLException {
-        ArrayList<Recipe> recipes = new ArrayList<>();
-        while (result.next()){
-            int recipeID = result.getInt(1);
-            String name = result.getString(2);
-            int duration = result.getInt(3);
-            int nbPersons = result.getInt(4);
-            String method = result.getString(5);
-            String category = result.getString(6);
-            String type = result.getString(7);
-            Recipe recipe = new Recipe(recipeID, name, duration, category, type, nbPersons, method);
-            recipes.add(recipe);
-        }
-        for(Recipe rec: recipes){
-            fillRecipeWithProducts(rec);
-        }
-        return recipes;
-    }
-
-    /**
      * @param productID ID de l'ingredient que l'on cherche
      * @return objet Product trouvé
      */
@@ -287,26 +263,6 @@ public class Database {
         insert("TypePlat", values);
     }
 
-    public void insertRecipe(Recipe recipe) throws SQLException {
-        String name = String.format("'%s'", recipe.getName());
-        String duration = String.format("%d", recipe.getDuration());
-        String nbPerson = String.format("%d", recipe.getNbrPerson());
-        String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
-        String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
-        String preparation = String.format("'%s'", recipe.getPreparation());
-
-        String[] values = {"null", name, duration, nbPerson, type, category, preparation};
-        insert("Recette", values);
-        String recipeID = String.format("%d", getGeneratedID());
-
-        for (Product p: recipe) {
-            String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
-            String quantity =  String.format("%d", p.getQuantity());
-            String[] productValues = {recipeID, productID, quantity};
-            insert("RecetteIngredient", productValues);
-        }
-    }
-
     public void insertUnite(String name) throws SQLException {
         String[] values = {"null",String.format("'%s'",name)};
         insert("Unite",values);
@@ -335,7 +291,6 @@ public class Database {
     }
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
-
         return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
     }
 
@@ -370,42 +325,6 @@ public class Database {
             shoppingList.add(new Product(productName,productQuantity,productUnity,productFamily));
         }
         return shoppingList;
-    }
-
-    /**
-     * Si un ou plusieurs parametres sont null ils ne sont pas ajoutes dans les contraintes de la requete
-     * @param nameCategory contrainte pour le nom de la categorie
-     * @param nameType contrainte pour le nom du type
-     * @param nbPerson contrainte pour le nombre de personne
-     */
-    public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        String stringQuery;
-        StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n");
-
-        if (nameCategory != null){
-            int categoryID = getIDFromName("Categorie",nameCategory,"CategorieID");
-            constraint.add(String.format("R.CategorieID = %d", categoryID));
-        }
-        if (nameType != null){
-            int typeID = getIDFromName("TypePlat",nameType,"TypePlatID");
-            constraint.add(String.format("R.TypePlatID = %d", typeID));
-        }
-        if (nbPerson > 0){
-            constraint.add(String.format("R.NbPersonnes = %d", nbPerson));
-        }
-        if (constraint.size() > 0){
-            query.append(" Where ");
-            stringQuery = appendValuesToWhere(query,constraint);
-        }
-        else {
-            stringQuery = String.valueOf(query);
-        }
-        ResultSet result = sendQuery(stringQuery);
-        return getRecipes(result);
     }
 
     public Integer createAndGetIdShoppingList(String name) throws SQLException {
