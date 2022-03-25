@@ -171,11 +171,6 @@ public class Database {
         sendQueryUpdate(stringQuery);
     }
 
-    protected void insertIngredientInShoppingList(int shoppingListId, int ingredientId, int quantity) throws SQLException {
-        String[] values = {String.format("%d",shoppingListId),String.format("%d",ingredientId),String.format("%d",quantity)};
-        insert("ListeCourseIngredient",values);
-    }
-
     /**
      * @param table Table dans laquelle on cherche le nom
      * @param id ID correspondant au nom
@@ -234,101 +229,4 @@ public class Database {
         }
     }
 
-    /**
-     * Insertion dans la table Categorie
-     * @param nameCategory Nouvelle categorie à inserer
-     */
-    public void insertCategory(String nameCategory) throws SQLException {
-        String[] values = {"null", String.format("'%s'", nameCategory)};
-        insert("Categorie", values);
-    }
-
-    public void insertType(String nameType) throws SQLException {
-        String[] values = {"null", String.format("'%s'", nameType)};
-        insert("TypePlat", values);
-    }
-
-    public void insertUnite(String name) throws SQLException {
-        String[] values = {"null",String.format("'%s'",name)};
-        insert("Unite",values);
-    }
-
-    public void insertFamilleAliment(String name) throws SQLException {
-        String[] values = {"null",String.format("'%s'",name)};
-        insert("FamilleAliment",values);
-    }
-
-    /**
-     * @return ArrayList contenant le nom de toutes les categories
-     */
-    public ArrayList<String> getAllCategories() throws SQLException {
-        return getAllNameFromTable("Categorie",null);
-    }
-
-    public ArrayList<String> getAllShoppingListName() throws SQLException {
-        return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
-    }
-
-    public ArrayList<String> getAllUnityName() throws SQLException {
-        return getAllNameFromTable("Unite",null);
-    }
-
-    public ArrayList<String> getAllTypeName() throws SQLException {
-        return getAllNameFromTable("TypePlat",null);
-    }
-
-
-    public ShoppingList getShoppingListFromName(String nameShoppingList) throws SQLException {
-
-        int nameID = getIDFromName("ListeCourse",nameShoppingList,"ListeCourseID");
-        ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
-                "FROM ListeCourseIngredient as S\n" +
-                "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
-                "INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID \n" +
-                "INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID\n" +
-                "WHERE S.ListeCourseID = %d", nameID));
-        ShoppingList shoppingList = new ShoppingList(nameShoppingList,nameID);
-        while(querySelectShoppingList.next()){
-            int productQuantity = querySelectShoppingList.getInt(1);
-            String productName = querySelectShoppingList.getString(2);
-            String productUnity = querySelectShoppingList.getString(3);
-            String productFamily = querySelectShoppingList.getString(4);
-            shoppingList.add(new Product(productName,productQuantity,productUnity,productFamily));
-        }
-        return shoppingList;
-    }
-
-    public Integer createAndGetIdShoppingList(String name) throws SQLException {
-        String[] values = {"null",String.format("'%s'",name)};
-        insert("ListeCourse",values);
-        return getGeneratedID();
-    }
-
-    public void saveNewShoppingList(ShoppingList shoppingList) throws SQLException {
-        int id = createAndGetIdShoppingList(shoppingList.getName());
-        for(Product product : shoppingList){
-            int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
-            insertIngredientInShoppingList(id,productID, product.getQuantity());
-        }
-    }
-
-    /**
-     * Sauvegarde une liste de course modifiée, et la supprime si la liste ne contient rien
-     */
-    public void saveModifyShoppingList(ShoppingList shoppingList) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
-        delete("ListeCourseIngredient",constraint);
-        updateName("ListeCourse", shoppingList.getName(),constraint );
-        if(shoppingList.size() == 0){
-           delete("ListeCourse",constraint);
-        }
-        else{
-           for (Product product : shoppingList) {
-               int productID = getIDFromName("Ingredient", product.getName(), "IngredientID");
-               insertIngredientInShoppingList(shoppingList.getId(), productID, product.getQuantity());
-           }
-
-        }
-    }
 }
