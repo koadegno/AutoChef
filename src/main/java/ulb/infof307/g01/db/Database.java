@@ -202,21 +202,6 @@ public class Database {
     }
 
     /**
-     * @param productID ID de l'ingredient que l'on cherche
-     * @return objet Product trouvé
-     */
-    protected Product getProduct(int productID) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %d","IngredientID",productID));
-        ResultSet querySelectProduct = select("Ingredient",constraint,null);
-        querySelectProduct.next();
-        String nameProduct = querySelectProduct.getString("Nom");
-        String familyProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
-        String unityProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
-        return new Product(nameProduct,1,unityProduct,familyProduct);
-    }
-
-    /**
      *
      * @param orderBy si non nul, ajoute la contrainte de triée par
      */
@@ -273,16 +258,6 @@ public class Database {
         insert("FamilleAliment",values);
     }
 
-    public void insertIngredient(Product product) throws SQLException {
-        int familyID = getIDFromName("FamilleAliment",product.getFamillyProduct(),"FamilleAlimentID");
-        int unityID = getIDFromName("Unite",product.getNameUnity(),"UniteID");
-        String stringFamilyID = String.format("%d", familyID);
-        String stringUnityID = String.format("%d",unityID);
-        String stringName = String.format("'%s'",product.getName());
-        String[] values = {"null",stringName, stringFamilyID,stringUnityID};
-        insert("Ingredient",values);
-    }
-
     /**
      * @return ArrayList contenant le nom de toutes les categories
      */
@@ -292,10 +267,6 @@ public class Database {
 
     public ArrayList<String> getAllShoppingListName() throws SQLException {
         return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
-    }
-
-    public ArrayList<String> getAllProductName() throws SQLException {
-        return getAllNameFromTable("Ingredient","ORDER BY Nom ASC");
     }
 
     public ArrayList<String> getAllUnityName() throws SQLException {
