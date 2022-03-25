@@ -36,7 +36,9 @@ public class DisplayMapController extends Window implements Initializable {
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
-    private GraphicsOverlay graphicsOverlay = new GraphicsOverlay();
+    private GraphicsOverlay shopGraphicsOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
+
 
     @FXML
     private Pane mapViewStackPane;
@@ -84,7 +86,9 @@ public class DisplayMapController extends Window implements Initializable {
         });
         //TODO fonction pour charger les magasins sur l'overlay
         mapViewStackPane.getChildren().add(mapView);
-        mapView.getGraphicsOverlays().add(graphicsOverlay);
+        mapView.getGraphicsOverlays().add(shopGraphicsOverlay);
+        mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
+
     }
 
     /**
@@ -113,10 +117,10 @@ public class DisplayMapController extends Window implements Initializable {
 
                 Point mapPoint = mapView.screenToLocation(cursorPoint2D);
 
-                for(int i =0; i < graphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
+                for(int i = 0; i < shopGraphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
 
-                    Graphic colorPointOnMap = graphicsOverlay.getGraphics().get(i);
-                    Graphic textPointOnMap = graphicsOverlay.getGraphics().get(i+1); // recuperer le suivant
+                    Graphic colorPointOnMap = shopGraphicsOverlay.getGraphics().get(i);
+                    Graphic textPointOnMap = shopGraphicsOverlay.getGraphics().get(i+1); // recuperer le suivant
 
                     if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
                         // TODO POP up avant de del avec les info du magasin
@@ -125,6 +129,11 @@ public class DisplayMapController extends Window implements Initializable {
                             removePointFromOverlay(textPointOnMap);
                             removePointFromOverlay(colorPointOnMap);
                             isPointRemoved = true;
+                            break; // tu as deja accomplie la tache que tu devais
+                        }
+                        else{
+                            shopGraphicsOverlay.clearSelection();
+                            return;
                         }
 
                     }
@@ -134,7 +143,7 @@ public class DisplayMapController extends Window implements Initializable {
                     addPointToOverlay(mapPoint);
                 }
             }
-            graphicsOverlay.clearSelection();
+            shopGraphicsOverlay.clearSelection();
 
         });
     }
@@ -146,14 +155,14 @@ public class DisplayMapController extends Window implements Initializable {
      * @throws InterruptedException Erreur a l'execution
      */
     private void highlightGraphicPoint(Point2D mapViewPoint) throws ExecutionException, InterruptedException {
-        ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(graphicsOverlay,
+        ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(shopGraphicsOverlay,
                 mapViewPoint, 10, false,2);
 
         identifyFuture.addDoneListener(() -> {
             try {
                 // get the list of graphics returned by identify
                 List<Graphic> identifiedGraphics = identifyFuture.get().getGraphics();
-                if(!identifiedGraphics.isEmpty()){
+                if(identifiedGraphics.size() == 2){
 
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
@@ -167,12 +176,17 @@ public class DisplayMapController extends Window implements Initializable {
         });
     }
 
+    /**
+     * Fonction qui renvoie la position de la ou se trouve la souris
+     * @param mouseEvent
+     * @return la representation geometrique d'un point
+     */
     private Point2D getCursorPosition(MouseEvent mouseEvent){
         return new Point2D(mouseEvent.getX(), mouseEvent.getY());
     }
 
     private void removePointFromOverlay(Graphic mapGraphicPoint){
-        graphicsOverlay.getGraphics().remove(mapGraphicPoint);
+        shopGraphicsOverlay.getGraphics().remove(mapGraphicPoint);
 
     }
 
@@ -191,9 +205,9 @@ public class DisplayMapController extends Window implements Initializable {
         Graphic textPoint = new Graphic(mapPoint, pierTextSymbol);
 
 
-        // add the graphic to the graphics overlay
-        graphicsOverlay.getGraphics().add(circlePoint);
-        graphicsOverlay.getGraphics().add(textPoint);
+        // ajoute des graphique a l'overlay
+        shopGraphicsOverlay.getGraphics().add(circlePoint);
+        shopGraphicsOverlay.getGraphics().add(textPoint);
 
     }
 
@@ -246,18 +260,18 @@ public class DisplayMapController extends Window implements Initializable {
     }
 
     private void displayResult(GeocodeResult geocodeResult) {
-        graphicsOverlay.getGraphics().clear(); // clears the overlay of any previous result
+        addressGraphicsOverlay.getGraphics().clear(); // clears the overlay of any previous result
 
         // create a graphic to display the address text
         String label = geocodeResult.getLabel();
         TextSymbol textSymbol = new TextSymbol(18, label, 0xFF000000, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
-        graphicsOverlay.getGraphics().add(textGraphic);
+        addressGraphicsOverlay.getGraphics().add(textGraphic);
 
         // create a graphic to display the location as a red square
         SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, 0xFFFF0000, 12.0f);
         Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
-        graphicsOverlay.getGraphics().add(markerGraphic);
+        addressGraphicsOverlay.getGraphics().add(markerGraphic);
 
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
     }

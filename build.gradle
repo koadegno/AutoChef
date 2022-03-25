@@ -28,17 +28,17 @@ sourceSets {
     }
 }
 
-javafx {
-    version = "17.0.2"
-    modules = [ 'javafx.controls', 'javafx.fxml' ]
-}
-
-
 application {
     mainClass = 'ulb.infof307.g01.Main'
 }
 
+ext {
+    arcgisVersion = '100.13.0'
+}
 
+configurations {
+    natives
+}
 
 dependencies {
 
@@ -89,9 +89,13 @@ dependencies {
     testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
 
-
+    //ArcGis
+    //https://developers.arcgis.com/java/install-and-set-up/
+    implementation "com.esri.arcgisruntime:arcgis-java:100.13.0"
+    natives "com.esri.arcgisruntime:arcgis-java-jnilibs:100.13.0"
+    natives "com.esri.arcgisruntime:arcgis-java-resources:100.13.0"
+    runtimeOnly "org.slf4j:slf4j-nop:1.7.32"
 }
-
 
 jar {
 
@@ -104,4 +108,30 @@ jar {
     }
     archivesBaseName = 'g01-iteration'
     destinationDirectory.set(file("$rootDir/dist"))
+}
+
+repositories {
+    mavenCentral()
+    maven {
+        url 'https://esri.jfrog.io/artifactory/arcgis'
+    }
+}
+
+javafx {
+    version = "17.0.2"
+    modules = [ 'javafx.controls','javafx.fxml'  ]
+}
+
+task copyNatives(type: Copy) {
+    description = "Copies the arcgis native libraries into the .arcgis directory for development."
+    group = "build"
+    configurations.natives.asFileTree.each {
+        from(zipTree(it))
+    }
+    into "${System.properties.getProperty("user.home")}/.arcgis/$arcgisVersion"
+}
+
+run {
+    dependsOn copyNatives
+    mainClassName = 'com.mycompany.app.App'
 }
