@@ -10,6 +10,7 @@ import javafx.util.Callback;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.cuisine.Product;
 import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
@@ -83,7 +84,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListName);
             fillShoppingListToSend(shoppingListToSend);
             try {
-                this.applicationConfiguration.getCurrent().getDatabase().saveNewShoppingList(shoppingListToSend);
+                Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
                 this.setNodeColor(nameMyCreateShoppingList,true);

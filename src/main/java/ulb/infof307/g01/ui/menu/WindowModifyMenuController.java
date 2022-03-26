@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.db.Configuration;
 
 import java.io.IOException;
 import java.net.URL;
@@ -61,7 +62,7 @@ public class WindowModifyMenuController extends WindowEditMenuController impleme
     @FXML
     public void saveMenu(){
         try{
-            this.applicationConfiguration.getCurrent().getDatabase().saveModifyMenu(myMenu);
+            Configuration.getCurrent().getMenuDao().update(myMenu);
             this.mainController.add(myMenu);
         }catch(Exception e){System.out.println(e);
         }

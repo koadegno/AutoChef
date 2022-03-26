@@ -9,6 +9,7 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ulb.infof307.g01.cuisine.*;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
@@ -39,7 +40,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
          else{
              currentShoppingListname = (String) nameMyShoppingList;
              try { // afficher les produits de la liste de course dans la table
-                 ShoppingList shoppingList = this.applicationConfiguration.getCurrent().getDatabase().getShoppingListFromName(currentShoppingListname);
+                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
                  Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
                  tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
                  isVisibleElementToModifyMyShoppingList(true);
@@ -58,12 +59,12 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
     public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
         try {
             //Recupere liste de courses chez la bdd
-            ShoppingList shoppingListInDataBase = this.applicationConfiguration.getCurrent().getDatabase().getShoppingListFromName(currentShoppingListname);
+            ShoppingList shoppingListInDataBase = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
             ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
-            this.applicationConfiguration.getCurrent().getDatabase().saveModifyShoppingList(shoppingListToSend);
+            Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
             returnShoppingList();
 
         } catch (SQLException e) {

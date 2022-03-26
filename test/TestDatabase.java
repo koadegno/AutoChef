@@ -2,6 +2,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.cuisine.*;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
@@ -25,12 +26,13 @@ class TestDatabase {
     static private Product peche = new Product("peche", 1,"g", "Fruit");
     static private Product fraise = new Product( "fraise", 1,"g", "Fruit");
 
+    /*
     @BeforeAll
     static public void createDB() throws SQLException {
+        String databaseName = "test.sqlite";
+        Configuration.getCurrent().setDatabase(databaseName);
 
-        db = new Database("test.sqlite");
-
-        db.insertCategory("Poisson");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
         db.insertCategory("Viande");
 
         db.insertFamilleAliment("Fruit");
@@ -220,5 +222,7 @@ class TestDatabase {
             }
         }
     }
+
+     */
 
 }

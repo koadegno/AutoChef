@@ -35,8 +35,7 @@ public class ProductDao extends Database implements Dao<Product> {
     }
 
     @Override
-    public void update(Product product) throws SQLException {
-    }
+    public void update(Product product) throws SQLException { throw new UnsupportedOperationException(); }
 
     /**
      * @param name nom de l'ingredient que l'on cherche
@@ -45,12 +44,16 @@ public class ProductDao extends Database implements Dao<Product> {
     @Override
     public Product get(String name) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %s","Nom",name));
+        constraint.add(String.format("%s = '%s'","Nom",name));
         ResultSet querySelectProduct = select("Ingredient",constraint,null);
         querySelectProduct.next();
+
         String nameProduct = querySelectProduct.getString("Nom");
-        String familyProduct = getNameFromID("FamilleAliment",querySelectProduct.getInt("FamilleAlimentID"),"FamilleAlimentID");
-        String unityProduct = getNameFromID("Unite",querySelectProduct.getInt("UniteID"),"UniteID");
+        int familyProductID = querySelectProduct.getInt("FamilleAlimentID");
+        int unityProductID = querySelectProduct.getInt("UniteID");
+
+        String familyProduct = getNameFromID("FamilleAliment", familyProductID,"FamilleAlimentID");
+        String unityProduct = getNameFromID("Unite", unityProductID,"UniteID");
         return new Product(nameProduct,1,unityProduct,familyProduct);
     }
 }

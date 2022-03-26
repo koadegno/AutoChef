@@ -9,6 +9,7 @@ import javafx.stage.Modality;
 import ulb.infof307.g01.cuisine.Day;
 import ulb.infof307.g01.cuisine.Menu;
 import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.tools.GenerateMenuDialog;
 
 import java.io.IOException;
@@ -76,7 +77,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
             int nbFish = (int) dialog.getFishSpinner().getValue();
             dialog.close();
             try {
-                myMenu.generateMenu(this.applicationConfiguration.getCurrent().getDatabase(), nbVegetarian, nbMeat, nbFish);
+                myMenu.generateMenu(nbVegetarian, nbMeat, nbFish);
                 dialog.close();
                 this.refreshTableView();
             } catch (SQLException e) {
@@ -97,7 +98,7 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
             if(myMenu.size() == 0) {
                 this.setNodeColor(menuTableView, true);
              } else {
-                this.applicationConfiguration.getCurrent().getDatabase().saveNewMenu(myMenu);
+                Configuration.getCurrent().getMenuDao().insert(myMenu);
                 WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
                 mainMenuController.displayMainMenuController();
             }

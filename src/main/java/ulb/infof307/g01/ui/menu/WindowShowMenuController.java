@@ -14,6 +14,7 @@ import java.util.*;
 
 import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowCreateUserShoppingListController;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
@@ -127,7 +128,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     public void cancel() {
 
         try{
-            add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
+            add(Configuration.getCurrent().getMenuDao().get(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
     }
