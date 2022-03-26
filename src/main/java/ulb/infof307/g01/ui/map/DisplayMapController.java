@@ -20,6 +20,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import ulb.infof307.g01.ui.Window;
@@ -97,10 +98,9 @@ public class DisplayMapController extends Window implements Initializable {
     private void initializeMapEvent() {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
-            // selectionner un point
-            if(mouseEvent.getClickCount() == ONCE_CLICKED){
+            // selectionner un point avec un simple clique droit
+            if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED){
                 /* TODO Popup avec les info et les produits du magasin
-
                 */
                 Point2D mapViewPoint = getCursorPosition(mouseEvent);
                 try {
@@ -109,43 +109,44 @@ public class DisplayMapController extends Window implements Initializable {
                     e.printStackTrace();
                 }
             }
-            // ajouter un point sur la map ou suppression si on double
-            // clique sur un point deja sur la map
-            else if(mouseEvent.getClickCount() == DOUBLE_CLICKED) {
-                boolean isPointRemoved = false;
+            // ajouter un point sur la map ou suppression si on double clique droit
+            // sur un point deja sur la map
+            else if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == DOUBLE_CLICKED) {
                 Point2D cursorPoint2D = new Point2D( mouseEvent.getX(),mouseEvent.getY());
-
                 Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-
-                for(int i = 0; i < shopGraphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
-
-                    Graphic colorPointOnMap = shopGraphicsOverlay.getGraphics().get(i);
-                    Graphic textPointOnMap = shopGraphicsOverlay.getGraphics().get(i+1); // recuperer le suivant
-
-                    if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
-                        // TODO POP up avant de del avec les info du magasin
-                        ButtonType alertResult = showAlert(Alert.AlertType.CONFIRMATION,"Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
-                        if(alertResult == ButtonType.OK){
-                            removePointFromOverlay(textPointOnMap);
-                            removePointFromOverlay(colorPointOnMap);
-                            isPointRemoved = true;
-                            break; // tu as deja accomplie la tache que tu devais
-                        }
-                        else{
-                            shopGraphicsOverlay.clearSelection();
-                            return;
-                        }
-
-                    }
-                }
-                if(!isPointRemoved){
+                boolean isPointFound = deleteGraphicPoint();
+                if(!isPointFound){
                     //TODO fenetre pour mettre les infos du magasin
                     addPointToOverlay(mapPoint);
                 }
             }
             shopGraphicsOverlay.clearSelection();
-
         });
+    }
+
+    /**
+     * Supprime les points selectioner de l'overlay
+     * @return un boolean indiquant si un objet graphic a ete double-cliquer
+     */
+    private boolean deleteGraphicPoint(){
+        boolean isPointFound = false;
+        for(int i = 0; i < shopGraphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
+
+            Graphic colorPointOnMap = shopGraphicsOverlay.getGraphics().get(i);
+            Graphic textPointOnMap = shopGraphicsOverlay.getGraphics().get(i+1); // le symbole texte associer au point aussi
+
+            if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
+                isPointFound = true;
+                // TODO POP up avant de del avec les info du magasin
+                ButtonType alertResult = showAlert(Alert.AlertType.CONFIRMATION,"Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
+                if(alertResult == ButtonType.OK){
+                    removePointFromOverlay(textPointOnMap);
+                    removePointFromOverlay(colorPointOnMap);
+                }
+                return isPointFound; // tu as deja accomplie la tache que tu devais
+            }
+        }
+        return isPointFound;
     }
 
     /**
@@ -167,7 +168,6 @@ public class DisplayMapController extends Window implements Initializable {
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
                     identifiedGraphics.get(1).setSelected(true);
-
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
@@ -178,24 +178,31 @@ public class DisplayMapController extends Window implements Initializable {
 
     /**
      * Fonction qui renvoie la position de la ou se trouve la souris
-     * @param mouseEvent
+     * @param mouseEvent event lié au clique
      * @return la representation geometrique d'un point
      */
     private Point2D getCursorPosition(MouseEvent mouseEvent){
         return new Point2D(mouseEvent.getX(), mouseEvent.getY());
     }
 
+    /**
+     * supprimer un point(magasin) de l'overlay
+     * @param mapGraphicPoint objet graphique a supprimé de l'overlay
+     */
     private void removePointFromOverlay(Graphic mapGraphicPoint){
         shopGraphicsOverlay.getGraphics().remove(mapGraphicPoint);
-
     }
 
+    /**
+     * Ajout d'un point avec son texte sur la map
+     * @param mapPoint la ou doit se trouver le point
+     */
     private void addPointToOverlay(Point mapPoint) {
-        // create a red (0xFFFF0000) circle simple marker symbol
         // TODO Attention nombre magique
+        //cree un cercle rouge
         SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, 0xFFFF0000, 10);
 
-        // create a graphic from the point and  TExt symbol
+        // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
                         10, "Santa Monica Pier", 0xFF000000,
