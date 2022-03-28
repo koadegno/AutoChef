@@ -12,6 +12,7 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
@@ -37,7 +38,7 @@ public class DisplayMapController extends Window implements Initializable {
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
-    private GraphicsOverlay shopGraphicsOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay shopGraphicsOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
 
 
@@ -54,12 +55,30 @@ public class DisplayMapController extends Window implements Initializable {
 
 
     @FXML
-    void showSearchResult(KeyEvent event) {
+    void onShoppingSearchBoxAction(KeyEvent event) {
         //TODO faire la requete a la db et afficher sur la maps les magasins
         //TODO ou alors avoir un combo box et il selectionne un elem qui l'emene au bonne endroit sur la carte
 
         System.out.println(textFieldMenuBar.getText());
         event.consume();
+    }
+
+    /**
+     * Methode de recherche des adresses lié a la searchBox
+     * @param keyEvent l'action recu par le textfield
+     */
+    @FXML
+    private void onAddressSearchBoxAction(ActionEvent keyEvent) {
+
+        String address = searchBox.getText();
+        if (!address.isBlank()) {
+            setNodeColor(searchBox,false);
+            performGeocode(address);
+        }
+        else{
+            setNodeColor(searchBox,true);
+        }
+
     }
 
     /**
@@ -75,16 +94,9 @@ public class DisplayMapController extends Window implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMap();
         initializeMapEvent();
-        setupTextField();
 
         createLocatorTaskAndDefaultParameters();
 
-        searchBox.setOnAction(event -> {
-            String address = searchBox.getText();
-            if (!address.isBlank()) {
-                performGeocode(address);
-            }
-        });
         //TODO fonction pour charger les magasins sur l'overlay
         mapViewStackPane.getChildren().add(mapView);
         mapView.getGraphicsOverlays().add(shopGraphicsOverlay);
@@ -143,7 +155,7 @@ public class DisplayMapController extends Window implements Initializable {
                     removePointFromOverlay(textPointOnMap);
                     removePointFromOverlay(colorPointOnMap);
                 }
-                return isPointFound; // tu as deja accomplie la tache que tu devais
+                break; // tu as deja accomplie la tache que tu devais
             }
         }
         return isPointFound;
@@ -230,52 +242,65 @@ public class DisplayMapController extends Window implements Initializable {
 
     }
 
-    private void setupTextField() {
-        searchBox.setMaxWidth(400);
-        searchBox.setPromptText("Search for an address");
-    }
 
-
+    /**
+     * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
+     * Pour parametrer le service de geocoding Locator
+     * et Parametre par defaut du service de geocoding
+     */
     private void createLocatorTaskAndDefaultParameters() {
         locatorTask = new LocatorTask("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
 
         geocodeParameters = new GeocodeParameters();
-        geocodeParameters.getResultAttributeNames().add("*");
+        geocodeParameters.getResultAttributeNames().add("*"); // permet de retourne tt les attributs
         geocodeParameters.setMaxResults(1);
+        // comment les coordonnées doivent correspondre a la location
         geocodeParameters.setOutputSpatialReference(mapView.getSpatialReference());
     }
 
+    /**
+     * Recherche les coordonnées et les infos complètes qui correspond le mieux à l'adresse
+     * et affiche le resultat sur la map
+     * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
+     */
     private void performGeocode(String address) {
         ListenableFuture<List<GeocodeResult>> geocodeResults = locatorTask.geocodeAsync(address, geocodeParameters);
 
-        geocodeResults.addDoneListener(() -> {
+        geocodeResults.addDoneListener(() -> {  // rècuperer le résultat
             try {
                 List<GeocodeResult> geocodes = geocodeResults.get();
                 if (geocodes.size() > 0) {
                     GeocodeResult result = geocodes.get(0);
-
                     displayResult(result);
 
                 } else {
-                    new Alert(Alert.AlertType.INFORMATION, "No results found.").show();
+                    // pas d'adresse trouvé
+                    showAlert(Alert.AlertType.INFORMATION,"Information", address + " n'est pas une adresse valide");
                 }
-            } catch (InterruptedException | ExecutionException e) {
-                new Alert(Alert.AlertType.ERROR, "Error getting result.").show();
-                e.printStackTrace();
+            } catch (InterruptedException | ExecutionException exception) {
+
+                showAlert(Alert.AlertType.ERROR,"Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
+                exception.printStackTrace();
             }
         });
     }
 
+    /**
+     * Crée et afficher l'objet graphique associer a une recherche d'adresse sur la map
+     * @param geocodeResult le resultat d'une recherche
+     */
     private void displayResult(GeocodeResult geocodeResult) {
-        addressGraphicsOverlay.getGraphics().clear(); // clears the overlay of any previous result
+        addressGraphicsOverlay.getGraphics().clear();
 
-        // create a graphic to display the address text
+        // creation de l'objet graphique avec l'adresse
+        // TODO NOMBRE MAGIQUE
         String label = geocodeResult.getLabel();
         TextSymbol textSymbol = new TextSymbol(18, label, 0xFF000000, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
         addressGraphicsOverlay.getGraphics().add(textGraphic);
 
-        // create a graphic to display the location as a red square
+        // creation de l'objet graphique avec le carré rouge
+        // TODO ATTENTION NOMBRE MAGIQUE
         SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, 0xFFFF0000, 12.0f);
         Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.getGraphics().add(markerGraphic);
