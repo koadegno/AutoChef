@@ -126,8 +126,10 @@ public class DisplayMapController extends Window implements Initializable {
 
     }
 
+
     private void initializeMapPoint() {
         allShopList = new ArrayList<>();
+        // TODO Recuperer la liste de Magasin de la db
         allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
         allShopList.add(new Shop("Aldi 2", new Point(5.6257913, 50.9702834, SpatialReferences.getWgs84())));
         allShopList.add(new Shop("Lidl 1", new Point(4.3586407, 50.8424057,SpatialReferences.getWgs84())));
@@ -148,20 +150,20 @@ public class DisplayMapController extends Window implements Initializable {
             if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED){
                 /* TODO Popup avec les info et les produits du magasin
                 */
-                Point2D mapViewPoint = getCursorPosition(mouseEvent);
+                Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
                 try {
                     DisplayMapController.this.highlightGraphicPoint(mapViewPoint);
                 } catch (ExecutionException | InterruptedException e) {
                     e.printStackTrace();
                 }
             }
-            // ajouter un point sur la map ou suppression si on double clique droit
+            // ajouter un point sur la map ou suppression si on double-clique droit
             // sur un point deja sur la map
             else if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == DOUBLE_CLICKED) {
                 Point2D cursorPoint2D = new Point2D( mouseEvent.getX(),mouseEvent.getY());
                 Point mapPoint = mapView.screenToLocation(cursorPoint2D);
                 Shop shopToAdd = new Shop("new Shop", mapPoint);
-                boolean isPointFound = deleteGraphicPoint();
+                boolean isPointFound = deleteGraphicPoint(); //
                 if(!isPointFound){
                     //TODO fenetre pour mettre les infos du magasin
                     addPointToOverlay(shopToAdd);
@@ -181,16 +183,16 @@ public class DisplayMapController extends Window implements Initializable {
         boolean isPointFound = false;
         for(int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++){
 
-            Graphic colorPointOnMap = shopGraphicsCercleOverlay.getGraphics().get(i);
+            Graphic cerclePointOnMap = shopGraphicsCercleOverlay.getGraphics().get(i);
             Graphic textPointOnMap = shopGraphicsTextOverlay.getGraphics().get(i); // le symbole texte associer au point aussi
 
-            if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
+            if(cerclePointOnMap.isSelected()){
                 isPointFound = true;
                 // TODO POP up avant de del avec les info du magasin
                 ButtonType alertResult = showAlert(Alert.AlertType.CONFIRMATION,"Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if(alertResult == ButtonType.OK){
-                    shopGraphicsTextOverlay.getGraphics().remove(colorPointOnMap);
-                    shopGraphicsCercleOverlay.getGraphics().remove(textPointOnMap);
+                    shopGraphicsCercleOverlay.getGraphics().remove(cerclePointOnMap);
+                    shopGraphicsTextOverlay.getGraphics().remove(textPointOnMap);
                 }
                 break; // tu as deja accomplie la tache que tu devais
             }
@@ -216,6 +218,7 @@ public class DisplayMapController extends Window implements Initializable {
 
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
+
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
@@ -224,14 +227,7 @@ public class DisplayMapController extends Window implements Initializable {
         });
     }
 
-    /**
-     * Fonction qui renvoie la position de la ou se trouve la souris
-     * @param mouseEvent event lié au clique
-     * @return la representation geometrique d'un point
-     */
-    private Point2D getCursorPosition(MouseEvent mouseEvent){
-        return new Point2D(mouseEvent.getX(), mouseEvent.getY());
-    }
+
 
 
     /**
@@ -314,7 +310,7 @@ public class DisplayMapController extends Window implements Initializable {
     }
 
     /**
-     * Crée et afficher l'objet graphique associer a une recherche d'adresse sur la map
+     * Crée et afficher l'objet graphique associé à une recherche d'adresse sur la map
      * @param geocodeResult le resultat d'une recherche
      */
     private void displayResult(GeocodeResult geocodeResult) {
