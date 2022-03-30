@@ -62,6 +62,14 @@ public class Window  {
         primaryStage.show();
     }
 
+    /**
+     * Affiche une fenêtre Dialogue avec un titre et du texte
+     * Utiliser pour les erreurs ou les messages simple à l'utilisateur
+     * @param alertType le type de Dialogue
+     * @param headerText l'entête, titre
+     * @param contentText le texte a afficher
+     * @return le type de bouton cliquer par l'utilisateur
+     */
     protected ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
         Alert alert = new Alert(alertType);
         alert.setHeaderText(headerText);

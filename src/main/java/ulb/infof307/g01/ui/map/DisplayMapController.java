@@ -18,6 +18,7 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
+import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
@@ -25,6 +26,9 @@ import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.WindowHomeController;
+import ulb.infof307.g01.ui.menu.WindowHomeMenuController;
+import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
 
 import java.net.URL;
 import java.util.List;
@@ -41,7 +45,6 @@ public class DisplayMapController extends Window implements Initializable {
     private final GraphicsOverlay shopGraphicsOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
 
-
     @FXML
     private Pane mapViewStackPane;
 
@@ -50,9 +53,6 @@ public class DisplayMapController extends Window implements Initializable {
 
     @FXML
     private TextField searchBox;
-
-
-
 
     @FXML
     void onShoppingSearchBoxAction(KeyEvent event) {
@@ -306,5 +306,11 @@ public class DisplayMapController extends Window implements Initializable {
         addressGraphicsOverlay.getGraphics().add(markerGraphic);
 
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
+    }
+
+    @FXML
+    public void returnMainMenu() {
+        WindowHomeController windowHomeController = new WindowHomeController();
+        windowHomeController.displayMain(primaryStage);
     }
 }
