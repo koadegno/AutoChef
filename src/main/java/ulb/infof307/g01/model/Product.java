@@ -7,7 +7,7 @@ public class Product {
 
     private String name;
     private int quantity = 1;
-    private int price = 0;
+    private double price = 0;
     private String nameUnity = "Unité";
     private String famillyProduct = "Famille";
 
@@ -30,10 +30,9 @@ public class Product {
         this.quantity = quantity;
         this.nameUnity = nameUnity;
     }
-    public Product(String productName, int quantity, String nameUnity, int price) {
+
+    public Product(String productName, double price) {
         name = productName;
-        this.quantity = quantity;
-        this.nameUnity = nameUnity;
         this.price = price;
     }
 
@@ -89,7 +88,7 @@ public class Product {
 
     public String getNameUnity(){return nameUnity;}
 
-    public int getPrice(){return price;}
+    public double getPrice(){return price;}
 
     /**
      * Compare 2 objets

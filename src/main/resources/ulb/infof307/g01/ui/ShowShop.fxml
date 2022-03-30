@@ -10,6 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
+
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
@@ -30,9 +31,13 @@
       <HBox alignment="CENTER" prefHeight="102.0" prefWidth="750.0" spacing="10.0">
          <children>
             <ComboBox fx:id="comboboxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
-            <Spinner fx:id="spinnerPrice" prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
-            <Button fx:id="buttonAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
+            <Spinner fx:id="spinnerPrice" prefHeight="25.0" prefWidth="123.0" promptText="Prix"
+                     min="0.1" max="10000.0" initialValue="3.2" amountToStepBy=".1"/>
+            <Button fx:id="buttonAdd" mnemonicParsing="false" prefHeight="25.0" onAction="#addProductToTableView" prefWidth="139.0" text="Ajouter" />
          </children>
       </HBox>
    </children>
 </VBox>
+
+
+

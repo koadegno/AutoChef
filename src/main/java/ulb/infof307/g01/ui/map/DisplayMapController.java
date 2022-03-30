@@ -246,8 +246,6 @@ public class DisplayMapController extends Window implements Initializable {
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
                 showAlert(Alert.AlertType.ERROR,"ERREUR !", "Veillez rapporter l'erreur au pres des développeurs.");
-            } catch (IOException e) {
-                e.printStackTrace();
             }
         });
     }
