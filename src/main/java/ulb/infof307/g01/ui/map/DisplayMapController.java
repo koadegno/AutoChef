@@ -22,7 +22,6 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
 import ulb.infof307.g01.cuisine.Shop;
 import ulb.infof307.g01.ui.Window;
@@ -114,7 +113,7 @@ public class DisplayMapController extends Window implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMap();
         initializeMapEvent();
-        initializeMapPoint();
+        initializeMapShop();
 
         createLocatorTaskAndDefaultParameters();
         //TODO
@@ -126,8 +125,26 @@ public class DisplayMapController extends Window implements Initializable {
 
     }
 
+    /**
+     * Initialisation de la carte pour correspondre au point de vue la Belgique
+     * et mise en place de la clé d'API
+     */
+    private void initializeMap(){
+        mapView = new MapView();
+        //TODO trouver un meilleur moyen de mettre la clé
+        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
+        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
+        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
+        mapView.setMap(map);
+        //TODO changer ces nombres magique
+        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
 
-    private void initializeMapPoint() {
+    }
+
+    /**
+     * Initialisation des magasins sur la map
+     */
+    private void initializeMapShop() {
         allShopList = new ArrayList<>();
         // TODO Recuperer la liste de Magasin de la db
         allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
@@ -227,9 +244,6 @@ public class DisplayMapController extends Window implements Initializable {
         });
     }
 
-
-
-
     /**
      * Ajout d'un point avec son texte sur la map
      * @param shopToAdd la ou doit se trouver le point
@@ -252,18 +266,6 @@ public class DisplayMapController extends Window implements Initializable {
         // ajoute des graphique a l'overlay
         shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
         shopGraphicsTextOverlay.getGraphics().add(textPoint);
-
-    }
-
-    private void initializeMap(){
-        mapView = new MapView();
-        //TODO trouver un meilleur moyen de mettre la clé
-        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
-        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
-        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
-        mapView.setMap(map);
-        //TODO changer ces nombres magique
-        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
 
     }
 
