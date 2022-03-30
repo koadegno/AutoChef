@@ -22,7 +22,7 @@ public class WindowHomeMenuController extends Window {
      * Affiche la page principale des Menus.
      */
     public void displayMainMenuController() {
-        this.loadFXML("FXMLMainMenu.fxml");
+        this.loadFXML("HomeMenu.fxml");
     }
 
     /**
