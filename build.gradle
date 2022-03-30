@@ -19,14 +19,17 @@ java {
 
 test {
     useJUnitPlatform()
+    testLogging {events "passed", "skipped", "failed"}
 }
-sourceSets {
-    test {
-        java {
-            srcDirs = ["test/"]
-        }
-    }
+
+sourceSets {test {java {srcDirs = ["test/"]}}}
+javadoc {setDocsDirName("doc/")}
+
+javafx {
+    version = "17.0.2"
+    modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
+
 
 application {
     mainClass = 'ulb.infof307.g01.Main'
