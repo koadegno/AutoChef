@@ -26,7 +26,9 @@ import javafx.scene.layout.Pane;
 import ulb.infof307.g01.cuisine.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
+import ulb.infof307.g01.ui.shop.ShowShopController;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -236,10 +238,16 @@ public class DisplayMapController extends Window implements Initializable {
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
 
+                    //POPUP SHOP
+                    ShowShopController showShopController = new ShowShopController();
+                    showShopController.createPopup();
+
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
                 showAlert(Alert.AlertType.ERROR,"ERREUR !", "Veillez rapporter l'erreur au pres des développeurs.");
+            } catch (IOException e) {
+                e.printStackTrace();
             }
         });
     }

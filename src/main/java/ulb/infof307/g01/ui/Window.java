@@ -6,6 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.Configuration;
 
@@ -41,6 +43,14 @@ public class Window  {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
         loader.setController(controller);
         setNewScene(loader);
+    }
+
+    protected void popupFXML(String filename) throws IOException {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
+        popup.setScene(new Scene(loader.load()));
+        popup.show();
     }
 
 
