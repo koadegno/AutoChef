@@ -7,6 +7,7 @@ public class Product {
 
     private String name;
     private int quantity = 1;
+    private int price = 0;
     private String nameUnity = "Unité";
     private String famillyProduct = "Famille";
 
@@ -29,12 +30,19 @@ public class Product {
         this.quantity = quantity;
         this.nameUnity = nameUnity;
     }
+    public Product(String productName, int quantity, String nameUnity, int price) {
+        name = productName;
+        this.quantity = quantity;
+        this.nameUnity = nameUnity;
+        this.price = price;
+    }
 
-    public Product(String productName, int quantity, String nameUnity,String famillyProduct ) {
+    public Product(String productName, int quantity, String nameUnity,String famillyProduct) {
         name = productName;
         this.quantity = quantity;
         this.nameUnity = nameUnity;
         this.famillyProduct = famillyProduct;
+        this.price = price;
     }
 
     public void rename(String newName) {
@@ -80,6 +88,8 @@ public class Product {
     public String getFamillyProduct() { return famillyProduct; }
 
     public String getNameUnity(){return nameUnity;}
+
+    public int getPrice(){return price;}
 
     /**
      * Compare 2 objets

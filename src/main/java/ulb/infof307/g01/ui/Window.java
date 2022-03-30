@@ -45,10 +45,11 @@ public class Window  {
         setNewScene(loader);
     }
 
-    protected void popupFXML(String filename) throws IOException {
+    protected void popupFXML(String filename, Window controller) throws IOException {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
+        loader.setController(controller);
         popup.setScene(new Scene(loader.load()));
         popup.show();
     }

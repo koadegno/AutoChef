@@ -10,7 +10,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.shop.ShowShopController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -21,17 +21,17 @@
             </Label>
          </children>
       </HBox>
-      <TableView prefHeight="249.0" prefWidth="750.0">
+      <TableView fx:id="tableViewShop" prefHeight="249.0" prefWidth="750.0">
         <columns>
-          <TableColumn prefWidth="280.6666616201401" text="Produit" />
-            <TableColumn prefWidth="118.0" text="Prix" />
+          <TableColumn fx:id="columnProduct" prefWidth="280.6666616201401" text="Produit" />
+            <TableColumn fx:id="columnPrice" prefWidth="118.0" text="Prix" />
         </columns>
       </TableView>
       <HBox alignment="CENTER" prefHeight="102.0" prefWidth="750.0" spacing="10.0">
          <children>
-            <ComboBox prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
-            <Spinner prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
-            <Button mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
+            <ComboBox fx:id="comboboxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
+            <Spinner fx:id="spinnerPrice" prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
+            <Button fx:id="buttonAdd" mnemonicParsing="false" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
          </children>
       </HBox>
    </children>
