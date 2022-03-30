@@ -4,8 +4,8 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
 

@@ -1,4 +1,4 @@
-package ulb.infof307.g01.cuisine;
+package ulb.infof307.g01.model;
 import ulb.infof307.g01.db.Database;
 
 import java.sql.SQLException;

@@ -1,8 +1,8 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.cuisine.AutoCompletion;
-import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.model.AutoCompletion;
+import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;

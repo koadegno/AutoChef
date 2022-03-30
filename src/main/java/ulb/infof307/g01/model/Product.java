@@ -1,4 +1,4 @@
-package ulb.infof307.g01.cuisine;
+package ulb.infof307.g01.model;
 
 /**
  * Classe représentant un Produit Alimentaire/Ingrédient

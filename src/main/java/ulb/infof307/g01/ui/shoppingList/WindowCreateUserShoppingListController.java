@@ -1,15 +1,14 @@
 package ulb.infof307.g01.ui.shoppingList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import org.sqlite.SQLiteException;
-import ulb.infof307.g01.cuisine.Product;
-import ulb.infof307.g01.cuisine.ShoppingList;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 

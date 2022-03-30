@@ -1,7 +1,6 @@
-package ulb.infof307.g01.cuisine;
+package ulb.infof307.g01.model;
 
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.mapping.view.Graphic;
 
 public class Shop {
 

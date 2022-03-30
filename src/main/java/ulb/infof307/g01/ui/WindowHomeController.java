@@ -11,9 +11,9 @@ import ulb.infof307.g01.ui.shoppingList.WindowHomeShoppingListController;
  * pour la page principale de l'application qui s'affiche
  * lorsque le programme est lancé. Elle permet à l'utilisateur d'être redirigé vers
  * la page des Listes de Courses, Recettes ou Menus.
- * @see ulb.infof307.g01.cuisine.ShoppingList
- * @see ulb.infof307.g01.cuisine.Recipe
- * @see ulb.infof307.g01.cuisine.Menu
+ * @see ulb.infof307.g01.model.ShoppingList
+ * @see ulb.infof307.g01.model.Recipe
+ * @see ulb.infof307.g01.model.Menu
  * */
 public class WindowHomeController extends Window{
     public WindowHomeController() {}

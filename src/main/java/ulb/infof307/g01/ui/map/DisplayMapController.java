@@ -23,7 +23,7 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import ulb.infof307.g01.cuisine.Shop;
+import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
 import ulb.infof307.g01.ui.shop.ShowShopController;
@@ -166,7 +166,7 @@ public class DisplayMapController extends Window implements Initializable {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
             // selectionner un point avec un simple clique droit
-            if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED){
+            if(mouseEvent.getButton() == MouseButton.SECONDARY && mouseEvent.getClickCount() == ONCE_CLICKED){
                 /* TODO Popup avec les info et les produits du magasin
                 */
                 Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());

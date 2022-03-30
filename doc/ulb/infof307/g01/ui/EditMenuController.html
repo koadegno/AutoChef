@@ -77,7 +77,7 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;</code></dd>
 </dl>
 <dl class="notes">
 <dt>Direct Known Subclasses:</dt>
@@ -86,7 +86,7 @@ loadScripts(document, 'script');</script>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">EditMenuController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;</span></div>
+implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;</span></div>
 <div class="block">Classe permettant l'edition d'un menu mais qui ne fait rien quand à quoi faire de ce menu
  Il laisse cela aux enfants</div>
 </section>
@@ -101,13 +101,13 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
 <div class="table-header col-first">Modifier and Type</div>
 <div class="table-header col-second">Field</div>
 <div class="table-header col-last">Description</div>
-<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.cuisine">Day</a>&gt;</code></div>
+<div class="col-first even-row-color"><code>protected <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.model">Day</a>&gt;</code></div>
 <div class="col-second even-row-color"><code><a href="#daysName" class="member-name-link">daysName</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected <a href="../db/Database.html" title="class in ulb.infof307.g01.db">Database</a></code></div>
 <div class="col-second odd-row-color"><code><a href="#db" class="member-name-link">db</a></code></div>
 <div class="col-last odd-row-color">&nbsp;</div>
-<div class="col-first even-row-color"><code>protected <a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a></code></div>
+<div class="col-first even-row-color"><code>protected <a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a></code></div>
 <div class="col-second even-row-color"><code><a href="#myMenu" class="member-name-link">myMenu</a></code></div>
 <div class="col-last even-row-color">&nbsp;</div>
 <div class="col-first odd-row-color"><code>protected javafx.stage.Stage</code></div>
@@ -141,7 +141,7 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Recipe)" class="member-name-link">add</a><wbr>(<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&nbsp;recipe)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Recipe)" class="member-name-link">add</a><wbr>(<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&nbsp;recipe)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Methode de l'interface Utilisation contract qu'on a promis d'implementer pour
  pouvoir utiliser la window qui permet la recherche d'une recette sur base de filtre
@@ -157,7 +157,7 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
 </div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fillTableView(javafx.scene.control.TableView,java.util.List)" class="member-name-link">fillTableView</a><wbr>(javafx.scene.control.TableView&nbsp;table,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;&nbsp;valueList)</code></div>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;&nbsp;valueList)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#recipeSelectedEvent(javafx.event.Event)" class="member-name-link">recipeSelectedEvent</a><wbr>(javafx.event.Event&nbsp;event)</code></div>
@@ -207,13 +207,13 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
 <li>
 <section class="detail" id="myMenu">
 <h3>myMenu</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a></span>&nbsp;<span class="element-name">myMenu</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a></span>&nbsp;<span class="element-name">myMenu</span></div>
 </section>
 </li>
 <li>
 <section class="detail" id="daysName">
 <h3>daysName</h3>
-<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.cuisine">Day</a>&gt;</span>&nbsp;<span class="element-name">daysName</span></div>
+<div class="member-signature"><span class="modifiers">protected</span>&nbsp;<span class="return-type"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.model">Day</a>&gt;</span>&nbsp;<span class="element-name">daysName</span></div>
 </section>
 </li>
 </ul>
@@ -247,21 +247,21 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
  Elle permet à la classe appler de nous prevenir que l'utilisateur à annuller la recherche</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="add(ulb.infof307.g01.cuisine.Recipe)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&nbsp;recipe)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&nbsp;recipe)</span></div>
 <div class="block">Methode de l'interface Utilisation contract qu'on a promis d'implementer pour
  pouvoir utiliser la window qui permet la recherche d'une recette sur base de filtre
  Elle permet à la classe appler de nous prevenir que l'utilisateur à fini sa recherche et
  nous remettre la recette sélectionnée</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>recipe</code> - : la window appeler retourne l'objet demander avant de se fermer</dd>
 </dl>
@@ -271,7 +271,7 @@ implements <a href="UtilisationContrat.html" title="interface in ulb.infof307.g0
 <section class="detail" id="fillTableView(javafx.scene.control.TableView,java.util.List)">
 <h3>fillTableView</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fillTableView</span><wbr><span class="parameters">(javafx.scene.control.TableView&nbsp;table,
- <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.cuisine">Recipe</a>&gt;&nbsp;valueList)</span></div>
+ <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="../cuisine/Recipe.html" title="class in ulb.infof307.g01.model">Recipe</a>&gt;&nbsp;valueList)</span></div>
 </section>
 </li>
 <li>
