@@ -8,7 +8,7 @@
     <MenuBar layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
         <Menu mnemonicParsing="false" text="Chercher un magasin">
             <graphic>
-                <TextField fx:id="textFieldMenuBar" onKeyReleased="#onShoppingSearchBoxAction" promptText="Chercher un nom de magasin" />
+                <TextField fx:id="textFieldMenuBar" onAction="#onShoppingSearchBoxAction" promptText="Chercher un nom de magasin" />
             </graphic>
         </Menu>
         <Menu mnemonicParsing="false" text="Chercher une adresse">

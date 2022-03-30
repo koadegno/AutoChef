@@ -3,6 +3,7 @@ package ulb.infof307.g01.ui.map;
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
@@ -18,21 +19,17 @@ import javafx.fxml.Initializable;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
-import javafx.scene.control.Button;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseButton;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.Pane;
+import ulb.infof307.g01.cuisine.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
-import ulb.infof307.g01.ui.menu.WindowHomeMenuController;
-import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
 
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.concurrent.ExecutionException;
 
 public class DisplayMapController extends Window implements Initializable {
@@ -42,7 +39,8 @@ public class DisplayMapController extends Window implements Initializable {
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
-    private final GraphicsOverlay shopGraphicsOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay shopGraphicsCercleOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
 
     @FXML
@@ -53,13 +51,35 @@ public class DisplayMapController extends Window implements Initializable {
 
     @FXML
     private TextField searchBox;
+    private ArrayList<Shop> allShopList;
 
     @FXML
-    void onShoppingSearchBoxAction(KeyEvent event) {
+    void onShoppingSearchBoxAction(ActionEvent event) {
         //TODO faire la requete a la db et afficher sur la maps les magasins
         //TODO ou alors avoir un combo box et il selectionne un elem qui l'emene au bonne endroit sur la carte
 
-        System.out.println(textFieldMenuBar.getText());
+        String fieldText = textFieldMenuBar.getText();
+        System.out.println();
+
+        for(int index = 0; index < shopGraphicsTextOverlay.getGraphics().size(); index++){
+
+            Graphic textGraphicShop = shopGraphicsTextOverlay.getGraphics().get(index);
+            Graphic cercleGraphicShop = shopGraphicsCercleOverlay.getGraphics().get(index);
+
+            TextSymbol textSymbol = (TextSymbol) textGraphicShop.getSymbol();
+            if(textSymbol.getText().equals(fieldText) || Objects.equals(fieldText, "")){
+                textGraphicShop.setVisible(true);
+                cercleGraphicShop.setVisible(true);
+            }
+            else{
+                textGraphicShop.setVisible(false);
+                cercleGraphicShop.setVisible(false);
+
+            }
+
+
+        }
+
         event.consume();
     }
 
@@ -94,14 +114,28 @@ public class DisplayMapController extends Window implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMap();
         initializeMapEvent();
+        initializeMapPoint();
 
         createLocatorTaskAndDefaultParameters();
-
+        //TODO
         //TODO fonction pour charger les magasins sur l'overlay
         mapViewStackPane.getChildren().add(mapView);
-        mapView.getGraphicsOverlays().add(shopGraphicsOverlay);
+        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
+        mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
         mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
 
+    }
+
+    private void initializeMapPoint() {
+        allShopList = new ArrayList<>();
+        allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
+        allShopList.add(new Shop("Aldi 2", new Point(5.6257913, 50.9702834, SpatialReferences.getWgs84())));
+        allShopList.add(new Shop("Lidl 1", new Point(4.3586407, 50.8424057,SpatialReferences.getWgs84())));
+
+        for(Shop shop: allShopList){
+            addPointToOverlay(shop);
+            System.out.println(shop.getCoordinate());
+        }
     }
 
     /**
@@ -126,13 +160,16 @@ public class DisplayMapController extends Window implements Initializable {
             else if(mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == DOUBLE_CLICKED) {
                 Point2D cursorPoint2D = new Point2D( mouseEvent.getX(),mouseEvent.getY());
                 Point mapPoint = mapView.screenToLocation(cursorPoint2D);
+                Shop shopToAdd = new Shop("new Shop", mapPoint);
                 boolean isPointFound = deleteGraphicPoint();
                 if(!isPointFound){
                     //TODO fenetre pour mettre les infos du magasin
-                    addPointToOverlay(mapPoint);
+                    addPointToOverlay(shopToAdd);
                 }
             }
-            shopGraphicsOverlay.clearSelection();
+            shopGraphicsCercleOverlay.clearSelection();
+            shopGraphicsTextOverlay.clearSelection();
+
         });
     }
 
@@ -142,18 +179,18 @@ public class DisplayMapController extends Window implements Initializable {
      */
     private boolean deleteGraphicPoint(){
         boolean isPointFound = false;
-        for(int i = 0; i < shopGraphicsOverlay.getGraphics().size(); i += 2){ // saute de 2 en 2
+        for(int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++){
 
-            Graphic colorPointOnMap = shopGraphicsOverlay.getGraphics().get(i);
-            Graphic textPointOnMap = shopGraphicsOverlay.getGraphics().get(i+1); // le symbole texte associer au point aussi
+            Graphic colorPointOnMap = shopGraphicsCercleOverlay.getGraphics().get(i);
+            Graphic textPointOnMap = shopGraphicsTextOverlay.getGraphics().get(i); // le symbole texte associer au point aussi
 
             if(colorPointOnMap.isSelected() && textPointOnMap.isSelected()){
                 isPointFound = true;
                 // TODO POP up avant de del avec les info du magasin
                 ButtonType alertResult = showAlert(Alert.AlertType.CONFIRMATION,"Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if(alertResult == ButtonType.OK){
-                    removePointFromOverlay(textPointOnMap);
-                    removePointFromOverlay(colorPointOnMap);
+                    shopGraphicsTextOverlay.getGraphics().remove(colorPointOnMap);
+                    shopGraphicsCercleOverlay.getGraphics().remove(textPointOnMap);
                 }
                 break; // tu as deja accomplie la tache que tu devais
             }
@@ -168,18 +205,17 @@ public class DisplayMapController extends Window implements Initializable {
      * @throws InterruptedException Erreur a l'execution
      */
     private void highlightGraphicPoint(Point2D mapViewPoint) throws ExecutionException, InterruptedException {
-        ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(shopGraphicsOverlay,
-                mapViewPoint, 10, false,2);
+        ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(shopGraphicsCercleOverlay,
+                mapViewPoint, 10, false,1);
 
         identifyFuture.addDoneListener(() -> {
             try {
                 // get the list of graphics returned by identify
                 List<Graphic> identifiedGraphics = identifyFuture.get().getGraphics();
-                if(identifiedGraphics.size() == 2){
+                if(identifiedGraphics.size() == 1){
 
                     // Use identified graphics as required, for example access attributes or geometry, select, build a table, etc...
                     identifiedGraphics.get(0).setSelected(true);
-                    identifiedGraphics.get(1).setSelected(true);
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace(); //TODO gerer l'erreur ?
@@ -197,19 +233,12 @@ public class DisplayMapController extends Window implements Initializable {
         return new Point2D(mouseEvent.getX(), mouseEvent.getY());
     }
 
-    /**
-     * supprimer un point(magasin) de l'overlay
-     * @param mapGraphicPoint objet graphique a supprimé de l'overlay
-     */
-    private void removePointFromOverlay(Graphic mapGraphicPoint){
-        shopGraphicsOverlay.getGraphics().remove(mapGraphicPoint);
-    }
 
     /**
      * Ajout d'un point avec son texte sur la map
-     * @param mapPoint la ou doit se trouver le point
+     * @param shopToAdd la ou doit se trouver le point
      */
-    private void addPointToOverlay(Point mapPoint) {
+    private void addPointToOverlay(Shop shopToAdd) {
         // TODO Attention nombre magique
         //cree un cercle rouge
         SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, 0xFFFF0000, 10);
@@ -217,16 +246,16 @@ public class DisplayMapController extends Window implements Initializable {
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        10, "Santa Monica Pier", 0xFF000000,
+                        10, shopToAdd.getName(), 0xFF000000,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
 
-        Graphic circlePoint = new Graphic(mapPoint, redCircleSymbol);
-        Graphic textPoint = new Graphic(mapPoint, pierTextSymbol);
+        Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
+        Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
 
 
         // ajoute des graphique a l'overlay
-        shopGraphicsOverlay.getGraphics().add(circlePoint);
-        shopGraphicsOverlay.getGraphics().add(textPoint);
+        shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().add(textPoint);
 
     }
 
@@ -241,7 +270,6 @@ public class DisplayMapController extends Window implements Initializable {
         mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
 
     }
-
 
     /**
      * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
@@ -297,6 +325,7 @@ public class DisplayMapController extends Window implements Initializable {
         String label = geocodeResult.getLabel();
         TextSymbol textSymbol = new TextSymbol(18, label, 0xFF000000, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
+        System.out.println(geocodeResult.getDisplayLocation());
         addressGraphicsOverlay.getGraphics().add(textGraphic);
 
         // creation de l'objet graphique avec le carré rouge
@@ -313,4 +342,7 @@ public class DisplayMapController extends Window implements Initializable {
         WindowHomeController windowHomeController = new WindowHomeController();
         windowHomeController.displayMain(primaryStage);
     }
+
+
 }
+
