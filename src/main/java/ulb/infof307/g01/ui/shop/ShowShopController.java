@@ -81,9 +81,12 @@ public class ShowShopController extends Window implements Initializable {
 
 
     public void addProductToTableView(){
-        String nameProduct  = comboboxProduct.getSelectionModel().getSelectedItem().toString();
+
+        Object nameProduct  = comboboxProduct.getSelectionModel().getSelectedItem();
+        if (nameProduct == null) return;
+
         double priceProduct = spinnerPrice.getValue();
-        Product product = new Product(nameProduct, priceProduct);
+        Product product = new Product(nameProduct.toString(), priceProduct);
         shop.add(product);
         tableViewShop.getItems().addAll(product);
         //TODO: envoyer shop a la base de donnee
