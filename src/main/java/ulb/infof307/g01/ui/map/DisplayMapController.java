@@ -161,6 +161,9 @@ public class DisplayMapController extends Window implements Initializable {
         }
     }
 
+    /**
+     * Initialisation du Contexte menu et action possible sur celui ci
+     */
     private void initializeContextMenu(){
 
         addShopMenuItem.setOnAction(event -> {
@@ -193,8 +196,12 @@ public class DisplayMapController extends Window implements Initializable {
         });
     }
 
-    private void setShopOnMap(Point2D cursorPoint2D2) {
-        Point mapPoint = mapView.screenToLocation(cursorPoint2D2);
+    /**
+     * lance le popup pour ajouter un magasin
+     * @param cursorPoint2D La position ou se trouve le curseur
+     */
+    private void setShopOnMap(Point2D cursorPoint2D) {
+        Point mapPoint = mapView.screenToLocation(cursorPoint2D);
         //TODO Recupe le nom du shop
         Shop shop = new Shop("new Shop 3", mapPoint);
         addPointToOverlay(shop);
