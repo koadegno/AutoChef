@@ -51,9 +51,9 @@ public class ProductDao extends Database implements Dao<Product> {
         String nameProduct = querySelectProduct.getString("Nom");
         int familyProductID = querySelectProduct.getInt("FamilleAlimentID");
         int unityProductID = querySelectProduct.getInt("UniteID");
-
         String familyProduct = getNameFromID("FamilleAliment", familyProductID,"FamilleAlimentID");
         String unityProduct = getNameFromID("Unite", unityProductID,"UniteID");
+
         return new Product(nameProduct,1,unityProduct,familyProduct);
     }
 }

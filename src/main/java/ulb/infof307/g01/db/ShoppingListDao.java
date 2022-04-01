@@ -45,7 +45,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     @Override
     public void update(ShoppingList shoppingList) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %d","ListeCourseID",shoppingList.getId()));
+        int id = getIDFromName("ListeCourse", shoppingList.getName(), "ListeCourseID");
+        constraint.add(String.format("%s = %d","ListeCourseID", id));
         delete("ListeCourseIngredient",constraint);
         updateName("ListeCourse", shoppingList.getName(),constraint );
         if(shoppingList.size() == 0){
@@ -54,9 +55,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
         else{
             for (Product product : shoppingList) {
                 int productID = getIDFromName("Ingredient", product.getName(), "IngredientID");
-                insertIngredientInShoppingList(shoppingList.getId(), productID, product.getQuantity());
+                insertIngredientInShoppingList(id, productID, product.getQuantity());
             }
-
         }
     }
 

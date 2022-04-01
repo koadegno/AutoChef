@@ -24,9 +24,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String name = result.getString(2);
         int duration = result.getInt(3);
         int nbPersons = result.getInt(4);
-        String method = result.getString(5);
+        String type = result.getString(5);
         String category = result.getString(6);
-        String type = result.getString(7);
+        String method = result.getString(7);
         return new Recipe(recipeID, name, duration, category, type, nbPersons, method);
     }
 
@@ -56,7 +56,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         String stringQuery;
-        StringBuilder query = new StringBuilder("SELECT R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
+        StringBuilder query = new StringBuilder("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
                 "FROM Recette as R\n" +
                 "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
                 "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n");
@@ -116,11 +116,15 @@ public class RecipeDao extends Database implements Dao<Recipe> {
 
     @Override
     public Recipe get(String name) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %s","Nom",name));
-        ResultSet querySelectRecipe = select("Recette",constraint,null);
-        querySelectRecipe.next();
-        Recipe recipe = fillRecipe(querySelectRecipe);
+        StringBuilder query = new StringBuilder(String.format("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
+                "FROM Recette as R\n" +
+                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
+                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
+                "WHERE R.Nom = '%s'", name));
+        ResultSet result = sendQuery(query.toString());
+        result.next();
+
+        Recipe recipe = fillRecipe(result);
         fillRecipeWithProducts(recipe);
         return recipe;
     }

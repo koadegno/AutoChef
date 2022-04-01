@@ -11,11 +11,11 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 
 class TestConfiguration {
-    static private Product peche = new Product("peche", 1,"g", "Fruit");
+    static private Product peach = new Product("peche", 1,"g", "Fruit");
 
 
     @BeforeAll
@@ -23,9 +23,9 @@ class TestConfiguration {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
 
-        Configuration.getCurrent().getProductFamilyDao().insert(peche.getFamillyProduct());
-        Configuration.getCurrent().getProductUnityDao().insert(peche.getNameUnity());
-        Configuration.getCurrent().getProductDao().insert(peche);
+        Configuration.getCurrent().getProductFamilyDao().insert(peach.getFamillyProduct());
+        Configuration.getCurrent().getProductUnityDao().insert(peach.getNameUnity());
+        Configuration.getCurrent().getProductDao().insert(peach);
     }
 
     @AfterAll
@@ -36,26 +36,23 @@ class TestConfiguration {
 
     @Test
     void testGetProductFamilyDao() throws SQLException {
-        ArrayList<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(peche.getFamillyProduct(), families.get(0));
+        List<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        assertEquals(peach.getFamillyProduct(), families.get(0));
     }
 
     @Test
     void testGetProductUnityDao() throws SQLException {
 
-        ArrayList<String> unities = Configuration.getCurrent().getProductUnityDao().getAllName();
-        assertEquals(peche.getNameUnity(), unities.get(0));
+        List<String> unities = Configuration.getCurrent().getProductUnityDao().getAllName();
+        assertEquals(peach.getNameUnity(), unities.get(0));
     }
 
     @Test
     void testGetProductDao() throws SQLException {
-        Product product = Configuration.getCurrent().getProductDao().get(peche.getName());
-        assertEquals(peche.getName(), product.getName());
-        assertEquals(peche.getQuantity(), product.getQuantity());
-        assertEquals(peche.getNameUnity(),product.getNameUnity());
-        assertEquals(peche.getFamillyProduct(), product.getFamillyProduct());
+        Product product = Configuration.getCurrent().getProductDao().get(peach.getName());
+        assertEquals(peach.getName(), product.getName());
+        assertEquals(peach.getQuantity(), product.getQuantity());
+        assertEquals(peach.getNameUnity(),product.getNameUnity());
+        assertEquals(peach.getFamillyProduct(), product.getFamillyProduct());
     }
-
-
-
 }
