@@ -1,17 +1,14 @@
 package ulb.infof307.g01.ui.menu;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.Scene;
-import ulb.infof307.g01.cuisine.Day;
-import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.model.Day;
+import ulb.infof307.g01.model.Menu;
+import ulb.infof307.g01.model.Recipe;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;

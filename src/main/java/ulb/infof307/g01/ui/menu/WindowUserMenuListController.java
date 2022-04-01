@@ -9,11 +9,10 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.Window;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,7 +25,7 @@ import java.util.ResourceBundle;
  * un menu pour l'afficher, ou de tapper manuellement le nom du
  * menu. Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
- * @see ulb.infof307.g01.cuisine.Menu
+ * @see ulb.infof307.g01.model.Menu
  * @see WindowShowMenuController
  * */
 public class WindowUserMenuListController extends Window implements Initializable {

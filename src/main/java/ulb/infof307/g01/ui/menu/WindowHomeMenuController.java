@@ -3,7 +3,6 @@ package ulb.infof307.g01.ui.menu;
 import javafx.event.ActionEvent;
 import javafx.scene.Node;
 import javafx.stage.Stage;
-import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
 
@@ -14,7 +13,7 @@ import java.sql.SQLException;
  * La classe WindowHomeMenuController représente le controleur
  * pour la page principale des Menus. Elle permet à l'utilisateur
  * de voir ses Menus et d'en créer un nouveau
- * @see ulb.infof307.g01.cuisine.Menu
+ * @see ulb.infof307.g01.model.Menu
  * */
 public class WindowHomeMenuController extends Window {
 

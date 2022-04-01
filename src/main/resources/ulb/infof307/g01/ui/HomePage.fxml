@@ -8,6 +8,7 @@
    <children>
       <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList" prefHeight="50.0" prefWidth="170.0" text="Liste de courses" />
       <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0" prefWidth="170.0" text="Menus" />
+      <Button fx:id="mapBtn" mnemonicParsing="false" onAction="#redirectToMap" prefHeight="50.0" prefWidth="170.0" text="Map" />
       <Button mnemonicParsing="false" onAction="#closeApplication" prefHeight="50.0" prefWidth="170.0" text="Quitter" />
    </children>
 </VBox>

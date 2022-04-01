@@ -4,11 +4,16 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
+import javafx.stage.Modality;
+import javafx.stage.Popup;
 import javafx.stage.Stage;
 import ulb.infof307.g01.db.Configuration;
 
 import java.io.IOException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class Window  {
     protected static Configuration applicationConfiguration;
@@ -40,6 +45,15 @@ public class Window  {
         setNewScene(loader);
     }
 
+    protected void popupFXML(String filename, Window controller) throws IOException {
+        Stage popup = new Stage();
+        popup.initModality(Modality.APPLICATION_MODAL);
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
+        loader.setController(controller);
+        popup.setScene(new Scene(loader.load()));
+        popup.show();
+    }
+
 
     public static void setStage(Stage stage){
         if (primaryStage == null){
@@ -57,6 +71,22 @@ public class Window  {
         primaryStage.setTitle("Autochef");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();
+    }
+
+    /**
+     * Affiche une fenêtre Dialogue avec un titre et du texte
+     * Utiliser pour les erreurs ou les messages simple à l'utilisateur
+     * @param alertType le type de Dialogue
+     * @param headerText l'entête, titre
+     * @param contentText le texte a afficher
+     * @return le type de bouton cliquer par l'utilisateur
+     */
+    public static ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        Optional<ButtonType> alertResult = alert.showAndWait();
+        return alertResult.get();
     }
 
 }

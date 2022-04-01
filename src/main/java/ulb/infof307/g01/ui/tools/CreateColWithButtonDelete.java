@@ -6,7 +6,7 @@ import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.util.Callback;
-import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.model.Product;
 
 public class CreateColWithButtonDelete {
 

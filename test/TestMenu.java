@@ -1,4 +1,5 @@
 import org.junit.jupiter.api.*;
+import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.cuisine.*;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.Database;
@@ -62,7 +63,6 @@ class TestMenu {
         Configuration.getCurrent().getRecipeDao().insert(recipes[2]);
         Configuration.getCurrent().getRecipeDao().insert(recipes[3]);
         Configuration.getCurrent().getRecipeDao().insert(recipes[4]);
-
     }
 
     @AfterAll
