@@ -6,6 +6,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
@@ -13,35 +15,37 @@ import ulb.infof307.g01.ui.Window;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.HashSet;
-import java.util.ResourceBundle;
-import java.util.Set;
+import java.util.*;
 
 public class ShowShopController extends Window implements Initializable {
 
     public TableView tableViewShop;
     public ComboBox comboboxProduct;
     public Spinner<Double> spinnerPrice;
-    public Button buttonAdd;
     public TableColumn columnProduct;
     public TableColumn columnPrice;
+    public TextField nameShop;
+    public VBox vBox; 
     private Shop shop = null;
 
 
-    public void createPopup(){
+    public void createPopup(int idShop){
         try { popupFXML("ShowShop.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        initElement();
+        //TODO : demander a la base de donnée le Shop avec l'id
+        initElement(idShop);
     }
 
 
-    public void initElement(){
+    public void initElement(int idShop){
         //TODO: connection avec la bdd avec id
-        fakeBDD();
-        fillTableViewShop();
+        if (idShop != 0){  //TODO: seulement un test
+            fakeBDD();
+            nameShop.setText(shop.getName());
+            fillTableViewShop();
+        }
         fillComboboxProduct();
     }
 
@@ -82,13 +86,29 @@ public class ShowShopController extends Window implements Initializable {
 
     public void addProductToTableView(){
 
+        setNodeColor(comboboxProduct, false);
         Object nameProduct  = comboboxProduct.getSelectionModel().getSelectedItem();
-        if (nameProduct == null) return;
+        if (nameProduct == null) setNodeColor(comboboxProduct, true);
+        else{
+            double priceProduct = spinnerPrice.getValue();
+            Product product = new Product(nameProduct.toString(), priceProduct);
+            shop.add(product);
+            tableViewShop.getItems().addAll(product);
+        }
 
-        double priceProduct = spinnerPrice.getValue();
-        Product product = new Product(nameProduct.toString(), priceProduct);
-        shop.add(product);
-        tableViewShop.getItems().addAll(product);
-        //TODO: envoyer shop a la base de donnee
+    }
+
+    public void saveNewShop(){
+        setNodeColor(nameShop, false);
+        String getNameShop = nameShop.getText();
+
+        if (!Objects.equals(getNameShop, "")){
+            //TODO: envoyer shop a la base de donnee
+            Stage stage = (Stage) vBox.getScene().getWindow();
+            stage.close();
+        }
+        else{
+            setNodeColor(nameShop, true);
+        }
     }
 }

@@ -6,20 +6,21 @@
 <?import javafx.scene.control.Spinner?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="113.0" prefWidth="600.0" text="Magasin ">
+            <Label prefHeight="17.0" prefWidth="113.0" text="Nom du magasin : ">
                <font>
-                  <Font size="30.0" />
+                  <Font size="13.0" />
                </font>
             </Label>
+            <TextField fx:id="nameShop" promptText="nom du magasin" />
          </children>
       </HBox>
       <TableView fx:id="tableViewShop" prefHeight="249.0" prefWidth="750.0">
@@ -31,13 +32,14 @@
       <HBox alignment="CENTER" prefHeight="102.0" prefWidth="750.0" spacing="10.0">
          <children>
             <ComboBox fx:id="comboboxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
-            <Spinner fx:id="spinnerPrice" prefHeight="25.0" prefWidth="123.0" promptText="Prix"
-                     min="0.1" max="10000.0" initialValue="3.2" amountToStepBy=".1"/>
-            <Button fx:id="buttonAdd" mnemonicParsing="false" prefHeight="25.0" onAction="#addProductToTableView" prefWidth="139.0" text="Ajouter" />
+            <Spinner fx:id="spinnerPrice" amountToStepBy=".1" initialValue="3.2" max="10000.0" min="0.1" prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
+            <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addProductToTableView" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="216.0" text="Confirmer" />
          </children>
       </HBox>
    </children>
 </VBox>
-
-
-

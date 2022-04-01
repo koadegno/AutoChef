@@ -185,6 +185,9 @@ public class DisplayMapController extends Window implements Initializable {
                 boolean isPointFound = deleteGraphicPoint(); //
                 if(!isPointFound){
                     //TODO fenetre pour mettre les infos du magasin
+                    ShowShopController showShopController = new ShowShopController();
+                    int id = 0; //TODO: donner vraie id : pour seulement test ici
+                    showShopController.createPopup(id);
                     addPointToOverlay(shopToAdd);
                 }
             }
@@ -240,7 +243,8 @@ public class DisplayMapController extends Window implements Initializable {
 
                     //POPUP SHOP
                     ShowShopController showShopController = new ShowShopController();
-                    showShopController.createPopup();
+                    int id = 1; //TODO: donner vraie id : pour seulement test ici
+                    showShopController.createPopup(id);
 
                 }
             } catch (InterruptedException | ExecutionException ex) {
