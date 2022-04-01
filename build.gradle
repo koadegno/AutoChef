@@ -9,6 +9,7 @@ version '2'
 
 repositories {
     mavenCentral()
+    maven {url 'https://esri.jfrog.io/artifactory/arcgis'}
 }
 
 java {
@@ -100,6 +101,15 @@ dependencies {
     runtimeOnly "org.slf4j:slf4j-nop:1.7.32"
 }
 
+task copyNatives(type: Copy) {
+    description = "Copies the arcgis native libraries into the .arcgis directory for development."
+    group = "build"
+    configurations.natives.asFileTree.each {
+        from(zipTree(it))
+    }
+    into "${System.properties.getProperty("user.home")}/.arcgis/$arcgisVersion"
+}
+
 jar {
 
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
@@ -113,11 +123,9 @@ jar {
     destinationDirectory.set(file("$rootDir/dist"))
 }
 
-repositories {
-    mavenCentral()
-    maven {
-        url 'https://esri.jfrog.io/artifactory/arcgis'
-    }
+run {
+    dependsOn copyNatives
+    mainClassName = 'ulb.infof307.g01.Main'
 }
 
 javafx {
@@ -125,16 +133,9 @@ javafx {
     modules = [ 'javafx.controls','javafx.fxml'  ]
 }
 
-task copyNatives(type: Copy) {
-    description = "Copies the arcgis native libraries into the .arcgis directory for development."
-    group = "build"
-    configurations.natives.asFileTree.each {
-        from(zipTree(it))
-    }
-    into "${System.properties.getProperty("user.home")}/.arcgis/$arcgisVersion"
+
+
+tasks.withType(JavaCompile) {
+    options.encoding = 'UTF-8'
 }
 
-run {
-    dependsOn copyNatives
-    mainClassName = 'com.mycompany.app.App'
-}
