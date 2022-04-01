@@ -12,6 +12,7 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.ui.Window;
@@ -127,7 +128,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     public void cancel() {
 
         try{
-            add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
+            add(Configuration.getCurrent().getMenuDao().get(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
     }

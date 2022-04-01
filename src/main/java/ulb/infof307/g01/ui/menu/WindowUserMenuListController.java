@@ -45,9 +45,9 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * */
     public void initializeMenusFromDB() {
         try {
-            allMenusNames = Configuration.getCurrent().getDatabase().getAllMenuName();
+            allMenusNames = Configuration.getCurrent().getMenuDao().getAllName();
             for (String name : allMenusNames){
-                menus.add(Configuration.getCurrent().getDatabase().getMenuFromName(name));
+                menus.add(Configuration.getCurrent().getMenuDao().get(name));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -132,7 +132,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
         String name = menuName.getText();
         if (!(Objects.equals(name, ""))) {
             try {
-                Menu menu = Configuration.getCurrent().getDatabase().getMenuFromName(name);
+                Menu menu = Configuration.getCurrent().getMenuDao().get(name);
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
                 controller.setMenu(menu);

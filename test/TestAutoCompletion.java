@@ -1,6 +1,9 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.cuisine.AutoCompletion;
+import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.AutoCompletion;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.db.Database;
@@ -26,21 +29,21 @@ class TestAutoCompletion {
 
     @BeforeAll
     static public void createDB() throws SQLException {
+        String databaseName = "test.sqlite";
+        Configuration.getCurrent().setDatabase(databaseName);
 
-        db = new Database("test.sqlite");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
 
-        db.insertCategory("Poisson");
-        db.insertCategory("Viande");
-        db.insertCategory("Végétarien");
-        db.insertCategory("Vegan");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Dessert");
 
-        db.insertType("Plat");
-        db.insertType("Dessert");
-
-        db.insertRecipe(bolo);
-        db.insertRecipe(carbo);
-        db.insertRecipe(pesto);
-        db.insertRecipe(tiramisu);
+        Configuration.getCurrent().getRecipeDao().insert(bolo);
+        Configuration.getCurrent().getRecipeDao().insert(carbo);
+        Configuration.getCurrent().getRecipeDao().insert(pesto);
+        Configuration.getCurrent().getRecipeDao().insert(tiramisu);
     }
 
 
@@ -69,7 +72,7 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
+        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null);
 
         // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {

@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
@@ -57,10 +58,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
      */
     public void initShoppingListElement() {
         try {
-            allProduct = this.applicationConfiguration.getCurrent().getDatabase().getAllProductName();
-            allUnitName = this.applicationConfiguration.getCurrent().getDatabase().getAllUniteName();
+            allProduct = Configuration.getCurrent().getProductDao().getAllName();
+            allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
             allUnitName.removeAll(List.of(unitToRemove));
-            allShoppinListName = this.applicationConfiguration.getCurrent().getDatabase().getAllShoppingListName();
+            allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
         } catch (SQLException e) {
             e.printStackTrace();

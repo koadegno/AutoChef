@@ -139,12 +139,11 @@ public class Menu {
 
     /**
      * Complète automatiquement le {@code Menu} en fonction des paramètres fournis
-     * @param db Un objet {@code Database} permettant d'obtenir la liste de produits correspondant à certains filtres
      * @param nbVegetarian Nombre de repas Végétarien à insérer au minimum
      * @param nbMeat Nombre de repas contenant de la viande à insérer au minimum
      * @param nbFish Nombre de repas contenant du poisson à insérer au minimum
      */
-    public void generateMenu(Database db, int nbVegetarian, int nbMeat, int nbFish) throws SQLException {
+    public void generateMenu(int nbVegetarian, int nbMeat, int nbFish) throws SQLException {
 
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
         List<Recipe> recipesUsed = getAllRecipes();
@@ -160,7 +159,7 @@ public class Menu {
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
-                List<Recipe> recipesChosed = AutoCompletion.generateRecipesList(recipesUsed, categoriesWanted, nbRecipesToAdd,  null,  db);
+                List<Recipe> recipesChosed = AutoCompletion.generateRecipesList(recipesUsed, categoriesWanted, nbRecipesToAdd,  null);
                 menu.get(index).addAll(recipesChosed);
             }
             index++;

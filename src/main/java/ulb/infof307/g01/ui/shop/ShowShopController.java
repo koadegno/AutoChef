@@ -8,6 +8,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
@@ -76,7 +77,7 @@ public class ShowShopController extends Window implements Initializable {
 
     private void fillComboboxProduct(){
         ArrayList<String> allProduct = null;
-        try {allProduct = this.applicationConfiguration.getCurrent().getDatabase().getAllProductName();
+        try {allProduct = Configuration.getCurrent().getProductDao().getAllName();
         } catch (SQLException e) {
             e.printStackTrace();
         }
