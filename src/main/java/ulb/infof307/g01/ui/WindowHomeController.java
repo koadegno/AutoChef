@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import ulb.infof307.g01.ui.map.DisplayMapController;
 import ulb.infof307.g01.ui.menu.WindowHomeMenuController;
+import ulb.infof307.g01.ui.recipe.WindowHomeRecipeController;
 import ulb.infof307.g01.ui.shoppingList.WindowHomeShoppingListController;
 
 /**
@@ -57,6 +58,12 @@ public class WindowHomeController extends Window{
     public void redirectToMap(){
         DisplayMapController mapController = new DisplayMapController();
         mapController.displayMain();
+    }
+
+    @FXML
+    public void redirectToRecipe(){
+        WindowHomeRecipeController recipeWindow = new WindowHomeRecipeController();
+        recipeWindow.displayMain();
     }
 
 
