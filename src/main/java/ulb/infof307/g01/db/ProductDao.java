@@ -1,6 +1,6 @@
 package ulb.infof307.g01.db;
 
-import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.model.Product;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

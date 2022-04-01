@@ -1,8 +1,8 @@
 package ulb.infof307.g01.db;
 
-import ulb.infof307.g01.cuisine.Day;
-import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.model.Day;
+import ulb.infof307.g01.model.Menu;
+import ulb.infof307.g01.model.Recipe;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

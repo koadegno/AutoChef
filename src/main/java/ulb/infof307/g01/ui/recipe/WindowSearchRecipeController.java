@@ -9,6 +9,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
