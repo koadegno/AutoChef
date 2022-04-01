@@ -81,7 +81,7 @@ public class Window  {
      * @param contentText le texte a afficher
      * @return le type de bouton cliquer par l'utilisateur
      */
-    protected ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
+    public static ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
         Alert alert = new Alert(alertType);
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
