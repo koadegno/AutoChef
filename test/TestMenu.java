@@ -1,11 +1,11 @@
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -16,7 +16,6 @@ class TestMenu {
     static private Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
-    static Database db;
 
     @BeforeAll
     static void setUp() throws SQLException {
@@ -66,7 +65,7 @@ class TestMenu {
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 

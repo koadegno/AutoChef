@@ -4,7 +4,6 @@ import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.AutoCompletion;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -18,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestAutoCompletion {
 
-    static Database db;
     static Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
     static Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
     static Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
@@ -47,7 +45,7 @@ class TestAutoCompletion {
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
