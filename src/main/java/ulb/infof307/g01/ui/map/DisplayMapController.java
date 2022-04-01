@@ -188,7 +188,8 @@ public class DisplayMapController extends Window implements Initializable {
                     // TODO recup l'id et lancer la pop ip avec le bonne id
                     //POPUP SHOP
                     ShowShopController showShopController = new ShowShopController();
-                    showShopController.createPopup();
+                    int id = 1; //TODO: seulement pour tester
+                    showShopController.createPopup(id);
                     break;
                 }
             }
@@ -207,7 +208,8 @@ public class DisplayMapController extends Window implements Initializable {
         addPointToOverlay(shop);
         //POPUP SHOP
         ShowShopController showShopController = new ShowShopController();
-        showShopController.createPopup();
+        int id = 0;
+        showShopController.createPopup(id);
     }
 
     /**
