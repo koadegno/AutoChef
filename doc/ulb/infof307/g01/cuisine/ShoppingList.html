@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <meta name="dc.created" content="2022-03-14">
-<meta name="description" content="declaration: package: ulb.infof307.g01.cuisine, class: ShoppingList">
+<meta name="description" content="declaration: package: ulb.infof307.g01.model, class: ShoppingList">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -68,14 +68,14 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">ulb.infof307.g01.cuisine</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">ulb.infof307.g01.model</a></div>
 <h1 title="Class ShoppingList" class="title">Class ShoppingList</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractCollection.html" title="class or interface in java.util" class="external-link">java.util.AbstractCollection</a>&lt;E&gt;
 <div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/AbstractList.html" title="class or interface in java.util" class="external-link">java.util.AbstractList</a>&lt;E&gt;
-<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">java.util.Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;
-<div class="inheritance">ulb.infof307.g01.cuisine.ShoppingList</div>
+<div class="inheritance"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">java.util.Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;
+<div class="inheritance">ulb.infof307.g01.model.ShoppingList</div>
 </div>
 </div>
 </div>
@@ -83,11 +83,11 @@ loadScripts(document, 'script');</script>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/RandomAccess.html" title="class or interface in java.util" class="external-link">RandomAccess</a></code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/io/Serializable.html" title="class or interface in java.io" class="external-link">Serializable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Cloneable.html" title="class or interface in java.lang" class="external-link">Cloneable</a></code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Iterable.html" title="class or interface in java.lang" class="external-link">Iterable</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code>, <code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/RandomAccess.html" title="class or interface in java.util" class="external-link">RandomAccess</a></code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">ShoppingList</span>
-<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</span></div>
+<span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</span></div>
 <div class="block">Classe représentant une Liste de Course</div>
 <dl class="notes">
 <dt>See Also:</dt>
@@ -141,10 +141,10 @@ loadScripts(document, 'script');</script>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(int,ulb.infof307.g01.cuisine.Product)" class="member-name-link">add</a><wbr>(int&nbsp;index,
- <a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;product)</code></div>
+ <a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;product)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Product)" class="member-name-link">add</a><wbr>(<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;p)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Product)" class="member-name-link">add</a><wbr>(<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;p)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Ajoute le <code>Product</code> p à la liste, si p est déjà dans la liste, le <code>Product</code> n'est pas ajouté en double,
   sa quantité est seulement incrémentée</div>
@@ -161,7 +161,7 @@ loadScripts(document, 'script');</script>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#getName()" class="member-name-link">getName</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#insertElementAt(ulb.infof307.g01.cuisine.Product,int)" class="member-name-link">insertElementAt</a><wbr>(<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;p,
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#insertElementAt(ulb.infof307.g01.cuisine.Product,int)" class="member-name-link">insertElementAt</a><wbr>(<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;p,
  int&nbsp;index)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Méthode inaccessible</div>
@@ -169,7 +169,7 @@ loadScripts(document, 'script');</script>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>boolean</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#isArchived()" class="member-name-link">isArchived</a>()</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
-<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a></code></div>
+<div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="Product.html" title="class in ulb.infof307.g01.model">Product</a></code></div>
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#remove(int)" class="member-name-link">remove</a><wbr>(int&nbsp;index)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Méthode inaccessible</div>
@@ -272,16 +272,16 @@ loadScripts(document, 'script');</script>
 <li>
 <section class="detail" id="add(ulb.infof307.g01.cuisine.Product)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;p)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">boolean</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;p)</span></div>
 <div class="block">Ajoute le <code>Product</code> p à la liste, si p est déjà dans la liste, le <code>Product</code> n'est pas ajouté en double,
   sa quantité est seulement incrémentée</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#add(E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>Toujours True</dd>
 </dl>
@@ -291,12 +291,12 @@ loadScripts(document, 'script');</script>
 <section class="detail" id="add(int,ulb.infof307.g01.cuisine.Product)">
 <h3>add</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(int&nbsp;index,
- <a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;product)</span></div>
+ <a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;product)</span></div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#add(int,E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#add(int,E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#add(int,E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#add(int,E)" title="class or interface in java.util" class="external-link">add</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -307,32 +307,32 @@ loadScripts(document, 'script');</script>
 <div class="block">Méthode inaccessible</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#copyInto(java.lang.Object%5B%5D)" title="class or interface in java.util" class="external-link">copyInto</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#copyInto(java.lang.Object%5B%5D)" title="class or interface in java.util" class="external-link">copyInto</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="insertElementAt(ulb.infof307.g01.cuisine.Product,int)">
 <h3>insertElementAt</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">insertElementAt</span><wbr><span class="parameters">(<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&nbsp;p,
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">insertElementAt</span><wbr><span class="parameters">(<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&nbsp;p,
  int&nbsp;index)</span></div>
 <div class="block">Méthode inaccessible</div>
 <dl class="notes">
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#insertElementAt(E,int)" title="class or interface in java.util" class="external-link">insertElementAt</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#insertElementAt(E,int)" title="class or interface in java.util" class="external-link">insertElementAt</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
 <li>
 <section class="detail" id="remove(int)">
 <h3>remove</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a></span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type"><a href="Product.html" title="class in ulb.infof307.g01.model">Product</a></span>&nbsp;<span class="element-name">remove</span><wbr><span class="parameters">(int&nbsp;index)</span></div>
 <div class="block">Méthode inaccessible</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#remove(int)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#remove(int)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#remove(int)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#remove(int)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 </dl>
 </section>
 </li>
@@ -344,11 +344,11 @@ loadScripts(document, 'script');</script>
  si la quantité est à 1, le <code>Product</code> est supprimé de la liste</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Collection.html" title="class or interface in java.util" class="external-link">Collection</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Specified by:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in interface&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/List.html" title="class or interface in java.util" class="external-link">List</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Overrides:</dt>
-<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.cuisine">Product</a>&gt;</code></dd>
+<dd><code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html#remove(java.lang.Object)" title="class or interface in java.util" class="external-link">remove</a></code>&nbsp;in class&nbsp;<code><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/Vector.html" title="class or interface in java.util" class="external-link">Vector</a>&lt;<a href="Product.html" title="class in ulb.infof307.g01.model">Product</a>&gt;</code></dd>
 <dt>Returns:</dt>
 <dd>True si le produit était dans la liste, False sinon</dd>
 </dl>

@@ -1,4 +1,5 @@
-package ulb.infof307.g01.cuisine;
+package ulb.infof307.g01.model;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.Database;
 
 import java.sql.SQLException;
@@ -17,10 +18,9 @@ public class AutoCompletion {
      * @param categoriesWanted   HashMap contenant les categories souhaitées et en quelle quantité
      * @param nbRecipes          int indiquant le nombre de recettes souhaitées
      * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
-     * @param db                 Database contenant les recettes
      */
 
-    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type, Database db) throws SQLException {
+    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
         if (categoriesWanted.isEmpty()){ return menu;}
@@ -32,7 +32,7 @@ public class AutoCompletion {
 
             while (recipes.size() == 0) {
                 categoryMax = findMax(categoriesWanted);
-                recipes     = db.getRecipeWhere(categoryMax, type,  0);
+                recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(categoryMax, type,  0);
 
                 // Si aucune recette trouvée correspondante à la catégorie souhaitée, la catégorie est supprimée
                 if (recipes.size() == 0) {

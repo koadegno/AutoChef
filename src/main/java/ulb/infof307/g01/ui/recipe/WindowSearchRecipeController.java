@@ -3,18 +3,17 @@ package ulb.infof307.g01.ui.recipe;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
-import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,9 +45,9 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
     CheckBox activateSpinnerCheckBox;
 
     public WindowSearchRecipeController() throws SQLException {
-        this.dietList = this.applicationConfiguration.getCurrent().getDatabase().getAllCategories();
-        this.typeList = this.applicationConfiguration.getCurrent().getDatabase().getAllTypes();
-        this.recipeName = this.applicationConfiguration.getCurrent().getDatabase().getRecipeWhere(null, null, 0);
+        this.dietList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+        this.typeList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        this.recipeName = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
         this.dietList.add(0, "Tout");
         this.typeList.add(0, "Tout");
     }
@@ -116,7 +115,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
         if (dietIndex > 0) dietCondition = dietList.get(dietIndex);
         if (typeIndex > 0) typeCondition = typeList.get(typeIndex);
         if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;
-        this.recipeName = this.applicationConfiguration.getCurrent().getDatabase().getRecipeWhere(dietCondition, typeCondition, nbPerson);
+        this.recipeName = Configuration.getCurrent().getRecipeDao().getRecipeWhere(dietCondition, typeCondition, nbPerson);
         this.recipeTableView.getItems().clear();
         this.recipeTableView.getItems().addAll(recipeName);
 

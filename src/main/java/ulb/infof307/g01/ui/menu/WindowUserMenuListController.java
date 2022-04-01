@@ -9,11 +9,10 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.ui.Window;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
@@ -26,7 +25,7 @@ import java.util.ResourceBundle;
  * un menu pour l'afficher, ou de tapper manuellement le nom du
  * menu. Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
- * @see ulb.infof307.g01.cuisine.Menu
+ * @see ulb.infof307.g01.model.Menu
  * @see WindowShowMenuController
  * */
 public class WindowUserMenuListController extends Window implements Initializable {
@@ -46,9 +45,9 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * */
     public void initializeMenusFromDB() {
         try {
-            allMenusNames = Configuration.getCurrent().getDatabase().getAllMenuName();
+            allMenusNames = Configuration.getCurrent().getMenuDao().getAllName();
             for (String name : allMenusNames){
-                menus.add(Configuration.getCurrent().getDatabase().getMenuFromName(name));
+                menus.add(Configuration.getCurrent().getMenuDao().get(name));
             }
         }catch (SQLException e){
             e.printStackTrace();
@@ -133,7 +132,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
         String name = menuName.getText();
         if (!(Objects.equals(name, ""))) {
             try {
-                Menu menu = Configuration.getCurrent().getDatabase().getMenuFromName(name);
+                Menu menu = Configuration.getCurrent().getMenuDao().get(name);
 
                 WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
                 controller.setMenu(menu);

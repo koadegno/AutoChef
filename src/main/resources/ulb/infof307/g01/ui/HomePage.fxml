@@ -1,13 +1,30 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
-
+<?import javafx.scene.text.Font?>
 
 <VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="75.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.ui.WindowHomeController">
    <children>
-      <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList" prefHeight="50.0" prefWidth="170.0" text="Liste de courses" />
-      <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0" prefWidth="170.0" text="Menus" />
-      <Button mnemonicParsing="false" onAction="#closeApplication" prefHeight="50.0" prefWidth="170.0" text="Quitter" />
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="516.0" text="Bienvenue dans Autochef" textAlignment="CENTER">
+         <font>
+            <Font size="20.0" />
+         </font>
+      </Label>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+         <children>
+            <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList" prefHeight="50.0" prefWidth="170.0" text="Liste de courses" />
+            <Button onAction="#redirectToRecipe" mnemonicParsing="false" prefHeight="50.0" prefWidth="170.0" text="Recettes" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
+         <children>
+            <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0" prefWidth="170.0" text="Menus" />
+            <Button fx:id="mapBtn" mnemonicParsing="false" onAction="#redirectToMap" prefHeight="50.0" prefWidth="170.0" text="Map" />
+         </children>
+      </HBox>
+      <Button mnemonicParsing="false" onAction="#closeApplication" prefHeight="50.0" prefWidth="544.0" text="Quitter" />
    </children>
 </VBox>

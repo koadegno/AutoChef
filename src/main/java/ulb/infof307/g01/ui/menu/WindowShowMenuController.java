@@ -12,8 +12,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import ulb.infof307.g01.cuisine.*;
-import ulb.infof307.g01.cuisine.Menu;
+import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowCreateUserShoppingListController;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
@@ -26,7 +27,7 @@ import ulb.infof307.g01.ui.tools.UtilisationContrat;
  * de courses.
  * Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
- * @see ulb.infof307.g01.cuisine.Menu
+ * @see ulb.infof307.g01.model.Menu
  * @see WindowShowMenuController
  * */
 public class WindowShowMenuController extends Window implements Initializable, UtilisationContrat<Menu> {
@@ -127,7 +128,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
     public void cancel() {
 
         try{
-            add(this.applicationConfiguration.getCurrent().getDatabase().getMenuFromName(this.menu.getName()));
+            add(Configuration.getCurrent().getMenuDao().get(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
     }

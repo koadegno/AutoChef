@@ -37,6 +37,6 @@ public class WindowHomeShoppingListController extends Window {
     @FXML
     public void returnMainMenu() {
         WindowHomeController windowHomeController = new WindowHomeController();
-        windowHomeController.displayMain(this.primaryStage);
+        windowHomeController.displayMain(primaryStage);
     }
 }

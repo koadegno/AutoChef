@@ -1,10 +1,11 @@
 import org.junit.jupiter.api.*;
-import ulb.infof307.g01.cuisine.*;
-import ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -15,7 +16,6 @@ class TestMenu {
     static private Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
-    static Database db;
 
     @BeforeAll
     static void setUp() throws SQLException {
@@ -44,28 +44,28 @@ class TestMenu {
     }
 
     static public void createDB() throws SQLException {
+        String databaseName = "test.sqlite";
+        Configuration.getCurrent().setDatabase(databaseName);
 
-        db = new Database("test.sqlite");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
 
-        db.insertCategory("Poisson");
-        db.insertCategory("Viande");
-        db.insertCategory("Végétarien");
-        db.insertCategory("Vegan");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Mijoté");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Test");
 
-        db.insertType("Plat");
-        db.insertType("Mijoté");
-        db.insertType("Test");
-
-        db.insertRecipe(recipes[5]);
-        db.insertRecipe(recipes[6]);
-        db.insertRecipe(recipes[2]);
-        db.insertRecipe(recipes[3]);
-        db.insertRecipe(recipes[4]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[5]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[6]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[2]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[3]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[4]);
     }
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
@@ -184,7 +184,7 @@ class TestMenu {
     @Test
     void generateMenu() throws SQLException {
 
-        menu.generateMenu(db, 6, 4, 6);
+        menu.generateMenu(6, 4, 6);
 
         for (Day day: Day.values()) {
             List<Recipe> recipes = menu.getRecipesfor(day);
