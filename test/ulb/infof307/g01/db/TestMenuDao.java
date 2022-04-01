@@ -3,9 +3,9 @@ package ulb.infof307.g01.db;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.cuisine.Day;
-import ulb.infof307.g01.cuisine.Menu;
-import ulb.infof307.g01.cuisine.Recipe;
+import ulb.infof307.g01.model.Day;
+import ulb.infof307.g01.model.Menu;
+import ulb.infof307.g01.model.Recipe;
 
 import java.io.IOException;
 import java.nio.file.Files;

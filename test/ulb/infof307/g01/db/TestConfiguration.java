@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.cuisine.Product;
+import ulb.infof307.g01.model.Product;
 
 import java.io.IOException;
 import java.nio.file.Files;
