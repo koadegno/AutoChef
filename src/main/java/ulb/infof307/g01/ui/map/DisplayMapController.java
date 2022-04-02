@@ -111,7 +111,7 @@ public class DisplayMapController extends Window implements Initializable {
         allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
         allShopList.add(new Shop("Aldi 2", new Point(5.6257913, 50.9702834, SpatialReferences.getWgs84())));
         allShopList.add(new Shop("Lidl 1", new Point(4.3586407, 50.8424057,SpatialReferences.getWgs84())));
-
+        allShopList.add(new Shop("Magasin de quartier", new Point(613522.260836, 6458871.247709)));
         for(Shop shop: allShopList){
             mapTools.addPointToOverlay(shop);
         }

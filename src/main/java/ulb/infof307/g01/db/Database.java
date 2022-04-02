@@ -135,6 +135,7 @@ public class Database {
         if (constraintToAppend.size() > 0){
             StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
             stringQuery = appendValuesToWhere(query,constraintToAppend);
+            System.out.println(stringQuery);
         } else {
             stringQuery = String.format("SELECT * FROM %s ", nameTable);
         }

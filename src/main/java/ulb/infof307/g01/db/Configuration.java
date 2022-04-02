@@ -1,9 +1,6 @@
 package ulb.infof307.g01.db;
 
-import ulb.infof307.g01.model.Menu;
-import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.*;
 
 import java.sql.SQLException;
 
@@ -18,6 +15,7 @@ public class Configuration {
     private Dao<Recipe> recipeDao;
     private Dao<String> recipeTypeDao;
     private Dao<ShoppingList> shoppingListDao;
+    private Dao<Shop> shopDao;
 
     private Configuration(){}
 
@@ -37,6 +35,7 @@ public class Configuration {
         this.recipeDao = new RecipeDao(dbPath);
         this.recipeTypeDao = new RecipeTypeDao(dbPath);
         this.shoppingListDao = new ShoppingListDao(dbPath);
+        this.shopDao = new ShopDao(dbPath);
     }
 
     public void closeConnection() throws SQLException {
@@ -67,4 +66,6 @@ public class Configuration {
     public RecipeTypeDao getRecipeTypeDao() { return (RecipeTypeDao) recipeTypeDao; }
 
     public ShoppingListDao getShoppingListDao() { return (ShoppingListDao) shoppingListDao; }
+
+    public ShopDao getShopDao() { return (ShopDao) shopDao; }
 }
