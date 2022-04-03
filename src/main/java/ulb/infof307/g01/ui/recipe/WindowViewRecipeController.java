@@ -3,6 +3,7 @@ package ulb.infof307.g01.ui.recipe;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -21,9 +22,14 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     public TextField recipeTextField;
     @FXML
     public TextArea displayRecipeTextArea;
+    @FXML
+    public Button deleteButton;
+
     private static Scene scene;
     private String ingredientTitle = "Ingrédients : ";
     private String preparationTitle = "Préparation : ";
+    private Recipe displayedRecipe = null;
+
     public void returnHomeRecipeWindow() {
         WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
         myRecipeWindow.displayMain();
@@ -38,13 +44,21 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         displayRecipeTextArea.setEditable(false);
         displayRecipeTextArea.setWrapText(true);
         recipeTextField.setPromptText("Entrer nom de la recette");
+        deleteButton.setVisible(false);
+        refreshTextArea();
     }
 
-    public void displayRecipe(Recipe recipe){
-        String preparation = preparationTitle + "\n" + recipe.getPreparation() + "\n";
-        String ingredient = ingredientTitle + "\n" + productListToString(recipe) + "\n";
-        String toDisplay = ingredient + preparation;
-        displayRecipeTextArea.setText(toDisplay);
+    public void refreshTextArea() {
+        if (displayedRecipe != null) {
+            String preparation = preparationTitle + "\n" + displayedRecipe.getPreparation() + "\n";
+            String ingredient = ingredientTitle + "\n" + productListToString(displayedRecipe) + "\n";
+            String toDisplay = ingredient + preparation;
+            displayRecipeTextArea.setText(toDisplay);
+            deleteButton.setVisible(true);
+        }
+        else{
+            displayRecipeTextArea.setText("Aucune recette sélectionnée");
+        }
     }
 
     public String productListToString(Recipe recipe){
@@ -67,7 +81,8 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
 
     @Override
     public void add(Recipe recipe) {
-        displayRecipe(recipe);
+        displayedRecipe = recipe;
+        refreshTextArea();
         this.primaryStage.setScene(this.scene);
     }
 
@@ -90,4 +105,10 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         }
     }
 
+    public void deleteRecipe() {
+        // TODO: delete recipe from db
+        deleteButton.setVisible(false);
+        displayedRecipe = null;
+        refreshTextArea();
+    }
 }

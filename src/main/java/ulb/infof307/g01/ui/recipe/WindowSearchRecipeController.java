@@ -57,19 +57,6 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
     @FXML
     public void confirmRecipe() {}
 
-    @FXML
-    private void onlyIntValue(){
-        numberOfPersonSpinner.getEditor().textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
-                }
-            }
-        });
-    }
-
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         columnRecipeName.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
@@ -82,7 +69,7 @@ public class WindowSearchRecipeController<T extends UtilisationContrat<Recipe>> 
         numberOfPersonSpinner.setValueFactory(
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
         );
-        onlyIntValue();
+        this.onlyIntValue(numberOfPersonSpinner);
         this.numberOfPersonSpinner.setVisible(false);
     }
 
