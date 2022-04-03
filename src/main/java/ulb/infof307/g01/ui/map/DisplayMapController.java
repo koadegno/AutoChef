@@ -23,12 +23,12 @@ import java.util.*;
 
 public class DisplayMapController extends Window implements Initializable {
 
-
+// TODO: CONTEXT MENU DANS FXML ?
     private final MapTools mapTools = new MapTools();
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem addShopMenuItem = new MenuItem("Add Shop");
     private final MenuItem deleteShopMenuItem = new MenuItem("Delete Shop");
-    private final MenuItem modifieShopMenuItem = new MenuItem("Modifie Shop");
+    private final MenuItem modifyShopMenuItem = new MenuItem("Modifie Shop");
 
     @FXML
     private Pane mapViewStackPane;
@@ -106,7 +106,6 @@ public class DisplayMapController extends Window implements Initializable {
         mapTools.initializeMapEvent();
         mapTools.createLocatorTaskAndDefaultParameters();
         mapViewStackPane.getChildren().add(mapTools.getMapView());
-
     }
 
     /**
@@ -125,7 +124,7 @@ public class DisplayMapController extends Window implements Initializable {
      */
     private void initializeContextMenu(){
         mapTools.getMapView().setContextMenu(contextMenu);
-        contextMenu.getItems().addAll(addShopMenuItem, modifieShopMenuItem, deleteShopMenuItem);
+        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem);
 
         // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> {
@@ -146,15 +145,23 @@ public class DisplayMapController extends Window implements Initializable {
         });
 
         //contexte menu pour la modification
-        modifieShopMenuItem.setOnAction(event -> {
-            for(int i = 0; i < mapTools.getShopGraphicsCercleList().size(); i++) {
-                Graphic cercleGraphic = mapTools.getShopGraphicsCercleList().get(i);
+        modifyShopMenuItem.setOnAction(event -> {
+            for(int index = 0; index < mapTools.getShopGraphicsCercleList().size(); index++) {
+                Graphic cercleGraphic = mapTools.getShopGraphicsCercleList().get(index);
+                Graphic textGraphic = mapTools.getShopGraphicsTextList().get(index);
+
                 if(cercleGraphic.isSelected()){
-                    // TODO recup l'id et lancer la pop ip avec le bonne id
-                    //POPUP SHOP
-                    ShowShopController showShopController = new ShowShopController();
-                    int id = 1; //TODO: seulement pour tester
-//                    showShopController.createPopup(id,);
+                    Point mapPoint = (Point) cercleGraphic.getGeometry();
+                    String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
+                    try {
+                        Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
+                        //POPUP SHOP
+                        ShowShopController showShopController = new ShowShopController();
+                        showShopController.createPopup(shopToModify,mapTools,true);
+                    } catch (SQLException e) {
+                        Window.showAlert(Alert.AlertType.ERROR,"ERROR","Erreur au niveau de la basse de donnée veillez contactez le manager");
+                        e.printStackTrace();
+                    }
                     break;
                 }
             }

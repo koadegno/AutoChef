@@ -80,8 +80,7 @@ public class MapTools {
         //TODO Recupe le nom du shop
         //POPUP SHOP
         ShowShopController showShopController = new ShowShopController();
-        int id = -1;
-        showShopController.createPopup(id,mapPoint,this);
+        showShopController.createPopup(new Shop(mapPoint),this,false);
     }
 
     /**
@@ -262,5 +261,17 @@ public class MapTools {
         addressGraphicsOverlay.getGraphics().add(markerGraphic);
 
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
+    }
+
+    public void update(Shop shop) {
+
+        for(int index=0;index < shopGraphicsCercleOverlay.getGraphics().size();index++ ){
+            Graphic cercleGraphic = shopGraphicsCercleOverlay.getGraphics().get(index);
+            Graphic textGraphic = shopGraphicsTextOverlay.getGraphics().get(index);
+
+            if(cercleGraphic.isSelected()){
+                ((TextSymbol)textGraphic.getSymbol()).setText(shop.getName());
+            }
+        }
     }
 }

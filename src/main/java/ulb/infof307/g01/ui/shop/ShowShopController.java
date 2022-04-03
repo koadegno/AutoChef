@@ -4,7 +4,6 @@ import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -30,32 +29,20 @@ public class ShowShopController extends Window implements Initializable {
     public VBox vBox; 
     private Shop shop = null;
     private MapTools map;
+    private boolean isModifying;
 
 
-    public void createPopup(int idShop,Point shopPoint,MapTools map){
+    public void createPopup(Shop shop, MapTools map,boolean isModifying){
         try { popupFXML("ShowShop.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
         this.map = map;
-        //TODO : demander a la base de donnée le Shop avec l'id
-        initElement(idShop,shopPoint);
-    }
-
-
-    public void initElement(int idShop, Point shopPoint){
-        //TODO: connection avec la bdd avec id
-        if(idShop == -1){
-            shop = new Shop(shopPoint);
-        }
-        else if (idShop != 0){  //TODO: seulement un test
-            fakeBDD();
-            nameShop.setText(shop.getName());
-            fillTableViewShop();
-        }
+        //TODO : demander a la base de donnée le Shop avec l'
+        this.shop=shop;
+        this.isModifying=isModifying;
         fillComboboxProduct();
     }
-
 
     private void fakeBDD(){
         // TODO Supprimer
@@ -112,8 +99,15 @@ public class ShowShopController extends Window implements Initializable {
         if (!Objects.equals(getNameShop, "")){
             //TODO: envoyer shop a la base de donnee
             shop.setName(getNameShop);
-            map.addPointToOverlay(shop);
-            Configuration.getCurrent().getShopDao().insert(shop);
+            if(isModifying){
+                Configuration.getCurrent().getShopDao().update(shop);
+                map.update(shop);
+            }
+            else{
+                map.addPointToOverlay(shop);
+                Configuration.getCurrent().getShopDao().insert(shop);
+
+            }
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
         }
