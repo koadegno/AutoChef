@@ -57,9 +57,10 @@ public class ShopDao extends Database implements Dao<Shop>{
      * trouve les magasins qui correspondent au nom
      * @param name le nom du magasin
      * @return la liste de tous les magasins
-     * @throws SQLException erreur avec la requette SQL
+     * @throws SQLException erreur avec la requête SQL
      */
-    public List<Shop> getShops(String name) throws SQLException { // retourne tt les lidl de la map
+    public List<Shop> getShops(String name) throws SQLException {
+        // TODO Attention je pense qu'on a pas besoin de cette methode
         List<Shop> shops = getAllShops(name);
 
         for(Shop shop: shops){
@@ -68,6 +69,12 @@ public class ShopDao extends Database implements Dao<Shop>{
         return shops;
     }
 
+    /**
+     * Remplie un magasin avec les produits qui lui sont associés
+     * @param shop le magasin qui doit etre remplie
+     * @return le magasin remplie
+     * @throws SQLException erreur au niveau de la requête SQL
+     */
     private Shop fillShopWithProducts(Shop shop) throws SQLException {
         ResultSet querySelectProductList = sendQuery(String.format("SELECT Ingredient.Nom,MI.prix\n" +
                 "FROM MagasinIngredient as MI\n" +
@@ -83,6 +90,12 @@ public class ShopDao extends Database implements Dao<Shop>{
         return shop;
     }
 
+    /**
+     * récupérer tous les magasins qui contiennent le nom
+     * @param name le nom du magasin
+     * @return la liste de tous les magasins
+     * @throws SQLException erreur au niveau de la requête SQL
+     */
     private List<Shop> getAllShops(String name) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add("Nom LIKE '%"+ name + "%'");
@@ -101,8 +114,11 @@ public class ShopDao extends Database implements Dao<Shop>{
 
     @Override
     @NotImplemented
+    /**
+     * Methode inutilisé
+     */
     public Shop get(String name) throws SQLException , NotImplementedException{
-        throw new NotImplementedException("Cette methode n'est pas implementer casse toi");
+        throw new NotImplementedException("Cette methode n'est pas implementé");
 
     }
 
