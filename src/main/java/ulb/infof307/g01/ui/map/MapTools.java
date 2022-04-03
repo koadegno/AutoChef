@@ -25,6 +25,7 @@ import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shop.ShowShopController;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
@@ -125,6 +126,16 @@ public class MapTools {
                 // TODO POP up avant de del avec les info du magasin
                 ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if (alertResult == ButtonType.OK) {
+                    TextSymbol textSymbol = (TextSymbol) textPointOnMap.getSymbol();
+                    Point mapPoint = (Point) textPointOnMap.getGeometry();
+                    try {
+                        Shop shopToDelete = Configuration.getCurrent().getShopDao().get(textSymbol.getText(), mapPoint);
+                        Configuration.getCurrent().getShopDao().delete(shopToDelete);
+                    } catch (SQLException e) {
+                        Window.showAlert(Alert.AlertType.ERROR, "ERREUR !", "Veillez rapporter l'erreur au près des développeurs.");
+                        e.printStackTrace();
+                    }
+
                     shopGraphicsCercleOverlay.getGraphics().remove(cerclePointOnMap);
                     shopGraphicsTextOverlay.getGraphics().remove(textPointOnMap);
                 }

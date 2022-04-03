@@ -140,6 +140,7 @@ public class DisplayMapController extends Window implements Initializable {
 
         // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
+
             mapTools.deleteGraphicPoint(); //
 
         });

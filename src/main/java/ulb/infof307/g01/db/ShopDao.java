@@ -43,7 +43,7 @@ public class ShopDao extends Database implements Dao<Shop>{
         for (Product product: shop) {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
             String price =  String.valueOf(product.getPrice());
-            String[] productValues = {String.valueOf(shop.getID()),productID,price};
+            String[] productValues = {shopID,productID,price};
             insert("MagasinIngredient", productValues);
         }
     }
