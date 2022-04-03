@@ -188,7 +188,6 @@ public class MapTools {
 
         Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
         Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
-        System.out.println(shopToAdd.getCoordinate());
 
         // ajoute des graphique a l'overlay
         shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
@@ -263,6 +262,14 @@ public class MapTools {
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
     }
 
+    /**
+     * Met a jour le shop afficher sur la carte
+     * @param shop le magasin existant qu'il faut mettre a jour
+     */
+    /**
+     * Met a jour le shop afficher sur la carte
+     * @param shop le magasin existant qu'il faut mettre a jour
+     */
     public void update(Shop shop) {
 
         for(int index=0;index < shopGraphicsCercleOverlay.getGraphics().size();index++ ){

@@ -110,5 +110,10 @@ public class Product {
     public void setNameUnity(String nameUnity) {
         this.nameUnity = nameUnity;
     }
+
+    @Override
+    public String toString(){
+        return name + " "+price+"€/$";
+    }
 }
 

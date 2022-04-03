@@ -9,6 +9,7 @@ import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -31,26 +32,40 @@ public class ShopDao extends Database implements Dao<Shop>{
 
     @Override
     public void insert(Shop shop) throws SQLException {
+        System.out.println(shop);
         //TODO rajouter les autres attributs
         String name = String.format("'%s'", shop.getName());
         String latitude = String.valueOf(shop.getCoordinateX());
         String longitude = String.valueOf(shop.getCoordinateY());
 
         String[] values = {"null", name,"null", longitude,latitude};
+        System.out.println("il y une erreur 2 avant");
+        System.out.println(Arrays.toString(values));
         insert("Magasin", values);
+        System.out.println("il y une erreur 2 apres");
+
         String shopID = String.format("%d", getGeneratedID());
 
         for (Product product: shop) {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
             String price =  String.valueOf(product.getPrice());
             String[] productValues = {shopID,productID,price};
+            System.out.println("il y une erreur avant");
             insert("MagasinIngredient", productValues);
+            System.out.println("il y une erreur apres");
+
         }
     }
 
     @Override
     public void update(Shop shop) throws SQLException {
         delete(shop);
+        try {
+            wait(5000);
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
         insert(shop);
     }
 
@@ -76,15 +91,20 @@ public class ShopDao extends Database implements Dao<Shop>{
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private Shop fillShopWithProducts(Shop shop) throws SQLException {
-        ResultSet querySelectProductList = sendQuery(String.format("SELECT Ingredient.Nom,MI.prix\n" +
+        String query = String.format("SELECT Ingredient.Nom,MI.prix\n" +
                 "FROM MagasinIngredient as MI\n" +
                 "INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID\n" +
                 "INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID\n" +
-                "WHERE MI.MagasinID = '%d' AND ",shop.getID()));
+                "WHERE MI.MagasinID = %d",shop.getID());
+        System.out.println(query);
+        ResultSet querySelectProductList = sendQuery(query);
         if(querySelectProductList != null &&querySelectProductList.next()){
             String productName = querySelectProductList.getString("Nom");
             double productPrice = querySelectProductList.getDouble("prix");
             shop.add(new Product(productName,productPrice));
+        }
+        else{
+            System.out.println("je suis vide bg");
         }
         return shop;
     }
@@ -144,12 +164,19 @@ public class ShopDao extends Database implements Dao<Shop>{
         return null;
     }
 
-    public void delete(Shop shop){
+    public void delete(Shop shop) throws SQLException {
 
-        sendQuery(String.format("DELETE FROM MagasinIngredient as MI\n" +
+        ResultSet queryResult = sendQuery(String.format("DELETE FROM MagasinIngredient as MI\n" +
                 "WHERE MI.MagasinID = %d",shop.getID()));
 
-        sendQuery(String.format("DELETE FROM Magasin as M\n" +
+        if(queryResult != null&&!queryResult.next()){
+            System.out.println("jai pas fini");
+        }
+
+        queryResult = sendQuery(String.format("DELETE FROM Magasin as M\n" +
                 "WHERE M.MagasinID = %d",shop.getID()));
+        if(queryResult != null&&!queryResult.next()){
+            System.out.println("jai pas fini");
+        }
     }
 }
