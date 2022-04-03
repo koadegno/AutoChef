@@ -16,8 +16,8 @@ import java.util.Scanner;
  */
 public class Database {
 
-    private Connection connection;
-    private Statement request;
+    private static Connection connection=null;
+    private static Statement request=null;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -29,6 +29,9 @@ public class Database {
         File file = new File(nameDB);
         boolean fileExist = file.exists();
         try {
+            if(connection!= null){
+                return; //TODO changer ca un jour
+            }
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
             if(! fileExist ) {

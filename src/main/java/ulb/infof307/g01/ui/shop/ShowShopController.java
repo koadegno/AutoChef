@@ -41,6 +41,7 @@ public class ShowShopController extends Window implements Initializable {
         //TODO : demander a la base de donnée le Shop avec l'
         this.shop=shop;
         this.isModifying=isModifying;
+        fillTableViewShop();
         fillComboboxProduct();
     }
 
@@ -77,7 +78,6 @@ public class ShowShopController extends Window implements Initializable {
         comboboxProduct.setItems(FXCollections.observableArrayList(allProduct));
     }
 
-
     public void addProductToTableView(){
 
         setNodeColor(comboboxProduct, false);
@@ -89,7 +89,6 @@ public class ShowShopController extends Window implements Initializable {
             shop.add(product);
             tableViewShop.getItems().addAll(product);
         }
-
     }
 
     public void saveNewShop() throws SQLException {
@@ -106,7 +105,6 @@ public class ShowShopController extends Window implements Initializable {
             else{
                 map.addPointToOverlay(shop);
                 Configuration.getCurrent().getShopDao().insert(shop);
-
             }
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();

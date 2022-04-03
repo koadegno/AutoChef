@@ -26,9 +26,9 @@ public class DisplayMapController extends Window implements Initializable {
 // TODO: CONTEXT MENU DANS FXML ?
     private final MapTools mapTools = new MapTools();
     private final ContextMenu contextMenu = new ContextMenu();
-    private final MenuItem addShopMenuItem = new MenuItem("Add Shop");
-    private final MenuItem deleteShopMenuItem = new MenuItem("Delete Shop");
-    private final MenuItem modifyShopMenuItem = new MenuItem("Modifie Shop");
+    private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
+    private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
+    private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
 
     @FXML
     private Pane mapViewStackPane;
