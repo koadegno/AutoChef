@@ -24,7 +24,7 @@ public class ShopDao extends Database implements Dao<Shop>{
         super(nameDB);
     }
 
-    @Override // TODO Modifier pour avoir les coord aussi peut etre que t'as pas besoin
+    @Override
     public ArrayList<String> getAllName() throws SQLException {
         return getAllNameFromTable("Magasin","ORDER BY Nom ASC");
     }

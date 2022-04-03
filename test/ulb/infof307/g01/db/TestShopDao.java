@@ -57,8 +57,10 @@ class TestShopDao {
     @Test
     void testInsert() throws SQLException {
         Point point = new Point(lidlShop.getCoordinateX(), lidlShop.getCoordinateY());
+        Configuration.getCurrent().getShopDao().insert(lidlShop);
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(lidlShop.getName(), point);
 
+        assertNotNull(shopInserted);
         assertEquals(lidlShop.getName(),shopInserted.getName());
         assertEquals(lidlShop.getCoordinate(),shopInserted.getCoordinate());
 
