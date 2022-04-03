@@ -82,7 +82,6 @@ public class ShopDao extends Database implements Dao<Shop>{
                 "INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID\n" +
                 "INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID\n" +
                 "WHERE MI.MagasinID = '%d' AND ",shop.getID()));
-        //TODO attention les coordonnées peuvent avoir des virgules pas accepter dans le sqlite
         if(querySelectProductList != null &&querySelectProductList.next()){
             String productName = querySelectProductList.getString("Nom");
             double productPrice = querySelectProductList.getDouble("prix");
