@@ -23,9 +23,10 @@ class TestShopDao {
     static String gram = "g";
     static private Product peach = new Product("peche", 1, gram, fruit);
     static private Product strawberry = new Product( "fraise", 1, gram, fruit);
-    static private Shop aldiShop = new Shop(1,"aldi",new Point(0,0));
+    static private Shop aldiShop = new Shop(1,"1aldi",new Point(0,0));
     static private Shop lidlShop = new Shop(2,"aldi Namur",new Point(0,1));
     static private Shop aldi2Shop = new Shop(3,"aldi Vilvorde",new Point(0,2));
+    static private Shop aldi4Shop = new Shop(4,"1aldi Rue neuve",new Point(0,2));
 
     static private String  databaseName = "test.sqlite";
 
@@ -37,6 +38,7 @@ class TestShopDao {
         Configuration.getCurrent().getProductFamilyDao().insert(fruit);
         Configuration.getCurrent().getProductDao().insert(peach);
         Configuration.getCurrent().getShopDao().insert(aldiShop);
+        Configuration.getCurrent().getShopDao().insert(aldi4Shop);
     }
 
     @AfterAll
@@ -46,7 +48,10 @@ class TestShopDao {
     }
 
     @Test
-    void testGetAllName() {
+    void testGetAllName() throws SQLException {
+        List<String> allShopName = Configuration.getCurrent().getShopDao().getAllName();
+        assertEquals(aldiShop.getName(),allShopName.get(0));
+        assertEquals(aldi4Shop.getName(),allShopName.get(1));
     }
 
     @Test
@@ -54,14 +59,23 @@ class TestShopDao {
         Point point = new Point(lidlShop.getCoordinateX(), lidlShop.getCoordinateY());
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(lidlShop.getName(), point);
 
-        assertEquals(lidlShop.getID(),shopInserted.getID());
         assertEquals(lidlShop.getName(),shopInserted.getName());
         assertEquals(lidlShop.getCoordinate(),shopInserted.getCoordinate());
 
     }
 
     @Test
-    void testUpdate() {
+    void testUpdate() throws SQLException {
+        Point coordinate = new Point(1,1);
+        Shop aldiBruxellesShop = new Shop(2,"aldi Bruxelles",coordinate);
+        Configuration.getCurrent().getShopDao().insert(aldiBruxellesShop);
+        aldiBruxellesShop = new Shop(2,"aldi Zaventem",coordinate);
+        Configuration.getCurrent().getShopDao().update(aldiBruxellesShop);
+        Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
+
+        assertEquals(aldiBruxellesShop.getName(),shopInserted.getName());
+        assertEquals(aldiBruxellesShop.getCoordinate(),shopInserted.getCoordinate());
+
     }
 
     @Test
@@ -74,10 +88,10 @@ class TestShopDao {
         Configuration.getCurrent().getShopDao().insert(aldiShop);
         Configuration.getCurrent().getShopDao().insert(lidlShop);
         Configuration.getCurrent().getShopDao().insert(aldi2Shop);
+        Configuration.getCurrent().getShopDao().insert(aldi4Shop);
 
         List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops("aldi");
-        System.out.println(shopList);
-        assertEquals(3,shopList.size());
+        assertEquals(4,shopList.size());
 
     }
 
@@ -86,7 +100,6 @@ class TestShopDao {
         Point point = new Point(aldiShop.getCoordinateX(), aldiShop.getCoordinateY());
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiShop.getName(), point);
 
-        assertEquals(aldiShop.getID(),shopInserted.getID());
         assertEquals(aldiShop.getName(),shopInserted.getName());
         assertEquals(aldiShop.getCoordinate(),shopInserted.getCoordinate());
 

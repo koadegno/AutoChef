@@ -50,7 +50,8 @@ public class ShopDao extends Database implements Dao<Shop>{
 
     @Override
     public void update(Shop shop) throws SQLException {
-        //TODO
+        delete(shop);
+        insert(shop);
     }
 
     /**
