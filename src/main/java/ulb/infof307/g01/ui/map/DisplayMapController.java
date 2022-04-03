@@ -126,6 +126,8 @@ public class DisplayMapController extends Window implements Initializable {
     private void initializeContextMenu(){
         mapTools.getMapView().setContextMenu(contextMenu);
         contextMenu.getItems().addAll(addShopMenuItem, modifieShopMenuItem, deleteShopMenuItem);
+
+        // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> {
             mapTools.getMapView().setCursor(Cursor.DEFAULT);
             // TODO NOMBRE MAGIQUE
@@ -136,11 +138,13 @@ public class DisplayMapController extends Window implements Initializable {
             mapTools.setShopOnMap(cursorPoint2D2);
         });
 
+        // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
             mapTools.deleteGraphicPoint(); //
 
         });
 
+        //contexte menu pour la modification
         modifieShopMenuItem.setOnAction(event -> {
             for(int i = 0; i < mapTools.getShopGraphicsCercleList().size(); i++) {
                 Graphic cercleGraphic = mapTools.getShopGraphicsCercleList().get(i);
@@ -149,7 +153,7 @@ public class DisplayMapController extends Window implements Initializable {
                     //POPUP SHOP
                     ShowShopController showShopController = new ShowShopController();
                     int id = 1; //TODO: seulement pour tester
-                    showShopController.createPopup(id);
+//                    showShopController.createPopup(id,);
                     break;
                 }
             }

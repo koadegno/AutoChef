@@ -6,7 +6,7 @@ import java.util.HashSet;
 
 public class Shop extends HashSet<Product> {
 
-    private final String name;
+    private String name;
     private final Point coordinate;
     private int id = -1;
 
@@ -18,6 +18,14 @@ public class Shop extends HashSet<Product> {
     public Shop(String name, Point coordinate){
         this.name = name;
         this.coordinate = coordinate;
+    }
+
+    public Shop(Point shopPoint) {
+        this.coordinate = shopPoint;
+    }
+
+    public void setName(String shopName){
+        name = shopName;
     }
 
     public double getCoordinateX() { return coordinate.getX(); }

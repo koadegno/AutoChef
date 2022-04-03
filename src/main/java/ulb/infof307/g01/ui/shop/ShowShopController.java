@@ -12,6 +12,7 @@ import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.map.MapTools;
 
 import java.io.IOException;
 import java.net.URL;
@@ -28,21 +29,26 @@ public class ShowShopController extends Window implements Initializable {
     public TextField nameShop;
     public VBox vBox; 
     private Shop shop = null;
+    private MapTools map;
 
 
-    public void createPopup(int idShop){
+    public void createPopup(int idShop,Point shopPoint,MapTools map){
         try { popupFXML("ShowShop.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
+        this.map = map;
         //TODO : demander a la base de donnée le Shop avec l'id
-        initElement(idShop);
+        initElement(idShop,shopPoint);
     }
 
 
-    public void initElement(int idShop){
+    public void initElement(int idShop, Point shopPoint){
         //TODO: connection avec la bdd avec id
-        if (idShop != 0){  //TODO: seulement un test
+        if(idShop == -1){
+            shop = new Shop(shopPoint);
+        }
+        else if (idShop != 0){  //TODO: seulement un test
             fakeBDD();
             nameShop.setText(shop.getName());
             fillTableViewShop();
@@ -99,17 +105,21 @@ public class ShowShopController extends Window implements Initializable {
 
     }
 
-    public void saveNewShop(){
+    public void saveNewShop() throws SQLException {
         setNodeColor(nameShop, false);
         String getNameShop = nameShop.getText();
 
         if (!Objects.equals(getNameShop, "")){
             //TODO: envoyer shop a la base de donnee
+            shop.setName(getNameShop);
+            map.addPointToOverlay(shop);
+            Configuration.getCurrent().getShopDao().insert(shop);
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
         }
         else{
             setNodeColor(nameShop, true);
         }
+
     }
 }

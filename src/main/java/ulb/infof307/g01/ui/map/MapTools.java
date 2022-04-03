@@ -20,6 +20,7 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shop.ShowShopController;
@@ -70,19 +71,16 @@ public class MapTools {
     }
 
     /**
-     * lance le popup pour ajouter un magasin
-     *
+     * lance le popup pour ajouter un magasin sur la map
      * @param cursorPoint2D La position ou se trouve le curseur
      */
     void setShopOnMap(Point2D cursorPoint2D) {
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
         //TODO Recupe le nom du shop
-        Shop shop = new Shop("new Shop 3", mapPoint);
-        addPointToOverlay(shop);
         //POPUP SHOP
         ShowShopController showShopController = new ShowShopController();
-        int id = 0;
-        showShopController.createPopup(id);
+        int id = -1;
+        showShopController.createPopup(id,mapPoint,this);
     }
 
     /**
@@ -167,7 +165,7 @@ public class MapTools {
      *
      * @param shopToAdd la ou doit se trouver le point
      */
-    void addPointToOverlay(Shop shopToAdd) {
+    public void addPointToOverlay(Shop shopToAdd) {
         // TODO Attention nombre magique
         //cree un cercle rouge
         SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, 10);

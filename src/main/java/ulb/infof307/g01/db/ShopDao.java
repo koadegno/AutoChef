@@ -42,8 +42,8 @@ public class ShopDao extends Database implements Dao<Shop>{
 
         for (Product product: shop) {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
-            String price =  String.format("%10f", product.getPrice());
-            String[] productValues = {productID, String.valueOf(shop.getID()), price};
+            String price =  String.valueOf(product.getPrice());
+            String[] productValues = {String.valueOf(shop.getID()),productID,price};
             insert("MagasinIngredient", productValues);
         }
     }
@@ -96,7 +96,7 @@ public class ShopDao extends Database implements Dao<Shop>{
      */
     private List<Shop> getAllShops() throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        ResultSet shopResultSet = select("Magasin", null,null);
+        ResultSet shopResultSet = select("Magasin", new ArrayList<>(),null);
         ArrayList<Shop> shopsList = new ArrayList<>();
         while (shopResultSet.next()){
             int shopID = shopResultSet.getInt("MagasinID");
