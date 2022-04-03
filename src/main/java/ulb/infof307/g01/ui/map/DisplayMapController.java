@@ -11,12 +11,14 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
 import ulb.infof307.g01.ui.shop.ShowShopController;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 public class DisplayMapController extends Window implements Initializable {
@@ -39,7 +41,7 @@ public class DisplayMapController extends Window implements Initializable {
     private List<Shop> allShopList;
 
     @FXML
-    void onShoppingSearchBoxAction(ActionEvent event) {
+    void onShopSearchBoxAction(ActionEvent event) {
         //TODO faire la requete a la db et afficher sur la maps les magasins
         //TODO ou alors avoir un combo box et il selectionne un elem qui l'emmene au bonne endroit sur la carte
 
@@ -93,7 +95,12 @@ public class DisplayMapController extends Window implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMapShop();
+        try {
+            initializeMapShop();
+        } catch (SQLException e) {
+            Window.showAlert(Alert.AlertType.ERROR,"ERROR","Erreur au niveau de la basse de donnée veillez contactez le manager");
+            e.printStackTrace();
+        }
         initializeContextMenu();
 
         mapTools.initializeMapEvent();
@@ -105,13 +112,9 @@ public class DisplayMapController extends Window implements Initializable {
     /**
      * Initialisation des magasins sur la map
      */
-    private void initializeMapShop() {
-        allShopList = new ArrayList<>();
+    private void initializeMapShop() throws SQLException {
         // TODO Recuperer la liste de Magasin de la db
-        allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Aldi 2", new Point(5.6257913, 50.9702834, SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Lidl 1", new Point(4.3586407, 50.8424057,SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Magasin de quartier", new Point(613522.260836, 6458871.247709)));
+        allShopList = Configuration.getCurrent().getShopDao().getShops();
         for(Shop shop: allShopList){
             mapTools.addPointToOverlay(shop);
         }

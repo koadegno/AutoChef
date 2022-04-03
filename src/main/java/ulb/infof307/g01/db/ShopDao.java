@@ -56,13 +56,12 @@ public class ShopDao extends Database implements Dao<Shop>{
 
     /**
      * trouve les magasins qui correspondent au nom
-     * @param name le nom du magasin
      * @return la liste de tous les magasins
      * @throws SQLException erreur avec la requête SQL
      */
-    public List<Shop> getShops(String name) throws SQLException {
+    public List<Shop> getShops() throws SQLException {
         // TODO Attention je pense qu'on a pas besoin de cette methode
-        List<Shop> shops = getAllShops(name);
+        List<Shop> shops = getAllShops();
 
         for(Shop shop: shops){
             shop = fillShopWithProducts(shop);
@@ -92,20 +91,18 @@ public class ShopDao extends Database implements Dao<Shop>{
 
     /**
      * récupérer tous les magasins qui contiennent le nom
-     * @param name le nom du magasin
      * @return la liste de tous les magasins
      * @throws SQLException erreur au niveau de la requête SQL
      */
-    private List<Shop> getAllShops(String name) throws SQLException {
+    private List<Shop> getAllShops() throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        constraint.add("Nom LIKE '%"+ name + "%'");
-        ResultSet shopResultSet = select("Magasin", constraint,null);
+        ResultSet shopResultSet = select("Magasin", null,null);
         ArrayList<Shop> shopsList = new ArrayList<>();
         while (shopResultSet.next()){
             int shopID = shopResultSet.getInt("MagasinID");
             String shopName = shopResultSet.getString("Nom");
-            Double shopX = shopResultSet.getDouble("latitude");
-            Double shopY = shopResultSet.getDouble("longitude");
+            double shopX = shopResultSet.getDouble("latitude");
+            double shopY = shopResultSet.getDouble("longitude");
             Point shopPoint = new Point(shopX,shopY);
             shopsList.add(new Shop(shopID,shopName, shopPoint));
         }
