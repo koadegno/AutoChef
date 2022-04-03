@@ -15,15 +15,12 @@ public class Shop extends HashSet<Product> {
         this.coordinate = coordinate;
         this.id = id;
     }
-
     public Shop(String name, Point coordinate){
         this.name = name;
         this.coordinate = coordinate;
     }
 
-    public double getCoordinateX() {
-        return coordinate.getX();
-    }
+    public double getCoordinateX() { return coordinate.getX(); }
 
     public double getCoordinateY() {
         return coordinate.getY();
@@ -37,9 +34,12 @@ public class Shop extends HashSet<Product> {
         return coordinate;
     }
 
-
     public int getID() {
         return id;
+    }
+
+    public String toString(){
+        return String.format("name : %s\n",name) + coordinate;
     }
 
 }

@@ -35,7 +35,7 @@ public class Configuration {
         this.recipeDao = new RecipeDao(dbPath);
         this.recipeTypeDao = new RecipeTypeDao(dbPath);
         this.shoppingListDao = new ShoppingListDao(dbPath);
-        this.shopDao = new ShopDao(dbPath);
+        shopDao = new ShopDao(dbPath);
     }
 
     public void closeConnection() throws SQLException {
@@ -47,6 +47,7 @@ public class Configuration {
         getRecipeDao().closeConnection();
         getRecipeTypeDao().closeConnection();
         getShoppingListDao().closeConnection();
+        getShopDao().closeConnection();
     }
 
     public MenuDao getMenuDao(){

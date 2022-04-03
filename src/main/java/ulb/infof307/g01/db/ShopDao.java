@@ -2,8 +2,10 @@ package ulb.infof307.g01.db;
 
 import com.esri.arcgisruntime.geometry.Point;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
+import org.apache.poi.util.NotImplemented;
 import ulb.infof307.g01.model.*;
 
+import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -34,7 +36,7 @@ public class ShopDao extends Database implements Dao<Shop>{
         String latitude = String.valueOf(shop.getCoordinateX());
         String longitude = String.valueOf(shop.getCoordinateY());
 
-        String[] values = {"null", name,"null", latitude,longitude};
+        String[] values = {"null", name,"null", longitude,latitude};
         insert("Magasin", values);
         String shopID = String.format("%d", getGeneratedID());
 
@@ -54,8 +56,8 @@ public class ShopDao extends Database implements Dao<Shop>{
     /**
      * trouve les magasins qui correspondent au nom
      * @param name le nom du magasin
-     * @return
-     * @throws SQLException
+     * @return la liste de tous les magasins
+     * @throws SQLException erreur avec la requette SQL
      */
     public List<Shop> getShops(String name) throws SQLException { // retourne tt les lidl de la map
         List<Shop> shops = getAllShops(name);
@@ -64,25 +66,27 @@ public class ShopDao extends Database implements Dao<Shop>{
             shop = fillShopWithProducts(shop);
         }
         return shops;
-
     }
 
     private Shop fillShopWithProducts(Shop shop) throws SQLException {
-        ResultSet querySelectProductList = sendQuery(String.format("SELECT Ingredient.Nom,MagasinIngredient.prix\n" +
+        ResultSet querySelectProductList = sendQuery(String.format("SELECT Ingredient.Nom,MI.prix\n" +
                 "FROM MagasinIngredient as MI\n" +
                 "INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID\n" +
                 "INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID\n" +
-                "WHERE MI.Nom = '%s', MI.longitude = %10f, MI.latitude = %10f ",shop.getName(),shop.getCoordinateY(),shop.getCoordinateX() ));
-        querySelectProductList.next();
-        String productName = querySelectProductList.getString("Nom");
-        Double productPrice = querySelectProductList.getDouble("prix");
-        shop.add(new Product(productName,productPrice));
+                "WHERE MI.MagasinID = '%d' AND ",shop.getID()));
+        //TODO attention les coordonnées peuvent avoir des virgules pas accepter dans le sqlite
+        if(querySelectProductList != null &&querySelectProductList.next()){
+            String productName = querySelectProductList.getString("Nom");
+            double productPrice = querySelectProductList.getDouble("prix");
+            shop.add(new Product(productName,productPrice));
+        }
         return shop;
     }
 
     private List<Shop> getAllShops(String name) throws SQLException {
-        String nameConstraint = String.format("Nom = '%s'", name);
-        ResultSet shopResultSet = select("Magasin", Collections.singletonList(nameConstraint),null);
+        ArrayList<String> constraint = new ArrayList<>();
+        constraint.add("Nom LIKE '%"+ name + "%'");
+        ResultSet shopResultSet = select("Magasin", constraint,null);
         ArrayList<Shop> shopsList = new ArrayList<>();
         while (shopResultSet.next()){
             int shopID = shopResultSet.getInt("MagasinID");
@@ -96,6 +100,7 @@ public class ShopDao extends Database implements Dao<Shop>{
     }
 
     @Override
+    @NotImplemented
     public Shop get(String name) throws SQLException , NotImplementedException{
         throw new NotImplementedException("Cette methode n'est pas implementer casse toi");
 
@@ -107,19 +112,31 @@ public class ShopDao extends Database implements Dao<Shop>{
         String latitudeConstraint = stringBuilder.append("latitude = ").append(coordinates.getX()).toString();
         stringBuilder = new StringBuilder();
         String longitudeConstraint = stringBuilder.append(" longitude = ").append(coordinates.getY()).toString();
-        ArrayList<String> constraints = new ArrayList<String>();
+        ArrayList<String> constraints = new ArrayList<>();
         constraints.add(nameConstraint); constraints.add(latitudeConstraint); constraints.add(longitudeConstraint);
 
         ResultSet shopResultSet = select("Magasin", constraints,null);
-        shopResultSet.next();
-        int shopID = shopResultSet.getInt("MagasinID");
-        String shopName = shopResultSet.getString("Nom");
-        Double shopX = shopResultSet.getDouble("latitude");
-        Double shopY = shopResultSet.getDouble("longitude");
-        Point shopPoint = new Point(shopX,shopY);
-        Shop shop = new Shop(shopID,shopName, shopPoint);
-        shop = fillShopWithProducts(shop);
+        if(shopResultSet.next()){
+            int shopID = shopResultSet.getInt(1);
+            String shopName = shopResultSet.getString(2);
+            // TODO L'adresse plus tard
+            double shopY = shopResultSet.getDouble(4);
+            double shopX = shopResultSet.getDouble(5);
+            Point shopPoint = new Point(shopX,shopY);
+            Shop shop = new Shop(shopID,shopName, shopPoint);
+            shop = fillShopWithProducts(shop);
+            return shop;
+        }
 
-        return shop;
+        return null;
+    }
+
+    public void delete(Shop shop){
+
+        sendQuery(String.format("DELETE FROM MagasinIngredient as MI\n" +
+                "WHERE MI.MagasinID = %d",shop.getID()));
+
+        sendQuery(String.format("DELETE FROM Magasin as M\n" +
+                "WHERE M.MagasinID = %d",shop.getID()));
     }
 }
