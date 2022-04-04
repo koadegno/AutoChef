@@ -20,18 +20,23 @@ import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.input.MouseButton;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shop.ShowShopController;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
 public class MapTools {
     public static final int COLOR_RED = 0xFFFF0000;
+    public static final int SIZE = 10;
     private static final int ONCE_CLICKED = 1;
     private static final int DOUBLE_CLICKED = 2;
     public static final int COLOR_BLACK = 0xFF000000;
+    public static final int ADDRESS_SIZE = 18;
+    public static final float ADDRESS_MARKER_SIZE = 12.0f;
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
@@ -70,19 +75,13 @@ public class MapTools {
     }
 
     /**
-     * lance le popup pour ajouter un magasin
-     *
+     * lance la popup pour ajouter un magasin sur la map
      * @param cursorPoint2D La position ou se trouve le curseur
      */
     void setShopOnMap(Point2D cursorPoint2D) {
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-        //TODO Recupe le nom du shop
-        Shop shop = new Shop("new Shop 3", mapPoint);
-        addPointToOverlay(shop);
-        //POPUP SHOP
         ShowShopController showShopController = new ShowShopController();
-        int id = 0;
-        showShopController.createPopup(id);
+        showShopController.createPopup(new Shop(mapPoint),this,false);
     }
 
     /**
@@ -113,27 +112,32 @@ public class MapTools {
     /**
      * Supprime les points selectioner de l'overlay
      *
-     * @return un boolean indiquant si un objet graphic a ete double-cliquer
      */
-    boolean deleteGraphicPoint() {
-        boolean isPointFound = false;
-        for (int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++) {
+    void deleteGraphicPoint() {
 
+        for (int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++) {
             Graphic cerclePointOnMap = shopGraphicsCercleOverlay.getGraphics().get(i);
             Graphic textPointOnMap = shopGraphicsTextOverlay.getGraphics().get(i); // le symbole texte associer au point aussi
 
             if (cerclePointOnMap.isSelected()) {
-                isPointFound = true;
-                // TODO POP up avant de del avec les info du magasin
                 ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if (alertResult == ButtonType.OK) {
+                    TextSymbol textSymbol = (TextSymbol) textPointOnMap.getSymbol();
+                    Point mapPoint = (Point) textPointOnMap.getGeometry();
+                    try {
+                        Shop shopToDelete = Configuration.getCurrent().getShopDao().get(textSymbol.getText(), mapPoint);
+                        Configuration.getCurrent().getShopDao().delete(shopToDelete);
+                    } catch (SQLException e) {
+                        Window.showAlert(Alert.AlertType.ERROR, "ERREUR !", "Veillez rapporter l'erreur au près des développeurs.");
+                        e.printStackTrace();
+                    }
+
                     shopGraphicsCercleOverlay.getGraphics().remove(cerclePointOnMap);
                     shopGraphicsTextOverlay.getGraphics().remove(textPointOnMap);
                 }
                 break; // tu as deja accomplie la tache que tu devais
             }
         }
-        return isPointFound;
     }
 
     /**
@@ -143,7 +147,7 @@ public class MapTools {
      */
     void highlightGraphicPoint(Point2D mapViewPoint) {
         ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(shopGraphicsCercleOverlay,
-                mapViewPoint, 10, false, 1);
+                mapViewPoint, SIZE, false, 1);
 
         identifyFuture.addDoneListener(() -> {
             try {
@@ -156,7 +160,7 @@ public class MapTools {
 
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                ex.printStackTrace(); //TODO gerer l'erreur ?
+                ex.printStackTrace();
                 Window.showAlert(Alert.AlertType.ERROR, "ERREUR !", "Veillez rapporter l'erreur au pres des développeurs.");
             }
         });
@@ -167,20 +171,17 @@ public class MapTools {
      *
      * @param shopToAdd la ou doit se trouver le point
      */
-    void addPointToOverlay(Shop shopToAdd) {
-        // TODO Attention nombre magique
+    public void addPointToOverlay(Shop shopToAdd) {
         //cree un cercle rouge
-        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, 10);
-
+        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        10, shopToAdd.getName(), COLOR_BLACK,
+                        SIZE, shopToAdd.getName(), COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
 
         Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
         Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
-        System.out.println(shopToAdd.getCoordinate());
 
         // ajoute des graphique a l'overlay
         shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
@@ -226,7 +227,7 @@ public class MapTools {
             } catch (InterruptedException | ExecutionException exception) {
 
                 Window.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
-                exception.printStackTrace();//TODO gerer l'erreur
+                exception.printStackTrace();
             }
         });
     }
@@ -240,18 +241,33 @@ public class MapTools {
         addressGraphicsOverlay.getGraphics().clear();
 
         // creation de l'objet graphique avec l'adresse
-        // TODO NOMBRE MAGIQUE
         String label = geocodeResult.getLabel();
-        TextSymbol textSymbol = new TextSymbol(18, label, COLOR_BLACK, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+        TextSymbol textSymbol = new TextSymbol(ADDRESS_SIZE, label, COLOR_BLACK, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
         addressGraphicsOverlay.getGraphics().add(textGraphic);
 
         // creation de l'objet graphique avec le carré rouge
-        // TODO ATTENTION NOMBRE MAGIQUE
-        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, 0xFFFF0000, 12.0f);
+        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, COLOR_RED, ADDRESS_MARKER_SIZE);
         Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.getGraphics().add(markerGraphic);
 
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
+    }
+
+
+    /**
+     * Met a jour le shop afficher sur la carte
+     * @param shop le magasin existant qu'il faut mettre a jour
+     */
+    public void update(Shop shop) {
+
+        for(int index=0;index < shopGraphicsCercleOverlay.getGraphics().size();index++ ){
+            Graphic cercleGraphic = shopGraphicsCercleOverlay.getGraphics().get(index);
+            Graphic textGraphic = shopGraphicsTextOverlay.getGraphics().get(index);
+
+            if(cercleGraphic.isSelected()){
+                ((TextSymbol)textGraphic.getSymbol()).setText(shop.getName());
+            }
+        }
     }
 }

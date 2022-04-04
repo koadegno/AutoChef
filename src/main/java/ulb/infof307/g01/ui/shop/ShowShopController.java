@@ -2,9 +2,9 @@ package ulb.infof307.g01.ui.shop;
 
 import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
@@ -12,6 +12,7 @@ import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.map.MapTools;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,29 +28,23 @@ public class ShowShopController extends Window implements Initializable {
     public TableColumn columnPrice;
     public TextField nameShop;
     public VBox vBox; 
-    private Shop shop = null;
+    private Shop shop;
+    private MapTools map;
+    private boolean isModifying;// POPUP pour la modification ou non
 
 
-    public void createPopup(int idShop){
+    public void createPopup(Shop shop, MapTools map,boolean isModifying){
         try { popupFXML("ShowShop.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
         }
-        //TODO : demander a la base de donnée le Shop avec l'id
-        initElement(idShop);
-    }
-
-
-    public void initElement(int idShop){
-        //TODO: connection avec la bdd avec id
-        if (idShop != 0){  //TODO: seulement un test
-            fakeBDD();
-            nameShop.setText(shop.getName());
-            fillTableViewShop();
-        }
+        this.map = map;
+        this.shop=shop;
+        this.isModifying=isModifying;
+        if(isModifying) nameShop.setText(shop.getName()); // nom dans la barre de nom
+        fillTableViewShop();
         fillComboboxProduct();
     }
-
 
     private void fakeBDD(){
         // TODO Supprimer
@@ -84,7 +79,6 @@ public class ShowShopController extends Window implements Initializable {
         comboboxProduct.setItems(FXCollections.observableArrayList(allProduct));
     }
 
-
     public void addProductToTableView(){
 
         setNodeColor(comboboxProduct, false);
@@ -96,20 +90,28 @@ public class ShowShopController extends Window implements Initializable {
             shop.add(product);
             tableViewShop.getItems().addAll(product);
         }
-
     }
 
-    public void saveNewShop(){
+    public void saveNewShop() throws SQLException {
         setNodeColor(nameShop, false);
         String getNameShop = nameShop.getText();
 
         if (!Objects.equals(getNameShop, "")){
-            //TODO: envoyer shop a la base de donnee
+            shop.setName(getNameShop);
+            if(isModifying){
+                Configuration.getCurrent().getShopDao().update(shop);
+                map.update(shop);
+            }
+            else{
+                map.addPointToOverlay(shop);
+                Configuration.getCurrent().getShopDao().insert(shop);
+            }
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
         }
         else{
             setNodeColor(nameShop, true);
         }
+
     }
 }

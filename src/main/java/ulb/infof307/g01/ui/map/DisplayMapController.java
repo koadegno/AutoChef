@@ -1,7 +1,6 @@
 package ulb.infof307.g01.ui.map;
 
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.event.ActionEvent;
@@ -11,22 +10,24 @@ import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.layout.Pane;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.WindowHomeController;
 import ulb.infof307.g01.ui.shop.ShowShopController;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.*;
 
 public class DisplayMapController extends Window implements Initializable {
 
-
+// TODO: CONTEXT MENU DANS FXML ?
     private final MapTools mapTools = new MapTools();
     private final ContextMenu contextMenu = new ContextMenu();
-    private final MenuItem addShopMenuItem = new MenuItem("Add Shop");
-    private final MenuItem deleteShopMenuItem = new MenuItem("Delete Shop");
-    private final MenuItem modifieShopMenuItem = new MenuItem("Modifie Shop");
+    private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
+    private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
+    private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
 
     @FXML
     private Pane mapViewStackPane;
@@ -36,13 +37,9 @@ public class DisplayMapController extends Window implements Initializable {
 
     @FXML
     private TextField searchBox;
-    private List<Shop> allShopList;
 
     @FXML
-    void onShoppingSearchBoxAction(ActionEvent event) {
-        //TODO faire la requete a la db et afficher sur la maps les magasins
-        //TODO ou alors avoir un combo box et il selectionne un elem qui l'emmene au bonne endroit sur la carte
-
+    void onShopSearchBoxAction(ActionEvent event) {
         String fieldText = textFieldMenuBar.getText();
 
         for(int index = 0; index < mapTools.getShopGraphicsTextList().size(); index++){
@@ -60,7 +57,6 @@ public class DisplayMapController extends Window implements Initializable {
                 cercleGraphicShop.setVisible(false);
             }
         }
-
         event.consume();
     }
 
@@ -93,25 +89,24 @@ public class DisplayMapController extends Window implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMapShop();
+        try {
+            initializeMapShop();
+        } catch (SQLException e) {
+            Window.showAlert(Alert.AlertType.ERROR,"ERROR","Erreur au niveau de la basse de donnée veillez contactez le manager");
+            e.printStackTrace();
+        }
         initializeContextMenu();
 
         mapTools.initializeMapEvent();
         mapTools.createLocatorTaskAndDefaultParameters();
         mapViewStackPane.getChildren().add(mapTools.getMapView());
-
     }
 
     /**
      * Initialisation des magasins sur la map
      */
-    private void initializeMapShop() {
-        allShopList = new ArrayList<>();
-        // TODO Recuperer la liste de Magasin de la db
-        allShopList.add(new Shop("Lidl 3", new Point( 3.503561,50.6224768, SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Aldi 2", new Point(5.6257913, 50.9702834, SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Lidl 1", new Point(4.3586407, 50.8424057,SpatialReferences.getWgs84())));
-        allShopList.add(new Shop("Magasin de quartier", new Point(613522.260836, 6458871.247709)));
+    private void initializeMapShop() throws SQLException {
+        List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
         for(Shop shop: allShopList){
             mapTools.addPointToOverlay(shop);
         }
@@ -122,31 +117,40 @@ public class DisplayMapController extends Window implements Initializable {
      */
     private void initializeContextMenu(){
         mapTools.getMapView().setContextMenu(contextMenu);
-        contextMenu.getItems().addAll(addShopMenuItem, modifieShopMenuItem, deleteShopMenuItem);
+        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem);
+
+        // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> {
             mapTools.getMapView().setCursor(Cursor.DEFAULT);
-            // TODO NOMBRE MAGIQUE
-            // les nombres sont la pour corriger la position du curseur
+            //TODO les nombres sont la pour corriger la position du curseur
+            //il y a une correction fait attention ca peut faire des erreurs tu penses ?
             Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + 10, addShopMenuItem.getParentPopup().getY() + 5);
             Point2D cursorPoint2D2 = mapTools.getMapView().screenToLocal(cursorPoint2D);
-
             mapTools.setShopOnMap(cursorPoint2D2);
         });
 
+        // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
             mapTools.deleteGraphicPoint(); //
-
         });
 
-        modifieShopMenuItem.setOnAction(event -> {
-            for(int i = 0; i < mapTools.getShopGraphicsCercleList().size(); i++) {
-                Graphic cercleGraphic = mapTools.getShopGraphicsCercleList().get(i);
+        //contexte menu pour la modification
+        modifyShopMenuItem.setOnAction(event -> {
+            for(int index = 0; index < mapTools.getShopGraphicsCercleList().size(); index++) {
+                Graphic cercleGraphic = mapTools.getShopGraphicsCercleList().get(index);
+                Graphic textGraphic = mapTools.getShopGraphicsTextList().get(index);
+
                 if(cercleGraphic.isSelected()){
-                    // TODO recup l'id et lancer la pop ip avec le bonne id
-                    //POPUP SHOP
-                    ShowShopController showShopController = new ShowShopController();
-                    int id = 1; //TODO: seulement pour tester
-                    showShopController.createPopup(id);
+                    Point mapPoint = (Point) cercleGraphic.getGeometry();
+                    String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
+                    try {
+                        Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
+                        ShowShopController showShopController = new ShowShopController();
+                        showShopController.createPopup(shopToModify,mapTools,true);
+                    } catch (SQLException e) {
+                        Window.showAlert(Alert.AlertType.ERROR,"ERROR","Erreur au niveau de la basse de donnée veillez contactez le manager");
+                        e.printStackTrace();
+                    }
                     break;
                 }
             }
