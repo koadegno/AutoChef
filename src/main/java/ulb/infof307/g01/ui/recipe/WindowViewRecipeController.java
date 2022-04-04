@@ -30,6 +30,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     private String preparationTitle = "Préparation : ";
     private Recipe displayedRecipe = null;
 
+
     public void returnHomeRecipeWindow() {
         WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
         myRecipeWindow.displayMain();
@@ -38,6 +39,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     public void displayMain() {
         this.loadFXML("viewRecipe.fxml");
     }
+
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

@@ -78,34 +78,39 @@ public class WindowCreateRecipeController extends Window implements Initializabl
 
     }
     public void saveRecipe() {
+        removeRedBorder();
+
         int dietIndex = dietComboBox.getSelectionModel().getSelectedIndex();
         int typeIndex = typeComboBox.getSelectionModel().getSelectedIndex();
         int nbPerson = (int) nbPersonSpinner.getValue();
         String recipeName = recipeNameTextField.getText();
         String preparation = preparationTextArea.getText();
-        System.out.println(recipeName);
-
 
         if(dietIndex < 0)setNodeColor(dietComboBox, true);
         else if (typeIndex <0) setNodeColor(typeComboBox, true);
         else if(recipeIngredients.size() ==0) setNodeColor(ingredientTableView, true);
         else if(Objects.equals(preparation, ""))setNodeColor(preparationTextArea, true);
+        else if(Objects.equals(recipeName, "")) setNodeColor(recipeNameTextField, true);
         else{
-            //this.myRecipe = new Recipe();
-            //TODO link to recipe
+            String diet= dietList.get(dietIndex);
+            String type = typeList.get(typeIndex);
+            this.myRecipe = new Recipe(recipeName, 0, diet, type, nbPerson, preparation );
+            //TODO Configuration.getCurrent().getRecipeDao().addRecipe(myRecipe);
+            returnHomeRecipeWindow();
 
         }
-        /*String dietCondition = null; //all diet
-        String typeCondition = null; //all type
+    }
 
-        // get new recipe's list from Database
-        if (dietIndex > 0) dietCondition = dietList.get(dietIndex);
-        if (typeIndex > 0) typeCondition = typeList.get(typeIndex);
-        if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;*/
+    private void removeRedBorder() {
+        setNodeColor(dietComboBox, false);
+        setNodeColor(typeComboBox, false);
+        setNodeColor(ingredientTableView, false);
+        setNodeColor(preparationTextArea, false);
+        setNodeColor(recipeNameTextField, false);
     }
 
 
-    public void returnHomeRecipeWindow(ActionEvent actionEvent) {
+    public void returnHomeRecipeWindow() {
         WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
         myRecipeWindow.displayMain();
     }
