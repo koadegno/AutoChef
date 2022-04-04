@@ -84,10 +84,6 @@ class TestShopDao {
     void testGetShops() throws SQLException {
 
         //TODO MODIFIER
-        Configuration.getCurrent().getShopDao().insert(aldiShop);
-        Configuration.getCurrent().getShopDao().insert(lidlShop);
-        Configuration.getCurrent().getShopDao().insert(aldi2Shop);
-        Configuration.getCurrent().getShopDao().insert(aldi4Shop);
 
 
     }
