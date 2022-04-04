@@ -40,7 +40,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
     @FXML
     protected TableView tableViewDisplayProductList;
     @FXML
-    protected Button returnToMenu;
+    protected Button returnToMenu, btnSendMail;
     protected ArrayList<String> allUnitName = null;
     protected ArrayList<String> allProduct = null;
     protected ArrayList<String> allShoppinListName = null;
@@ -147,6 +147,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
         } catch (IOException | SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendShoppingListByMail(){
+        //TODO: attendre que cette tache soit fini
     }
 
 

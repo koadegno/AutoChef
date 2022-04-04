@@ -80,6 +80,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         btnConfirm.setVisible(isVisible);
         btnAddNewProduct.setVisible(isVisible);
         btnExportShoppingList.setVisible(isVisible);
+        btnSendMail.setVisible(isVisible);
     }
 
     /**
