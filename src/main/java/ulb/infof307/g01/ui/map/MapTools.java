@@ -31,9 +31,12 @@ import java.util.concurrent.ExecutionException;
 
 public class MapTools {
     public static final int COLOR_RED = 0xFFFF0000;
+    public static final int SIZE = 10;
     private static final int ONCE_CLICKED = 1;
     private static final int DOUBLE_CLICKED = 2;
     public static final int COLOR_BLACK = 0xFF000000;
+    public static final int ADDRESS_SIZE = 18;
+    public static final float ADDRESS_MARKER_SIZE = 12.0f;
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
@@ -72,13 +75,11 @@ public class MapTools {
     }
 
     /**
-     * lance le popup pour ajouter un magasin sur la map
+     * lance la popup pour ajouter un magasin sur la map
      * @param cursorPoint2D La position ou se trouve le curseur
      */
     void setShopOnMap(Point2D cursorPoint2D) {
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-        //TODO Recupe le nom du shop
-        //POPUP SHOP
         ShowShopController showShopController = new ShowShopController();
         showShopController.createPopup(new Shop(mapPoint),this,false);
     }
@@ -122,7 +123,6 @@ public class MapTools {
 
             if (cerclePointOnMap.isSelected()) {
                 isPointFound = true;
-                // TODO POP up avant de del avec les info du magasin
                 ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if (alertResult == ButtonType.OK) {
                     TextSymbol textSymbol = (TextSymbol) textPointOnMap.getSymbol();
@@ -151,7 +151,7 @@ public class MapTools {
      */
     void highlightGraphicPoint(Point2D mapViewPoint) {
         ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = mapView.identifyGraphicsOverlayAsync(shopGraphicsCercleOverlay,
-                mapViewPoint, 10, false, 1);
+                mapViewPoint, SIZE, false, 1);
 
         identifyFuture.addDoneListener(() -> {
             try {
@@ -164,7 +164,7 @@ public class MapTools {
 
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                ex.printStackTrace(); //TODO gerer l'erreur ?
+                ex.printStackTrace();
                 Window.showAlert(Alert.AlertType.ERROR, "ERREUR !", "Veillez rapporter l'erreur au pres des développeurs.");
             }
         });
@@ -176,14 +176,12 @@ public class MapTools {
      * @param shopToAdd la ou doit se trouver le point
      */
     public void addPointToOverlay(Shop shopToAdd) {
-        // TODO Attention nombre magique
         //cree un cercle rouge
-        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, 10);
-
+        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        10, shopToAdd.getName(), COLOR_BLACK,
+                        SIZE, shopToAdd.getName(), COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
 
         Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
@@ -233,7 +231,7 @@ public class MapTools {
             } catch (InterruptedException | ExecutionException exception) {
 
                 Window.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
-                exception.printStackTrace();//TODO gerer l'erreur
+                exception.printStackTrace();
             }
         });
     }
@@ -247,25 +245,20 @@ public class MapTools {
         addressGraphicsOverlay.getGraphics().clear();
 
         // creation de l'objet graphique avec l'adresse
-        // TODO NOMBRE MAGIQUE
         String label = geocodeResult.getLabel();
-        TextSymbol textSymbol = new TextSymbol(18, label, COLOR_BLACK, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+        TextSymbol textSymbol = new TextSymbol(ADDRESS_SIZE, label, COLOR_BLACK, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
         addressGraphicsOverlay.getGraphics().add(textGraphic);
 
         // creation de l'objet graphique avec le carré rouge
-        // TODO ATTENTION NOMBRE MAGIQUE
-        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, 0xFFFF0000, 12.0f);
+        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, COLOR_RED, ADDRESS_MARKER_SIZE);
         Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.getGraphics().add(markerGraphic);
 
         mapView.setViewpointCenterAsync(geocodeResult.getDisplayLocation());
     }
 
-    /**
-     * Met a jour le shop afficher sur la carte
-     * @param shop le magasin existant qu'il faut mettre a jour
-     */
+
     /**
      * Met a jour le shop afficher sur la carte
      * @param shop le magasin existant qu'il faut mettre a jour

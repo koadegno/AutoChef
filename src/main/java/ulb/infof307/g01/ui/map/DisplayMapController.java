@@ -1,7 +1,6 @@
 package ulb.infof307.g01.ui.map;
 
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.event.ActionEvent;
@@ -38,13 +37,9 @@ public class DisplayMapController extends Window implements Initializable {
 
     @FXML
     private TextField searchBox;
-    private List<Shop> allShopList;
 
     @FXML
     void onShopSearchBoxAction(ActionEvent event) {
-        //TODO faire la requete a la db et afficher sur la maps les magasins
-        //TODO ou alors avoir un combo box et il selectionne un elem qui l'emmene au bonne endroit sur la carte
-
         String fieldText = textFieldMenuBar.getText();
 
         for(int index = 0; index < mapTools.getShopGraphicsTextList().size(); index++){
@@ -62,7 +57,6 @@ public class DisplayMapController extends Window implements Initializable {
                 cercleGraphicShop.setVisible(false);
             }
         }
-
         event.consume();
     }
 
@@ -112,8 +106,7 @@ public class DisplayMapController extends Window implements Initializable {
      * Initialisation des magasins sur la map
      */
     private void initializeMapShop() throws SQLException {
-        // TODO Recuperer la liste de Magasin de la db
-        allShopList = Configuration.getCurrent().getShopDao().getShops();
+        List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
         for(Shop shop: allShopList){
             mapTools.addPointToOverlay(shop);
         }
@@ -129,19 +122,16 @@ public class DisplayMapController extends Window implements Initializable {
         // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> {
             mapTools.getMapView().setCursor(Cursor.DEFAULT);
-            // TODO NOMBRE MAGIQUE
-            // les nombres sont la pour corriger la position du curseur
+            //TODO les nombres sont la pour corriger la position du curseur
+            //il y a une correction fait attention ca peut faire des erreurs tu penses ?
             Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + 10, addShopMenuItem.getParentPopup().getY() + 5);
             Point2D cursorPoint2D2 = mapTools.getMapView().screenToLocal(cursorPoint2D);
-
             mapTools.setShopOnMap(cursorPoint2D2);
         });
 
         // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
-
             mapTools.deleteGraphicPoint(); //
-
         });
 
         //contexte menu pour la modification
@@ -155,8 +145,6 @@ public class DisplayMapController extends Window implements Initializable {
                     String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
                     try {
                         Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
-                        System.out.println(shopToModify);
-                        //POPUP SHOP
                         ShowShopController showShopController = new ShowShopController();
                         showShopController.createPopup(shopToModify,mapTools,true);
                     } catch (SQLException e) {
