@@ -9,6 +9,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.ui.recipe.WindowCreateRecipeController;
 import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
@@ -24,6 +25,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
     Button btnConfirm, btnAddNewProduct;
     @FXML
     ComboBox comboBoxShoppingNameList;
+    private WindowCreateRecipeController callerClass=null;
 
     /**
      * Permet d'afficher sur le tableView les listes de courses a partir d'un nom d'une
@@ -123,4 +125,24 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         comboBoxShoppingNameList.setItems(FXCollections.observableArrayList(allShoppinListName));
     }
 
+    public void setCallerClass(WindowCreateRecipeController windowCreateRecipeController) {
+        this.callerClass = windowCreateRecipeController;
+    }
+
+    public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
+        super.initComboBox();
+        comboBoxShoppingNameList.setVisible(false);
+        btnSeeShoppingList.setVisible(false);
+        Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
+        tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
+        isVisibleElementToModifyMyShoppingList(true);
+        returnToMenu.setOnAction(event -> {
+            this.callerClass.cancel();
+        });
+        btnConfirm.setOnAction(event -> {
+            ShoppingList shoppingListToReturn = new ShoppingList("current");
+            fillShoppingListToSend(shoppingListToReturn);
+            this.callerClass.add(shoppingListToReturn);
+        });
+    }
 }

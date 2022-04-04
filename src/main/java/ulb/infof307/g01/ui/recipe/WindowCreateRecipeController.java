@@ -4,21 +4,33 @@ import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.db.ShoppingListDao;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowUserShoppingListsController;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.Vector;
 
 public class WindowCreateRecipeController extends Window implements Initializable {
+
+
     private ArrayList<String> dietList;
     private ArrayList<String> typeList;
     @FXML
     private TableView ingredientTableView;
+    @FXML
+    private TableColumn tableColumnProduct, tableColumnQuantityOrNumber, tableColumnUnity;
     @FXML
     private TextArea preparationTextArea;
     @FXML
@@ -27,6 +39,11 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     private ComboBox dietComboBox;
     @FXML
     private Spinner nbPersonSpinner;
+    @FXML
+    public TextField recipeNameTextField;
+    private Scene scene;
+    private ShoppingList recipeIngredients = null;
+    private Recipe myRecipe = null;
 
     public WindowCreateRecipeController() {
         try {
@@ -35,6 +52,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        this.recipeIngredients = new ShoppingList("ingredients");
     }
 
     public void displayMain() {
@@ -49,21 +67,71 @@ public class WindowCreateRecipeController extends Window implements Initializabl
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
         );
         this.onlyIntValue(nbPersonSpinner);
+        tableColumnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
+        tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
+        tableColumnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
+    }
 
-
+    private void refreshTableView() {
+        Vector<Product> productOfShoppingList =  (Vector<Product>) recipeIngredients;
+        ingredientTableView.setItems(FXCollections.observableArrayList(productOfShoppingList));
 
     }
+    public void saveRecipe() {
+        int dietIndex = dietComboBox.getSelectionModel().getSelectedIndex();
+        int typeIndex = typeComboBox.getSelectionModel().getSelectedIndex();
+        int nbPerson = (int) nbPersonSpinner.getValue();
+        String recipeName = recipeNameTextField.getText();
+        String preparation = preparationTextArea.getText();
+        System.out.println(recipeName);
+
+
+        if(dietIndex < 0)setNodeColor(dietComboBox, true);
+        else if (typeIndex <0) setNodeColor(typeComboBox, true);
+        else if(recipeIngredients.size() ==0) setNodeColor(ingredientTableView, true);
+        else if(Objects.equals(preparation, ""))setNodeColor(preparationTextArea, true);
+        else{
+            //this.myRecipe = new Recipe();
+            //TODO link to recipe
+
+        }
+        /*String dietCondition = null; //all diet
+        String typeCondition = null; //all type
+
+        // get new recipe's list from Database
+        if (dietIndex > 0) dietCondition = dietList.get(dietIndex);
+        if (typeIndex > 0) typeCondition = typeList.get(typeIndex);
+        if(!this.activateSpinnerCheckBox.isSelected()) nbPerson =0;*/
+    }
+
+
     public void returnHomeRecipeWindow(ActionEvent actionEvent) {
         WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
         myRecipeWindow.displayMain();
     }
 
     public void addIngredients() {
+        this.scene = this.primaryStage.getScene();
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
         this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
+        windowsMyShoppingListsController.setCallerClass(this);
 
         //Initialise la page avec les informations de la bdd
         windowsMyShoppingListsController.initShoppingListElement();
-        windowsMyShoppingListsController.initComboBox();
+        windowsMyShoppingListsController.initForCreateRecipe(recipeIngredients);
     }
+
+
+    public void cancel() {
+        this.primaryStage.setScene(this.scene);
+    }
+
+    public void add(ShoppingList shoppingListToReturn) {
+        this.recipeIngredients = shoppingListToReturn;
+        this.primaryStage.setScene(this.scene);
+        refreshTableView();
+    }
+
+
+
 }
