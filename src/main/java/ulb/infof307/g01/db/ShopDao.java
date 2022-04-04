@@ -84,7 +84,7 @@ public class ShopDao extends Database implements Dao<Shop>{
                 "INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID\n" +
                 "WHERE MI.MagasinID = %d",shop.getID());
         ResultSet querySelectProductList = sendQuery(query);
-        if(querySelectProductList != null &&querySelectProductList.next()){
+        while(querySelectProductList != null &&querySelectProductList.next()){
             String productName = querySelectProductList.getString("Nom");
             double productPrice = querySelectProductList.getDouble("prix");
             shop.add(new Product(productName,productPrice));

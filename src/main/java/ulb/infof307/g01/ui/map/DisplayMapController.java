@@ -155,6 +155,7 @@ public class DisplayMapController extends Window implements Initializable {
                     String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
                     try {
                         Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
+                        System.out.println(shopToModify);
                         //POPUP SHOP
                         ShowShopController showShopController = new ShowShopController();
                         showShopController.createPopup(shopToModify,mapTools,true);
