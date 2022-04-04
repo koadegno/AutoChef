@@ -9,6 +9,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
+import ulb.infof307.g01.ui.shoppingList.ExportShoppingListView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,7 +34,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
-    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct;
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct, btnExportShoppingList;
     @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
@@ -135,6 +136,17 @@ public class WindowUserShoppingListsControllerTools extends Window {
     public void initComboBox() {
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
+    }
+
+    public void exportShoppingList(){
+        ExportShoppingListView exportShoppingListView = new ExportShoppingListView();
+        try {
+            popupFXML("exportShoppingList.fxml", exportShoppingListView);
+            ShoppingList shoppingListToExport = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
+            exportShoppingListView.setShoppingList(shoppingListToExport);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
     }
 
 

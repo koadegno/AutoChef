@@ -23,8 +23,6 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
 
     @FXML
     Button btnConfirm, btnAddNewProduct;
-    @FXML
-    ComboBox comboBoxShoppingNameList;
     private WindowCreateRecipeController callerClass=null;
 
     /**
@@ -81,6 +79,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         comboBoxListUnity.setVisible(isVisible);
         btnConfirm.setVisible(isVisible);
         btnAddNewProduct.setVisible(isVisible);
+        btnExportShoppingList.setVisible(isVisible);
     }
 
     /**
