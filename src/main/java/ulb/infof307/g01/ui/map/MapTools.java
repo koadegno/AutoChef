@@ -112,17 +112,14 @@ public class MapTools {
     /**
      * Supprime les points selectioner de l'overlay
      *
-     * @return un boolean indiquant si un objet graphic a ete double-cliquer
      */
-    boolean deleteGraphicPoint() {
-        boolean isPointFound = false;
-        for (int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++) {
+    void deleteGraphicPoint() {
 
+        for (int i = 0; i < shopGraphicsCercleOverlay.getGraphics().size(); i++) {
             Graphic cerclePointOnMap = shopGraphicsCercleOverlay.getGraphics().get(i);
             Graphic textPointOnMap = shopGraphicsTextOverlay.getGraphics().get(i); // le symbole texte associer au point aussi
 
             if (cerclePointOnMap.isSelected()) {
-                isPointFound = true;
                 ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
                 if (alertResult == ButtonType.OK) {
                     TextSymbol textSymbol = (TextSymbol) textPointOnMap.getSymbol();
@@ -141,7 +138,6 @@ public class MapTools {
                 break; // tu as deja accomplie la tache que tu devais
             }
         }
-        return isPointFound;
     }
 
     /**
