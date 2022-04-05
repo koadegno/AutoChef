@@ -6,6 +6,7 @@ import java.io.FileInputStream;
 import java.io.IOException;
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -16,8 +17,8 @@ import java.util.Scanner;
  */
 public class Database {
 
-    private static Connection connection=null;
-    private static Statement request=null;
+    protected static Connection connection=null;
+    protected static Statement request=null;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -142,9 +143,13 @@ public class Database {
      */
     protected ResultSet select(String nameTable, List<String> constraintToAppend,String orderBy){
         String stringQuery;
+        //tring query = "SELECT * FROM %s ";
+        //PreparedStatement statement = connection.prepareStatement();
         if (constraintToAppend.size() > 0){
+            //query += " WHERE ";
             StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s WHERE ", nameTable));
             stringQuery = appendValuesToWhere(query,constraintToAppend);
+            System.out.println(splitOnCharacter(constraintToAppend.get(0)));
         } else {
             stringQuery = String.format("SELECT * FROM %s ", nameTable);
         }
@@ -237,6 +242,32 @@ public class Database {
             Product product = new Product(productName, quantity, unityName,familyName);
             recipe.add(product);
         }
+    }
+
+    protected List<String> splitOnCharacter(String s){
+        ArrayList<String> parts = null;
+        if(s.contains(">=")){
+            //split sur base de >=
+            parts = new ArrayList<>(Arrays.asList(s.split(">=")));
+            parts.add(">=");
+        }
+        else if(s.contains("<=")){
+            parts = new ArrayList<>(Arrays.asList(s.split("<=")));
+            parts.add("<=");
+        }
+        else if(s.contains("<")){
+            parts = new ArrayList<>(Arrays.asList(s.split("<")));
+            parts.add("<");
+        }
+        else if(s.contains(">")){
+            parts = new ArrayList<>(Arrays.asList(s.split(">")));
+            parts.add(">");
+        }
+        else if(s.contains("=")){
+            parts = new ArrayList<>(Arrays.asList(s.split("=")));
+            parts.add("=");
+        }
+        return parts;
     }
 
 }
