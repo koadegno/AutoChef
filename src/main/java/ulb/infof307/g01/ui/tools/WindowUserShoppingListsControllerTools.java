@@ -1,9 +1,11 @@
 package ulb.infof307.g01.ui.tools;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
@@ -136,6 +138,39 @@ public class WindowUserShoppingListsControllerTools extends Window {
     public void initComboBox() {
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
+    }
+
+    public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+            @Override
+            public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
+                final TableCell<Product, Void> cell = new TableCell<Product, Void>() {
+
+                    //Creer un bouton supprimer
+                    private final Button btnDelete = new Button("Supprimer");
+                    {
+                        //Action pour le bouton supprimer
+                        btnDelete.setOnAction((ActionEvent event) -> {
+                            Product data = getTableView().getItems().get(getIndex());
+                            tableViewDisplayProductList.getItems().remove(data);
+                        });
+                    }
+
+                    //Ajout du bouton supprimer
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btnDelete);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+        return cellFactory;
     }
 
     public void exportShoppingList(){

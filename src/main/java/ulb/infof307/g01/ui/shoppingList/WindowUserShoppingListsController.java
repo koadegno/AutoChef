@@ -10,9 +10,7 @@ import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.ui.recipe.WindowCreateRecipeController;
-import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -99,8 +97,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
 
         //Cree les boutons delete dans chaque ligne de la tableView
-        CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
 
         returnToMenu.setOnAction((event) ->{
