@@ -1,11 +1,13 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.db.dao;
 
+import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class RecipeDao extends Database implements Dao<Recipe> {
 
@@ -102,6 +104,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String recipeID = String.format("%d", getGeneratedID());
 
         for (Product p: recipe) {
+            System.out.println(p);
             String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
             String quantity =  String.format("%d", p.getQuantity());
             String[] productValues = {recipeID, productID, quantity};
@@ -127,5 +130,13 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         Recipe recipe = fillRecipe(result);
         fillRecipeWithProducts(recipe);
         return recipe;
+    }
+
+    public void delete(Recipe displayedRecipe) throws SQLException {
+
+        String[] constraint = {"RecetteID = "+ displayedRecipe.getId()};
+        delete("RecetteIngredient", List.of(constraint));
+        delete("Recette",List.of(constraint));
+
     }
 }

@@ -8,13 +8,22 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.db.JSON;
 
 
 class JSONTest {
-    final static private Database db = new Database("testJSON.sqlite");
+    final static private String fileNameDB   = "testJSON.sqlite";
     final static private String fileNameJSON = "testRecette.json";
+
+    @BeforeAll
+    static public void createDB() throws SQLException {
+        Configuration.getCurrent().setDatabase(fileNameDB);
+
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
+    }
 
     @BeforeAll
     static public void createJSON() throws IOException {
@@ -33,7 +42,7 @@ class JSONTest {
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("testJSON.sqlite"));
     }
 

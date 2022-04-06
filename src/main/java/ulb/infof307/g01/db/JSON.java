@@ -4,16 +4,17 @@ import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
 import ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.model.Recipe;
 
 import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
+import java.sql.SQLException;
 
 public class JSON
 {
     public void jsonReader(String fileName)
     {
-        Database db = new Database("autochef.sqlite");
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
@@ -22,20 +23,22 @@ public class JSON
             //Read JSON file
             Object obj = jsonParser.parse(reader);
 
-            JSONObject recette = (JSONObject) obj;
+            JSONObject recipe = (JSONObject) obj;
 
-            String Nom = (String) recette.get("Nom");
-            Long Duree = (Long) recette.get("Duree");
-            Long NbPersonnes = (Long) recette.get("NbPersonnes");
-            String TypePlat = (String) recette.get("TypePlat");
-            String Categorie = (String) recette.get("Categorie");
-            String Preparation = (String) recette.get("Preparation");
+            String name = (String) recipe.get("Nom");
+            Long duration = (Long) recipe.get("Duree");
+            Long nbrPerson = (Long) recipe.get("NbPersonnes");
+            String type = (String) recipe.get("TypePlat");
+            String category = (String) recipe.get("Categorie");
+            String preparation = (String) recipe.get("Preparation");
 
-            String insertRecettePart1 = "INSERT INTO Recette(Nom, Duree, NbPersonnes, TypePlatID, CategorieID, Preparation) VALUES (";
-            String insertRecettePart2 = "( Select TypePlatID from TypePlat WHERE TypePlat.Nom = ";
-            String insertRecettePart3 = "( Select CategorieID from Categorie WHERE Categorie.Nom = ";
-            String queryRecette = insertRecettePart1 + "'"+ Nom + "', " +Duree+", "+ NbPersonnes +","+ insertRecettePart2 +"'"+ TypePlat+ "')," + insertRecettePart3+ "'"+ Categorie+"'),\""+Preparation+"\")";
-            db.sendRequest(queryRecette);
+            //Envoyer recette à la base de donnee
+            Recipe recipeToSend = new Recipe(name, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
+            try {
+                Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

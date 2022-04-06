@@ -62,7 +62,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
             //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
-            returnShoppingList();
+
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -1,14 +1,12 @@
 package ulb.infof307.g01.ui.recipe;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.ShoppingListDao;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
@@ -95,9 +93,16 @@ public class WindowCreateRecipeController extends Window implements Initializabl
             String diet= dietList.get(dietIndex);
             String type = typeList.get(typeIndex);
             this.myRecipe = new Recipe(recipeName, 0, diet, type, nbPerson, preparation );
-            //TODO Configuration.getCurrent().getRecipeDao().addRecipe(myRecipe);
+            for (Product product : recipeIngredients) {
+                this.myRecipe.add(product);
+            }
+            try {
+                Configuration.getCurrent().getRecipeDao().insert(myRecipe);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
+            }
             returnHomeRecipeWindow();
-
         }
     }
 
@@ -136,7 +141,6 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         this.primaryStage.setScene(this.scene);
         refreshTableView();
     }
-
 
 
 }
