@@ -74,7 +74,10 @@ public class Mail {
         Multipart messageBody = new MimeMultipart();
 
         messageBody.addBodyPart(addText());
-        messageBody.addBodyPart(addAttachment("S:\\Nathan\\Pictures\\E0Nj0xaWQAIM43b.jpg"));
+
+        PDFCreator.createPDF(shoppingListToSend);
+
+        messageBody.addBodyPart(addAttachment(System.getProperty("user.dir") + "\\" + shoppingListToSend.getName() + ".pdf"));
 
         message.setContent(messageBody);
 
@@ -88,7 +91,7 @@ public class Mail {
      */
     private BodyPart addText() throws MessagingException {
         BodyPart textBodyPart = new MimeBodyPart();
-        textBodyPart.setText("On vous as envoyé cette Liste de Course en pièce jointe");  // TODO : nom Liste de courses
+        textBodyPart.setText("On vous as envoyé cette Liste de Course en pièce jointe");
         return textBodyPart;
     }
     private BodyPart addAttachment(String attachmentFilePath) throws MessagingException {
