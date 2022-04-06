@@ -14,7 +14,6 @@ import javafx.stage.FileChooser;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.db.JSON;
 import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.ReadJSON;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.tools.UtilisationContrat;
