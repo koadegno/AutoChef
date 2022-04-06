@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model;
 
 
 import java.io.FileOutputStream;
@@ -39,6 +39,9 @@ public class PDFCreator {
         }}
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
+        if (!productList.isEmpty()){
+            System.err.println("Warning: ShoppingList is empty!");
+        }
         String nameFamilyProduct = productList.get(0).getFamillyProduct();
 
         Anchor anchor = new Anchor("Liste de courses : " + FILE , catFont); //catFont
