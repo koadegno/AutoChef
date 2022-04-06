@@ -12,6 +12,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.db.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ReadJSON;
 import ulb.infof307.g01.model.Recipe;
@@ -133,8 +134,8 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         dialog.getExtensionFilters().setAll(new FileChooser.ExtensionFilter("Fichier JSON", "*.json"));
         File file = dialog.showOpenDialog(primaryStage);
         if (file != null && file.getName().endsWith(".json")) {
-            System.out.println(file);
-            //TODO: faire appel à la class qd elle sera bien push sur dev
+            JSON json = new JSON();
+            json.jsonReader(file.getAbsolutePath());
         }
 
     }
