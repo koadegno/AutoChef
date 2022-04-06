@@ -4,6 +4,7 @@ import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -56,6 +57,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      * @param nbPerson contrainte pour le nombre de personne
      */
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
+        ArrayList<String> valuesOfPreparedStatement = null;
         ArrayList<String> constraint = new ArrayList<>();
         String stringQuery;
         StringBuilder query = new StringBuilder("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
@@ -76,12 +78,15 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
         if (constraint.size() > 0){
             query.append(" Where ");
-            stringQuery = appendValuesToWhere(query,constraint);
+            valuesOfPreparedStatement = appendValuesToWhere(query,constraint);
+            stringQuery = String.valueOf(query);
         }
         else {
             stringQuery = String.valueOf(query);
         }
-        ResultSet result = sendQuery(stringQuery);
+        PreparedStatement statement = connection.prepareStatement(stringQuery);
+        fillPreparedStatementValues(statement, valuesOfPreparedStatement);
+        ResultSet result = sendQuery(statement);
         return fillRecipes(result);
     }
 
@@ -104,7 +109,6 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String recipeID = String.format("%d", getGeneratedID());
 
         for (Product p: recipe) {
-            System.out.println(p);
             String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
             String quantity =  String.format("%d", p.getQuantity());
             String[] productValues = {recipeID, productID, quantity};
@@ -119,12 +123,17 @@ public class RecipeDao extends Database implements Dao<Recipe> {
 
     @Override
     public Recipe get(String name) throws SQLException {
-        StringBuilder query = new StringBuilder(String.format("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
+        StringBuilder query = new StringBuilder("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
                 "FROM Recette as R\n" +
                 "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
                 "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE R.Nom = '%s'", name));
-        ResultSet result = sendQuery(query.toString());
+                "WHERE R.Nom = ?");
+
+        ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
+        valuesOfPreparedStatement.add(name);
+        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
+        fillPreparedStatementValues(statement, valuesOfPreparedStatement);
+        ResultSet result = sendQuery(statement);
         result.next();
 
         Recipe recipe = fillRecipe(result);
