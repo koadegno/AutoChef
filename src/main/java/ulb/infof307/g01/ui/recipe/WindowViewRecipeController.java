@@ -1,6 +1,5 @@
 package ulb.infof307.g01.ui.recipe;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -12,7 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.JSON;
+import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.Window;
