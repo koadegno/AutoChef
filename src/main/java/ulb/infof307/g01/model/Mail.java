@@ -11,7 +11,7 @@ public class Mail {
 
     private final static String SMTP_SERVER = "smtp-mail.outlook.com";
     private final static int SMTP_PORT = 587;
-    private final static boolean TTLS_ENABLED = true;
+    private final static boolean TLS_ENABLED = true;
 
     private Session session;
 
@@ -28,7 +28,7 @@ public class Mail {
     private void createSession() {
         Properties properties = new Properties();
         properties.put("mail.smtp.auth", "true");
-        properties.put("mail.smtp.starttls.enable", String.valueOf(TTLS_ENABLED));
+        properties.put("mail.smtp.starttls.enable", String.valueOf(TLS_ENABLED));
         properties.put("mail.smtp.host", SMTP_SERVER);
         properties.put("mail.smtp.port", String.valueOf(SMTP_PORT));
         session = Session.getDefaultInstance(properties, new Authenticator() {
