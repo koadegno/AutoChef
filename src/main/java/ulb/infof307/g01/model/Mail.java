@@ -19,9 +19,9 @@ public class Mail {
         createSession();
     }
 
-    public void sendMail(String recipientAddress) throws MessagingException {
+    public void sendMail(String recipientAddress, ShoppingList shoppingListToSend) throws MessagingException {
         createSession();
-        Message mail = composeMessage(recipientAddress);
+        Message mail = composeMessage(recipientAddress, shoppingListToSend);
         Transport.send(mail);
     }
 
@@ -39,13 +39,13 @@ public class Mail {
         });
     }
 
-    private Message composeMessage(String recipientAddress) throws AddressException, MessagingException {
+    private Message composeMessage(String recipientAddress, ShoppingList shoppingListToSend) throws AddressException, MessagingException {
         Message message = new MimeMessage(session);
 
         message.setFrom(new InternetAddress(defaultAddress));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
 
-        message.setSubject("Liste de courses"); // TODO : nom Liste de courses
+        message.setSubject("On vous as envoyé une liste de course: " + shoppingListToSend.getName());
 
         Multipart messageBody = new MimeMultipart();
 
