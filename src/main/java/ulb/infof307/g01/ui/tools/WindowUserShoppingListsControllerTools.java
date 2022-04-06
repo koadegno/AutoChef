@@ -54,8 +54,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
         this.setNodeColor(hBoxToCreateProduct, false);
     }
 
-    public void confirmMyCreateShoppingList(){}
-
     /**
      * Inialise les ComboBox avec les elements de la bdd dans une liste : produit, unité, nom de liste de courses
      */

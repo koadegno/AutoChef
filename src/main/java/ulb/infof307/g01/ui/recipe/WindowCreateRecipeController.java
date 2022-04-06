@@ -15,6 +15,7 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowUserShoppingListsController;
 
+import javax.sound.midi.Receiver;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -95,9 +96,16 @@ public class WindowCreateRecipeController extends Window implements Initializabl
             String diet= dietList.get(dietIndex);
             String type = typeList.get(typeIndex);
             this.myRecipe = new Recipe(recipeName, 0, diet, type, nbPerson, preparation );
-            //TODO Configuration.getCurrent().getRecipeDao().addRecipe(myRecipe);
+            for (Product product : recipeIngredients) {
+                this.myRecipe.add(product);
+            }
+            try {
+                Configuration.getCurrent().getRecipeDao().insert(myRecipe);
+            } catch (SQLException e) {
+                e.printStackTrace();
+                Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
+            }
             returnHomeRecipeWindow();
-
         }
     }
 
@@ -136,7 +144,6 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         this.primaryStage.setScene(this.scene);
         refreshTableView();
     }
-
 
 
 }
