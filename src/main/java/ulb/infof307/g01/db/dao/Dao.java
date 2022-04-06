@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.db.dao;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
