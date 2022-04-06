@@ -3,6 +3,7 @@ package ulb.infof307.g01.ui.shoppingList;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ulb.infof307.g01.db.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 
@@ -14,7 +15,8 @@ public class ExportShoppingListView extends Window {
     public ShoppingList shoppingList = null;
 
     public void exportToPDF(){
-        //TODO:attendre que Salma ait push
+        PDFCreator pdfCreator = new PDFCreator();
+        pdfCreator.createPDF(shoppingList);
         closePopup();
     }
 
