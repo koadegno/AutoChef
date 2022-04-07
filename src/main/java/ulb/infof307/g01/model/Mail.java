@@ -95,13 +95,20 @@ public class Mail {
         textBodyPart.setText(mailTextBody);
         return textBodyPart;
     }
+
+    /**
+     * Créer une {@link BodyPart} contenant une pièce-jointe.
+     * @param attachmentFilePath Le chemin vers le fichier à joindre au Mail.
+     * @return la {@code BodyPart} créée.
+     * @throws MessagingException si une exception est déclenchée par la librairie.
+     */
     private BodyPart addAttachment(String attachmentFilePath) throws MessagingException {
 
         BodyPart attachmentBodyPart = new MimeBodyPart();
         DataSource source = new FileDataSource(attachmentFilePath);
 
         attachmentBodyPart.setDataHandler(new DataHandler(source));
-        attachmentBodyPart.setFileName("Liste_De_Course.jpg"); // TODO : gérer odt
+        attachmentBodyPart.setFileName("Liste_De_Course.pdf");
 
         return attachmentBodyPart;
     }
