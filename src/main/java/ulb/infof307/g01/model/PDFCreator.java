@@ -15,7 +15,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
-
+/**
+ * Classe qui permet d'exporter une liste de course en pdf
+ */
 public class PDFCreator {
     private static String FILE = null;
 
