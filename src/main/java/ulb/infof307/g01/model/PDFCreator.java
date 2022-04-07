@@ -35,7 +35,7 @@ public class PDFCreator {
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE+".pdf"));
             document.open();
-            addContent(document, shoppingList);
+            addContent(document, sortedShoppingList);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();

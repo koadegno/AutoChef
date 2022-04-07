@@ -27,12 +27,14 @@ public class Mail {
      * Envoie une @{code ShoppingList} par mail.
      * @param recipientAddress Adresse e-mail du destinataire du mail.
      * @param shoppingListToSend Liste de Course à envoyé (en pièce-jointe).
+     * @param subject l'objet du mail
+     * @param mailTextBody texte qui contient la description du mail
      * @throws AddressException Si l'adresse e-mail n'est pas dans un format valide.
      * @throws MessagingException Pour toutes les autres erreurs.
      */
-    public void sendMail(String recipientAddress, ShoppingList shoppingListToSend) throws MessagingException {
+    public void sendMail(String recipientAddress, ShoppingList shoppingListToSend, String subject, String mailTextBody) throws MessagingException {
         createSession();
-        Message mail = composeMessage(recipientAddress, shoppingListToSend);
+        Message mail = composeMessage(recipientAddress, shoppingListToSend, subject, mailTextBody);
         Transport.send(mail);
     }
 
@@ -61,17 +63,17 @@ public class Mail {
      * @throws AddressException Si l'adresse e-mail n'est pas dans un format valide.
      * @throws MessagingException Pour toutes les autres erreurs.
      */
-    private Message composeMessage(String recipientAddress, ShoppingList shoppingListToSend) throws AddressException, MessagingException {
+    private Message composeMessage(String recipientAddress, ShoppingList shoppingListToSend, String subject, String mailTextBody) throws AddressException, MessagingException {
         Message message = new MimeMessage(session);
 
         message.setFrom(new InternetAddress(defaultAddress));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
 
-        message.setSubject("On vous as envoyé une liste de course: " + shoppingListToSend.getName());
+        message.setSubject(subject);
 
         Multipart messageBody = new MimeMultipart();
 
-        messageBody.addBodyPart(addText());
+        messageBody.addBodyPart(addText(mailTextBody));
 
         PDFCreator.createPDF(shoppingListToSend);
 
@@ -84,12 +86,13 @@ public class Mail {
 
     /**
      * Créer une {@link BodyPart} contenant le texte du mail.
+     * @param mailTextBody texte qui contient la description du mail
      * @return la {@code BodyPart} créée.
      * @throws MessagingException si une exception est déclenchée par la librairie.
      */
-    private BodyPart addText() throws MessagingException {
+    private BodyPart addText(String mailTextBody) throws MessagingException {
         BodyPart textBodyPart = new MimeBodyPart();
-        textBodyPart.setText("On vous as envoyé cette Liste de Course en pièce jointe");
+        textBodyPart.setText(mailTextBody);
         return textBodyPart;
     }
     private BodyPart addAttachment(String attachmentFilePath) throws MessagingException {
