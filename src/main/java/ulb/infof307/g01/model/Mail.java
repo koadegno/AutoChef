@@ -1,7 +1,5 @@
 package ulb.infof307.g01.model;
 
-import ulb.infof307.g01.db.PDFCreator;
-
 import javax.activation.*;
 import javax.mail.*;
 import javax.mail.internet.*;
