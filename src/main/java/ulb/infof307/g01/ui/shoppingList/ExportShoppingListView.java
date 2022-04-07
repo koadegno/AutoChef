@@ -3,7 +3,7 @@ package ulb.infof307.g01.ui.shoppingList;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ulb.infof307.g01.db.PDFCreator;
+import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 

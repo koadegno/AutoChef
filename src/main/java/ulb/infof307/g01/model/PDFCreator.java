@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model;
 
 
 import java.io.FileOutputStream;
@@ -15,7 +15,9 @@ import com.itextpdf.text.pdf.PdfWriter;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
-
+/**
+ * Classe qui permet d'exporter une liste de course en pdf
+ */
 public class PDFCreator {
     private static String FILE = null;
 
@@ -40,6 +42,9 @@ public class PDFCreator {
         }}
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
+        if (!productList.isEmpty()){
+            System.err.println("Warning: ShoppingList is empty!");
+        }
         String nameFamilyProduct = productList.get(0).getFamillyProduct();
 
         Anchor anchor = new Anchor("Liste de courses : " + FILE , catFont); //catFont

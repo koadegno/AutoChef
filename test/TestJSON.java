@@ -9,11 +9,10 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.db.JSON;
+import ulb.infof307.g01.model.JSON;
 
 
-class JSONTest {
+class TestJSON {
     final static private String fileNameDB   = "testJSON.sqlite";
     final static private String fileNameJSON = "testRecette.json";
 

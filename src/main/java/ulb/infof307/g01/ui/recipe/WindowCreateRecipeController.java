@@ -1,21 +1,18 @@
 package ulb.infof307.g01.ui.recipe;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.ShoppingListDao;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.shoppingList.WindowUserShoppingListsController;
 
-import javax.sound.midi.Receiver;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
