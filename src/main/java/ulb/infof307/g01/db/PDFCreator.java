@@ -26,7 +26,8 @@ public class PDFCreator {
             Font.BOLD);
     public static void createPDF(ShoppingList shoppingList) {
         try {
-            shoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
+            Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
+            sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
 
             FILE = shoppingList.getName();
             Document document = new Document();
