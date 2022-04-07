@@ -1,14 +1,17 @@
 package ulb.infof307.g01.ui.tools;
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
+import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
 import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
+import ulb.infof307.g01.ui.shoppingList.ExportShoppingListView;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -33,13 +36,13 @@ public class WindowUserShoppingListsControllerTools extends Window {
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
-    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct;
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct, btnExportShoppingList;
     @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
     protected TableView tableViewDisplayProductList;
     @FXML
-    protected Button returnToMenu;
+    protected Button returnToMenu, btnSendMail;
     protected ArrayList<String> allUnitName = null;
     protected ArrayList<String> allProduct = null;
     protected ArrayList<String> allShoppinListName = null;
@@ -50,8 +53,6 @@ public class WindowUserShoppingListsControllerTools extends Window {
         this.setNodeColor(tableViewDisplayProductList,false);
         this.setNodeColor(hBoxToCreateProduct, false);
     }
-
-    public void confirmMyCreateShoppingList(){}
 
     /**
      * Inialise les ComboBox avec les elements de la bdd dans une liste : produit, unité, nom de liste de courses
@@ -135,6 +136,54 @@ public class WindowUserShoppingListsControllerTools extends Window {
     public void initComboBox() {
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
+    }
+
+    public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+            @Override
+            public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
+                final TableCell<Product, Void> cell = new TableCell<Product, Void>() {
+
+                    //Creer un bouton supprimer
+                    private final Button btnDelete = new Button("Supprimer");
+                    {
+                        //Action pour le bouton supprimer
+                        btnDelete.setOnAction((ActionEvent event) -> {
+                            Product data = getTableView().getItems().get(getIndex());
+                            tableViewDisplayProductList.getItems().remove(data);
+                        });
+                    }
+
+                    //Ajout du bouton supprimer
+                    @Override
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btnDelete);
+                        }
+                    }
+                };
+                return cell;
+            }
+        };
+        return cellFactory;
+    }
+
+    public void exportShoppingList(){
+        ExportShoppingListView exportShoppingListView = new ExportShoppingListView();
+        try {
+            popupFXML("exportShoppingList.fxml", exportShoppingListView);
+            ShoppingList shoppingListToExport = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
+            exportShoppingListView.setShoppingList(shoppingListToExport);
+        } catch (IOException | SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void sendShoppingListByMail(){
+        //TODO: attendre que cette tache soit fini
     }
 
 

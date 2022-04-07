@@ -1,11 +1,15 @@
 package ulb.infof307.g01.ui;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.Spinner;
 import javafx.stage.Modality;
 import javafx.stage.Popup;
 import javafx.stage.Stage;
@@ -87,6 +91,19 @@ public class Window  {
         alert.setContentText(contentText);
         Optional<ButtonType> alertResult = alert.showAndWait();
         return alertResult.get();
+    }
+
+    @FXML
+    protected void onlyIntValue(Spinner<Integer> numberOfPersonSpinner){
+        numberOfPersonSpinner.getEditor().textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
+                }
+            }
+        });
     }
 
 }

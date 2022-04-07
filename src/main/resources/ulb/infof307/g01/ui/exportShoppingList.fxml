@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="238.0" prefWidth="503.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+   <children>
+      <HBox alignment="CENTER" prefHeight="108.0" prefWidth="503.0">
+         <children>
+            <Label fx:id="nameShoppingList" alignment="CENTER" contentDisplay="CENTER" prefHeight="30.0" prefWidth="319.0" text="My shopping list">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="37.0" prefWidth="503.0" spacing="10.0">
+         <children>
+            <Label prefHeight="20.0" prefWidth="266.0" text="Exporter ma liste de courses en :">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="60.0">
+         <children>
+            <Button mnemonicParsing="false" onAction="#exportToPDF" text="PDF" />
+            <Button mnemonicParsing="false" onAction="#exportToODT" text="ODT" />
+         </children>
+      </HBox>
+   </children>
+</VBox>

@@ -1,19 +1,17 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.db.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
 import org.apache.poi.ss.formula.eval.NotImplementedException;
 import org.apache.poi.util.NotImplemented;
+import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.model.*;
 
-import java.sql.Array;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
 import java.util.List;
 
-public class ShopDao extends Database implements Dao<Shop>{
+public class ShopDao extends Database implements Dao<Shop> {
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB

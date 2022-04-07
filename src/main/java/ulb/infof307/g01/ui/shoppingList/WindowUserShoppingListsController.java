@@ -9,9 +9,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.*;
-import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
+import ulb.infof307.g01.ui.recipe.WindowCreateRecipeController;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
-
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -22,8 +21,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
 
     @FXML
     Button btnConfirm, btnAddNewProduct;
-    @FXML
-    ComboBox comboBoxShoppingNameList;
+    private WindowCreateRecipeController callerClass=null;
 
     /**
      * Permet d'afficher sur le tableView les listes de courses a partir d'un nom d'une
@@ -64,7 +62,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
             //Renvoie liste de courses chez la bdd
             fillShoppingListToSend(shoppingListToSend);
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
-            returnShoppingList();
+
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -79,6 +77,8 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         comboBoxListUnity.setVisible(isVisible);
         btnConfirm.setVisible(isVisible);
         btnAddNewProduct.setVisible(isVisible);
+        btnExportShoppingList.setVisible(isVisible);
+        btnSendMail.setVisible(isVisible);
     }
 
     /**
@@ -97,8 +97,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
 
         //Cree les boutons delete dans chaque ligne de la tableView
-        CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
 
         returnToMenu.setOnAction((event) ->{
@@ -123,4 +122,24 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         comboBoxShoppingNameList.setItems(FXCollections.observableArrayList(allShoppinListName));
     }
 
+    public void setCallerClass(WindowCreateRecipeController windowCreateRecipeController) {
+        this.callerClass = windowCreateRecipeController;
+    }
+
+    public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
+        super.initComboBox();
+        comboBoxShoppingNameList.setVisible(false);
+        btnSeeShoppingList.setVisible(false);
+        Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
+        tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
+        isVisibleElementToModifyMyShoppingList(true);
+        returnToMenu.setOnAction(event -> {
+            this.callerClass.cancel();
+        });
+        btnConfirm.setOnAction(event -> {
+            ShoppingList shoppingListToReturn = new ShoppingList("current");
+            fillShoppingListToSend(shoppingListToReturn);
+            this.callerClass.add(shoppingListToReturn);
+        });
+    }
 }

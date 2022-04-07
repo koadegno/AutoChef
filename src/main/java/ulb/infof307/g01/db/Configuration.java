@@ -1,5 +1,6 @@
 package ulb.infof307.g01.db;
 
+import ulb.infof307.g01.db.dao.*;
 import ulb.infof307.g01.model.*;
 
 import java.sql.SQLException;

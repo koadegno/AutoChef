@@ -10,7 +10,6 @@ import org.sqlite.SQLiteException;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.ui.tools.CreateColWithButtonDelete;
 import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
 import java.io.IOException;
@@ -39,8 +38,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
-        CreateColWithButtonDelete createColWithButtonDelete = new CreateColWithButtonDelete();
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButtonDelete.createColWithButton(tableViewDisplayProductList);
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
         returnToMenu.setOnAction((event) ->{
             try {

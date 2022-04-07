@@ -29,7 +29,7 @@ public class Database {
         File file = new File(nameDB);
         boolean fileExist = file.exists();
         try {
-            if(connection!= null){
+            if(connection != null && request != null){
                 return; //TODO changer ca un jour
             }
             connection = DriverManager.getConnection(dbName);
@@ -61,7 +61,14 @@ public class Database {
     }
 
     public void closeConnection() throws SQLException {
-        connection.close();
+        if(request != null && connection != null){
+            if(!request.isClosed() && !connection.isClosed() ){
+                request.close();
+                connection.close();
+                request = null;
+                connection = null;
+            }
+        }
     }
 
     /**
