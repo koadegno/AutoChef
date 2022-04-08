@@ -99,6 +99,12 @@ dependencies {
     testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
+    //ODT
+    implementation group: 'org.odftoolkit', name: 'odfdom-java', version: '0.10.0'
+
+
+    // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.odfdom.converter.pdf.itext5
+    implementation group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.odfdom.converter.pdf.itext5', version: '2.0.3'
 
 
     //ArcGis
