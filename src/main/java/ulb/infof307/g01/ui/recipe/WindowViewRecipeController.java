@@ -1,6 +1,5 @@
 package ulb.infof307.g01.ui.recipe;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Scene;
@@ -12,7 +11,7 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.JSON;
+import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.Window;
@@ -104,13 +103,16 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     public void verifyTextFieldContent(KeyEvent keyEvent) {
         if(keyEvent.getCode() != KeyCode.ENTER)return;
         String recipeName = recipeTextField.getText();
-        System.out.println(recipeName);
         if(recipeName==null)return;
+        System.out.println(recipeName);
         try {
-            //TODO: verifier l'existence de la recette dans le db
-            //TODO: displayRecipe(recipe) si elle existe sinon rougir le textfield
-        }catch (Exception e){
-            //TODO: rougir le textField
+            displayedRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
+            if(displayedRecipe == null) setNodeColor(recipeTextField,true);
+            else setNodeColor(recipeTextField,false);
+            refreshTextArea();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Window.showAlert(Alert.AlertType.ERROR,"Erreur", "Erreur lié a la base de donnée contacter le service d'assistance ");
         }
     }
 

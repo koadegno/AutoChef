@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
+import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 
 import java.io.IOException;
@@ -12,6 +13,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Iterator;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -86,11 +88,16 @@ class TestMenuDao {
                 assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
                 assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
 
-                for (int j = 0; j < recipeFromMenu.get(i).size(); j++) {
-                    assertEquals(recipeFromMenu.get(i).get(j).getName(),recipeFromNewMenu.get(i).get(j).getName());
-                    assertEquals(recipeFromMenu.get(i).get(j).getNameUnity(),recipeFromNewMenu.get(i).get(j).getNameUnity());
-                    assertEquals(recipeFromMenu.get(i).get(j).getFamillyProduct(),recipeFromNewMenu.get(i).get(j).getFamillyProduct());
-                    assertEquals(recipeFromMenu.get(i).get(j).getQuantity(),recipeFromNewMenu.get(i).get(j).getQuantity());
+                Iterator<Product> iteratorRecipeFromMenu = recipeFromMenu.get(i).iterator();
+                Iterator<Product> iteratorRecipeFromNewMenu = recipeFromNewMenu.get(i).iterator();
+                while (iteratorRecipeFromMenu.hasNext() && iteratorRecipeFromNewMenu.hasNext()) {
+                    Product nextRecipeFromMenuProduct    = iteratorRecipeFromMenu.next();
+                    Product nextRecipeFromNewMenuProduct = iteratorRecipeFromNewMenu.next();
+
+                    assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
+                    assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
+                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
         }
@@ -112,11 +119,17 @@ class TestMenuDao {
                 assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
                 assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
 
-                for (int j = 0; j < recipeFromMenu.get(i).size(); j++) {
-                    assertEquals(recipeFromMenu.get(i).get(j).getName(),recipeFromNewMenu.get(i).get(j).getName());
-                    assertEquals(recipeFromMenu.get(i).get(j).getNameUnity(),recipeFromNewMenu.get(i).get(j).getNameUnity());
-                    assertEquals(recipeFromMenu.get(i).get(j).getFamillyProduct(),recipeFromNewMenu.get(i).get(j).getFamillyProduct());
-                    assertEquals(recipeFromMenu.get(i).get(j).getQuantity(),recipeFromNewMenu.get(i).get(j).getQuantity());
+                Iterator<Product> iteratorRecipeFromMenu = recipeFromMenu.get(i).iterator();
+                Iterator<Product> iteratorRecipeFromNewMenu = recipeFromNewMenu.get(i).iterator();
+
+                while (iteratorRecipeFromMenu.hasNext() && iteratorRecipeFromNewMenu.hasNext()) {
+                    Product nextRecipeFromMenuProduct    = iteratorRecipeFromMenu.next();
+                    Product nextRecipeFromNewMenuProduct = iteratorRecipeFromNewMenu.next();
+
+                    assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
+                    assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
+                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
         }
@@ -136,11 +149,16 @@ class TestMenuDao {
                 assertEquals(recipeFromMenu.get(i).getType(),recipeFromNewMenu.get(i).getType());
                 assertEquals(recipeFromMenu.get(i).getCategory(),recipeFromNewMenu.get(i).getCategory());
 
-                for (int j = 0; j < recipeFromMenu.get(i).size(); j++) {
-                    assertEquals(recipeFromMenu.get(i).get(j).getName(),recipeFromNewMenu.get(i).get(j).getName());
-                    assertEquals(recipeFromMenu.get(i).get(j).getNameUnity(),recipeFromNewMenu.get(i).get(j).getNameUnity());
-                    assertEquals(recipeFromMenu.get(i).get(j).getFamillyProduct(),recipeFromNewMenu.get(i).get(j).getFamillyProduct());
-                    assertEquals(recipeFromMenu.get(i).get(j).getQuantity(),recipeFromNewMenu.get(i).get(j).getQuantity());
+                Iterator<Product> iteratorRecipeFromMenu = recipeFromMenu.get(i).iterator();
+                Iterator<Product> iteratorRecipeFromNewMenu = recipeFromNewMenu.get(i).iterator();
+                while (iteratorRecipeFromMenu.hasNext() && iteratorRecipeFromNewMenu.hasNext()) {
+                    Product nextRecipeFromMenuProduct    = iteratorRecipeFromMenu.next();
+                    Product nextRecipeFromNewMenuProduct = iteratorRecipeFromNewMenu.next();
+
+                    assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
+                    assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
+                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
         }

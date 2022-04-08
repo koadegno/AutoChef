@@ -10,6 +10,7 @@ import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
+import ulb.infof307.g01.ui.mail.MailView;
 import ulb.infof307.g01.ui.menu.WindowUserMenuListController;
 import ulb.infof307.g01.ui.shoppingList.ExportShoppingListView;
 
@@ -182,8 +183,17 @@ public class WindowUserShoppingListsControllerTools extends Window {
         }
     }
 
-    public void sendShoppingListByMail(){
-        //TODO: attendre que cette tache soit fini
+    public void sendShoppingListByMail() throws SQLException {
+
+        ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
+        MailView mailView = new MailView();
+        try {
+            popupFXML("createMail.fxml", mailView);
+            mailView.setShoppingListToMail(shoppingList);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
 

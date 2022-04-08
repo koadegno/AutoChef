@@ -13,11 +13,16 @@ import java.util.List;
 
 public class ShopDao extends Database implements Dao<Shop> {
 
+    public static final int SHOP_ID_INDEX = 1;
+    public static final int SHOP_NAME_INDEX = 2;
+    public static final int SHOP_LONGITUDE_INDEX = 4;
+    public static final int SHOP_LATITUDE_INDEX = 5;
+
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
      *
-     * @param nameDB nom de la base de données que l'ont veut charger/créer.
+     * @param nameDB nom de la base de données que l'on veut charger/créer.
      */
     public ShopDao(String nameDB) {
         super(nameDB);
@@ -30,7 +35,6 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     @Override
     public void insert(Shop shop) throws SQLException {
-        //TODO rajouter les autres attributs
         String name = String.format("'%s'", shop.getName());
         String latitude = String.valueOf(shop.getCoordinateX());
         String longitude = String.valueOf(shop.getCoordinateY());
@@ -55,14 +59,12 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     /**
-     * trouve les magasins qui correspondent au nom
+     * tous les magasins stocker
      * @return la liste de tous les magasins
      * @throws SQLException erreur avec la requête SQL
      */
     public List<Shop> getShops() throws SQLException {
-        // TODO Attention je pense qu'on a pas besoin de cette methode
         List<Shop> shops = getAllShops();
-
         for(Shop shop: shops){
             fillShopWithProducts(shop);
         }
@@ -72,26 +74,25 @@ public class ShopDao extends Database implements Dao<Shop> {
     /**
      * Remplie un magasin avec les produits qui lui sont associés
      * @param shop le magasin qui doit etre remplie
-     * @return le magasin remplie
      * @throws SQLException erreur au niveau de la requête SQL
      */
-    private Shop fillShopWithProducts(Shop shop) throws SQLException {
-        String query = String.format("SELECT Ingredient.Nom,MI.prix\n" +
-                "FROM MagasinIngredient as MI\n" +
-                "INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID\n" +
-                "INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID\n" +
-                "WHERE MI.MagasinID = %d",shop.getID());
+    private void fillShopWithProducts(Shop shop) throws SQLException {
+        String query = String.format("""
+                SELECT Ingredient.Nom,MI.prix
+                FROM MagasinIngredient as MI
+                INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID
+                INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID
+                WHERE MI.MagasinID = %d""",shop.getID());
         ResultSet querySelectProductList = sendQuery(query);
         while(querySelectProductList != null &&querySelectProductList.next()){
             String productName = querySelectProductList.getString("Nom");
             double productPrice = querySelectProductList.getDouble("prix");
             shop.add(new Product(productName,productPrice));
         }
-        return shop;
     }
 
     /**
-     * récupérer tous les magasins qui contiennent le nom
+     * récupérer tous les magasins
      * @return la liste de tous les magasins
      * @throws SQLException erreur au niveau de la requête SQL
      */
@@ -112,33 +113,38 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     @Override
     @NotImplemented
-    /**
-     * Methode inutilisé
-     */
     public Shop get(String name) throws SQLException , NotImplementedException{
         throw new NotImplementedException("Cette methode n'est pas implementé");
-
     }
 
+    /**
+     * Recupère un magasin en fonction de son nom et de ces coordonnées
+     * @param name le nom du magasin
+     * @param coordinates les coordonnées du magasin
+     * @return le magasin qui correspond
+     * @throws SQLException erreur avec la requête SQL
+     */
     public Shop get(String name, Point coordinates) throws SQLException {
+        // construction des contraintes
         StringBuilder stringBuilder = new StringBuilder();
         String nameConstraint = String.format("Nom = '%s' ", name);
         String latitudeConstraint = stringBuilder.append("latitude = ").append(coordinates.getX()).toString();
         stringBuilder = new StringBuilder();
         String longitudeConstraint = stringBuilder.append(" longitude = ").append(coordinates.getY()).toString();
         ArrayList<String> constraints = new ArrayList<>();
+        // ajout des contraintes
         constraints.add(nameConstraint); constraints.add(latitudeConstraint); constraints.add(longitudeConstraint);
 
         ResultSet shopResultSet = select("Magasin", constraints,null);
         if(shopResultSet.next()){
-            int shopID = shopResultSet.getInt(1);
-            String shopName = shopResultSet.getString(2);
+            int shopID = shopResultSet.getInt(SHOP_ID_INDEX);
+            String shopName = shopResultSet.getString(SHOP_NAME_INDEX);
             // TODO L'adresse plus tard
-            double shopY = shopResultSet.getDouble(4);
-            double shopX = shopResultSet.getDouble(5);
+            double shopY = shopResultSet.getDouble(SHOP_LONGITUDE_INDEX);
+            double shopX = shopResultSet.getDouble(SHOP_LATITUDE_INDEX);
             Point shopPoint = new Point(shopX,shopY);
             Shop shop = new Shop(shopID,shopName, shopPoint);
-            shop = fillShopWithProducts(shop);
+            fillShopWithProducts(shop);
             return shop;
         }
 
@@ -146,7 +152,6 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     public void delete(Shop shop) throws SQLException {
-
         String[] constraint = {"MagasinID = "+ shop.getID()};
         delete("MagasinIngredient", List.of(constraint));
         delete("Magasin",List.of(constraint));

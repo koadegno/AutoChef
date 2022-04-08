@@ -98,7 +98,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
      */
     public void fillTableViewWithExistentShoppingList(ShoppingList myExistentShoppingList){
         tableViewDisplayProductList.getItems().clear();
-        Vector<Product> temp =  (Vector<Product>) myExistentShoppingList;
+        Vector<Product> temp = new Vector<>(myExistentShoppingList);
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
         tableViewDisplayProductList.setItems(data);
         //Retour menu precedent : MainShoppingList

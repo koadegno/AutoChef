@@ -3,7 +3,6 @@ package ulb.infof307.g01.db;
 import com.esri.arcgisruntime.geometry.Point;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
@@ -12,7 +11,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -21,14 +19,14 @@ class TestShopDao {
 
     static String fruit = "Fruit";
     static String gram = "g";
-    static private Product peach = new Product("peche", 1, gram, fruit);
-    static private Product strawberry = new Product( "fraise", 1, gram, fruit);
-    static private Shop aldiShop = new Shop(1,"1aldi",new Point(0,0));
-    static private Shop lidlShop = new Shop(2,"aldi Namur",new Point(0,1));
-    static private Shop aldi2Shop = new Shop(3,"aldi Vilvorde",new Point(0,2));
-    static private Shop aldi4Shop = new Shop(4,"1aldi Rue neuve",new Point(0,2));
+    static private final Product peach = new Product("peche", 1, gram, fruit);
+    static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
+    static private final Shop aldiShop = new Shop("1 aldi",new Point(0,0));
+    static private final Shop lidlShop = new Shop("aldi Namur",new Point(0,1));
+    static private final Shop aldiRueNeuve = new Shop("1 aldi Rue neuve",new Point(0,2));
+    static private final Shop carrefourAnvers = new Shop("Carrefour Anvers", new Point(50,30));
 
-    static private String  databaseName = "test.sqlite";
+    static private final String  databaseName = "test.sqlite";
 
 
     @BeforeAll
@@ -37,8 +35,11 @@ class TestShopDao {
         Configuration.getCurrent().getProductUnityDao().insert(gram);
         Configuration.getCurrent().getProductFamilyDao().insert(fruit);
         Configuration.getCurrent().getProductDao().insert(peach);
+        Configuration.getCurrent().getProductDao().insert(strawberry);
         Configuration.getCurrent().getShopDao().insert(aldiShop);
-        Configuration.getCurrent().getShopDao().insert(aldi4Shop);
+        Configuration.getCurrent().getShopDao().insert(aldiRueNeuve);
+        Configuration.getCurrent().getShopDao().insert(carrefourAnvers);
+
     }
 
     @AfterAll
@@ -51,7 +52,19 @@ class TestShopDao {
     void testGetAllName() throws SQLException {
         List<String> allShopName = Configuration.getCurrent().getShopDao().getAllName();
         assertEquals(aldiShop.getName(),allShopName.get(0));
-        assertEquals(aldi4Shop.getName(),allShopName.get(1));
+        assertEquals(aldiRueNeuve.getName(),allShopName.get(1));
+    }
+
+    @Test
+    void testDelete() throws SQLException{
+
+        Configuration.getCurrent().getShopDao().delete(carrefourAnvers);
+        List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
+        assertNotEquals(shopList.get(shopList.size()-1).getName(),carrefourAnvers.getName());
+        assertNotEquals(shopList.get(shopList.size()-1).getCoordinate(), new Point(50,30));
+
+
+
     }
 
     @Test
@@ -83,18 +96,33 @@ class TestShopDao {
     @Test
     void testGetShops() throws SQLException {
 
-        //TODO MODIFIER
-
+        List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
+        assertEquals(shopList.get(0).getName(),aldiShop.getName());
+        assertEquals(shopList.get(0).getCoordinate(),aldiShop.getCoordinate());
+        assertEquals(shopList.get(1).getName(), aldiRueNeuve.getName());
+        assertEquals(shopList.get(1).getCoordinate(), aldiRueNeuve.getCoordinate());
 
     }
 
     @Test
     void testGet() throws SQLException {
-        Point point = new Point(aldiShop.getCoordinateX(), aldiShop.getCoordinateY());
-        Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiShop.getName(), point);
+        Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiShop.getName(), aldiShop.getCoordinate());
 
         assertEquals(aldiShop.getName(),shopInserted.getName());
         assertEquals(aldiShop.getCoordinate(),shopInserted.getCoordinate());
+
+    }
+
+    @Test
+    void testFillShopWithProduct() throws SQLException{
+        Point coordinate = new Point(89,40);
+        Shop carrefourBruxelles = new Shop(98,"Carrefour Bruxelles",coordinate);
+        carrefourBruxelles.add(peach); carrefourBruxelles.add(strawberry);
+
+        Configuration.getCurrent().getShopDao().insert(carrefourBruxelles);
+        Shop shopToTest = Configuration.getCurrent().getShopDao().get(carrefourBruxelles.getName(),coordinate);
+
+        assertEquals(carrefourBruxelles.size(),shopToTest.size());
 
     }
 

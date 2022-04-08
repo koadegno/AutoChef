@@ -38,7 +38,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
              currentShoppingListname = (String) nameMyShoppingList;
              try { // afficher les produits de la liste de course dans la table
                  ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-                 Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
+                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
                  tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
                  isVisibleElementToModifyMyShoppingList(true);
              } catch (SQLException e) {
@@ -130,7 +130,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         super.initComboBox();
         comboBoxShoppingNameList.setVisible(false);
         btnSeeShoppingList.setVisible(false);
-        Vector<Product> productOfShoppingList =  (Vector<Product>) shoppingList;
+        Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);
         returnToMenu.setOnAction(event -> {

@@ -46,15 +46,6 @@ public class ShowShopController extends Window implements Initializable {
         fillComboboxProduct();
     }
 
-    private void fakeBDD(){
-        // TODO Supprimer
-        shop = new Shop("Aldi", new Point(88,0));
-        Product product1 = new Product("Pomme", 9.0);
-        Product product2 = new Product("Banane",9.0);
-        shop.add(product1);
-        shop.add(product2);
-    }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -87,24 +78,34 @@ public class ShowShopController extends Window implements Initializable {
         else{
             double priceProduct = spinnerPrice.getValue();
             Product product = new Product(nameProduct.toString(), priceProduct);
-            shop.add(product);
             tableViewShop.getItems().addAll(product);
         }
     }
 
-    public void saveNewShop() throws SQLException {
+    public void saveNewShop() {
         setNodeColor(nameShop, false);
         String getNameShop = nameShop.getText();
 
         if (!Objects.equals(getNameShop, "")){
             shop.setName(getNameShop);
             if(isModifying){
-                Configuration.getCurrent().getShopDao().update(shop);
-                map.update(shop);
+                try {
+                    shop.addAll(tableViewShop.getItems());
+                    Configuration.getCurrent().getShopDao().update(shop);
+                    map.update(shop);
+                } catch (SQLException e) { // erreur de doublons de produit
+                    Window.showAlert(Alert.AlertType.ERROR,"Erreur","Erreur au niveau des produits");
+
+                }
             }
             else{
-                map.addPointToOverlay(shop);
-                Configuration.getCurrent().getShopDao().insert(shop);
+                try {
+                    shop.addAll(tableViewShop.getItems());
+                    map.addPointToOverlay(shop);
+                    Configuration.getCurrent().getShopDao().insert(shop);
+                } catch (SQLException e) { // erreur de doublons de produit
+                    Window.showAlert(Alert.AlertType.ERROR,"Erreur","Erreur au niveau des produits");
+                }
             }
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();

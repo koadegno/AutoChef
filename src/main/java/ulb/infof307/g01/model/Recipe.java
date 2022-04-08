@@ -4,7 +4,7 @@ package ulb.infof307.g01.model;
  * Classe représentant les recettes
  */
 
-public class Recipe extends UniqueProductList {
+public class Recipe extends ProductHashSet {
     
     private int id;
     private String name;

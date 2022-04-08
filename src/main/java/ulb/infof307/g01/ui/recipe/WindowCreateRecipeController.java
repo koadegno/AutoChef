@@ -71,7 +71,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     }
 
     private void refreshTableView() {
-        Vector<Product> productOfShoppingList =  (Vector<Product>) recipeIngredients;
+        Vector<Product> productOfShoppingList = new Vector<>(recipeIngredients);
         ingredientTableView.setItems(FXCollections.observableArrayList(productOfShoppingList));
 
     }

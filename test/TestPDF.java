@@ -1,17 +1,22 @@
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import org.odftoolkit.odfdom.doc.OdfTextDocument;
+import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.db.PDFCreator;
+import ulb.infof307.g01.model.PDFCreator;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 
 import java.io.IOException;
+import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
+import java.util.Arrays;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class PDFTest {
+class TestPDF {
     static private ShoppingList shoppingList;
 
     @BeforeAll
@@ -38,4 +43,6 @@ class PDFTest {
         assertEquals(text, textFromPage);
         reader.close();
     }
+
+
 }

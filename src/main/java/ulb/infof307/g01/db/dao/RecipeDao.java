@@ -109,6 +109,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String recipeID = String.format("%d", getGeneratedID());
 
         for (Product p: recipe) {
+            System.out.println(p);
             String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
             String quantity =  String.format("%d", p.getQuantity());
             String[] productValues = {recipeID, productID, quantity};
@@ -134,7 +135,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
         ResultSet result = sendQuery(statement);
-        result.next();
+        if(!result.next()) return null;
 
         Recipe recipe = fillRecipe(result);
         fillRecipeWithProducts(recipe);
