@@ -4,7 +4,7 @@ package ulb.infof307.g01.model;
 /**
  * Classe représentant une Liste de Course
  */
-public class ShoppingList extends UniqueProductList {
+public class ShoppingList extends ProductHashSet {
 
     private int id;
     private String name;

@@ -21,20 +21,20 @@ import ulb.infof307.g01.model.ShoppingList;
 public class PDFCreator {
     private static String FILE = null;
 
-
     private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
     private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
             Font.BOLD);
     public static void createPDF(ShoppingList shoppingList) {
         try {
-            shoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
+            Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
+            sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
 
             FILE = shoppingList.getName();
             Document document = new Document();
             PdfWriter.getInstance(document, new FileOutputStream(FILE+".pdf"));
             document.open();
-            addContent(document, shoppingList);
+            addContent(document, sortedShoppingList);
             document.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -57,11 +57,5 @@ public class PDFCreator {
                 subCatPart = catPart.addSection(new Paragraph(nameFamilyProduct, subFont));} //subFont
             subCatPart.add(new Paragraph(product.getName() + " " +product.getQuantity() + product.getNameUnity()));}
         document.add(catPart);
-    }
-
-    private static void addEmptyLine(Paragraph paragraph, int number) {
-        for (int i = 0; i < number; i++) {
-            paragraph.add(new Paragraph(" "));
-        }
     }
 }

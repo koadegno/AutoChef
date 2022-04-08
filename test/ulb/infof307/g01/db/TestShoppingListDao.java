@@ -1,8 +1,6 @@
 package ulb.infof307.g01.db;
 
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
@@ -10,7 +8,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.*;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -65,11 +63,18 @@ class TestShoppingListDao {
         Configuration.getCurrent().getShoppingListDao().insert(christmas);
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(christmas.getName());
         assertEquals(christmas.getName(), shoppingList2.getName());
-        for (int i = 0; i < christmas.size(); i++) {
-            assertEquals(christmas.get(i).getQuantity(), shoppingList2.get(i).getQuantity());
-            assertEquals(christmas.get(i).getName(), shoppingList2.get(i).getName());
-            assertEquals(christmas.get(i).getNameUnity(), shoppingList2.get(i).getNameUnity());
-            assertEquals(christmas.get(i).getFamillyProduct(), shoppingList2.get(i).getFamillyProduct());
+
+        Iterator<Product> iteratorChristmas  = ShoppingListSorter.getSortedShoppingList(christmas).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
+
+       while (iteratorChristmas.hasNext() && iteratorShoppingList2.hasNext()) {
+           Product nextChristmasProduct = iteratorChristmas.next();
+           Product nextShoppingList2Product = iteratorShoppingList2.next();
+
+           assertEquals(nextChristmasProduct.getQuantity(), nextShoppingList2Product.getQuantity());
+           assertEquals(nextChristmasProduct.getName(), nextShoppingList2Product.getName());
+           assertEquals(nextChristmasProduct.getNameUnity(), nextShoppingList2Product.getNameUnity());
+           assertEquals(nextChristmasProduct.getFamillyProduct(), nextShoppingList2Product.getFamillyProduct());
         }
     }
 
@@ -77,11 +82,17 @@ class TestShoppingListDao {
     void testGet() throws SQLException {
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(halloween.getName());
         assertEquals(halloween.getName(), shoppingList2.getName());
-        for (int i = 0; i < halloween.size(); i++) {
-            assertEquals(halloween.get(i).getQuantity(), shoppingList2.get(i).getQuantity());
-            assertEquals(halloween.get(i).getName(), shoppingList2.get(i).getName());
-            assertEquals(halloween.get(i).getNameUnity(), shoppingList2.get(i).getNameUnity());
-            assertEquals(halloween.get(i).getFamillyProduct(), shoppingList2.get(i).getFamillyProduct());
+
+        Iterator<Product> iteratorHalloween     = ShoppingListSorter.getSortedShoppingList(halloween).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
+        while (iteratorHalloween.hasNext() && iteratorShoppingList2.hasNext()) {
+            Product nextHalloweenProduct = iteratorHalloween.next();
+            Product nextShoppingList2Product = iteratorShoppingList2.next();
+
+            assertEquals(nextHalloweenProduct.getQuantity(), nextShoppingList2Product.getQuantity());
+            assertEquals(nextHalloweenProduct.getName(), nextShoppingList2Product.getName());
+            assertEquals(nextHalloweenProduct.getNameUnity(), nextShoppingList2Product.getNameUnity());
+            assertEquals(nextHalloweenProduct.getFamillyProduct(), nextShoppingList2Product.getFamillyProduct());
         }
     }
 
@@ -91,11 +102,18 @@ class TestShoppingListDao {
         Configuration.getCurrent().getShoppingListDao().update(easter);
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(easter.getName());
         assertEquals(easter.getName(), shoppingList2.getName());
-        for (int i = 0; i < easter.size(); i++) {
-            assertEquals(easter.get(i).getQuantity(), shoppingList2.get(i).getQuantity());
-            assertEquals(easter.get(i).getName(), shoppingList2.get(i).getName());
-            assertEquals(easter.get(i).getNameUnity(), shoppingList2.get(i).getNameUnity());
-            assertEquals(easter.get(i).getFamillyProduct(), shoppingList2.get(i).getFamillyProduct());
+
+        Iterator<Product> iteratorEaster    = ShoppingListSorter.getSortedShoppingList(easter).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
+
+        while (iteratorEaster.hasNext() && iteratorShoppingList2.hasNext()) {
+            Product nextEasterProduct        = iteratorEaster.next();
+            Product nextShoppingList2Product = iteratorShoppingList2.next();
+
+            assertEquals(nextEasterProduct.getQuantity(), nextShoppingList2Product.getQuantity());
+            assertEquals(nextEasterProduct.getName(), nextShoppingList2Product.getName());
+            assertEquals(nextEasterProduct.getNameUnity(), nextShoppingList2Product.getNameUnity());
+            assertEquals(nextEasterProduct.getFamillyProduct(), nextShoppingList2Product.getFamillyProduct());
         }
     }
 }
