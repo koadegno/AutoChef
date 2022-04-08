@@ -171,10 +171,12 @@ class TestMenu {
 
         int[] productsCounter = {0, 0};
 
-        int i = 0;
         for (Product p : generatedShoppingList) {
-            productsCounter[i] = p.getQuantity();
-            i++;
+            for (int i = 0; i < products.length; i++) {
+                if (p.equals(products[i])) {
+                    productsCounter[i] = p.getQuantity();
+                }
+            }
         }
 
         assertEquals(5, productsCounter[0]);
