@@ -95,7 +95,6 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     }
 
     public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) {
-        System.out.println(nbVegetarianDishes + " " + nbMeatDishes + " " + " " + nbFishDishes);
         popup.close();
         try {
             myMenu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
@@ -106,7 +105,6 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
     }
 
     public void cancelGeneratingMenu() {
-        System.out.println("cancel generating");
         popup.close();
     }
 }
