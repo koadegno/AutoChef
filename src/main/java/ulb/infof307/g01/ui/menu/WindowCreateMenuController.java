@@ -4,20 +4,21 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.stage.Modality;
+import javafx.stage.Stage;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.ui.tools.GenerateMenuDialog;
 
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class WindowCreateMenuController extends WindowEditMenuController implements Initializable {
-
+public class WindowCreateMenuController extends WindowEditMenuController implements Initializable{
+    Stage popup=null;
     public WindowCreateMenuController() throws SQLException {
         this.myMenu = new Menu();
         this.daysName = new ArrayList<>();
@@ -64,24 +65,13 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
      */
     @FXML
     public void generateMenu() throws SQLException {
-        final GenerateMenuDialog dialog = new GenerateMenuDialog();
-        dialog.initModality(Modality.APPLICATION_MODAL);
-        dialog.initOwner(this.primaryStage);
-        dialog.initObject();
-        dialog.getOkButton().setOnAction((event1)->{
-            int nbVegetarian = (int) dialog.getVegetarianSpinner().getValue();
-            int nbMeat = (int) dialog.getMeatSpinner().getValue();
-            int nbFish = (int) dialog.getFishSpinner().getValue();
-            dialog.close();
-            try {
-                myMenu.generateMenu(nbVegetarian, nbMeat, nbFish);
-                dialog.close();
-                this.refreshTableView();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        });
-        dialog.show();
+        try {
+            GenerateMenuDialog generateMenuDialog = new GenerateMenuDialog();
+            popup = popupFXML("GenerateMenuDialog.fxml", generateMenuDialog);
+            generateMenuDialog.setMainController(this);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -102,5 +92,21 @@ public class WindowCreateMenuController extends WindowEditMenuController impleme
         } catch(SQLException e) {
             this.setNodeColor(menuNameTextField,true);
         }
+    }
+
+    public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) {
+        System.out.println(nbVegetarianDishes + " " + nbMeatDishes + " " + " " + nbFishDishes);
+        popup.close();
+        try {
+            myMenu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+            this.refreshTableView();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void cancelGeneratingMenu() {
+        System.out.println("cancel generating");
+        popup.close();
     }
 }
