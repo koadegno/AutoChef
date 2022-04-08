@@ -54,7 +54,6 @@ public class ODTCreator {
         String productElements = null;
         boolean createProduct = false;
         for(int i =0; i< nodes.getLength(); i++){ // parcours des enfants
-            System.out.println(nodes.item(i).getNodeName());
             if(nodes.item(i).hasChildNodes()){ // parcours des enfants des enfants
                 NodeList nodeList = nodes.item(i).getChildNodes();
                 for(int j =0; j< nodeList.getLength(); j++){
@@ -74,8 +73,8 @@ public class ODTCreator {
                     }
                     if(createProduct){ // permet de savoir quand cree un produit
                         String[] productElementArray = productElements.split(" ");
-                        System.out.println(familyProduct);
-                        System.out.println(Arrays.toString(productElementArray));
+//                        System.out.println(familyProduct);
+//                        System.out.println(Arrays.toString(productElementArray));
                         shoppingList.add(new Product(productElementArray[0],
                                 Integer.parseInt(productElementArray[1]),
                                 productElementArray[2],
