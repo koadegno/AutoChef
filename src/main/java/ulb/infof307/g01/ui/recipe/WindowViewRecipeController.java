@@ -103,13 +103,16 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     public void verifyTextFieldContent(KeyEvent keyEvent) {
         if(keyEvent.getCode() != KeyCode.ENTER)return;
         String recipeName = recipeTextField.getText();
-        System.out.println(recipeName);
         if(recipeName==null)return;
+        System.out.println(recipeName);
         try {
-            //TODO: verifier l'existence de la recette dans le db
-            //TODO: displayRecipe(recipe) si elle existe sinon rougir le textfield
-        }catch (Exception e){
-            //TODO: rougir le textField
+            displayedRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
+            if(displayedRecipe == null) setNodeColor(recipeTextField,true);
+            else setNodeColor(recipeTextField,false);
+            refreshTextArea();
+        } catch (SQLException e) {
+            e.printStackTrace();
+            Window.showAlert(Alert.AlertType.ERROR,"Erreur", "Erreur lié a la base de donnée contacter le service d'assistance ");
         }
     }
 

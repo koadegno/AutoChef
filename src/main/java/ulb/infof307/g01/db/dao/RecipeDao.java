@@ -125,7 +125,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
                 "WHERE R.Nom = '%s'", name));
         ResultSet result = sendQuery(query.toString());
-        result.next();
+        if(!result.next()) return null; // pas trouvé
 
         Recipe recipe = fillRecipe(result);
         fillRecipeWithProducts(recipe);
