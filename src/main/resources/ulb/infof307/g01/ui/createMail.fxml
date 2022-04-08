@@ -36,7 +36,7 @@
                   <Font size="14.0" />
                </font>
             </Label>
-            <ComboBox fx:id="mailReceiver" prefHeight="25.0" prefWidth="322.0" />
+            <ComboBox fx:id="mailReceiver" prefHeight="25.0" prefWidth="322.0" promptText="les mails favoris" />
             <Button mnemonicParsing="false" onAction="#chooseFavoriteMail" prefHeight="25.0" prefWidth="93.0" text="nouveau mail" />
          </children>
       </HBox>

@@ -10,17 +10,18 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label fx:id="nameFavoriteMail" text="Nouveau mail favori :" />
+            <Label fx:id="nameFavoriteMail" text="Nouveau mail :" />
+         </children>
+      </HBox>
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+         <children>
+            <TextField fx:id="newFavoriteMail" prefHeight="25.0" prefWidth="291.0" promptText="nouveau email favori" />
+            <Button onAction="#addFavoriteMail" mnemonicParsing="false" text="ajouter en favori" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <TextField fx:id="newFavoriteMail" prefHeight="23.0" prefWidth="303.0" promptText="nouveau email favori" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Button mnemonicParsing="false" onAction="#confirmFavoriteMail" prefHeight="30.0" prefWidth="165.0" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#confirmMail" prefHeight="30.0" prefWidth="165.0" text="Confirmer" />
          </children>
       </HBox>
    </children>
