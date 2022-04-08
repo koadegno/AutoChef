@@ -5,7 +5,6 @@ import ulb.infof307.g01.db.Configuration;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -13,15 +12,32 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestMenu {
 
-    static private Menu menu = new Menu("Menu Test");
+    static private final Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
+
+    /**
+     * Stocke la quantité contenu dans une recette pour chaque produit
+     *  {@code RECIPE_PRODUCT_QUANTITY[i][j]} contient la quantité du {@link Product} {@code products[j]}
+     *  contenu dans la {@link Recipe} {@code recipes[i]}
+     */
+    private static final int[][] RECIPE_PRODUCT_QUANTITY = new int[2][2];
+
+    /**
+     * Stocke la quantité contenu dans {@code menu} pour chaque {@code products}
+     *  {@code MENU_PRODUCT_QUANTITY[i]} contient la quantité du {@link Product} {@code products[j]}
+     *  contenu dans {@code menu}
+     */
+    private static final int[]   MENU_PRODUCT_QUANTITY = new int[2];
+
 
     @BeforeAll
     static void setUp() throws SQLException {
 
         recipes  = new Recipe [7];
         products = new Product[2];
+
+
 
         products[0] = new Product("Abricot");
         products[1] = new Product("Fraise");
@@ -30,9 +46,14 @@ class TestMenu {
         recipes[0].add(products[0]);
         recipes[0].add(products[0]);
 
+        RECIPE_PRODUCT_QUANTITY[0][0] = 2;
+
         recipes[1] = new Recipe(5, "test2", 5, "Vegan", "Test", 2, "Avant le code");
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
+
+        RECIPE_PRODUCT_QUANTITY[1][0] = 1;
+        RECIPE_PRODUCT_QUANTITY[1][1] = 1;
 
         recipes[2]  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
         recipes[3]  = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
@@ -78,6 +99,9 @@ class TestMenu {
 
         menu.addRecipeTo(Day.Monday, recipes[1]);
         menu.addRecipeTo(Day.Friday, recipes[1]);
+
+        MENU_PRODUCT_QUANTITY[0] = RECIPE_PRODUCT_QUANTITY[0][0] * 2 + RECIPE_PRODUCT_QUANTITY[1][0];
+        MENU_PRODUCT_QUANTITY[1] = RECIPE_PRODUCT_QUANTITY[0][1] + RECIPE_PRODUCT_QUANTITY[1][1] * 2;
     }
 
     @AfterEach
@@ -167,9 +191,9 @@ class TestMenu {
 
         ShoppingList generatedShoppingList = menu.generateShoppingList();
 
-        assertEquals(2, generatedShoppingList.size());
+        assertEquals(products.length, generatedShoppingList.size());
 
-        int[] productsCounter = {0, 0};
+        int[] productsCounter = new int[products.length];
 
         for (Product p : generatedShoppingList) {
             for (int i = 0; i < products.length; i++) {
@@ -179,8 +203,8 @@ class TestMenu {
             }
         }
 
-        assertEquals(5, productsCounter[0]);
-        assertEquals(2, productsCounter[1]);
+        assertEquals(MENU_PRODUCT_QUANTITY[0], productsCounter[0]);
+        assertEquals(MENU_PRODUCT_QUANTITY[1], productsCounter[1]);
     }
 
     @Test
