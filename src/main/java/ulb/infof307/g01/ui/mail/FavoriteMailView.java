@@ -20,7 +20,7 @@ public class FavoriteMailView extends Window {
         setNodeColor(newFavoriteMail, false);
         String newMail = newFavoriteMail.getText(); //envoyer ça
         if(isValidEmailAddress(newMail)){
-            comboboxListFavoriteMaiL.setPromptText(newMail); //TODO: changer solution poubelle
+            comboboxListFavoriteMaiL.setValue(newMail); //TODO: changer solution poubelle
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
         }
