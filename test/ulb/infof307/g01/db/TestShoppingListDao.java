@@ -64,8 +64,8 @@ class TestShoppingListDao {
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(christmas.getName());
         assertEquals(christmas.getName(), shoppingList2.getName());
 
-        Iterator<Product> iteratorChristmas  = sortedSet(christmas);
-        Iterator<Product> iteratorShoppingList2 = sortedSet(shoppingList2);
+        Iterator<Product> iteratorChristmas  = ShoppingListSorter.getSortedShoppingList(christmas).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
 
        while (iteratorChristmas.hasNext() && iteratorShoppingList2.hasNext()) {
            Product nextChristmasProduct = iteratorChristmas.next();
@@ -83,8 +83,8 @@ class TestShoppingListDao {
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(halloween.getName());
         assertEquals(halloween.getName(), shoppingList2.getName());
 
-        Iterator<Product> iteratorHalloween     = sortedSet(halloween);
-        Iterator<Product> iteratorShoppingList2 = sortedSet(shoppingList2);
+        Iterator<Product> iteratorHalloween     = ShoppingListSorter.getSortedShoppingList(halloween).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
         while (iteratorHalloween.hasNext() && iteratorShoppingList2.hasNext()) {
             Product nextHalloweenProduct = iteratorHalloween.next();
             Product nextShoppingList2Product = iteratorShoppingList2.next();
@@ -103,8 +103,8 @@ class TestShoppingListDao {
         ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(easter.getName());
         assertEquals(easter.getName(), shoppingList2.getName());
 
-        Iterator<Product> iteratorEaster    = sortedSet(easter);
-        Iterator<Product> iteratorShoppingList2 = sortedSet(shoppingList2);
+        Iterator<Product> iteratorEaster    = ShoppingListSorter.getSortedShoppingList(easter).iterator();
+        Iterator<Product> iteratorShoppingList2 = ShoppingListSorter.getSortedShoppingList(shoppingList2).iterator();
 
         while (iteratorEaster.hasNext() && iteratorShoppingList2.hasNext()) {
             Product nextEasterProduct        = iteratorEaster.next();
@@ -115,12 +115,5 @@ class TestShoppingListDao {
             assertEquals(nextEasterProduct.getNameUnity(), nextShoppingList2Product.getNameUnity());
             assertEquals(nextEasterProduct.getFamillyProduct(), nextShoppingList2Product.getFamillyProduct());
         }
-    }
-
-    private Iterator<Product> sortedSet(Set<Product> set) {
-        List<Product> list = new Vector<>(set);
-        list.sort(Comparator.comparing(Product::getName));
-
-        return list.iterator();
     }
 }
