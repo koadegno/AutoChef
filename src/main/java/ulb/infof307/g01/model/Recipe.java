@@ -28,7 +28,7 @@ public class Recipe extends ProductHashSet {
         this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
 
-    public int getId() {return id;}
+    public int getId() { return id;}
     public String getName() {
         return name;
     }
@@ -39,6 +39,13 @@ public class Recipe extends ProductHashSet {
     public String getType() { return type; }
     public int getNbrPerson() { return nbrPerson; }
     public String getPreparation() { return preparation;}
+
+    public void setName(String name) { this.name = name;}
+    public void setDuration(int duration) { this.duration = duration;}
+    public void setCategory(String category) { this.category = category;}
+    public void setType(String type) { this.type = type;}
+    public void setNbrPerson(int nbrPerson) { this.nbrPerson = nbrPerson;}
+    public void setPreparation(String preparation) { this.preparation = preparation;}
 
 
     /**
