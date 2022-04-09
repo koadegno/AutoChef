@@ -49,8 +49,6 @@ public class MailView extends Window {
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
 
-        } catch (AddressException e) {
-            setNodeColor(mailReceiver, true);
         } catch (MessagingException e) {
             setNodeColor(mailReceiver, true);
         }
