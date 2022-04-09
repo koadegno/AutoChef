@@ -29,7 +29,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     @FXML
     public TextArea displayRecipeTextArea;
     @FXML
-    public Button deleteButton;
+    public Button deleteButton, modifyRecipeButton;
 
     private static Scene scene;
     private String ingredientTitle = "Ingrédients : ";
@@ -53,6 +53,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         displayRecipeTextArea.setWrapText(true);
         recipeTextField.setPromptText("Entrer nom de la recette");
         deleteButton.setVisible(false);
+        modifyRecipeButton.setVisible(false);
         refreshTextArea();
     }
 
@@ -63,6 +64,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             String toDisplay = "Nom de la recette :  " + displayedRecipe.getName()  + "\n" + ingredient + preparation;
             displayRecipeTextArea.setText(toDisplay);
             deleteButton.setVisible(true);
+            modifyRecipeButton.setVisible(true);
         }
         else{
             displayRecipeTextArea.setText("Aucune recette sélectionnée");
@@ -124,8 +126,16 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
         }
         deleteButton.setVisible(false);
+        modifyRecipeButton.setVisible(false);
         displayedRecipe = null;
         refreshTextArea();
+    }
+
+    public void modifyRecipe(){
+        this.scene = this.primaryStage.getScene();
+        WindowCreateRecipeController createRecipeWindow = new WindowCreateRecipeController();
+        createRecipeWindow.displayMain();
+        createRecipeWindow.setMainController(this, displayedRecipe);
     }
 
     public void importJSONRecipe() {
@@ -138,5 +148,16 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             json.jsonReader(file.getAbsolutePath());
         }
 
+    }
+
+    public void updateRecipe(Recipe myRecipe) {
+        this.primaryStage.setScene(this.scene);
+        try {
+            Configuration.getCurrent().getRecipeDao().update(myRecipe);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        displayedRecipe = myRecipe;
+        refreshTextArea();
     }
 }

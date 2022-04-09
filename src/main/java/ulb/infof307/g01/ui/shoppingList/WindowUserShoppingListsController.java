@@ -141,5 +141,8 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
             fillShoppingListToSend(shoppingListToReturn);
             this.callerClass.add(shoppingListToReturn);
         });
+
+        btnExportShoppingList.setVisible(false);
+        btnSendMail.setVisible(false);
     }
 }

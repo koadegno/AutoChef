@@ -21,8 +21,7 @@ import java.util.ResourceBundle;
 import java.util.Vector;
 
 public class WindowCreateRecipeController extends Window implements Initializable {
-
-
+    private WindowViewRecipeController mainController = null; //to modify a recipe from WindowviewRecipeController
     private ArrayList<String> dietList;
     private ArrayList<String> typeList;
     @FXML
@@ -38,7 +37,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     @FXML
     private Spinner nbPersonSpinner;
     @FXML
-    public TextField recipeNameTextField;
+    private TextField recipeNameTextField;
     private Scene scene;
     private ShoppingList recipeIngredients = null;
     private Recipe myRecipe = null;
@@ -53,8 +52,8 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         this.recipeIngredients = new ShoppingList("ingredients");
     }
 
-    public void displayMain() {
-        this.loadFXML("createRecipe.fxml");
+    public void  displayMain() {
+        this.loadFXML(this,"createRecipe.fxml");
     }
 
     @Override
@@ -68,6 +67,9 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         tableColumnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
         tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
         tableColumnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
+        recipeNameTextField.setPromptText("Nom de la recette"); //to activate its existence. If not, setMainController will cause nullPointerException
+        preparationTextArea.setWrapText(true);
+
     }
 
     private void refreshTableView() {
@@ -81,8 +83,10 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         int dietIndex = dietComboBox.getSelectionModel().getSelectedIndex();
         int typeIndex = typeComboBox.getSelectionModel().getSelectedIndex();
         int nbPerson = (int) nbPersonSpinner.getValue();
-        String recipeName = recipeNameTextField.getText();
         String preparation = preparationTextArea.getText();
+        String recipeName;
+        if(mainController==null)recipeName = recipeNameTextField.getText();
+        else recipeName = myRecipe.getName();
 
         if(dietIndex < 0)setNodeColor(dietComboBox, true);
         else if (typeIndex <0) setNodeColor(typeComboBox, true);
@@ -92,12 +96,18 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         else{
             String diet= dietList.get(dietIndex);
             String type = typeList.get(typeIndex);
-            this.myRecipe = new Recipe(recipeName, 0, diet, type, nbPerson, preparation );
-            for (Product product : recipeIngredients) {
-                this.myRecipe.add(product);
+            if(mainController==null) this.myRecipe = new Recipe(recipeName, 0, diet, type, nbPerson, preparation );
+            else{
+                this.myRecipe.setCategory(diet);
+                this.myRecipe.setPreparation(preparation);
+                this.myRecipe.setType(type);
+                this.myRecipe.setNbrPerson(nbPerson);
+                this.myRecipe.removeAll(this.myRecipe);
             }
+            this.myRecipe.addAll(recipeIngredients);
             try {
-                Configuration.getCurrent().getRecipeDao().insert(myRecipe);
+                if(mainController==null) Configuration.getCurrent().getRecipeDao().insert(myRecipe); //creating new recipe (not modifying )
+                else mainController.updateRecipe(myRecipe);
             } catch (SQLException e) {
                 e.printStackTrace();
                 Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
@@ -111,13 +121,18 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         setNodeColor(typeComboBox, false);
         setNodeColor(ingredientTableView, false);
         setNodeColor(preparationTextArea, false);
-        setNodeColor(recipeNameTextField, false);
+        if(mainController==null)setNodeColor(recipeNameTextField, false);
     }
 
 
     public void returnHomeRecipeWindow() {
-        WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
-        myRecipeWindow.displayMain();
+        if(mainController==null) {
+            WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
+            myRecipeWindow.displayMain();
+        }
+        else{ //cancel modfying
+            mainController.cancel();
+        }
     }
 
     public void addIngredients() {
@@ -140,6 +155,24 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         this.recipeIngredients = shoppingListToReturn;
         this.primaryStage.setScene(this.scene);
         refreshTableView();
+    }
+
+    public  void setMainController(WindowViewRecipeController viewRecipe, Recipe recipeToModify){
+        mainController = viewRecipe;
+        myRecipe = recipeToModify;
+        initElementToModifyingRecipe();
+    }
+    @FXML
+    public void initElementToModifyingRecipe() {
+        recipeIngredients = new ShoppingList("modifying");
+        recipeIngredients.addAll(myRecipe);
+        refreshTableView();
+        preparationTextArea.setText(myRecipe.getPreparation());
+        recipeNameTextField.setVisible(false);
+        dietComboBox.getSelectionModel().select(myRecipe.getCategory());
+        typeComboBox.getSelectionModel().select(myRecipe.getType());
+        nbPersonSpinner.getEditor().setText(String.valueOf(myRecipe.getNbrPerson()));
+
     }
 
 

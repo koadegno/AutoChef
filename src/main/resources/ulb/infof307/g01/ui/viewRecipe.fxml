@@ -25,7 +25,7 @@
             <VBox alignment="CENTER" prefHeight="422.0" prefWidth="276.0" spacing="40.0">
                <children>
                   <TextField fx:id="recipeTextField" onKeyPressed="#verifyTextFieldContent" />
-                  <Button fx:id="modifyRecipeButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="220.0" text="Modifier" />
+                  <Button fx:id="modifyRecipeButton"  onAction="#modifyRecipe" mnemonicParsing="false" prefHeight="30.0" prefWidth="220.0" text="Modifier" />
                   <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteRecipe" prefHeight="30.0" prefWidth="220.0" text="Supprimer" />
                   <Button mnemonicParsing="false" onAction="#searchRecipe" prefHeight="30.0" prefWidth="220.0" text="Voir toutes les recettes" />
                   <Button mnemonicParsing="false" onAction="#importJSONRecipe" prefHeight="30.0" prefWidth="220.0" text="Importer une recette JSON" />
