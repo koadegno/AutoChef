@@ -1,7 +1,5 @@
 package ulb.infof307.g01.db.dao;
 
-import org.apache.poi.ss.formula.eval.NotImplementedException;
-import org.apache.poi.util.NotImplemented;
 import ulb.infof307.g01.db.Database;
 
 import java.sql.PreparedStatement;
@@ -36,10 +34,8 @@ public class MailAddressDao extends Database implements Dao<String> {
     }
 
     @Override
-    @NotImplemented
-    public void update(String s) throws SQLException {
-        throw new NotImplementedException("Cette methode n'est pas implementé");
-
+    public void update(String s) throws SQLException{
+        throw new IllegalCallerException("Cette methode n'est pas implementé");
     }
 
     @Override

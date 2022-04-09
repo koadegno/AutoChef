@@ -129,7 +129,7 @@ jar {
         attributes 'Main-Class': 'ulb.infof307.g01.Main'
     }
     from {
-        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
 }
 
