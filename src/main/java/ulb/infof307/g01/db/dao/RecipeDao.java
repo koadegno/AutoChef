@@ -118,8 +118,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     }
 
     @Override
-    public void update(Recipe products) throws SQLException {
-        System.out.println("A FAIRE ENCORE");
+    public void update(Recipe recipe) throws SQLException {
+        delete(recipe);
+        insert(recipe);
     }
 
     @Override

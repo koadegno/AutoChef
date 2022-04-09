@@ -126,8 +126,24 @@ class TestRecipeDao {
     }
 
     @Test
-    void testUpdate() {
-        System.out.println("A FAIRE ENCORE");
+    void testUpdate() throws SQLException {
+        Recipe myPesto = new Recipe("Pesto maison", 20, fish, meal,3, "Faire cuire des cheveux");
+        Configuration.getCurrent().getRecipeDao().insert(myPesto);
+        myPesto = Configuration.getCurrent().getRecipeDao().get(myPesto.getName());
+        Recipe newMyPesto = new Recipe(myPesto.getId(), "Pesto maison", 25, fish, meal,2, "Faire cuire des cheveux et des pieds poilus ");
+        Configuration.getCurrent().getRecipeDao().update(newMyPesto);
+        Recipe pestoUpdated = Configuration.getCurrent().getRecipeDao().get(myPesto.getName());
+
+        assertEquals(newMyPesto.getName(), pestoUpdated.getName(),"Test nom de cette recette");
+        assertEquals(newMyPesto.getDuration(), pestoUpdated.getDuration(),"Test la duree de la preparation");
+        assertEquals(newMyPesto.getCategory(), pestoUpdated.getCategory(),"Test categorie de la recette");
+        assertEquals(newMyPesto.getType(), pestoUpdated.getType(),"Test Type de la recette");
+        assertEquals(newMyPesto.getNbrPerson(), pestoUpdated.getNbrPerson(),"test le nombre de personne");
+        assertEquals(newMyPesto.getPreparation(), pestoUpdated.getPreparation(),"Test la preparation");
+
+        assertNotEquals(newMyPesto.getDuration(), myPesto.getDuration(),"Test la duree de la preparation");
+        assertNotEquals(newMyPesto.getNbrPerson(), myPesto.getNbrPerson(),"test le nombre de personne");
+        assertNotEquals(newMyPesto.getPreparation(), myPesto.getPreparation(),"Test la preparation");
     }
 
     @Test
@@ -139,5 +155,17 @@ class TestRecipeDao {
         assertEquals(bolo.getType(), bolo2.getType(),"Test Type de la recette");
         assertEquals(bolo.getNbrPerson(), bolo2.getNbrPerson(),"test le nombre de personne");
         assertEquals(bolo.getPreparation(), bolo2.getPreparation(),"Test la preparation");
+    }
+
+    @Test
+    void testDelete() throws SQLException {
+        Recipe tomateCrevette = new Recipe("tomate aux crevettes grises", 20, fish, meal,3, "Mange un steak frite c'est mieux");
+        Configuration.getCurrent().getRecipeDao().insert(tomateCrevette);
+        tomateCrevette = Configuration.getCurrent().getRecipeDao().get(tomateCrevette.getName());
+        Configuration.getCurrent().getRecipeDao().delete(tomateCrevette);
+        Recipe tomateCrevetteInserted = Configuration.getCurrent().getRecipeDao().get(tomateCrevette.getName());
+        assertNull(tomateCrevetteInserted);
+
+
     }
 }
