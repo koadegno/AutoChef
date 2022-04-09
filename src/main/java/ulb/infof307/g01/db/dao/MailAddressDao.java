@@ -4,6 +4,7 @@ import org.apache.poi.ss.formula.eval.NotImplementedException;
 import org.apache.poi.util.NotImplemented;
 import ulb.infof307.g01.db.Database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -45,7 +46,8 @@ public class MailAddressDao extends Database implements Dao<String> {
     public String get(String mailAddressName) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s = '%s'","Nom",mailAddressName));
-        ResultSet querySelectProduct = select(TABLE_MAIL_ADDRESS,constraint,null);
+        PreparedStatement statement = select(TABLE_MAIL_ADDRESS,constraint,null);
+        ResultSet querySelectProduct = sendQuery(statement);
         if(!querySelectProduct.next()) return null;
         return querySelectProduct.getString("Nom");
 
