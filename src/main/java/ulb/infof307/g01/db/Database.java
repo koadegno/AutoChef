@@ -102,6 +102,7 @@ public class Database {
      * @param query requete sql
      */
     protected void sendQueryUpdate(String query) throws SQLException {
+        System.out.println(query);
         request.executeUpdate(query);
     }
 
@@ -221,12 +222,13 @@ public class Database {
     }
 
     protected void fillRecipeWithProducts(Recipe recipe) throws SQLException {
-        ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, F.Nom, U.Nom, R.Quantite\n" +
-                "FROM RecetteIngredient as R\n" +
-                "INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID \n" +
-                "INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID\n" +
-                "INNER JOIN Unite as U ON U.UniteID = I.UniteID\n" +
-                "WHERE R.RecetteID = %d", recipe.getId()));
+        ResultSet querySelectProduct = sendQuery(String.format("""
+                SELECT I.Nom, F.Nom, U.Nom, R.Quantite
+                FROM RecetteIngredient as R
+                INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID\s
+                INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID
+                INNER JOIN Unite as U ON U.UniteID = I.UniteID
+                WHERE R.RecetteID = %d""", recipe.getId()));
 
         while(querySelectProduct.next()){
             String productName = querySelectProduct.getString(1);
