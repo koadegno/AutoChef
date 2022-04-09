@@ -21,11 +21,8 @@ public class FavoriteMailView extends Window {
         setNodeColor(newFavoriteMail, false);
         String newMail = newFavoriteMail.getText(); //envoyer ça
         if(isValidEmailAddress(newMail)){
-            comboboxListFavoriteMaiL.setValue(newMail); //TODO: changer solution poubelle
-            comboboxListFavoriteMaiL.getItems().add(newMail);
-            //comboboxListFavoriteMaiL.setPromptText(newMail);
-            Stage stage = (Stage) vBox.getScene().getWindow();
-            stage.close();
+            addMailToCombobox(newMail);
+            closePopup();
         }
         else{
             setNodeColor(newFavoriteMail, true);
@@ -33,13 +30,18 @@ public class FavoriteMailView extends Window {
 
     }
 
+    private void addMailToCombobox(String newMail) {
+        comboboxListFavoriteMaiL.getItems().add(newMail);
+        comboboxListFavoriteMaiL.setValue(newMail);}
+
     public void addFavoriteMail(){
         String newMail = newFavoriteMail.getText();
         setNodeColor(newFavoriteMail, false);
         if(isValidEmailAddress(newMail)){
             try {
                 Configuration.getCurrent().getMailAddressDao().insert(newMail);
-                confirmMail(); //TODO: changer maybe
+                addMailToCombobox(newMail);
+                closePopup();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -49,11 +51,16 @@ public class FavoriteMailView extends Window {
         }
     }
 
+    private void closePopup(){
+        Stage stage = (Stage) vBox.getScene().getWindow();
+        stage.close();
+    }
+
     public boolean isValidEmailAddress(String email) {
         boolean result = true;
         try {
-            InternetAddress emailAddr = new InternetAddress(email);
-            emailAddr.validate();
+            InternetAddress addressEmail = new InternetAddress(email);
+            addressEmail.validate();
         } catch (AddressException ex) {
             result = false;
         }
