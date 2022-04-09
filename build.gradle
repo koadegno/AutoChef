@@ -2,6 +2,7 @@ plugins {
     id 'java'
     id 'application'
     id 'org.openjfx.javafxplugin' version '0.0.9'
+    id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
 group 'ulb.infof307.g01'
@@ -31,9 +32,9 @@ javafx {
     modules = [ 'javafx.controls', 'javafx.fxml' ]
 }
 
-
 application {
     mainClass = 'ulb.infof307.g01.Main'
+    mainModule = 'ulb.infof307.g01'
 }
 
 ext {
@@ -46,8 +47,7 @@ configurations {
 
 dependencies {
 
-    // Database
-
+    // <----------------------- Database ----------------------->
     // https://mvnrepository.com/artifact/org.xerial/sqlite-jdbc
     implementation group: 'org.xerial', name: 'sqlite-jdbc', version: '3.34.0'
 
@@ -81,34 +81,37 @@ dependencies {
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: '17.0.2', classifier: "mac"
     implementation group: 'org.openjfx', name: 'javafx-graphics', version: '17.0.2', classifier: "linux"
 
+    // <----------------------- JSON ------------------------>
     // https://mvnrepository.com/artifact/com.googlecode.json-simple/json-simple
     implementation group: 'com.googlecode.json-simple', name: 'json-simple', version: '1.1.1'
 
+    // <----------------------- Mail ----------------------->
     // https://mvnrepository.com/artifact/com.sun.mail/javax.mail
     implementation group: 'com.sun.mail', name: 'javax.mail', version: '1.6.2'
 
-
-
-    // Test
-    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
-    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
-    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+    // <----------------------- PDF ----------------------->
     // https://mvnrepository.com/artifact/com.itextpdf/itextpdf
     implementation group: 'com.itextpdf', name: 'itextpdf', version: '5.5.13.3'
-    //ODT
+    // <----------------------- ODT ----------------------->
     implementation group: 'org.odftoolkit', name: 'odfdom-java', version: '0.10.0'
 
-
-    // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.odfdom.converter.pdf.itext5
-    implementation group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.odfdom.converter.pdf.itext5', version: '2.0.3'
-
-
-    //ArcGis
+    // <----------------------- ArcGis (Map) ----------------------->
     //https://developers.arcgis.com/java/install-and-set-up/
     implementation "com.esri.arcgisruntime:arcgis-java:100.13.0"
     natives "com.esri.arcgisruntime:arcgis-java-jnilibs:100.13.0"
     natives "com.esri.arcgisruntime:arcgis-java-resources:100.13.0"
     runtimeOnly "org.slf4j:slf4j-nop:1.7.32"
+
+    // <----------------------- Tests ----------------------->
+    // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-api
+    testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-api', version: '5.8.1'
+    testImplementation 'org.junit.jupiter:junit-jupiter-engine:5.8.2'
+
+    // https://mvnrepository.com/artifact/fr.opensagres.xdocreport/fr.opensagres.odfdom.converter.pdf.itext5
+    implementation group: 'fr.opensagres.xdocreport', name: 'fr.opensagres.odfdom.converter.pdf.itext5', version: '2.0.3'
+
+
+
 }
 
 task copyNatives(type: Copy) {
@@ -121,16 +124,13 @@ task copyNatives(type: Copy) {
 }
 
 jar {
-
     duplicatesStrategy = DuplicatesStrategy.EXCLUDE
     manifest {
         attributes 'Main-Class': 'ulb.infof307.g01.Main'
     }
     from {
-        configurations.runtimeClasspath.collect { it.isDirectory() ? it : zipTree(it) }
+        configurations.compileClasspath.collect { it.isDirectory() ? it : zipTree(it) }
     }
-    archivesBaseName = 'g01-iteration'
-    destinationDirectory.set(file("$rootDir/dist"))
 }
 
 run {
@@ -138,14 +138,12 @@ run {
     mainClassName = 'ulb.infof307.g01.Main'
 }
 
-javafx {
-    version = "17.0.2"
-    modules = [ 'javafx.controls','javafx.fxml'  ]
-}
-
-
-
 tasks.withType(JavaCompile) {
     options.encoding = 'UTF-8'
 }
 
+tasks.withType(Jar) {
+    destinationDirectory.set(file("$rootDir/dist"))
+    archivesBaseName = 'g01-iteration'
+    archiveClassifier = ''
+}

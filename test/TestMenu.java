@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.*;
-import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,7 +8,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestMenu {
 
@@ -25,7 +25,7 @@ class TestMenu {
 
     /**
      * Stocke la quantité contenu dans {@code menu} pour chaque {@code products}
-     *  {@code MENU_PRODUCT_QUANTITY[i]} contient la quantité du {@link Product} {@code products[j]}
+     *  {@code MENU_PRODUCT_QUANTITY[i]} contient la quantité du {@link Product} {@code products[i]}
      *  contenu dans {@code menu}
      */
     private static final int[]   MENU_PRODUCT_QUANTITY = new int[2];
