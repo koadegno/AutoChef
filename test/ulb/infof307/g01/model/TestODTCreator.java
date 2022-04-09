@@ -10,11 +10,12 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestODTCreator {
 
+    public static final String NAME_SHOPPING_LIST = "test/testShoppingList";
     static private ShoppingList shoppingList;
 
     @BeforeAll
     static public void createShoppingList() {
-        shoppingList =  new ShoppingList("test/testShoppingList");
+        shoppingList =  new ShoppingList(NAME_SHOPPING_LIST);
         Product testProduct = new Product("Banane", 3, "kg", "Fruits");
         Product testProduct2 = new Product("Carotte", 7, "g", "Viande");
         shoppingList.add(testProduct);
@@ -25,14 +26,8 @@ class TestODTCreator {
     void testCreateODT()  throws Exception {
         ODTCreator odtCreator = new ODTCreator();
         odtCreator.createODT(shoppingList);
-        String text = """
-            1. Liste de courses : test/testShoppingList
-            1.1. Fruits
-            Banane 3kg
-            1.2. Viande
-            Carotte 7g""";
 
-        OdfTextDocument odtReader = OdfTextDocument.loadDocument ("test/testShoppingList.odt");
+        OdfTextDocument odtReader = OdfTextDocument.loadDocument (NAME_SHOPPING_LIST+".odt");
         ShoppingList shoppingListRead =  odtCreator.readODT(odtReader);
         Vector<Product> ShoppingListReadVector = new Vector<>(shoppingListRead);
         Vector<Product> ShoppingListVector = new Vector<>(shoppingList);

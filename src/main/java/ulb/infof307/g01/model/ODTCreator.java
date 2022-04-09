@@ -13,7 +13,7 @@ import java.util.Vector;
 public class ODTCreator {
 
 
-    public static void createODT(ShoppingList shoppingList) throws Exception {
+    public void createODT(ShoppingList shoppingList) throws Exception {
         OdfTextDocument odt = OdfTextDocument.newTextDocument();
 
         Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
