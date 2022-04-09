@@ -1,5 +1,4 @@
 package ulb.infof307.g01.model;
-import ulb.infof307.g01.db.Database;
 
 import java.sql.SQLException;
 import java.util.HashMap;

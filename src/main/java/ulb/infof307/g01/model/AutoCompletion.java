@@ -1,6 +1,5 @@
 package ulb.infof307.g01.model;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -20,7 +19,7 @@ public class AutoCompletion {
      * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
      */
 
-    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, HashMap<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
+    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, Map<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
         if (categoriesWanted.isEmpty()){ return menu;}
@@ -58,7 +57,7 @@ public class AutoCompletion {
      * @return  String de la key ayant la valeur la plus haute
      */
 
-    static public String findMax (HashMap<String, Integer> categoriesRecipesUsed) {
+    static public String findMax (Map<String, Integer> categoriesRecipesUsed) {
 
         if (categoriesRecipesUsed.isEmpty()) {return null;}
 
