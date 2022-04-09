@@ -1,10 +1,9 @@
 package ulb.infof307.g01.db.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
-import org.apache.poi.ss.formula.eval.NotImplementedException;
-import org.apache.poi.util.NotImplemented;
 import ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.Shop;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
@@ -112,9 +111,8 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     @Override
-    @NotImplemented
-    public Shop get(String name) throws SQLException , NotImplementedException{
-        throw new NotImplementedException("Cette methode n'est pas implementé");
+    public Shop get(String name) throws SQLException , IllegalCallerException{
+        throw new IllegalCallerException("Cette methode n'est pas implementé"); // TODO implémenter
     }
 
     /**
