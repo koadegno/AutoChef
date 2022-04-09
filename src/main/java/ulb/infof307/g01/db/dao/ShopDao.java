@@ -17,6 +17,8 @@ public class ShopDao extends Database implements Dao<Shop> {
     public static final int SHOP_NAME_INDEX = 2;
     public static final int SHOP_LONGITUDE_INDEX = 4;
     public static final int SHOP_LATITUDE_INDEX = 5;
+    public static final String TABLE_PRODUCT_SHOP = "MagasinIngredient";
+    public static final String TABLE_SHOP = "Magasin";
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -30,7 +32,7 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     @Override
     public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("Magasin","ORDER BY Nom ASC");
+        return getAllNameFromTable(TABLE_SHOP,"ORDER BY Nom ASC");
     }
 
     @Override
@@ -40,7 +42,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         String longitude = String.valueOf(shop.getCoordinateY());
 
         String[] values = {"null", name,"null", longitude,latitude};
-        insert("Magasin", values);
+        insert(TABLE_SHOP, values);
 
         String shopID = String.format("%d", getGeneratedID());
 
@@ -48,7 +50,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
             String price =  String.valueOf(product.getPrice());
             String[] productValues = {shopID,productID,price};
-            insert("MagasinIngredient", productValues);
+            insert(TABLE_PRODUCT_SHOP, productValues);
         }
     }
 
@@ -98,7 +100,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private List<Shop> getAllShops() throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        ResultSet shopResultSet = select("Magasin", new ArrayList<>(),null);
+        ResultSet shopResultSet = select(TABLE_SHOP, new ArrayList<>(),null);
         ArrayList<Shop> shopsList = new ArrayList<>();
         while (shopResultSet.next()){
             int shopID = shopResultSet.getInt("MagasinID");
@@ -135,7 +137,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         // ajout des contraintes
         constraints.add(nameConstraint); constraints.add(latitudeConstraint); constraints.add(longitudeConstraint);
 
-        ResultSet shopResultSet = select("Magasin", constraints,null);
+        ResultSet shopResultSet = select(TABLE_SHOP, constraints,null);
         if(shopResultSet.next()){
             int shopID = shopResultSet.getInt(SHOP_ID_INDEX);
             String shopName = shopResultSet.getString(SHOP_NAME_INDEX);
@@ -153,8 +155,8 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public void delete(Shop shop) throws SQLException {
         String[] constraint = {"MagasinID = "+ shop.getID()};
-        delete("MagasinIngredient", List.of(constraint));
-        delete("Magasin",List.of(constraint));
+        delete(TABLE_PRODUCT_SHOP, List.of(constraint));
+        delete(TABLE_SHOP,List.of(constraint));
 
     }
 }
