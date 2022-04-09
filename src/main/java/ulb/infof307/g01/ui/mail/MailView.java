@@ -8,6 +8,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
@@ -15,7 +16,9 @@ import ulb.infof307.g01.ui.Window;
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
 import java.io.IOException;
+import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 public class MailView extends Window {
 
@@ -66,18 +69,14 @@ public class MailView extends Window {
     }
 
     public void initComboboxFavoriteMail(){
-        //TODO: recuperer le mail chez la base de donne
-        ArrayList<String> allMail = fakeDataBase();
-        mailReceiver.setItems(FXCollections.observableArrayList(allMail));
-    }
+        try {
+            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
+            mailReceiver.setItems(FXCollections.observableArrayList(allMail));
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
-    private ArrayList<String> fakeDataBase(){
-        ArrayList<String> list = new ArrayList();
-        list.add("test@gmail.com");
-        list.add("hello@hotmail.be");
-        return list ;
     }
-
 
 
 }
