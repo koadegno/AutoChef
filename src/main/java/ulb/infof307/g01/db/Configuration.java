@@ -17,6 +17,8 @@ public class Configuration {
     private Dao<String> recipeTypeDao;
     private Dao<ShoppingList> shoppingListDao;
     private Dao<Shop> shopDao;
+    private Dao<String> mailAddressDao;
+
 
     private Configuration(){}
 
@@ -37,6 +39,7 @@ public class Configuration {
         this.recipeTypeDao = new RecipeTypeDao(dbPath);
         this.shoppingListDao = new ShoppingListDao(dbPath);
         shopDao = new ShopDao(dbPath);
+        mailAddressDao = new MailAddressDao(dbPath);
     }
 
     public void closeConnection() throws SQLException {
@@ -49,6 +52,7 @@ public class Configuration {
         getRecipeTypeDao().closeConnection();
         getShoppingListDao().closeConnection();
         getShopDao().closeConnection();
+        getMailAddressDao().closeConnection();
     }
 
     public MenuDao getMenuDao(){
@@ -56,6 +60,10 @@ public class Configuration {
     }
 
     public ProductDao getProductDao() { return (ProductDao) productDao; }
+
+    public MailAddressDao getMailAddressDao() {
+        return (MailAddressDao) mailAddressDao;
+    }
 
     public ProductFamilyDao getProductFamilyDao() { return (ProductFamilyDao) productFamilyDao; }
 
