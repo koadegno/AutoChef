@@ -45,7 +45,7 @@ public class ODTCreator {
      * @return ShoppingList est une liste de course
      * @throws Exception erreur ?
      */
-    public ShoppingList readODT(OdfTextDocument odtDocument) throws Exception {
+    ShoppingList readODT(OdfTextDocument odtDocument) throws Exception {
         ShoppingList shoppingList = new ShoppingList(odtDocument.getDocumentPath());
 
         OfficeTextElement contentRoot = odtDocument.getContentRoot();
@@ -61,15 +61,26 @@ public class ODTCreator {
                     if (nodeList.item(j).getNextSibling() != null && nodeList.item(j).getNextSibling().getNodeType() == Node.TEXT_NODE){
                         productElements = nodeList.item(j).getNextSibling().getNodeValue();
                         createProduct = true;
-                        //System.out.println(productElements);
+                        j++; // tu passes le produit parce que c'est le next node
+//                        System.out.println(productElements);
                     }
                     // corresponds a une ligne de texte avec la famille
                     else if(nodeList.item(j).getNodeName().equals("#text")){
                         familyProduct = nodeList.item(j).getNodeValue();
+//                        System.out.print(" -> " +nodeList.item(j).getNodeName());
+//                        System.out.print(" -> " +nodeList.item(j).getNodeType());
+//                        System.out.print(" -> " +nodeList.item(j).getNamespaceURI());
+//                        System.out.print(" -> " +nodeList.item(j).getLocalName());
+//                        System.out.print(" -> " +nodeList.item(j).getPrefix());
+//                        System.out.print(" -> " +nodeList.item(j).getBaseURI());
+//                        System.out.print(" -> " +nodeList.item(j).getNodeValue());
+//                        System.out.println();
+
                         if(familyProduct.contains("Liste de course")){
                             continue;
                         }
                         familyProduct = familyProduct.replace(":","").strip();
+//                        System.out.println(familyProduct);
                     }
                     if(createProduct){ // permet de savoir quand cree un produit
                         String[] productElementArray = productElements.split(" ");
@@ -85,6 +96,7 @@ public class ODTCreator {
                 }
             }
         }
-    return shoppingList;
+
+        return shoppingList;
     }
 }
