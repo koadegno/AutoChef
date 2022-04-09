@@ -19,7 +19,6 @@ public class Database {
 
     protected static Connection connection=null;
     protected static Statement request=null;
-    protected static PreparedStatement statement=null;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -36,7 +35,6 @@ public class Database {
             }
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
-            statement = connection.prepareStatement("");
             if(! fileExist ) {
                 createDB();
             }
@@ -88,22 +86,15 @@ public class Database {
 
     /**
      * Requete d'accès en lecture de la base de données
-     * @param query requete sql
+     * @param statement requete sql
      * @return resultat de la requete, ou null si la requete echoue
      */
     protected ResultSet sendQuery(PreparedStatement statement) {
-        System.out.println(statement.toString());
         ResultSet res = null;
         try {
             res =  statement.executeQuery();
         } catch (SQLException e) {
             System.out.println(e.getMessage());
-        }
-        try {
-            assert res != null;
-            System.out.println(res.isClosed());
-        } catch (SQLException e) {
-            e.printStackTrace();
         }
         return res;
     }
@@ -153,7 +144,7 @@ public class Database {
         }
         query.deleteCharAt(query.length()-1);
         query.append(");");
-        statement = connection.prepareStatement(String.valueOf(query));
+        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
         ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
         fillPreparedStatementValues(statement, columnValues);
         sendQueryUpdate(statement);
@@ -162,9 +153,9 @@ public class Database {
     /**
      * @param nameTable La table pour laquel il faut faire un select
      * @param constraintToAppend liste de toute les contraintes à ajouter
-     * @return Resultat de la query
+     * @return prepared statement
      */
-    protected ResultSet select(String nameTable, List<String> constraintToAppend,String orderBy) throws SQLException {
+    protected PreparedStatement select(String nameTable, List<String> constraintToAppend, String orderBy) throws SQLException {
         String stringQuery;
         StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s ", nameTable));
         ArrayList<String> valueOfPreparedStatement;
@@ -177,10 +168,10 @@ public class Database {
         }
         query.append(';');
         stringQuery = String.valueOf(query);
-        statement = connection.prepareStatement(stringQuery);
+        PreparedStatement statement = connection.prepareStatement(stringQuery);
         fillPreparedStatementValues(statement, valueOfPreparedStatement);
 
-        return sendQuery(statement);
+        return statement;
     }
 
     protected void fillPreparedStatementValues(PreparedStatement statement, ArrayList<String> valueOfPreparedStatement) throws SQLException {
@@ -188,7 +179,11 @@ public class Database {
         for(int i = 1; i < valueOfPreparedStatement.size() +1; i++){
             String columnValue = valueOfPreparedStatement.get(i-1);
             if(columnValue.contains("'")){//string value
-                statement.setString(i, columnValue);
+                StringBuilder removeQuotes = new StringBuilder(columnValue.strip());
+                removeQuotes = removeQuotes.deleteCharAt(0);
+                removeQuotes = removeQuotes.deleteCharAt(removeQuotes.length()-1);
+
+                statement.setString(i, String.valueOf(removeQuotes));
             }
             else if(columnValue.contains(".")){ //double
                 statement.setDouble(i, Double.parseDouble(columnValue));
@@ -197,19 +192,18 @@ public class Database {
                 statement.setNull(i, Types.NULL);
             }
             else{ //int value
-                statement.setInt(i, Integer.parseInt(columnValue));
+                int val =  Integer.parseInt(columnValue.strip());
+                statement.setInt(i,val);
             }
         }
     }
 
     protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
-        int firstIndex=0;
-        StringBuilder query = new StringBuilder("DELETE FROM ? WHERE ");
+        StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
         ArrayList<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
         query.append(";");
         String stringQuery = String.valueOf(query);
-        statement = connection.prepareStatement(stringQuery);
-        valueOfPreparedStatement.add(firstIndex, nameTable);
+        PreparedStatement statement = connection.prepareStatement(stringQuery);
         fillPreparedStatementValues(statement, valueOfPreparedStatement);
         sendQueryUpdate(statement);
     }
@@ -222,23 +216,22 @@ public class Database {
      */
     protected ArrayList<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
         ArrayList<String> columnValues = new ArrayList<>();
-        for (String s : constraintToAppend) {
-            ArrayList<String> columnAndValue = splitOnCharacter(s);
-            query.append(columnAndValue.get(0)).append(columnAndValue.get(2)).append(" ?").append(" AND ");
-            columnValues.add(columnAndValue.get(1));
+        if (!constraintToAppend.isEmpty()) {
+            for (String s : constraintToAppend) {
+                ArrayList<String> columnAndValue = splitOnCharacter(s);
+                query.append(columnAndValue.get(0)).append(columnAndValue.get(2)).append(" ?").append(" AND ");
+                columnValues.add(columnAndValue.get(1));
+            }
+            query.delete(query.length() - 4, query.length());
         }
-        query.delete(query.length()-4, query.length());
         return columnValues;
     }
 
     protected void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
-        int firstIndex = 0;
-        StringBuilder query = new StringBuilder("Update ? SET Nom = ? WHERE ");
+        StringBuilder query = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable, nameToUpdate));
         //nameTable,nameToUpdate
         ArrayList<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
-        valuesOfPreparedStatement.add(firstIndex, nameToUpdate);
-        valuesOfPreparedStatement.add(firstIndex,nameTable);
-        statement = connection.prepareStatement(String.valueOf(query));
+        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
 
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
         sendQueryUpdate(statement);
@@ -253,7 +246,8 @@ public class Database {
     protected String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
-        ResultSet res = select(table,constraint,null);
+        PreparedStatement statement = select(table,constraint,null);
+        ResultSet res = sendQuery(statement);
         res.next();
         return res.getString("Nom");
     }
@@ -264,9 +258,11 @@ public class Database {
     protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s='%s'","Nom",name));
-        ResultSet res = select(table,constraint,null);
+        PreparedStatement statement =  select(table,constraint,null);
+        ResultSet res = sendQuery(statement);
         res.next();
-        return res.getInt(nameIDColumn);
+        int idColumn = res.getInt(nameIDColumn);
+        return idColumn;
     }
 
     /**
@@ -275,7 +271,8 @@ public class Database {
      */
     protected ArrayList<String> getAllNameFromTable(String table, String orderBy) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        ResultSet queryAllTableName = select(table, constraint,orderBy);
+        PreparedStatement statement =  select(table, constraint,orderBy);
+        ResultSet queryAllTableName = sendQuery(statement);
         ArrayList<String> allProductName = new ArrayList<>();
         while(queryAllTableName.next()){
             allProductName.add(queryAllTableName.getString("Nom"));

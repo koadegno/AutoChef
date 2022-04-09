@@ -131,6 +131,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 "WHERE R.Nom = ?");
 
         ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
+        name = "'" + name + "'"; // quotes to recognize it as string and request need it
         valuesOfPreparedStatement.add(name);
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
