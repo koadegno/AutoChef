@@ -46,15 +46,6 @@ public class ShowShopController extends Window implements Initializable {
         fillComboboxProduct();
     }
 
-    private void fakeBDD(){
-        // TODO Supprimer
-        shop = new Shop("Aldi", new Point(88,0));
-        Product product1 = new Product("Pomme", 9.0);
-        Product product2 = new Product("Banane",9.0);
-        shop.add(product1);
-        shop.add(product2);
-    }
-
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

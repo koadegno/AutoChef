@@ -1,8 +1,10 @@
 package ulb.infof307.g01.ui.shoppingList;
 
+import javafx.scene.control.Alert;
 import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import ulb.infof307.g01.model.ODTCreator;
 import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.ui.Window;
@@ -21,7 +23,13 @@ public class ExportShoppingListView extends Window {
     }
 
     public void exportToODT(){
-        //TODO: attendre que Elsbeth ait fini
+        ODTCreator odtCreator = new ODTCreator();
+        try {
+            odtCreator.createODT(shoppingList);
+        } catch (Exception e) {
+            e.printStackTrace();
+            Window.showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur c'est produit avec le fichier ODT, contacté le service d'assistance.");
+        }
         closePopup();
     }
 

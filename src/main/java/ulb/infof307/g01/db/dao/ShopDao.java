@@ -6,6 +6,7 @@ import org.apache.poi.util.NotImplemented;
 import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.model.*;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -98,7 +99,8 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private List<Shop> getAllShops() throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        ResultSet shopResultSet = select("Magasin", new ArrayList<>(),null);
+        PreparedStatement statement =  select("Magasin", new ArrayList<>(),null);
+        ResultSet  shopResultSet = sendQuery(statement);
         ArrayList<Shop> shopsList = new ArrayList<>();
         while (shopResultSet.next()){
             int shopID = shopResultSet.getInt("MagasinID");
@@ -135,7 +137,8 @@ public class ShopDao extends Database implements Dao<Shop> {
         // ajout des contraintes
         constraints.add(nameConstraint); constraints.add(latitudeConstraint); constraints.add(longitudeConstraint);
 
-        ResultSet shopResultSet = select("Magasin", constraints,null);
+        PreparedStatement statement = select("Magasin", constraints,null);
+        ResultSet shopResultSet = sendQuery(statement);
         if(shopResultSet.next()){
             int shopID = shopResultSet.getInt(SHOP_ID_INDEX);
             String shopName = shopResultSet.getString(SHOP_NAME_INDEX);

@@ -42,7 +42,7 @@ public class MailView extends Window {
         setNodeColor(mailReceiver, false);
         try {
             Mail mail = new Mail();
-            mail.sendMail(mailReceiver.getAccessibleText(),shoppingList,subject.getText(), messageBody.getText());
+            mail.sendMail(mailReceiver.getSelectionModel().getSelectedItem(),shoppingList,subject.getText(), messageBody.getText());
             Stage stage = (Stage) vBox.getScene().getWindow();
             stage.close();
 
