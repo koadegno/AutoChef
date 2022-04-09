@@ -3,6 +3,7 @@ package ulb.infof307.g01.db.dao;
 import ulb.infof307.g01.db.Database;
 import ulb.infof307.g01.model.Product;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -46,8 +47,10 @@ public class ProductDao extends Database implements Dao<Product> {
     public Product get(String name) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s = '%s'","Nom",name));
-        ResultSet querySelectProduct = select("Ingredient",constraint,null);
-        querySelectProduct.next();
+        PreparedStatement statement  = select("Ingredient",constraint,null);
+        ResultSet querySelectProduct = sendQuery(statement);
+        if(!querySelectProduct.next())return null;
+
 
         String nameProduct = querySelectProduct.getString("Nom");
         int familyProductID = querySelectProduct.getInt("FamilleAlimentID");

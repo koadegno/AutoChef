@@ -60,7 +60,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         if (displayedRecipe != null) {
             String preparation = preparationTitle + "\n" + displayedRecipe.getPreparation() + "\n";
             String ingredient = ingredientTitle + "\n" + productListToString(displayedRecipe) + "\n";
-            String toDisplay = ingredient + preparation;
+            String toDisplay = "Nom de la recette :  " + displayedRecipe.getName()  + "\n" + ingredient + preparation;
             displayRecipeTextArea.setText(toDisplay);
             deleteButton.setVisible(true);
         }
@@ -104,7 +104,6 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         if(keyEvent.getCode() != KeyCode.ENTER)return;
         String recipeName = recipeTextField.getText();
         if(recipeName==null)return;
-        System.out.println(recipeName);
         try {
             displayedRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
             if(displayedRecipe == null) setNodeColor(recipeTextField,true);
