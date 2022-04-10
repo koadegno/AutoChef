@@ -69,7 +69,6 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         tableColumnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
         recipeNameTextField.setPromptText("Nom de la recette"); //to activate its existence. If not, setMainController will cause nullPointerException
         preparationTextArea.setWrapText(true);
-
     }
 
     private void refreshTableView() {
