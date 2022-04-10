@@ -10,7 +10,6 @@ import org.sqlite.SQLiteException;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
 
 import java.io.IOException;
 import java.net.URL;

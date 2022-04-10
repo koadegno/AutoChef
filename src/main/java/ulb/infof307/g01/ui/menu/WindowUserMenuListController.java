@@ -30,8 +30,8 @@ import java.util.ResourceBundle;
  * */
 public class WindowUserMenuListController extends Window implements Initializable {
 
-    private final ArrayList<Menu> menus = new ArrayList<>();
-    private ArrayList<String> allMenusNames = new ArrayList<>();
+    private ArrayList<Menu> menus ;
+    private ArrayList<String> allMenusNames;
     @FXML
     TextField menuName;
     @FXML
@@ -44,6 +44,7 @@ public class WindowUserMenuListController extends Window implements Initializabl
      * @see Configuration
      * */
     public void initializeMenusFromDB() {
+        menus = new ArrayList<>();
         try {
             allMenusNames = Configuration.getCurrent().getMenuDao().getAllName();
             for (String name : allMenusNames){

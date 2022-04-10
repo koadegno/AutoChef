@@ -1,4 +1,4 @@
-package ulb.infof307.g01.ui.tools;
+package ulb.infof307.g01.ui.shoppingList;
 
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;

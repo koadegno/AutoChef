@@ -10,7 +10,7 @@ import javafx.util.Callback;
 import ulb.infof307.g01.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.ui.recipe.WindowCreateRecipeController;
-import ulb.infof307.g01.ui.tools.WindowUserShoppingListsControllerTools;
+
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;

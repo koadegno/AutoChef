@@ -40,8 +40,9 @@ public class MenuDao extends Database implements Dao<Menu> {
                 "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
                 "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
                 "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE M.MenuID = %d", nameID));
+                "WHERE M.MenuID = %d order by M.Heure", nameID));
         Menu menu = new Menu(nameMenu);
+        System.out.println("nom : " + menu.getName());
         while(querySelectMenu.next()){
             int menuDay = querySelectMenu.getInt(1);
             int menuHour = querySelectMenu.getInt(2);
