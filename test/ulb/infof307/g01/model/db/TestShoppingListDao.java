@@ -1,9 +1,8 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model.db;
 
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;

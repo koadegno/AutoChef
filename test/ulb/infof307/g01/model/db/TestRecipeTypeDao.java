@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model.db;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,16 +13,14 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestRecipeCategoryDao {
-
-    static String fish = "Poison";
-
+class TestRecipeTypeDao {
+    static private String meal = "Plat";
 
     @BeforeAll
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductFamilyDao().insert(fish);
+        Configuration.getCurrent().getRecipeTypeDao().insert(meal);
     }
 
     @AfterAll
@@ -33,15 +31,15 @@ class TestRecipeCategoryDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(fish, categories.get(0));
+        ArrayList<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        assertEquals(meal, types.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
-        String meat = "Viande";
-        Configuration.getCurrent().getProductFamilyDao().insert(meat);
-        ArrayList<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(meat, categories.get(1));
+        String simmered = "Mijoté";
+        Configuration.getCurrent().getRecipeTypeDao().insert(simmered);
+        ArrayList<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        assertEquals(simmered, types.get(1));
     }
 }

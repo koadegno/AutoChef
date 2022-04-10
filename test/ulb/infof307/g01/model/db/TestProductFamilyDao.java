@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model.db;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
@@ -13,16 +13,16 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-class TestProductUnityDao {
+class TestProductFamilyDao {
 
-    static String gram = "g";
+    static String fruit = "Fruit";
 
 
     @BeforeAll
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductFamilyDao().insert(gram);
+        Configuration.getCurrent().getProductFamilyDao().insert(fruit);
     }
 
     @AfterAll
@@ -33,15 +33,15 @@ class TestProductUnityDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> unities = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(gram, unities.get(0));
+        ArrayList<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        assertEquals(fruit, families.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
-        String litre = "litre";
-        Configuration.getCurrent().getProductFamilyDao().insert(litre);
-        ArrayList<String> unities = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(litre, unities.get(1));
+        String vegetable = "Légume";
+        Configuration.getCurrent().getProductFamilyDao().insert(vegetable);
+        ArrayList<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        assertEquals(vegetable, families.get(1));
     }
 }

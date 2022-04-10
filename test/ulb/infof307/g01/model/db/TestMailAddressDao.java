@@ -1,4 +1,4 @@
-package ulb.infof307.g01.db;
+package ulb.infof307.g01.model.db;
 
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.db.Configuration;
