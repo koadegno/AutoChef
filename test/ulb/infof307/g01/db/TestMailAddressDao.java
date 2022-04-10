@@ -1,6 +1,7 @@
 package ulb.infof307.g01.db;
 
 import org.junit.jupiter.api.*;
+import ulb.infof307.g01.model.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;

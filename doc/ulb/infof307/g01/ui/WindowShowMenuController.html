@@ -6,7 +6,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <meta http-equiv="Content-Type" content="text/html; charset=utf8">
 <meta name="dc.created" content="2022-03-14">
-<meta name="description" content="declaration: package: ulb.infof307.g01.ui, class: WindowShowMenuController">
+<meta name="description" content="declaration: package: ulb.infof307.g01.view, class: WindowShowMenuController">
 <meta name="generator" content="javadoc/ClassWriterImpl">
 <link rel="stylesheet" type="text/css" href="../../../../stylesheet.css" title="Style">
 <link rel="stylesheet" type="text/css" href="../../../../script-dir/jquery-ui.min.css" title="Style">
@@ -68,21 +68,21 @@ loadScripts(document, 'script');</script>
 <main role="main">
 <!-- ======== START OF CLASS DATA ======== -->
 <div class="header">
-<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">ulb.infof307.g01.ui</a></div>
+<div class="sub-title"><span class="package-label-in-type">Package</span>&nbsp;<a href="package-summary.html">ulb.infof307.g01.view</a></div>
 <h1 title="Class WindowShowMenuController" class="title">Class WindowShowMenuController</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">ulb.infof307.g01.ui.menu.WindowShowMenuController</div>
+<div class="inheritance">ulb.infof307.g01.view.menu.WindowShowMenuController</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>javafx.fxml.Initializable</code>, <code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
+<dd><code>javafx.fxml.Initializable</code>, <code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.view">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">WindowShowMenuController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</span></div>
+implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.view">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</span></div>
 <div class="block">La classe WindowShowMenuController représente le controleur
  pour la page qui affiche le contenu du menu selectionné. Elle
  permet aux utilisateurs de le modifier, et de générer une liste
@@ -94,7 +94,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <dd>
 <ul class="see-list">
 <li><a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model"><code>Menu</code></a></li>
-<li><a href="WindowShowMenuController.html" title="class in ulb.infof307.g01.ui"><code>WindowShowMenuController</code></a></li>
+<li><a href="WindowShowMenuController.html" title="class in ulb.infof307.g01.view"><code>WindowShowMenuController</code></a></li>
 </ul>
 </dd>
 </dl>
@@ -152,7 +152,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
  par jour.</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fillShoppingList(ulb.infof307.g01.ui.WindowsCreateMyShoppingListController)" class="member-name-link">fillShoppingList</a><wbr>(<a href="WindowsCreateMyShoppingListController.html" title="class in ulb.infof307.g01.ui">WindowsCreateMyShoppingListController</a>&nbsp;controller)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#fillShoppingList(ulb.infof307.g01.ui.WindowsCreateMyShoppingListController)" class="member-name-link">fillShoppingList</a><wbr>(<a href="WindowsCreateMyShoppingListController.html" title="class in ulb.infof307.g01.view">WindowsCreateMyShoppingListController</a>&nbsp;controller)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#generateShoppingList(javafx.event.ActionEvent)" class="member-name-link">generateShoppingList</a><wbr>(javafx.event.ActionEvent&nbsp;event)</code></div>
@@ -173,7 +173,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <div class="block">Initialise le controleur</div>
 </div>
 <div class="col-first odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDatabase(ulb.infof307.g01.db.Database)" class="member-name-link">setDatabase</a><wbr>(<a href="../db/Database.html" title="class in ulb.infof307.g01.db">Database</a>&nbsp;db)</code></div>
+<div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDatabase(Database)" class="member-name-link">setDatabase</a><wbr>(<a href="../db/Database.html" title="class in ulb.infof307.g01.db">Database</a>&nbsp;db)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
 <div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMenu(ulb.infof307.g01.cuisine.Menu)" class="member-name-link">setMenu</a><wbr>(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&nbsp;menu)</code></div>
@@ -278,7 +278,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <li>
 <section class="detail" id="fillShoppingList(ulb.infof307.g01.ui.WindowsCreateMyShoppingListController)">
 <h3>fillShoppingList</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fillShoppingList</span><wbr><span class="parameters">(<a href="WindowsCreateMyShoppingListController.html" title="class in ulb.infof307.g01.ui">WindowsCreateMyShoppingListController</a>&nbsp;controller)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">fillShoppingList</span><wbr><span class="parameters">(<a href="WindowsCreateMyShoppingListController.html" title="class in ulb.infof307.g01.view">WindowsCreateMyShoppingListController</a>&nbsp;controller)</span></div>
 </section>
 </li>
 <li>
@@ -294,7 +294,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 </section>
 </li>
 <li>
-<section class="detail" id="setDatabase(ulb.infof307.g01.db.Database)">
+<section class="detail" id="setDatabase(Database)">
 <h3>setDatabase</h3>
 <div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setDatabase</span><wbr><span class="parameters">(<a href="../db/Database.html" title="class in ulb.infof307.g01.db">Database</a>&nbsp;db)</span></div>
 </section>
@@ -307,7 +307,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <div class="block">Permet à la classe appellant de prevenir qu'il a fini</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.view">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>menu</code> - : la window appeler retourne l'objet demander avant de se fermer</dd>
 </dl>
@@ -322,7 +322,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
  l'utilisateur à annuler la création de l'objet attend.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.view">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

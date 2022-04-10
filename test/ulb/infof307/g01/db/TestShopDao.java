@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
+import ulb.infof307.g01.model.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;

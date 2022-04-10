@@ -3,11 +3,8 @@ package ulb.infof307.g01.model;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
-import ulb.infof307.g01.db.Configuration;
-import ulb.infof307.g01.db.Database;
-import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.db.Configuration;
 
-import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;

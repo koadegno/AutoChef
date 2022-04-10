@@ -7,6 +7,7 @@ import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
