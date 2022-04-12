@@ -111,7 +111,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
                 e.printStackTrace();
                 Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
             }
-            returnHomeRecipeWindow();
+            onCancelButton();
         }
     }
 
@@ -124,7 +124,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     }
 
 
-    public void returnHomeRecipeWindow() {
+    public void onCancelButton() {
         if(mainController==null) {
             WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
             myRecipeWindow.displayMain();
@@ -134,7 +134,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         }
     }
 
-    public void addIngredients() {
+    public void onModifyProductsButton() {
         this.scene = this.primaryStage.getScene();
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
         this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");

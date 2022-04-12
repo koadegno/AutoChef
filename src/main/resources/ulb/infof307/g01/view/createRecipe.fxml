@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
@@ -43,9 +43,9 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
          <children>
-            <Button lineSpacing="200.0" mnemonicParsing="false" onAction="#returnHomeRecipeWindow" prefHeight="25.0" prefWidth="120.0" text="Annuler" />
-            <Button mnemonicParsing="false" onAction="#addIngredients" prefHeight="25.0" prefWidth="180.0" text="Modifier ingrédients" />
-            <Button mnemonicParsing="false" onAction="#saveRecipe" prefHeight="25.0" prefWidth="115.0" text="Valider" />
+            <Button lineSpacing="200.0" mnemonicParsing="false" onAction="#onCancelButton" prefHeight="25.0" prefWidth="120.0" text="Annuler" />
+            <Button mnemonicParsing="false" onAction="#onModifyProductsButton" prefHeight="25.0" prefWidth="180.0" text="Modifier ingrédients" />
+            <Button mnemonicParsing="false" onAction="#onSubmitButton" prefHeight="25.0" prefWidth="115.0" text="Valider" />
          </children>
       </HBox>
    </children>
