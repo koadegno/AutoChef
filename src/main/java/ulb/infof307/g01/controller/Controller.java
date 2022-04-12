@@ -7,6 +7,7 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
+import ulb.infof307.g01.view.Window;
 
 import java.io.IOException;
 import java.net.URL;
@@ -37,6 +38,14 @@ public abstract class Controller {
         setNewScene(loader);
 
         return loader;
+    }
+
+    @Deprecated
+    public void loadFXML(Window controller, String filename) {
+        // TODO : A VIRER A LA FIN DU REFACTOR MVC
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
+        loader.setController(controller);
+        setNewScene(loader);
     }
 
     protected void popupFXML(String filename, Controller controller) throws IOException {
