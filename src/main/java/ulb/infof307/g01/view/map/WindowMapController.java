@@ -1,24 +1,23 @@
 package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
-import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
+import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
+import javafx.scene.Cursor;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
-import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shop.ShowShopController;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -32,6 +31,8 @@ public class WindowMapController extends ViewController<WindowMapController.List
     private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
     private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
+
+    private static final int ONCE_CLICKED = 1;
 
     private final GraphicsOverlay shopGraphicsCercleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
@@ -78,22 +79,7 @@ public class WindowMapController extends ViewController<WindowMapController.List
     @FXML
     void onShopSearchBoxAction(ActionEvent event) {
         String fieldText = textFieldMenuBar.getText();
-
-        for(int index = 0; index < mapServices.getShopGraphicsTextList().size(); index++){
-
-            Graphic textGraphicShop = mapServices.getShopGraphicsTextList().get(index);
-            Graphic cercleGraphicShop = mapServices.getShopGraphicsCercleList().get(index);
-
-            TextSymbol textSymbol = (TextSymbol) textGraphicShop.getSymbol();
-            if(textSymbol.getText().contains(fieldText) || Objects.equals(fieldText, "")){
-                textGraphicShop.setVisible(true);
-                cercleGraphicShop.setVisible(true);
-            }
-            else{
-                textGraphicShop.setVisible(false);
-                cercleGraphicShop.setVisible(false);
-            }
-        }
+        listener.onSearchShop(fieldText);
         event.consume();
     }
 
@@ -103,15 +89,9 @@ public class WindowMapController extends ViewController<WindowMapController.List
      */
     @FXML
     private void onAddressSearchBoxAction() {
-
         String address = searchBox.getText();
-        if (!address.isBlank()) {
-            setNodeColor(searchBox,false);
-            mapServices.performGeocode(address);
-        }
-        else{
-            setNodeColor(searchBox,true);
-        }
+        boolean found = listener.onSearchAddress(address);
+        setNodeColor(searchBox, found);
 
     }
 
@@ -126,36 +106,57 @@ public class WindowMapController extends ViewController<WindowMapController.List
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMapService();
         try {
+            initializeMapService();
             listener.onInitializeMapShop();
+            initializeContextMenu();
+            initializeMapEvent();
+            createLocatorTaskAndDefaultParameters();
+            mapViewStackPane.getChildren().add(mapView);
         } catch (SQLException e) {
             showErrorSQL();
         }
-
-        initializeContextMenu();
-
-        mapServices.initializeMapEvent();
-        mapServices.createLocatorTaskAndDefaultParameters();
-        mapViewStackPane.getChildren().add(mapServices.getMapView());
     }
 
     /**
-     * Initialisation des magasins sur la map
+     * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
+     * Pour parametrer le service de geocoding Locator
+     * et Parametre par defaut du service de geocoding
      */
-    private void initializeMapShop() throws SQLException {
+    void createLocatorTaskAndDefaultParameters() {
+        locatorTask = new LocatorTask("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
+
+        geocodeParameters = new GeocodeParameters();
+        geocodeParameters.getResultAttributeNames().add("*"); // permet de retourner tous les attributs
+        geocodeParameters.setMaxResults(1);
+        // comment les coordonnées doivent correspondre a la location
+        geocodeParameters.setOutputSpatialReference(mapView.getSpatialReference());
     }
 
-    public MenuItem getAddShopMenuItem() {
-        return addShopMenuItem;
+    /**
+     * Methode initialisant le clique droit sur la map
+     */
+    private void initializeMapEvent() {
+        mapView.setOnMouseClicked(mouseEvent -> {
+            mapView.setCursor(Cursor.DEFAULT);
+            // selectionner un point avec un simple clique droit
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                if (mouseEvent.getClickCount() == ONCE_CLICKED) {
+
+                    Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                    listener.highlightGraphicPoint(mapViewPoint);
+
+                }
+            }
+        });
     }
 
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
      */
     private void initializeContextMenu(){
-        mapServices.getMapView().setContextMenu(contextMenu);
         contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem);
+        mapView.setContextMenu(contextMenu);
 
         // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> {
@@ -173,23 +174,10 @@ public class WindowMapController extends ViewController<WindowMapController.List
 
         //contexte menu pour la modification
         modifyShopMenuItem.setOnAction(event -> {
-            for(int index = 0; index < mapServices.getShopGraphicsCercleList().size(); index++) {
-                Graphic cercleGraphic = mapServices.getShopGraphicsCercleList().get(index);
-                Graphic textGraphic = mapServices.getShopGraphicsTextList().get(index);
-
-                if(cercleGraphic.isSelected()){
-                    Point mapPoint = (Point) cercleGraphic.getGeometry();
-                    String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
-                    try {
-                        Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
-                        ShowShopController showShopController = new ShowShopController();
-                        showShopController.createPopup(shopToModify, mapServices,true);
-                    } catch (SQLException e) {
-                        Window.showAlert(Alert.AlertType.ERROR,"ERROR","Erreur au niveau de la basse de donnée veillez contactez le manager");
-                        e.printStackTrace();
-                    }
-                    break;
-                }
+            try {
+                listener.onUpdateShopClicked();
+            } catch (SQLException e) {
+                showErrorSQL();
             }
 
         });
@@ -201,12 +189,26 @@ public class WindowMapController extends ViewController<WindowMapController.List
 //        windowHomeController.displayMain(primaryStage);
 //    }
 
+    public MenuItem getAddShopMenuItem() {
+        return addShopMenuItem;
+    }
 
+    public GraphicsOverlay getAddressGraphicsOverlay() {
+        return addressGraphicsOverlay;
+    }
+
+    public ListenableFuture<List<GeocodeResult>> getGeocodeAsync(){
+        return locatorTask.geocodeAsync(searchBox.getText(), geocodeParameters);
+    }
 
     public interface Listener {
         void onInitializeMapShop() throws SQLException;
         void onAddShopClicked();
         void onDeleteShopClicked() throws SQLException;
+        void onUpdateShopClicked() throws SQLException;
+        void onSearchShop(String shopName);
+        void highlightGraphicPoint(Point2D mapViewPoint);
+        boolean onSearchAddress(String address);
     }
 }
 
