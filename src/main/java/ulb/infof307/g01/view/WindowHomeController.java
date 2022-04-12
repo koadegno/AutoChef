@@ -2,7 +2,7 @@ package ulb.infof307.g01.view;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import ulb.infof307.g01.view.map.DisplayMapController;
+import ulb.infof307.g01.view.map.WindowMapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.recipe.WindowHomeRecipeController;
 import ulb.infof307.g01.view.shoppingList.WindowHomeShoppingListController;
@@ -56,7 +56,8 @@ public class WindowHomeController extends Window{
 
     @FXML
     public void redirectToMap(){
-        DisplayMapController mapController = new DisplayMapController();
+        // TODO appeller la bonne methode pour lancer la fenêtre
+        WindowMapController mapController = new WindowMapController();
         mapController.displayMain();
     }
 

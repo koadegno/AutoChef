@@ -10,7 +10,7 @@ import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.map.MapTools;
+import ulb.infof307.g01.view.map.MapServices;
 
 import java.io.IOException;
 import java.net.URL;
@@ -27,11 +27,11 @@ public class ShowShopController extends Window implements Initializable {
     public TextField nameShop;
     public VBox vBox; 
     private Shop shop;
-    private MapTools map;
+    private MapServices map;
     private boolean isModifying;// POPUP pour la modification ou non
 
 
-    public void createPopup(Shop shop, MapTools map,boolean isModifying){
+    public void createPopup(Shop shop, MapServices map, boolean isModifying){
         try { popupFXML("ShowShop.fxml", this);
         } catch (IOException e) {
             e.printStackTrace();
@@ -99,7 +99,7 @@ public class ShowShopController extends Window implements Initializable {
             else{
                 try {
                     shop.addAll(tableViewShop.getItems());
-                    map.addPointToOverlay(shop);
+                    map.addShop(shop);
                     Configuration.getCurrent().getShopDao().insert(shop);
                 } catch (SQLException e) { // erreur de doublons de produit
                     Window.showAlert(Alert.AlertType.ERROR,"Erreur","Erreur au niveau des produits");

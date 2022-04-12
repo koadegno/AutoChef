@@ -29,7 +29,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MapTools {
+public class MapServices {
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int SIZE = 10;
     private static final int ONCE_CLICKED = 1;
@@ -57,22 +57,22 @@ public class MapTools {
         return shopGraphicsTextOverlay.getGraphics();
     }
 
-    public MapTools() {
-
-//         Initialisation de la carte pour correspondre au point de vue la Belgique
-//         et mise en place de la clé d'API
-        mapView = new MapView();
-        //TODO trouver un meilleur moyen de mettre la clé
-        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
-        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
-        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
-        mapView.setMap(map);
-        //TODO changer ces nombres magique
-        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
-        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
-        mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
-        mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
-    }
+//    public MapServices() {
+//
+////         Initialisation de la carte pour correspondre au point de vue la Belgique
+////         et mise en place de la clé d'API
+//        mapView = new MapView();
+//        //TODO trouver un meilleur moyen de mettre la clé
+//        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
+//        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
+//        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
+//        mapView.setMap(map);
+//        //TODO changer ces nombres magique
+//        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
+//        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
+//        mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
+//        mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
+//    }
 
     /**
      * lance la popup pour ajouter un magasin sur la map
@@ -171,7 +171,7 @@ public class MapTools {
      *
      * @param shopToAdd la ou doit se trouver le point
      */
-    public void addPointToOverlay(Shop shopToAdd) {
+    public void addShop(Shop shopToAdd) {
         //cree un cercle rouge
         SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
         // cree un texte attacher au point
