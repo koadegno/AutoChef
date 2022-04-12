@@ -13,6 +13,8 @@ import ulb.infof307.g01.view.shoppingList.HomeShoppingListController.*;
 import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController;
 import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
 
+import java.sql.SQLException;
+
 /**
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
@@ -152,7 +154,12 @@ public class MainController extends Controller implements HomePageListener, Home
     @Override
     public void onUserCreateMenuButtonClick() {
         // TODO: REFACTOR MVC
-        WindowCreateMenuController createMenu = new WindowCreateMenuController();
+        WindowCreateMenuController createMenu = null;
+        try {
+            createMenu = new WindowCreateMenuController();
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
         createMenu.displayEditMeal();
     }
 }

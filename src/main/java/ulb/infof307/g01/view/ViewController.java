@@ -41,4 +41,15 @@ abstract public class ViewController<Listener> {
                 "Veuillez contactez l'équipe de développeur.");
         alert.showAndWait();
     }
+
+    /**
+     * Affiche une alerte de type Erreur pour les fichiers FXML manquants.
+     */
+    public static void showErrorSQL() {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Erreur SQL");
+        alert.setHeaderText("Un problème à eu lieu avec la base de données");
+        alert.setContentText("TODO"); //TODO Meilleur erreur
+        alert.showAndWait();
+    }
 }
