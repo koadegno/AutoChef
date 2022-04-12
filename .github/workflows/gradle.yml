@@ -9,9 +9,13 @@ name: Java CI with Gradle
 
 on:
   push:
-    branches: [ master, dev ]
+      branches:
+        - master
+        - dev
   pull_request:
-    branches: [ master, dev ]
+    branches:
+      - master
+      - dev
 
 jobs:
   build:
@@ -24,10 +28,13 @@ jobs:
       uses: actions/setup-java@v2
       with:
         java-version: '17.0.2'
-        distribution: 'openjdk'
+        distribution: 'temurin'
     - name: Build with Gradle
-      uses: gradle/gradle-build-action@0d13054264b0bb894ded474f08ebb30921341cee
+      uses: gradle/gradle-build-action@v2
       with:
-        arguments: build
+        arguments: classes
+
     - name: Run Tests
-      run: ./gradlew test
+      uses: gradle/gradle-build-action@v2
+      with:
+        arguments: test

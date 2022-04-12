@@ -72,17 +72,17 @@ loadScripts(document, 'script');</script>
 <h1 title="Class WindowShowMenuController" class="title">Class WindowShowMenuController</h1>
 </div>
 <div class="inheritance" title="Inheritance Tree"><a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">java.lang.Object</a>
-<div class="inheritance">ulb.infof307.g01.ui.WindowShowMenuController</div>
+<div class="inheritance">ulb.infof307.g01.ui.menu.WindowShowMenuController</div>
 </div>
 <section class="class-description" id="class-description">
 <dl class="notes">
 <dt>All Implemented Interfaces:</dt>
-<dd><code>javafx.fxml.Initializable</code>, <code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&gt;</code></dd>
+<dd><code>javafx.fxml.Initializable</code>, <code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 </dl>
 <hr>
 <div class="type-signature"><span class="modifiers">public class </span><span class="element-name type-name-label">WindowShowMenuController</span>
 <span class="extends-implements">extends <a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/lang/Object.html" title="class or interface in java.lang" class="external-link">Object</a>
-implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&gt;</span></div>
+implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</span></div>
 <div class="block">La classe WindowShowMenuController représente le controleur
  pour la page qui affiche le contenu du menu selectionné. Elle
  permet aux utilisateurs de le modifier, et de générer une liste
@@ -93,7 +93,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <dt>See Also:</dt>
 <dd>
 <ul class="see-list">
-<li><a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine"><code>Menu</code></a></li>
+<li><a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model"><code>Menu</code></a></li>
 <li><a href="WindowShowMenuController.html" title="class in ulb.infof307.g01.ui"><code>WindowShowMenuController</code></a></li>
 </ul>
 </dd>
@@ -126,7 +126,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <div class="table-header col-second">Method</div>
 <div class="table-header col-last">Description</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Menu)" class="member-name-link">add</a><wbr>(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&nbsp;menu)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#add(ulb.infof307.g01.cuisine.Menu)" class="member-name-link">add</a><wbr>(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&nbsp;menu)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Permet à la classe appellant de prevenir qu'il a fini</div>
 </div>
@@ -146,7 +146,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
  int&nbsp;nbOfDays)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayMenuTable(java.util.ArrayList)" class="member-name-link">displayMenuTable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.cuisine">Day</a>&gt;&nbsp;days)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#displayMenuTable(java.util.ArrayList)" class="member-name-link">displayMenuTable</a><wbr>(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.model">Day</a>&gt;&nbsp;days)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Affiche le contenu du menu, avec la liste des recettes
  par jour.</div>
@@ -176,7 +176,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <div class="col-second odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setDatabase(ulb.infof307.g01.db.Database)" class="member-name-link">setDatabase</a><wbr>(<a href="../db/Database.html" title="class in ulb.infof307.g01.db">Database</a>&nbsp;db)</code></div>
 <div class="col-last odd-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">&nbsp;</div>
 <div class="col-first even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code>void</code></div>
-<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMenu(ulb.infof307.g01.cuisine.Menu)" class="member-name-link">setMenu</a><wbr>(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&nbsp;menu)</code></div>
+<div class="col-second even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4"><code><a href="#setMenu(ulb.infof307.g01.cuisine.Menu)" class="member-name-link">setMenu</a><wbr>(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&nbsp;menu)</code></div>
 <div class="col-last even-row-color method-summary-table method-summary-table-tab2 method-summary-table-tab4">
 <div class="block">Récupère le menu envoyé par la page précédente, affiche son
  nom, sa duration et son contenu dans un tableau</div>
@@ -215,7 +215,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <li>
 <section class="detail" id="setMenu(ulb.infof307.g01.cuisine.Menu)">
 <h3>setMenu</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMenu</span><wbr><span class="parameters">(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&nbsp;menu)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">setMenu</span><wbr><span class="parameters">(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&nbsp;menu)</span></div>
 <div class="block">Récupère le menu envoyé par la page précédente, affiche son
  nom, sa duration et son contenu dans un tableau</div>
 </section>
@@ -242,7 +242,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <li>
 <section class="detail" id="displayMenuTable(java.util.ArrayList)">
 <h3>displayMenuTable</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">displayMenuTable</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.cuisine">Day</a>&gt;&nbsp;days)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">displayMenuTable</span><wbr><span class="parameters">(<a href="https://docs.oracle.com/en/java/javase/17/docs/api/java.base/java/util/ArrayList.html" title="class or interface in java.util" class="external-link">ArrayList</a>&lt;<a href="../cuisine/Day.html" title="enum class in ulb.infof307.g01.model">Day</a>&gt;&nbsp;days)</span></div>
 <div class="block">Affiche le contenu du menu, avec la liste des recettes
  par jour.</div>
 </section>
@@ -302,12 +302,12 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
 <li>
 <section class="detail" id="add(ulb.infof307.g01.cuisine.Menu)">
 <h3>add</h3>
-<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&nbsp;menu)</span></div>
+<div class="member-signature"><span class="modifiers">public</span>&nbsp;<span class="return-type">void</span>&nbsp;<span class="element-name">add</span><wbr><span class="parameters">(<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&nbsp;menu)</span></div>
 <div class="block"><span class="descfrm-type-label">Description copied from interface:&nbsp;<code><a href="UtilisationContrat.html#add(T)">UtilisationContrat</a></code></span></div>
 <div class="block">Permet à la classe appellant de prevenir qu'il a fini</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#add(T)">add</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 <dt>Parameters:</dt>
 <dd><code>menu</code> - : la window appeler retourne l'objet demander avant de se fermer</dd>
 </dl>
@@ -322,7 +322,7 @@ implements javafx.fxml.Initializable, <a href="UtilisationContrat.html" title="i
  l'utilisateur à annuler la création de l'objet attend.</div>
 <dl class="notes">
 <dt>Specified by:</dt>
-<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.cuisine">Menu</a>&gt;</code></dd>
+<dd><code><a href="UtilisationContrat.html#cancel()">cancel</a></code>&nbsp;in interface&nbsp;<code><a href="UtilisationContrat.html" title="interface in ulb.infof307.g01.ui">UtilisationContrat</a>&lt;<a href="../cuisine/Menu.html" title="class in ulb.infof307.g01.model">Menu</a>&gt;</code></dd>
 </dl>
 </section>
 </li>

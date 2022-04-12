@@ -1,6 +1,6 @@
 import org.junit.jupiter.api.*;
-import ulb.infof307.g01.cuisine.*;
-import ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.db.Configuration;
+import ulb.infof307.g01.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -8,20 +8,36 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 class TestMenu {
 
-    static private Menu menu = new Menu("Menu Test");
+    static private final Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
-    static Database db;
+
+    /**
+     * Stocke la quantité contenu dans une recette pour chaque produit
+     *  {@code RECIPE_PRODUCT_QUANTITY[i][j]} contient la quantité du {@link Product} {@code products[j]}
+     *  contenu dans la {@link Recipe} {@code recipes[i]}
+     */
+    private static final int[][] RECIPE_PRODUCT_QUANTITY = new int[2][2];
+
+    /**
+     * Stocke la quantité contenu dans {@code menu} pour chaque {@code products}
+     *  {@code MENU_PRODUCT_QUANTITY[i]} contient la quantité du {@link Product} {@code products[i]}
+     *  contenu dans {@code menu}
+     */
+    private static final int[]   MENU_PRODUCT_QUANTITY = new int[2];
+
 
     @BeforeAll
     static void setUp() throws SQLException {
 
         recipes  = new Recipe [7];
         products = new Product[2];
+
+
 
         products[0] = new Product("Abricot");
         products[1] = new Product("Fraise");
@@ -30,9 +46,14 @@ class TestMenu {
         recipes[0].add(products[0]);
         recipes[0].add(products[0]);
 
+        RECIPE_PRODUCT_QUANTITY[0][0] = 2;
+
         recipes[1] = new Recipe(5, "test2", 5, "Vegan", "Test", 2, "Avant le code");
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
+
+        RECIPE_PRODUCT_QUANTITY[1][0] = 1;
+        RECIPE_PRODUCT_QUANTITY[1][1] = 1;
 
         recipes[2]  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
         recipes[3]  = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
@@ -44,28 +65,28 @@ class TestMenu {
     }
 
     static public void createDB() throws SQLException {
+        String databaseName = "test.sqlite";
+        Configuration.getCurrent().setDatabase(databaseName);
 
-        db = new Database("test.sqlite");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
 
-        db.insertCategory("Poisson");
-        db.insertCategory("Viande");
-        db.insertCategory("Végétarien");
-        db.insertCategory("Vegan");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Mijoté");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Test");
 
-        db.insertType("Plat");
-        db.insertType("Mijoté");
-        db.insertType("Test");
-
-        db.insertRecipe(recipes[5]);
-        db.insertRecipe(recipes[6]);
-        db.insertRecipe(recipes[2]);
-        db.insertRecipe(recipes[3]);
-        db.insertRecipe(recipes[4]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[5]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[6]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[2]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[3]);
+        Configuration.getCurrent().getRecipeDao().insert(recipes[4]);
     }
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
@@ -78,6 +99,9 @@ class TestMenu {
 
         menu.addRecipeTo(Day.Monday, recipes[1]);
         menu.addRecipeTo(Day.Friday, recipes[1]);
+
+        MENU_PRODUCT_QUANTITY[0] = RECIPE_PRODUCT_QUANTITY[0][0] * 2 + RECIPE_PRODUCT_QUANTITY[1][0];
+        MENU_PRODUCT_QUANTITY[1] = RECIPE_PRODUCT_QUANTITY[0][1] + RECIPE_PRODUCT_QUANTITY[1][1] * 2;
     }
 
     @AfterEach
@@ -167,24 +191,26 @@ class TestMenu {
 
         ShoppingList generatedShoppingList = menu.generateShoppingList();
 
-        assertEquals(2, generatedShoppingList.size());
+        assertEquals(products.length, generatedShoppingList.size());
 
-        int[] productsCounter = {0, 0};
+        int[] productsCounter = new int[products.length];
 
-        int i = 0;
         for (Product p : generatedShoppingList) {
-            productsCounter[i] = p.getQuantity();
-            i++;
+            for (int i = 0; i < products.length; i++) {
+                if (p.equals(products[i])) {
+                    productsCounter[i] = p.getQuantity();
+                }
+            }
         }
 
-        assertEquals(5, productsCounter[0]);
-        assertEquals(2, productsCounter[1]);
+        assertEquals(MENU_PRODUCT_QUANTITY[0], productsCounter[0]);
+        assertEquals(MENU_PRODUCT_QUANTITY[1], productsCounter[1]);
     }
 
     @Test
     void generateMenu() throws SQLException {
 
-        menu.generateMenu(db, 6, 4, 6);
+        menu.generateMenu(6, 4, 6);
 
         for (Day day: Day.values()) {
             List<Recipe> recipes = menu.getRecipesfor(day);

@@ -1,9 +1,9 @@
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.cuisine.AutoCompletion;
-import ulb.infof307.g01.cuisine.Recipe;
-import ulb.infof307.g01.db.Database;
+import ulb.infof307.g01.model.AutoCompletion;
+import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.db.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestAutoCompletion {
 
-    static Database db;
     static Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
     static Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
     static Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
@@ -26,27 +25,27 @@ class TestAutoCompletion {
 
     @BeforeAll
     static public void createDB() throws SQLException {
+        String databaseName = "test.sqlite";
+        Configuration.getCurrent().setDatabase(databaseName);
 
-        db = new Database("test.sqlite");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
+        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
 
-        db.insertCategory("Poisson");
-        db.insertCategory("Viande");
-        db.insertCategory("Végétarien");
-        db.insertCategory("Vegan");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
+        Configuration.getCurrent().getRecipeTypeDao().insert("Dessert");
 
-        db.insertType("Plat");
-        db.insertType("Dessert");
-
-        db.insertRecipe(bolo);
-        db.insertRecipe(carbo);
-        db.insertRecipe(pesto);
-        db.insertRecipe(tiramisu);
+        Configuration.getCurrent().getRecipeDao().insert(bolo);
+        Configuration.getCurrent().getRecipeDao().insert(carbo);
+        Configuration.getCurrent().getRecipeDao().insert(pesto);
+        Configuration.getCurrent().getRecipeDao().insert(tiramisu);
     }
 
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        db.closeConnection();
+        Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
@@ -69,7 +68,7 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null,  db);
+        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null);
 
         // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {
