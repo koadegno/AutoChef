@@ -7,15 +7,9 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.model.Mail;
+import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.Window;
-
-import javax.mail.MessagingException;
-import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 public class MailView extends Window {
@@ -30,49 +24,32 @@ public class MailView extends Window {
     public VBox vBox;
     @FXML
     public ComboBox<String> mailReceiver;
-    private ShoppingList shoppingList;
+    private MailController mailController;
+
+    public void setMailController(MailController mailController){
+        this.mailController = mailController;
+    }
 
     public void setShoppingListToMail(ShoppingList shoppingList){
-        this.shoppingList = shoppingList;
         nameShoppingList.setText("Liste de courses : "+shoppingList.getName());
-        initComboboxFavoriteMail();
     }
 
     @FXML
     public void sendMail(){
         setNodeColor(mailReceiver, false);
-        try {
-            Mail mail = new Mail();
-            mail.sendMail(mailReceiver.getSelectionModel().getSelectedItem(),shoppingList,subject.getText(), messageBody.getText());
-            Stage stage = (Stage) vBox.getScene().getWindow();
-            stage.close();
-
-        } catch (MessagingException e) {
-            setNodeColor(mailReceiver, true);
-        }
-
+        mailController.sendMail(mailReceiver.getSelectionModel().getSelectedItem(),subject.getText(), messageBody.getText());
     }
 
     public void chooseFavoriteMail(){
-        FavoriteMailView favoriteMailView = new FavoriteMailView();
-        try {
-            popupFXML("favoriteMail.fxml", favoriteMailView);
-            favoriteMailView.setComboboxListFavoriteMail(mailReceiver);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-
+        mailController.chooseFavoriteMail();
     }
 
-    public void initComboboxFavoriteMail(){
-        try {
-            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-            mailReceiver.setItems(FXCollections.observableArrayList(allMail));
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    public void initComboboxFavoriteMail(List<String> allMail){
+        mailReceiver.setItems(FXCollections.observableArrayList(allMail));
     }
 
+    public void addMailToCombobox(String newMail) {
+        mailReceiver.getItems().add(newMail);
+        mailReceiver.setValue(newMail);}
 
 }

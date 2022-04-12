@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
@@ -183,16 +184,9 @@ public class WindowUserShoppingListsControllerTools extends Window {
     }
 
     public void sendShoppingListByMail() throws SQLException {
-
         ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-        MailView mailView = new MailView();
-        try {
-            popupFXML("createMail.fxml", mailView);
-            mailView.setShoppingListToMail(shoppingList);
-
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        MailController mailController = new MailController(shoppingList);
+        mailController.initMailView();
     }
 
 
