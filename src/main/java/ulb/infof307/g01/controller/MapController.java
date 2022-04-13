@@ -12,6 +12,8 @@ import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
@@ -45,6 +47,7 @@ public class MapController extends Controller implements WindowMapController.Lis
         viewController = loader.getController();
         viewController.setListener(this);
         this.setNewScene(loader,"Carte");
+
     }
 
     /**
