@@ -87,6 +87,25 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     //Fin Methode Listener de WindowUserShoppingListController
 
+    //Methode Listener de WindowShoppingListControllerTools
+
+    public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
+        //TODO: pq on faisait appel a remove??
+        windowUserShoppingListsController.showAddProductError(false);
+
+        Product userProduct;
+
+        if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
+            //Cree le produit pour le mettre dans le tableView
+            userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
+
+            windowUserShoppingListsController.addProductToTableView(userProduct);
+            windowUserShoppingListsController.clearElementAddProduct();
+        } else {
+            windowUserShoppingListsController.showAddProductError(true);
+        }
+    }
+
     @Override
     public void returnHomeShoppingList() {
         this.displayHomeShoppingListController();

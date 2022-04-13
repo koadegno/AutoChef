@@ -14,8 +14,6 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.ViewController;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
 
 /**
  * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
@@ -41,7 +39,7 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
     protected TableView tableViewDisplayProductList;
     @FXML
     protected Button returnToMenu, btnSendMail;
-    protected String currentShoppingListname;
+    protected String currentShoppingListName;
 
 
     protected void removeBorderColor() {
@@ -90,25 +88,24 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
      */
     @FXML
     public void addElementOfListToComboBoxProduct() {
-        this.removeBorderColor();
+        //this.removeBorderColor();
         //Recuper les elements choisi pour un produit
         Object nameProductChoose = comboBoxListProduct.getSelectionModel().getSelectedItem();
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
-        Product myProduct;
 
-        if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
-            //Cree le produit pour le mettre dans le tableView
-            myProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
-            tableViewDisplayProductList.getItems().add(myProduct);
+        listener.addElementOfList(nameProductChoose, quantityOrNumberChoose, nameUnityChoose);
+    }
 
-            //Nettoyer les combobox et le spinner
-            comboBoxListProduct.getSelectionModel().clearSelection();
-            comboBoxListUnity.getSelectionModel().clearSelection();
-            spinnerValueFactory.setValue(0);
-        } else {
-            setNodeColor(hBoxToCreateProduct,true);
-        }
+    public void showAddProductError(boolean isError){
+        setNodeColor(hBoxToCreateProduct,isError);
+    }
+
+    public void clearElementAddProduct(){
+        //Nettoyer les combobox et le spinner
+        comboBoxListProduct.getSelectionModel().clearSelection();
+        comboBoxListUnity.getSelectionModel().clearSelection();
+        spinnerValueFactory.setValue(0);
     }
 
     public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName) {
@@ -149,11 +146,16 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         return cellFactory;
     }
 
+    public void addProductToTableView(Product product){
+        tableViewDisplayProductList.getItems().add(product);
+    }
+
     public interface Listener{
         void returnHomeShoppingList();
         void returnToUserMenu();
+        void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
 
-        //TODO: creer un autre Controller??
+            //TODO: creer un autre Controller??
         void seeUserShoppingList(Object nameUserShoppingList);
         void confirmUserCreateShoppingList(String currentShoppingListName);
         void addProductToShoppingListToSend(Product product);
@@ -161,11 +163,11 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         }
 
     public void exportShoppingList(){
-        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListname);
+        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListName);
     }
 
     public void sendShoppingListByMail() throws SQLException {
-        ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
+        ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
         MailController mailController = new MailController(shoppingList);
         mailController.initMailView();
     }
