@@ -3,7 +3,6 @@ package ulb.infof307.g01.view;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.MapController;
-import ulb.infof307.g01.view.map.WindowMapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.recipe.WindowHomeRecipeController;
 import ulb.infof307.g01.view.shoppingList.WindowHomeShoppingListController;

@@ -29,12 +29,10 @@ public class ShopController extends Controller implements WindowShopController.L
     public void show(){
         viewController = new WindowShopController();
         viewController.setListener(this);
-        viewController.createPopup();
         if(isModifying) viewController.setNameShopTextField(shop.getName());
 
-        FXMLLoader loader = this.loadFXML("ShowShop.fxml");
-        loader.setController(viewController);
-        this.setNewScene(loader,"Magasin");
+        FXMLLoader loader = loadFXML(viewController,"ShowShop.fxml");
+        viewController.createPopup();
     }
 
     @Override

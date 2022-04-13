@@ -14,6 +14,7 @@ import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController
 import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Contrôleur principal de l'application.
@@ -28,7 +29,8 @@ public class MainController extends Controller implements HomePageListener, Home
      * @see ulb.infof307.g01.Main
      * */
     public void displayMain(Stage mainStage) {
-        FXMLLoader loader = this.loadFXML("HomePage.fxml");
+        setStage(mainStage);
+        FXMLLoader loader = loadFXML("HomePage.fxml");
         HomePageController viewController = loader.getController();
         viewController.setListener(this);
 
@@ -67,7 +69,8 @@ public class MainController extends Controller implements HomePageListener, Home
      */
     @Override
     public void onMapButtonClick() {
-
+        MapController mapController = new MapController(currentStage);
+        mapController.show();
     }
 
     /**

@@ -105,15 +105,18 @@ public class WindowMapController extends ViewController<WindowMapController.List
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        initializeMapService();
+        mapViewStackPane.getChildren().add(mapView);
+    }
+
+    public void start(){
         try {
-            initializeMapService();
             listener.onInitializeMapShop();
             initializeContextMenu();
             initializeMapEvent();
             createLocatorTaskAndDefaultParameters();
-            mapViewStackPane.getChildren().add(mapView);
         } catch (SQLException e) {
-            showErrorSQL();
+            e.printStackTrace();
         }
     }
 

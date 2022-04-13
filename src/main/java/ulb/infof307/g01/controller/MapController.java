@@ -39,14 +39,15 @@ public class MapController extends Controller implements WindowMapController.Lis
     private WindowMapController viewController;
 
     public MapController(Stage primaryStage){
-        this.setStage(primaryStage);
+        setStage(primaryStage);
     }
 
     public void show(){
         FXMLLoader loader = this.loadFXML("DisplayMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-        this.setNewScene(loader,"Carte");
+        viewController.start();
+//        this.setNewScene(loader,"Carte");
 
     }
 
@@ -94,8 +95,8 @@ public class MapController extends Controller implements WindowMapController.Lis
         Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
 
-        //TODO cree un controlleur pour le shop et l'appeler avec le point que tu veux ajouter
-        ShopController shopController = new ShopController(currentStage,new Shop(mapPoint),false,  this);
+        Stage popUpStage = new Stage();
+        ShopController shopController = new ShopController(popUpStage,new Shop(mapPoint),false,  this);
         shopController.show();
     }
 
