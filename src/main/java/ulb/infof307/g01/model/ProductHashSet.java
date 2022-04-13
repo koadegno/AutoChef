@@ -20,8 +20,7 @@ abstract class ProductHashSet extends HashSet<Product> {
             this.getProduct(p).increase(p.getQuantity());
         }
         else {
-            System.out.println("Else :" + p);
-            super.add(p);
+            super.add(p.clone());
         }
         return true;
     }

@@ -41,12 +41,27 @@ public class Product {
         this.price = price;
     }
 
-    public Product(String productName, int quantity, String nameUnity,String famillyProduct) {
+    public Product(String productName, int quantity, String nameUnity,String famillyProduct, double price) {
         name = productName;
         this.quantity = quantity;
         this.nameUnity = nameUnity;
         this.famillyProduct = famillyProduct;
         this.price = price;
+    }
+
+    public Product(String productName, int quantity, String nameUnity,String famillyProduct) {
+        name = productName;
+        this.quantity = quantity;
+        this.nameUnity = nameUnity;
+        this.famillyProduct = famillyProduct;
+    }
+
+    public Product(Product other) {
+        this.name = other.name;
+        this.quantity = other.quantity;
+        this.nameUnity = other.nameUnity;
+        this.famillyProduct = other.famillyProduct;
+        this.price = other.price;
     }
 
     public void rename(String newName) {
@@ -116,6 +131,9 @@ public class Product {
         return this.getName().equals(product.getName());
     }
 
+    public Product clone() {
+        return new Product(name, quantity, nameUnity, famillyProduct, price);
+    }
     public void setNameUnity(String nameUnity) {
         this.nameUnity = nameUnity;
     }
