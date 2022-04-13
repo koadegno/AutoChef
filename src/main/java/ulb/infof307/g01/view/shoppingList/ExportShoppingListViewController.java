@@ -4,7 +4,7 @@ import javafx.scene.control.Label;
 import ulb.infof307.g01.view.ViewController;
 
 
-public class WindowExportShoppingListController extends ViewController<WindowExportShoppingListController.Listener> {
+public class ExportShoppingListViewController extends ViewController<ExportShoppingListViewController.Listener> {
 
     public Label nameShoppingList;
 

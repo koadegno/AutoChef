@@ -4,8 +4,8 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.model.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.mail.WindowFavoriteMailController;
-import ulb.infof307.g01.view.mail.WindowMailController;
+import ulb.infof307.g01.view.mail.FavoriteMailViewController;
+import ulb.infof307.g01.view.mail.MailViewController;
 
 import javax.mail.MessagingException;
 import javax.mail.internet.AddressException;
@@ -15,10 +15,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
-public class MailController extends Controller implements WindowMailController.Listener, WindowFavoriteMailController.Listener  {
+public class MailController extends Controller implements MailViewController.Listener, FavoriteMailViewController.Listener  {
     private ShoppingList shoppingList;
-    private WindowMailController windowMailController;
-    private WindowFavoriteMailController windowFavoriteMailController;
+    private MailViewController mailViewController;
+    private FavoriteMailViewController favoriteMailViewController;
     private Stage popupStageMail, popupFavoriteMail;
 
     public MailController(ShoppingList shoppingList){
@@ -30,10 +30,10 @@ public class MailController extends Controller implements WindowMailController.L
      * Affiche la popup qui permet d'envoyer un mail
      */
     private void createMailViewController() {
-        this.windowMailController = new WindowMailController();
-        windowMailController.setListener(this);
+        this.mailViewController = new MailViewController();
+        mailViewController.setListener(this);
         try {
-            this.popupStageMail = popupFXML("createMail.fxml", windowMailController);
+            this.popupStageMail = popupFXML("createMail.fxml", mailViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -47,7 +47,7 @@ public class MailController extends Controller implements WindowMailController.L
      */
     @Override
     public void sendMail(String recipientAddress, String subject, String mailTextBody){
-        windowMailController.showAddressMailError(false);
+        mailViewController.showAddressMailError(false);
         Mail mail = new Mail();
         try {
             if(!Objects.equals(recipientAddress, null)){
@@ -55,10 +55,10 @@ public class MailController extends Controller implements WindowMailController.L
                 popupStageMail.close(); //Fermer la popup
             }
             else{
-                windowMailController.showAddressMailError(true); //l'utilisateur n'a pas choisi de mail
+                mailViewController.showAddressMailError(true); //l'utilisateur n'a pas choisi de mail
             }
         } catch (MessagingException e) {
-            windowMailController.showAddressMailError(true);
+            mailViewController.showAddressMailError(true);
         }
     }
 
@@ -67,10 +67,10 @@ public class MailController extends Controller implements WindowMailController.L
      */
     @Override
     public void createFavoriteMail(){
-        this.windowFavoriteMailController = new WindowFavoriteMailController();
-        windowFavoriteMailController.setListener(this);
+        this.favoriteMailViewController = new FavoriteMailViewController();
+        favoriteMailViewController.setListener(this);
         try {
-             this.popupFavoriteMail = popupFXML("favoriteMail.fxml", windowFavoriteMailController);
+             this.popupFavoriteMail = popupFXML("favoriteMail.fxml", favoriteMailViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -79,14 +79,14 @@ public class MailController extends Controller implements WindowMailController.L
     public void initComboboxFavoriteMail(){
         try {
             List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-            windowMailController.initComboboxFavoriteMail(allMail);
+            mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
     public void initMailView(){
-        windowMailController.showNameShoppingListToMail(shoppingList);
+        mailViewController.showNameShoppingListToMail(shoppingList);
         initComboboxFavoriteMail();
     }
 
@@ -97,7 +97,7 @@ public class MailController extends Controller implements WindowMailController.L
      */
     @Override
     public void saveFavoriteMail(String newMail, boolean isSave){
-        windowFavoriteMailController.showAddressMailError(false);
+        favoriteMailViewController.showAddressMailError(false);
         if(isValidEmailAddress(newMail)){
             try {
                 if(isSave){ //Enregistre le mail favorie dans la bdd
@@ -106,11 +106,11 @@ public class MailController extends Controller implements WindowMailController.L
             } catch (SQLException e) {
                 e.printStackTrace();
             }
-            windowMailController.addMailToCombobox(newMail);
+            mailViewController.addMailToCombobox(newMail);
             popupFavoriteMail.close(); //Ferme la popup
         }
         else{
-            windowFavoriteMailController.showAddressMailError(true); //l'utilisateur a mal écrit le mail
+            favoriteMailViewController.showAddressMailError(true); //l'utilisateur a mal écrit le mail
         }
     }
 

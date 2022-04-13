@@ -16,7 +16,7 @@ import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController;
+import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.UtilisationContrat;
 
 
@@ -99,17 +99,17 @@ public class WindowShowMenuController extends Window implements Initializable, U
     @FXML
     public void generateShoppingList() {
         //TODO: regler ce probleme pour le MVC
-        WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
-        //this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
-        //windowCreateUserShoppingListController.initShoppingListElement();
+        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
+        //this.loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
+        //createUserShoppingListViewController.initShoppingListElement();
         //TODO: arranger ça aie aie
-        //windowCreateUserShoppingListController.initComboBox();
-        fillShoppingList(windowCreateUserShoppingListController);
+        //createUserShoppingListViewController.initComboBox();
+        fillShoppingList(createUserShoppingListViewController);
 
     }
 
 
-    public void fillShoppingList(WindowCreateUserShoppingListController controller){
+    public void fillShoppingList(CreateUserShoppingListViewController controller){
         ShoppingList myShoppingList = menu.generateShoppingList();
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
     }

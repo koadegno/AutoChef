@@ -11,7 +11,7 @@ import ulb.infof307.g01.view.recipe.WindowCreateRecipeController;
 import java.net.URL;
 import java.util.*;
 
-public class WindowUserShoppingListsController extends WindowUserShoppingListsControllerTools implements Initializable {
+public class UserShoppingListViewViewController extends ShoppingListViewController implements Initializable {
     @FXML
     Button btnConfirm, btnAddNewProduct;
     private WindowCreateRecipeController callerClass=null;

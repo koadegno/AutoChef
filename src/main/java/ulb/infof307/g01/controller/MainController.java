@@ -9,11 +9,9 @@ import ulb.infof307.g01.view.HomePageController.*;
 import ulb.infof307.g01.view.menu.HomeMenuController;
 import ulb.infof307.g01.view.menu.WindowCreateMenuController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
-import ulb.infof307.g01.view.shoppingList.HomeShoppingListController;
-import ulb.infof307.g01.view.shoppingList.HomeShoppingListController.*;
-import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController;
-import ulb.infof307.g01.view.shoppingList.WindowHomeShoppingListController;
-import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
+import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.sql.SQLException;
 
@@ -21,7 +19,7 @@ import java.sql.SQLException;
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class MainController extends Controller implements HomePageListener, WindowHomeShoppingListController.Listener, HomeMenuController.HomeMenuListener {
+public class MainController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuController.HomeMenuListener {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -39,14 +37,14 @@ public class MainController extends Controller implements HomePageListener, Wind
 
     /**
      * Affiche la page principale des Listes de Courses.
-     * @see HomeShoppingListController
+     * @see HomeShoppingListViewController
      * */
     @Override
     public void onShoppingListButtonClick() {
         //TODO: reprendre le code de nathan plus tard
-        WindowHomeShoppingListController windowHomeShoppingListController = new WindowHomeShoppingListController();
-        windowHomeShoppingListController.setListener(this);
-        loadFXML(windowHomeShoppingListController, "HomeShoppingList.fxml");
+        HomeShoppingListViewController homeShoppingListViewController = new HomeShoppingListViewController();
+        homeShoppingListViewController.setListener(this);
+        loadFXML(homeShoppingListViewController, "HomeShoppingList.fxml");
 
     }
 
@@ -98,7 +96,7 @@ public class MainController extends Controller implements HomePageListener, Wind
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        WindowUserShoppingListsController windowUserShoppingListsController = new WindowUserShoppingListsController();
+        UserShoppingListViewViewController windowUserShoppingListsController = new UserShoppingListViewViewController();
         loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
         ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
 
@@ -114,9 +112,9 @@ public class MainController extends Controller implements HomePageListener, Wind
      */
     @Override
     public void onCreateShoppingListsButtonClick() {
-        WindowCreateUserShoppingListController windowCreateUserShoppingListController= new WindowCreateUserShoppingListController();
-        loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(windowCreateUserShoppingListController, this );
+        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
+        loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
+        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController, this );
 
         //Initialise la page avec les informations de la bdd
         shoppingListController.initInformationShoppingList(true);

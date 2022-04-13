@@ -11,7 +11,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -137,7 +137,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     public void addIngredients() {
         //TODO: regler ici pour le MVC
         this.scene = this.primaryStage.getScene();
-        WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
+        UserShoppingListViewViewController windowsMyShoppingListsController = new UserShoppingListViewViewController();
         //this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
         windowsMyShoppingListsController.setCallerClass(this);
 

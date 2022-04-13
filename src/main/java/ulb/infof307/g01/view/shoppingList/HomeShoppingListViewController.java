@@ -8,7 +8,7 @@ import ulb.infof307.g01.view.ViewController;
  * qui dirige chacun vers une autre sous fenetre de liste de courses
  */
 
-public class WindowHomeShoppingListController extends ViewController<WindowHomeShoppingListController.Listener> {
+public class HomeShoppingListViewController extends ViewController<HomeShoppingListViewController.Listener> {
 
     /**
      * Affiche la page pour voir et modifier une liste de courses

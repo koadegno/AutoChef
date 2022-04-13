@@ -3,11 +3,10 @@ package ulb.infof307.g01.view;
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.MainController;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.map.DisplayMapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.recipe.WindowHomeRecipeController;
-import ulb.infof307.g01.view.shoppingList.WindowHomeShoppingListController;
+import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 
 /**
  * La classe WindowHomeController représente le controleur
@@ -37,7 +36,7 @@ public class WindowHomeController extends Window{
 
     /**
      * Affiche la page principale des Listes de Courses.
-     * @see WindowHomeShoppingListController
+     * @see HomeShoppingListViewController
      * */
     @FXML
     public void redirectToShoppingList(){

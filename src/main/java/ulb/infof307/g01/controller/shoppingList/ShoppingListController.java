@@ -1,6 +1,5 @@
 package ulb.infof307.g01.controller.shoppingList;
 
-import javafx.stage.Stage;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.MailController;
@@ -8,7 +7,6 @@ import ulb.infof307.g01.controller.MainController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.WindowHomeController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
 
@@ -16,51 +14,46 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class ShoppingListController extends Controller implements WindowUserShoppingListsControllerTools.Listener  {
-    private WindowUserShoppingListsControllerTools windowUserShoppingListsControllerTools;
-    private WindowUserShoppingListsController windowUserShoppingListsController;
-    private WindowCreateUserShoppingListController windowCreateUserShoppingListController;
+public class ShoppingListController extends Controller implements ShoppingListViewController.Listener  {
+    private ShoppingListViewController shoppingListViewController;
+    private UserShoppingListViewViewController windowUserShoppingListsController;
+    private CreateUserShoppingListViewController createUserShoppingListViewController;
     private MainController mainController;
     private ShoppingList shoppingListToSend;
 
-    public ShoppingListController(WindowCreateUserShoppingListController windowCreateUserShoppingListController, MainController mainController){
-        this.windowUserShoppingListsControllerTools = this.windowCreateUserShoppingListController = windowCreateUserShoppingListController;
+    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, MainController mainController){
+        this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
+        initShoppingListController(mainController);
+    }
+
+    public ShoppingListController(UserShoppingListViewViewController windowUserShoppingListsController, MainController mainController){
+        this.shoppingListViewController = this.windowUserShoppingListsController = windowUserShoppingListsController;
+        initShoppingListController(mainController);
+    }
+
+    private void initShoppingListController(MainController mainController) {
         this.mainController = mainController;
-        this.windowCreateUserShoppingListController.setListener(this);
-        this.windowUserShoppingListsControllerTools.setListener(this);
+        this.shoppingListViewController.setListener(this);
     }
 
-    public ShoppingListController(WindowUserShoppingListsController windowUserShoppingListsController,MainController mainController){
-        this.windowUserShoppingListsControllerTools = this.windowUserShoppingListsController = windowUserShoppingListsController;
-        this.mainController = mainController;
-        this.windowUserShoppingListsController.setListener(this);
-        this.windowUserShoppingListsControllerTools.setListener(this);
-
-    }
-
-    public ShoppingListController(){
-        this.windowUserShoppingListsControllerTools = new WindowUserShoppingListsControllerTools();
-        windowUserShoppingListsControllerTools.setListener(this);
-    }
-
-    //Methode Listener de WindowCreateUserShoppingListController
+    //Methode Listener de CreateUserShoppingListViewController
 
     public void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
-            windowCreateUserShoppingListController.showNameUserCreateShoppingListError();
+            createUserShoppingListViewController.showNameUserCreateShoppingListError();
         }
         else if(sizeTableViewDisplayProductList == 0){ // table view est vide
-            windowCreateUserShoppingListController.showIsEmptyTableViewError();
+            createUserShoppingListViewController.showIsEmptyTableViewError();
         }
         else {
             this.shoppingListToSend = new ShoppingList(shoppingListName);
-            windowCreateUserShoppingListController.fillShoppingListToSend(shoppingListToSend);
+            createUserShoppingListViewController.fillShoppingListToSend(shoppingListToSend);
             try {
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
-                windowCreateUserShoppingListController.showNameUserCreateShoppingListError();
+                createUserShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -70,7 +63,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
         }
     }
 
-    //Fin Methode Listener de WindowCreateUserShoppingListController
+    //Fin Methode Listener de CreateUserShoppingListViewController
 
     //Methode Listener de WindowUserShoppingListController
 
@@ -122,7 +115,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
             allUnitName.removeAll(List.of(unitToRemove));
             ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
-            if(isCreateUserShoppingListController) windowCreateUserShoppingListController.initComboBox(allProduct, allUnitName);
+            if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
             else windowUserShoppingListsController.initComboBox(allProduct, allUnitName, allShoppinListName);
 
         } catch (SQLException e) {
@@ -136,7 +129,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
         //TODO: pq on faisait appel a remove??
-        windowUserShoppingListsControllerTools.showAddProductError(false);
+        shoppingListViewController.showAddProductError(false);
 
         Product userProduct;
 
@@ -144,10 +137,10 @@ public class ShoppingListController extends Controller implements WindowUserShop
             //Cree le produit pour le mettre dans le tableView
             userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
 
-            windowUserShoppingListsControllerTools.addProductToTableView(userProduct);
-            windowUserShoppingListsControllerTools.clearElementAddProduct();
+            shoppingListViewController.addProductToTableView(userProduct);
+            shoppingListViewController.clearElementAddProduct();
         } else {
-            windowUserShoppingListsControllerTools.showAddProductError(true);
+            shoppingListViewController.showAddProductError(true);
         }
     }
 
@@ -178,7 +171,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
     }
     //Fin Methode Listener de WindowUserShoppingListController
 
-    //Methode Listener de WindowHomeShoppingListController
+    //Methode Listener de HomeShoppingListViewController
 
 
     //TODO: ne devrait pas se trouver dans la HomeSHopping
@@ -187,7 +180,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
        }
 
 
-    //Fin Methode Listener de WindowHomeShoppingListController
+    //Fin Methode Listener de HomeShoppingListViewController
 
 
 }

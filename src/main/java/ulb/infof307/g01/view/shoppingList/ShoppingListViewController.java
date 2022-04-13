@@ -15,7 +15,7 @@ import java.util.ArrayList;
  * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
  */
 
-public class WindowUserShoppingListsControllerTools extends ViewController<WindowUserShoppingListsControllerTools.Listener> {
+public class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
     @FXML
     protected HBox hBoxToCreateProduct;

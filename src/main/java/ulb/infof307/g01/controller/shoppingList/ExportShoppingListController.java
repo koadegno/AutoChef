@@ -8,13 +8,13 @@ import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.WindowExportShoppingListController;
+import ulb.infof307.g01.view.shoppingList.ExportShoppingListViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class ExportShoppingListController extends Controller implements WindowExportShoppingListController.Listener {
-    private WindowExportShoppingListController windowExportShoppingListController;
+public class ExportShoppingListController extends Controller implements ExportShoppingListViewController.Listener {
+    private ExportShoppingListViewController exportShoppingListViewController;
     private Stage popupExportShoppingList;
     private ShoppingList shoppingList;
 
@@ -23,8 +23,8 @@ public class ExportShoppingListController extends Controller implements WindowEx
      * @param currentShoppingListName nom de la liste de courses
      */
     public ExportShoppingListController(String currentShoppingListName){
-        this.windowExportShoppingListController = new WindowExportShoppingListController();
-        windowExportShoppingListController.setListener(this);
+        this.exportShoppingListViewController = new ExportShoppingListViewController();
+        exportShoppingListViewController.setListener(this);
 
         try {
             this.shoppingList =  Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
@@ -40,7 +40,7 @@ public class ExportShoppingListController extends Controller implements WindowEx
      */
     public void displayExportShoppingList(){
         try {
-            this.popupExportShoppingList = popupFXML("exportShoppingList.fxml", windowExportShoppingListController);
+            this.popupExportShoppingList = popupFXML("exportShoppingList.fxml", exportShoppingListViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }

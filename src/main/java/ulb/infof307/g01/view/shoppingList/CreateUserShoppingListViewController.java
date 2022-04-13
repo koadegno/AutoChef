@@ -16,7 +16,7 @@ import java.util.*;
  * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
  */
 
-public class WindowCreateUserShoppingListController extends WindowUserShoppingListsControllerTools implements Initializable {
+public class CreateUserShoppingListViewController extends ShoppingListViewController implements Initializable {
 
     @FXML
     TextField nameMyCreateShoppingList;

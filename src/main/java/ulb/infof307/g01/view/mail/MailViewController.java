@@ -11,7 +11,7 @@ import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.model.ShoppingList;
 import java.util.List;
 
-public class WindowMailController extends ViewController<WindowMailController.Listener> {
+public class MailViewController extends ViewController<MailViewController.Listener> {
 
     @FXML
     public Label nameShoppingList;
