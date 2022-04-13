@@ -101,8 +101,8 @@ public class MainController extends Controller implements HomePageListener, Home
         this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
 
         //Initialise la page avec les informations de la bdd
-        windowsMyShoppingListsController.initShoppingListElement();
-        windowsMyShoppingListsController.initComboBox();
+        //TODO: arranger ça
+        //windowsMyShoppingListsController.initComboBox();
     }
 
     /**
@@ -115,8 +115,8 @@ public class MainController extends Controller implements HomePageListener, Home
         WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
         this.loadFXML(windowsCreateMyShoppingListController, "CreateUserShoppingList.fxml");
         //Initialise la page avec les informations de la bdd
-        windowsCreateMyShoppingListController.initShoppingListElement();
-        windowsCreateMyShoppingListController.initComboBox();
+        //TODO: arranger ça aussi
+        //windowsCreateMyShoppingListController.initComboBox();
     }
 
     /**

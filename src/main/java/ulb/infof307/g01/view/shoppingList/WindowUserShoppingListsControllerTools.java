@@ -41,31 +41,14 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
     protected TableView tableViewDisplayProductList;
     @FXML
     protected Button returnToMenu, btnSendMail;
-    protected ArrayList<String> allUnitName = null;
-    protected ArrayList<String> allProduct = null;
-    protected ArrayList<String> allShoppinListName = null;
-    protected String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
     protected String currentShoppingListname;
+
 
     protected void removeBorderColor() {
         this.setNodeColor(tableViewDisplayProductList,false);
         this.setNodeColor(hBoxToCreateProduct, false);
     }
 
-    /**
-     * Inialise les ComboBox avec les elements de la bdd dans une liste : produit, unité, nom de liste de courses
-     */
-    public void initShoppingListElement() {
-        try {
-            allProduct = Configuration.getCurrent().getProductDao().getAllName();
-            allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
-            allUnitName.removeAll(List.of(unitToRemove));
-            allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     /**
      * Retour au menu precedent : le menu principal de la liste de courses
@@ -83,11 +66,11 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         listener.returnToUserMenu();
     }
 
-    protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {
+    public void fillShoppingListToSend(ShoppingList shoppingListToSend) {
         // ajout de chaque produit de la table dans une nvl shoppingList
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
             Product product = (Product) tableViewDisplayProductList.getItems().get(i);
-            shoppingListToSend.add(product);
+            listener.addProductToShoppingListToSend(product);
         }
     }
 
@@ -128,7 +111,7 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         }
     }
 
-    public void initComboBox() {
+    public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName) {
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
     }
@@ -166,6 +149,17 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         return cellFactory;
     }
 
+    public interface Listener{
+        void returnHomeShoppingList();
+        void returnToUserMenu();
+
+        //TODO: creer un autre Controller??
+        void seeUserShoppingList(Object nameUserShoppingList);
+        void confirmUserCreateShoppingList(String currentShoppingListName);
+        void addProductToShoppingListToSend(Product product);
+        void initInformationShoppingList();
+        }
+
     public void exportShoppingList(){
         ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListname);
     }
@@ -175,10 +169,4 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         MailController mailController = new MailController(shoppingList);
         mailController.initMailView();
     }
-
-    public interface Listener{
-        void returnHomeShoppingList();
-        void returnToUserMenu();
-    }
-
 }

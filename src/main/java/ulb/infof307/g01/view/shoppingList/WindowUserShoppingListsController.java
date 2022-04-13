@@ -1,24 +1,17 @@
 package ulb.infof307.g01.view.shoppingList;
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.view.recipe.WindowCreateRecipeController;
-
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 
 public class WindowUserShoppingListsController extends WindowUserShoppingListsControllerTools implements Initializable {
-    private Vector<Product> myVectorProduct = new Vector<>();
-
     @FXML
     Button btnConfirm, btnAddNewProduct;
     private WindowCreateRecipeController callerClass=null;
@@ -29,45 +22,20 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
      */
     @FXML
      public void seeMyShoppingListTableView() {
-         Object nameMyShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
+         Object nameUserShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
+         listener.seeUserShoppingList(nameUserShoppingList);
+    }
 
-         if(Objects.equals(nameMyShoppingList, null)){ //nom est null
-             isVisibleElementToModifyMyShoppingList(false);
-         }
-         else{
-             currentShoppingListname = (String) nameMyShoppingList;
-             try { // afficher les produits de la liste de course dans la table
-                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
-                 tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
-                 isVisibleElementToModifyMyShoppingList(true);
-             } catch (SQLException e) {
-                 e.printStackTrace();
-             }
-         }
-
+    public void addProductListToTableView(Vector<Product> productOfShoppingList){
+        tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
     }
 
     /**
      * Permet d'enregistrer une liste de courses que l'utilisateur aurait modifie
-     * @param event : Methode liee a au bouton confirmBtn
      */
     @FXML
-    public void confirmMyCreateShoppingList(ActionEvent event) throws IOException {
-        try {
-            //Recupere liste de courses chez la bdd
-            ShoppingList shoppingListInDataBase = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-            ShoppingList shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
-
-            //Renvoie liste de courses chez la bdd
-            fillShoppingListToSend(shoppingListToSend);
-            Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-
+    public void confirmMyCreateShoppingList() {
+        listener.confirmUserCreateShoppingList(currentShoppingListname);
     }
 
     @FXML
@@ -112,18 +80,20 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         btnSeeShoppingList.setOnAction(e-> {seeMyShoppingListTableView();});
     }
 
-    @Override
-    public void initComboBox(){
-        super.initComboBox();
+    public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName, ArrayList<String> allShoppinListName ){
+        super.initComboBox(allProduct, allUnitName);
         comboBoxShoppingNameList.setItems(FXCollections.observableArrayList(allShoppinListName));
     }
 
+
+    //TODO: a méditer pour une meilleur solution plus bg
     public void setCallerClass(WindowCreateRecipeController windowCreateRecipeController) {
         this.callerClass = windowCreateRecipeController;
     }
 
     public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
-        super.initComboBox();
+        //TODO: regler ce probleme pour init
+        //super.initComboBox(allProduct, allUnitName);
         comboBoxShoppingNameList.setVisible(false);
         btnSeeShoppingList.setVisible(false);
         Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
@@ -141,4 +111,6 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         btnExportShoppingList.setVisible(false);
         btnSendMail.setVisible(false);
     }
+
+
 }

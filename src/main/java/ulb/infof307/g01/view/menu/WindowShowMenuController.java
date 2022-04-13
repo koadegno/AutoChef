@@ -101,8 +101,9 @@ public class WindowShowMenuController extends Window implements Initializable, U
         //TODO: regler ce probleme pour le MVC
         WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
         //this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
-        windowCreateUserShoppingListController.initShoppingListElement();
-        windowCreateUserShoppingListController.initComboBox();
+        //windowCreateUserShoppingListController.initShoppingListElement();
+        //TODO: arranger ça aie aie
+        //windowCreateUserShoppingListController.initComboBox();
         fillShoppingList(windowCreateUserShoppingListController);
 
     }

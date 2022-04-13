@@ -142,7 +142,8 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         windowsMyShoppingListsController.setCallerClass(this);
 
         //Initialise la page avec les informations de la bdd
-        windowsMyShoppingListsController.initShoppingListElement();
+        //TODO regler ce probleme
+        //windowsMyShoppingListsController.initShoppingListElement();
         windowsMyShoppingListsController.initForCreateRecipe(recipeIngredients);
     }
 
