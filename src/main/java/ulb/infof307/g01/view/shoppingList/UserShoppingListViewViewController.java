@@ -29,6 +29,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
     public void setCurrentShoppingListName(String currentShoppingListName){
         this.currentShoppingListName = currentShoppingListName;
     }
+
     public void addProductListToTableView(Vector<Product> productOfShoppingList){
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
     }
@@ -57,7 +58,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        activeElementVisibility();
+        activeElementVisibility(true);
 
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
@@ -76,10 +77,10 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
         });
     }
 
-    private void activeElementVisibility() {
-        comboBoxShoppingNameList.setVisible(true);
+    private void activeElementVisibility(boolean isVisible) {
+        comboBoxShoppingNameList.setVisible(isVisible);
         btnConfirm.setText("Enregistrer");
-        btnSeeShoppingList.setVisible(true);
+        btnSeeShoppingList.setVisible(isVisible);
         btnSeeShoppingList.setOnAction(e-> {seeMyShoppingListTableView();});
     }
 
@@ -107,7 +108,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
         });
         btnConfirm.setOnAction(event -> {
             ShoppingList shoppingListToReturn = new ShoppingList("current");
-            fillShoppingListToSend(shoppingListToReturn);
+            fillShoppingListToSend();
             this.callerClass.add(shoppingListToReturn);
         });
 

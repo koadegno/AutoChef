@@ -26,7 +26,7 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     Label labelNameShoppingList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        activeElementVisibility();
+        activeElementVisibility(true);
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -44,14 +44,14 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     /**
      * Methode qui rend visible les boutons utilisée
      */
-    private void activeElementVisibility() {
-        btnAddNewProduct.setVisible(true);
-        nameMyCreateShoppingList.setVisible(true);
-        labelNameShoppingList.setVisible(true);
-        comboBoxListUnity.setVisible(true);
-        comboBoxListProduct.setVisible(true);
-        spinnerQuantityOrNumber.setVisible(true);
-        btnConfirm.setVisible(true);
+    private void activeElementVisibility(boolean isVisible) {
+        btnAddNewProduct.setVisible(isVisible);
+        nameMyCreateShoppingList.setVisible(isVisible);
+        labelNameShoppingList.setVisible(isVisible);
+        comboBoxListUnity.setVisible(isVisible);
+        comboBoxListProduct.setVisible(isVisible);
+        spinnerQuantityOrNumber.setVisible(isVisible);
+        btnConfirm.setVisible(isVisible);
     }
 
     /**
@@ -61,10 +61,10 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     public void confirmMyCreateShoppingList() {
         String shoppingListName = nameMyCreateShoppingList.getText();
         int sizeTableViewDisplayProductList = tableViewDisplayProductList.getItems().size();
-        listener.confirmUserModifyShoppingList(shoppingListName, sizeTableViewDisplayProductList);
+        listener.confirmUserCreateShoppingList(shoppingListName, sizeTableViewDisplayProductList);
     }
 
-    //TODO: changer ça pparce que ce n'est pas MVC
+    //TODO: changer ça parce que ce n'est pas MVC
     /**Methode permettant de remplir le tableau des elements d'une liste de courses
      * @param myExistentShoppingList : liste de shopping contenant la liste de courses
      */

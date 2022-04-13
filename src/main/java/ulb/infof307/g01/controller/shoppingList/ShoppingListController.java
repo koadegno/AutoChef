@@ -38,7 +38,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     //Methode Listener de CreateUserShoppingListViewController
 
-    public void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
+    public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
         createUserShoppingListViewController.removeBorderColor();
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
@@ -49,7 +49,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         }
         else {
             this.shoppingListToSend = new ShoppingList(shoppingListName);
-            createUserShoppingListViewController.fillShoppingListToSend(shoppingListToSend);
+            createUserShoppingListViewController.fillShoppingListToSend();
             try {
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
@@ -59,8 +59,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 e.printStackTrace();
             }
             // else tout ce passe bien
-            //TODO: voir ici cmt faire
-            displayHomeShoppingListController();
+            mainController.onShoppingListButtonClick();
         }
     }
 
@@ -95,8 +94,11 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
-            userShoppingListViewViewController.fillShoppingListToSend(shoppingListToSend);
+            userShoppingListViewViewController.fillShoppingListToSend();
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
+
+            //Confirmer que la liste de courses est enregistrer
+            //TODO: faire une popup
 
 
         } catch (SQLException e) {
@@ -129,7 +131,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     //Methode Listener de WindowShoppingListControllerTools
 
     public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
-        //TODO: pq on faisait appel a remove??
+        shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
 
         Product userProduct;
@@ -147,7 +149,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     @Override
     public void returnHomeShoppingList() {
-        this.displayHomeShoppingListController();
+        mainController.onShoppingListButtonClick();
     }
 
     public void returnToUserMenu(){
@@ -157,7 +159,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     public void exportShoppingList(String currentShoppingListName){
         System.out.println("nom = " + currentShoppingListName);
-        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListName);
+        new ExportShoppingListController(currentShoppingListName);
     }
 
     public void sendShoppingListByMail(String currentShoppingListName){
@@ -170,18 +172,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         MailController mailController = new MailController(shoppingList);
         mailController.initMailView();
     }
+
     //Fin Methode Listener de WindowUserShoppingListController
-
-    //Methode Listener de HomeShoppingListViewController
-
-
-    //TODO: ne devrait pas se trouver dans la HomeSHopping
-    public void displayHomeShoppingListController(){
-        mainController.onShoppingListButtonClick();
-       }
-
-
-    //Fin Methode Listener de HomeShoppingListViewController
-
 
 }

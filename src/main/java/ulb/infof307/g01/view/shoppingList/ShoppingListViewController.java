@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.ViewController;
 import java.util.ArrayList;
 
@@ -38,11 +37,10 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
     protected String currentShoppingListName;
 
 
-    protected void removeBorderColor() {
+    public void removeBorderColor() {
         this.setNodeColor(tableViewDisplayProductList,false);
         this.setNodeColor(hBoxToCreateProduct, false);
     }
-
 
     /**
      * Retour au menu precedent : le menu principal de la liste de courses
@@ -60,8 +58,10 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
         listener.returnToUserMenu();
     }
 
-    public void fillShoppingListToSend(ShoppingList shoppingListToSend) {
-        // ajout de chaque produit de la table dans une nvl shoppingList
+    /**
+     * Ajout de chaque produit de la table dans une nouvelle liste de courses par le controller
+     */
+    public void fillShoppingListToSend() {
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
             Product product = (Product) tableViewDisplayProductList.getItems().get(i);
             listener.addProductToShoppingListToSend(product);
@@ -84,8 +84,7 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
      */
     @FXML
     public void addElementOfListToComboBoxProduct() {
-        //this.removeBorderColor();
-        //Recuper les elements choisi pour un produit
+        //Recupere les elements choisi pour un produit
         Object nameProductChoose = comboBoxListProduct.getSelectionModel().getSelectedItem();
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
@@ -169,6 +168,6 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
         void addProductToShoppingListToSend(Product product);
 
         //TODO: controller pour le create??
-        void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
+        void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
         }
 }
