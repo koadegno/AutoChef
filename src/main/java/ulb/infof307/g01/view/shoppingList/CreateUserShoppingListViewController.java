@@ -59,7 +59,6 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
      */
     @FXML
     public void confirmMyCreateShoppingList() {
-        removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
         int sizeTableViewDisplayProductList = tableViewDisplayProductList.getItems().size();
         listener.confirmUserModifyShoppingList(shoppingListName, sizeTableViewDisplayProductList);
@@ -81,7 +80,7 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     }
 
     @Override
-    protected void removeBorderColor() {
+    public void removeBorderColor() {
         super.removeBorderColor();
         this.setNodeColor(nameMyCreateShoppingList, false);
     }

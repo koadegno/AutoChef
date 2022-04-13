@@ -39,6 +39,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     //Methode Listener de CreateUserShoppingListViewController
 
     public void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
+        createUserShoppingListViewController.removeBorderColor();
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
             createUserShoppingListViewController.showNameUserCreateShoppingListError();
