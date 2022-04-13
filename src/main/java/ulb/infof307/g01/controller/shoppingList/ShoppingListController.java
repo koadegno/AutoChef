@@ -1,6 +1,7 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.stage.Stage;
+import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
@@ -17,6 +18,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
     private WindowUserShoppingListsControllerTools windowUserShoppingListsControllerTools;
     private WindowHomeShoppingListController windowHomeShoppingListController;
     private WindowUserShoppingListsController windowUserShoppingListsController;
+    private WindowCreateUserShoppingListController windowCreateUserShoppingListController;
     private ShoppingList shoppingListToSend;
 
     public ShoppingListController(){
@@ -28,6 +30,35 @@ public class ShoppingListController extends Controller implements WindowUserShop
         windowHomeShoppingListController.setListener(this);
 
     }
+
+    //Methode Listener de WindowCreateUserShoppingListController
+
+    public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
+
+        if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
+            windowCreateUserShoppingListController.showNameUserCreateShoppingListError();
+        }
+        else if(sizeTableViewDisplayProductList == 0){ // table view est vide
+            windowCreateUserShoppingListController.showIsEmptyTableViewError();
+        }
+        else {
+            this.shoppingListToSend = new ShoppingList(shoppingListName);
+            windowCreateUserShoppingListController.fillShoppingListToSend(shoppingListToSend);
+            try {
+                Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
+            }
+            catch (SQLiteException e) { //Erreur de doublon
+                windowCreateUserShoppingListController.showNameUserCreateShoppingListError();
+            } catch (SQLException e) {
+                e.printStackTrace();
+            }
+            // else tout ce passe bien
+            //TODO: voir ici cmt faire
+            displayHomeShoppingListController();
+        }
+    }
+
+    //Fin Methode Listener de WindowCreateUserShoppingListController
 
     //Methode Listener de WindowUserShoppingListController
 
@@ -70,7 +101,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
         shoppingListToSend.add(product);
     }
 
-    public void initInformationShoppingList(){
+    public void initInformationShoppingList(boolean isCreateUserShoppingListController){
         try {
             ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
             ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
@@ -78,7 +109,8 @@ public class ShoppingListController extends Controller implements WindowUserShop
             allUnitName.removeAll(List.of(unitToRemove));
             ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
-            windowUserShoppingListsController.initComboBox(allProduct, allUnitName, allShoppinListName);
+            if(isCreateUserShoppingListController) windowCreateUserShoppingListController.initComboBox(allProduct, allUnitName);
+            else windowUserShoppingListsController.initComboBox(allProduct, allUnitName, allShoppinListName);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -91,7 +123,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
         //TODO: pq on faisait appel a remove??
-        windowUserShoppingListsController.showAddProductError(false);
+        windowUserShoppingListsControllerTools.showAddProductError(false);
 
         Product userProduct;
 
@@ -99,10 +131,10 @@ public class ShoppingListController extends Controller implements WindowUserShop
             //Cree le produit pour le mettre dans le tableView
             userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
 
-            windowUserShoppingListsController.addProductToTableView(userProduct);
-            windowUserShoppingListsController.clearElementAddProduct();
+            windowUserShoppingListsControllerTools.addProductToTableView(userProduct);
+            windowUserShoppingListsControllerTools.clearElementAddProduct();
         } else {
-            windowUserShoppingListsController.showAddProductError(true);
+            windowUserShoppingListsControllerTools.showAddProductError(true);
         }
     }
 
@@ -116,6 +148,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
         menusController.displayMyMenus();
     }
 
+    //Fin Methode Listener de WindowUserShoppingListController
 
     public void returnHomeController(){
         Stage primaryStage = new Stage();
@@ -133,20 +166,22 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     @Override
     public void displayUserSHoppingListController(){
-        this.windowUserShoppingListsController = new WindowUserShoppingListsController();
+        this.windowUserShoppingListsControllerTools = this.windowUserShoppingListsController = new WindowUserShoppingListsController();
         windowUserShoppingListsController.setListener(this);
         loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
 
         //Initialise la page avec les informations de la bdd
-        this.initInformationShoppingList();
+        this.initInformationShoppingList(false);
     }
 
     @Override
     public void displayCreateUserShoppingListController(){
-        WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowsCreateMyShoppingListController, "CreateUserShoppingList.fxml");
+        this.windowUserShoppingListsControllerTools = this.windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
+        windowCreateUserShoppingListController.setListener(this);
+        loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
+
         //Initialise la page avec les informations de la bdd
-        //windowsCreateMyShoppingListController.initComboBox();
+        this.initInformationShoppingList(true);
 
     }
 

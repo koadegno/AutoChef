@@ -154,12 +154,15 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         void returnHomeShoppingList();
         void returnToUserMenu();
         void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
+        void initInformationShoppingList(boolean isCreateUserShoppingListController);
 
-            //TODO: creer un autre Controller??
+        //TODO: creer un autre Controller??
         void seeUserShoppingList(Object nameUserShoppingList);
         void confirmUserCreateShoppingList(String currentShoppingListName);
         void addProductToShoppingListToSend(Product product);
-        void initInformationShoppingList();
+
+        //TODO: controller pour le create??
+        void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
         }
 
     public void exportShoppingList(){
