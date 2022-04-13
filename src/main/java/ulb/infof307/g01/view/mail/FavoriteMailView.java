@@ -1,40 +1,28 @@
 package ulb.infof307.g01.view.mail;
 
-import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
-import ulb.infof307.g01.controller.MailController;
-import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.Window;
+import ulb.infof307.g01.view.ViewController;
 
-import javax.mail.internet.AddressException;
-import javax.mail.internet.InternetAddress;
-import java.sql.SQLException;
-
-public class FavoriteMailView extends Window {
+public class FavoriteMailView extends ViewController<FavoriteMailView.Listener> {
     public VBox vBox;
     public TextField newFavoriteMail;
-    private MailController mailController;
-
-    public void setMailController(MailController mailController){
-        this.mailController = mailController;
-    }
 
     public void confirmMail() {
         String newMail = newFavoriteMail.getText(); //envoyer ça
-        mailController.confirmMail(newMail);
+        listener.saveFavoriteMail(newMail, false);
     }
 
     public void addFavoriteMail(){
         String newMail = newFavoriteMail.getText();
-        mailController.addFavoriteMail(newMail);
+        listener.saveFavoriteMail(newMail, true);
     }
 
-    public void closePopup(){
-        Stage stage = (Stage) vBox.getScene().getWindow();
-        stage.close();
+    public void showAddressMailError(boolean isError){
+        setNodeColor(newFavoriteMail, isError);
     }
 
-
+    public interface Listener{
+        void saveFavoriteMail(String newMail, boolean isSave);
+    }
 }

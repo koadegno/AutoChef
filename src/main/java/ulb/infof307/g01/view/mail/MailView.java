@@ -7,12 +7,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
-import ulb.infof307.g01.controller.MailController;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.view.Window;
 import java.util.List;
 
-public class MailView extends Window {
+public class MailView extends ViewController<MailView.Listener> {
 
     @FXML
     public Label nameShoppingList;
@@ -24,11 +23,6 @@ public class MailView extends Window {
     public VBox vBox;
     @FXML
     public ComboBox<String> mailReceiver;
-    private MailController mailController;
-
-    public void setMailController(MailController mailController){
-        this.mailController = mailController;
-    }
 
     public void setShoppingListToMail(ShoppingList shoppingList){
         nameShoppingList.setText("Liste de courses : "+shoppingList.getName());
@@ -36,13 +30,17 @@ public class MailView extends Window {
 
     @FXML
     public void sendMail(){
-        setNodeColor(mailReceiver, false);
-        mailController.sendMail(mailReceiver.getSelectionModel().getSelectedItem(),subject.getText(), messageBody.getText());
+        listener.sendMail(mailReceiver.getSelectionModel().getSelectedItem(),subject.getText(), messageBody.getText());
     }
 
     public void chooseFavoriteMail(){
-        mailController.chooseFavoriteMail();
+        listener.chooseFavoriteMail();
     }
+
+    public void showAddressMailError(boolean isError){
+        setNodeColor(mailReceiver, isError);
+    }
+
 
     public void initComboboxFavoriteMail(List<String> allMail){
         mailReceiver.setItems(FXCollections.observableArrayList(allMail));
@@ -52,4 +50,8 @@ public class MailView extends Window {
         mailReceiver.getItems().add(newMail);
         mailReceiver.setValue(newMail);}
 
+    public interface Listener {
+        void sendMail(String recipientAddress, String subject, String mailTextBody);
+        void chooseFavoriteMail();
+    }
 }

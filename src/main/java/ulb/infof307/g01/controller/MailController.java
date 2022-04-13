@@ -4,7 +4,6 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.model.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.Window;
 import ulb.infof307.g01.view.mail.FavoriteMailView;
 import ulb.infof307.g01.view.mail.MailView;
 
@@ -14,12 +13,13 @@ import javax.mail.internet.InternetAddress;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 
-public class MailController extends Window {
+public class MailController extends Controller implements MailView.Listener, FavoriteMailView.Listener  {
     private ShoppingList shoppingList;
     private MailView mailView;
     private FavoriteMailView favoriteMailView;
-    private Stage popupStageMail;
+    private Stage popupStageMail, popupFavoriteMail;
 
     public MailController(ShoppingList shoppingList){
         this.shoppingList = shoppingList;
@@ -28,7 +28,7 @@ public class MailController extends Window {
 
     private void createMailViewController() {
         this.mailView = new MailView();
-        mailView.setMailController(this);
+        mailView.setListener(this);
         try {
             this.popupStageMail = popupFXML("createMail.fxml", mailView);
         } catch (IOException e) {
@@ -36,23 +36,29 @@ public class MailController extends Window {
         }
     }
 
+    @Override
     public void sendMail(String recipientAddress, String subject, String mailTextBody){
-        setNodeColor(mailView.mailReceiver, false);
+        mailView.showAddressMailError(false);
         Mail mail = new Mail();
         try {
-            mail.sendMail(recipientAddress, shoppingList, subject, mailTextBody);
-            popupStageMail.close();
+            if(!Objects.equals(recipientAddress, null)){
+                mail.sendMail(recipientAddress, shoppingList, subject, mailTextBody);
+                popupStageMail.close();
+            }
+            else{
+                mailView.showAddressMailError(true);
+            }
         } catch (MessagingException e) {
-            //TODO: colorier de cette maniere??
-            setNodeColor(mailView.mailReceiver, true);
+            mailView.showAddressMailError(true);
         }
     }
 
+    @Override
     public void chooseFavoriteMail(){
         this.favoriteMailView = new FavoriteMailView();
-        favoriteMailView.setMailController(this);
+        favoriteMailView.setListener(this);
         try {
-            popupFXML("favoriteMail.fxml", favoriteMailView);
+             this.popupFavoriteMail = popupFXML("favoriteMail.fxml", favoriteMailView);
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -72,34 +78,25 @@ public class MailController extends Window {
         initComboboxFavoriteMail();
     }
 
-    public void confirmMail(String newMail){
-        setNodeColor(favoriteMailView.newFavoriteMail, false);
-        if(isValidEmailAddress(newMail)){
-            mailView.addMailToCombobox(newMail);
-            favoriteMailView.closePopup();
-        }
-        else{
-            //TODO: mettre en rouge de cette façon??
-            setNodeColor(favoriteMailView.newFavoriteMail, true);
-        }
-    }
-
-    public void addFavoriteMail(String newMail) {
-        setNodeColor(favoriteMailView.newFavoriteMail, false);
+    @Override
+    public void saveFavoriteMail(String newMail, boolean isSave){
+        favoriteMailView.showAddressMailError(false);
         if(isValidEmailAddress(newMail)){
             try {
-                Configuration.getCurrent().getMailAddressDao().insert(newMail);
+                if(isSave){ //Enregistre le mail favorie dans la bdd
+                    Configuration.getCurrent().getMailAddressDao().insert(newMail);
+                }
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             mailView.addMailToCombobox(newMail);
-            favoriteMailView.closePopup(); //TODO: a revoir
+            popupFavoriteMail.close();
         }
         else{
-            //TODO: mettre en rouge de cette façon??
-            setNodeColor(favoriteMailView.newFavoriteMail, true);
+            favoriteMailView.showAddressMailError(true);
         }
     }
+
 
     public boolean isValidEmailAddress(String email) {
         boolean result = true;
