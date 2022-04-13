@@ -56,11 +56,9 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             this.shoppingListToSend = new ShoppingList(shoppingListName);
             createUserShoppingListViewController.fillShoppingListToSend();
             try {
-                //for(Product p: shoppingListToSend){System.out.println("Nom: "+p.getName());}
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
-                System.out.println("probleme but i dont know hwy");
                 e.printStackTrace();
                 createUserShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
