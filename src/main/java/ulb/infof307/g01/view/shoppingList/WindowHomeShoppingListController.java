@@ -10,15 +10,24 @@ import ulb.infof307.g01.view.ViewController;
 
 public class WindowHomeShoppingListController extends ViewController<WindowHomeShoppingListController.Listener> {
 
+    /**
+     * Affiche la page pour voir et modifier une liste de courses
+     */
     @FXML
     public void displayUserShoppingListController(){
         listener.displayUserSHoppingListController();}
 
+    /**
+     * Affiche la page pour créer une liste de courses
+     */
     @FXML
     public void displayCreateUserShoppingListController(){
         listener.displayCreateUserShoppingListController();
         }
 
+    /**
+     * Affiche la page pour retourner au menu précédent : la page principal d'une liste de shopping
+      */
     @FXML
     public void returnHomeShoppingListController() {
         listener.displayHomeShoppingListController();
