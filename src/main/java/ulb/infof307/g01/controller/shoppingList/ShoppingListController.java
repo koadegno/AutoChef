@@ -31,6 +31,11 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         initShoppingListController(mainController);
     }
 
+    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController){
+        this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
+        this.shoppingListViewController.setListener(this);
+    }
+
     private void initShoppingListController(MainController mainController) {
         this.mainController = mainController;
         this.shoppingListViewController.setListener(this);

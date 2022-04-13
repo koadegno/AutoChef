@@ -12,6 +12,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+import ulb.infof307.g01.controller.MainController;
+import ulb.infof307.g01.controller.MenuController;
+import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;
@@ -99,19 +102,17 @@ public class WindowShowMenuController extends Window implements Initializable, U
     @FXML
     public void generateShoppingList() {
         //TODO: regler ce probleme pour le MVC
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        //this.loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
-        //createUserShoppingListViewController.initShoppingListElement();
-        //TODO: arranger ça aie aie
-        //createUserShoppingListViewController.initComboBox();
-        fillShoppingList(createUserShoppingListViewController);
+        MenuController menuController = new MenuController(this);
+        menuController.setStage(primaryStage);
+        menuController.displayCreateUserShoppingList();
 
     }
 
-
-    public void fillShoppingList(CreateUserShoppingListViewController controller){
+    public ShoppingList fillShoppingList(CreateUserShoppingListViewController controller){
+        //TODO: changer ça qd il y aura le MVC
         ShoppingList myShoppingList = menu.generateShoppingList();
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
+        return myShoppingList;
     }
 
 
