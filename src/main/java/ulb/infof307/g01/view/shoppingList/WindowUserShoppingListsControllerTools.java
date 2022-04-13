@@ -11,7 +11,6 @@ import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.mail.MailView;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 
 import java.io.IOException;

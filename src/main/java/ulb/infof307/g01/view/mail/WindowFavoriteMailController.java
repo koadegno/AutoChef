@@ -4,7 +4,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import ulb.infof307.g01.view.ViewController;
 
-public class FavoriteMailView extends ViewController<FavoriteMailView.Listener> {
+public class WindowFavoriteMailController extends ViewController<WindowFavoriteMailController.Listener> {
     public VBox vBox;
     public TextField newFavoriteMail;
 
