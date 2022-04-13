@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.shoppingList.WindowHomeShoppingListController">
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
     <children>
       <HBox alignment="CENTER" prefHeight="121.0" prefWidth="750.0">
          <children>
@@ -18,13 +18,13 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="313.0" prefWidth="750.0" spacing="80.0">
          <children>
-              <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#displayMyShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Mes listes de courses" />
-              <Button fx:id="createShoppingListBtn" mnemonicParsing="false" onAction="#displayCreateShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Créer une liste de courses" />
+              <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#displayUserShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Mes listes de courses" />
+              <Button fx:id="createShoppingListBtn" mnemonicParsing="false" onAction="#displayCreateUserShoppingListController" prefHeight="50.0" prefWidth="170.0" text="Créer une liste de courses" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
          <children>
-              <Button fx:id="returnBtn" mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="48.0" prefWidth="415.0" text="Retour" />
+              <Button fx:id="returnBtn" mnemonicParsing="false" onAction="#returnHomeShoppingListController" prefHeight="48.0" prefWidth="415.0" text="Retour" />
          </children>
       </HBox>
     </children>

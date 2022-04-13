@@ -10,10 +10,7 @@ import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.menu.WindowUserMenuListController;
-
-import java.io.IOException;
+import ulb.infof307.g01.view.ViewController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -23,7 +20,7 @@ import java.util.Objects;
  * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
  */
 
-public class WindowUserShoppingListsControllerTools extends Window {
+public class WindowUserShoppingListsControllerTools extends ViewController<WindowUserShoppingListsControllerTools.Listener> {
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
     @FXML
     protected HBox hBoxToCreateProduct;
@@ -71,12 +68,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
 
     /**
      * Retour au menu precedent : le menu principal de la liste de courses
-     * @throws IOException
      */
     @FXML
-    public void returnShoppingList() throws IOException {
-        this.loadFXML("HomeShoppingList.fxml");
-
+    public void returnShoppingList() {
+        listener.returnHomeShoppingList();
     }
 
     /**
@@ -84,8 +79,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
      */
     @FXML
     public void returnToMyMenu() {
-        WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus();
+        listener.returnToUserMenu();
     }
 
     protected void fillShoppingListToSend(ShoppingList shoppingListToSend) {
@@ -172,14 +166,7 @@ public class WindowUserShoppingListsControllerTools extends Window {
     }
 
     public void exportShoppingList(){
-        ExportShoppingListView exportShoppingListView = new ExportShoppingListView();
-        try {
-            popupFXML("exportShoppingList.fxml", exportShoppingListView);
-            ShoppingList shoppingListToExport = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-            exportShoppingListView.setShoppingList(shoppingListToExport);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
+        listener.displayExportShoppingList(currentShoppingListname);
     }
 
     public void sendShoppingListByMail() throws SQLException {
@@ -188,5 +175,10 @@ public class WindowUserShoppingListsControllerTools extends Window {
         mailController.initMailView();
     }
 
+    public interface Listener{
+        void returnHomeShoppingList();
+        void returnToUserMenu();
+        void displayExportShoppingList(String currentShoppingListname );
+    }
 
 }

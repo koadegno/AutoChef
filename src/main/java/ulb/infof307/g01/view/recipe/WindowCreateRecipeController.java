@@ -135,9 +135,10 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     }
 
     public void addIngredients() {
+        //TODO: regler ici pour le MVC
         this.scene = this.primaryStage.getScene();
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
-        this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
+        //this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
         windowsMyShoppingListsController.setCallerClass(this);
 
         //Initialise la page avec les informations de la bdd

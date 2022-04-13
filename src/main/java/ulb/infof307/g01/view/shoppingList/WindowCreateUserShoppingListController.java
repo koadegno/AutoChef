@@ -40,11 +40,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
         returnToMenu.setOnAction((event) ->{
-            try {
-                returnShoppingList();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            returnShoppingList();
         });
 
     }

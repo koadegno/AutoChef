@@ -26,7 +26,7 @@ public abstract class Controller {
     }
 
     public FXMLLoader loadFXML(String filename) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(filename));
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         setNewScene(loader);
         return loader;
     }

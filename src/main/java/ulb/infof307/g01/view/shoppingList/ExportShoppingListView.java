@@ -7,10 +7,11 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.model.ODTCreator;
 import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.Window;
 
 
-public class ExportShoppingListView extends Window {
+public class ExportShoppingListView extends ViewController<ExportShoppingListView.Listener> {
 
     public Label nameShoppingList;
     public VBox vBox;
@@ -41,5 +42,9 @@ public class ExportShoppingListView extends Window {
     private void closePopup(){
         Stage stage = (Stage) vBox.getScene().getWindow();
         stage.close();
+    }
+
+    public interface Listener{
+
     }
 }

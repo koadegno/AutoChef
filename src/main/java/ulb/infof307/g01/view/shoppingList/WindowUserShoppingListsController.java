@@ -101,11 +101,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
         columnDelete.setCellFactory(cellFactory);
 
         returnToMenu.setOnAction((event) ->{
-            try {
-                returnShoppingList();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            returnShoppingList();
         });
     }
 
