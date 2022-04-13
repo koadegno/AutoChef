@@ -16,7 +16,7 @@ import java.util.*;
 
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener  {
     private ShoppingListViewController shoppingListViewController;
-    private UserShoppingListViewViewController windowUserShoppingListsController;
+    private UserShoppingListViewViewController userShoppingListViewViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private MainController mainController;
     private ShoppingList shoppingListToSend;
@@ -26,8 +26,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         initShoppingListController(mainController);
     }
 
-    public ShoppingListController(UserShoppingListViewViewController windowUserShoppingListsController, MainController mainController){
-        this.shoppingListViewController = this.windowUserShoppingListsController = windowUserShoppingListsController;
+    public ShoppingListController(UserShoppingListViewViewController userShoppingListViewViewController, MainController mainController){
+        this.shoppingListViewController = this.userShoppingListViewViewController = userShoppingListViewViewController;
         initShoppingListController(mainController);
     }
 
@@ -70,7 +70,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     @Override
     public void seeUserShoppingList(Object nameUserShoppingList){
         if(Objects.equals(nameUserShoppingList, null)){ //nom est null
-            windowUserShoppingListsController.isVisibleElementToModifyMyShoppingList(false);
+            userShoppingListViewViewController.isVisibleElementToModifyMyShoppingList(false);
         }
         else{
             String currentShoppingListName = (String) nameUserShoppingList;
@@ -78,9 +78,9 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 // afficher les produits de la liste de course dans la table
                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
-                windowUserShoppingListsController.addProductListToTableView(productOfShoppingList);
-                windowUserShoppingListsController.isVisibleElementToModifyMyShoppingList(true);
-                windowUserShoppingListsController.setCurrentShoppingListName(currentShoppingListName);
+                userShoppingListViewViewController.addProductListToTableView(productOfShoppingList);
+                userShoppingListViewViewController.isVisibleElementToModifyMyShoppingList(true);
+                userShoppingListViewViewController.setCurrentShoppingListName(currentShoppingListName);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -94,7 +94,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
-            windowUserShoppingListsController.fillShoppingListToSend(shoppingListToSend);
+            userShoppingListViewViewController.fillShoppingListToSend(shoppingListToSend);
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
 
@@ -116,7 +116,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
             if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else windowUserShoppingListsController.initComboBox(allProduct, allUnitName, allShoppinListName);
+            else userShoppingListViewViewController.initComboBox(allProduct, allUnitName, allShoppinListName);
 
         } catch (SQLException e) {
             e.printStackTrace();
