@@ -3,6 +3,7 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.stage.Stage;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
@@ -33,7 +34,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     //Methode Listener de WindowCreateUserShoppingListController
 
-    public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
+    public void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
             windowCreateUserShoppingListController.showNameUserCreateShoppingListError();
@@ -81,7 +82,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
         }
     }
 
-    public void confirmUserCreateShoppingList(String currentShoppingListName){
+    public void confirmUserModifyShoppingList(String currentShoppingListName){
         try {
             //Recupere liste de courses chez la bdd
             ShoppingList shoppingListInDataBase = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
@@ -148,6 +149,20 @@ public class ShoppingListController extends Controller implements WindowUserShop
         menusController.displayMyMenus();
     }
 
+    public void exportShoppingList(String currentShoppingListName){
+        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListName);
+    }
+
+    public void sendShoppingListByMail(String currentShoppingListName){
+        ShoppingList shoppingList = null;
+        try {
+            shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        MailController mailController = new MailController(shoppingList);
+        mailController.initMailView();
+    }
     //Fin Methode Listener de WindowUserShoppingListController
 
     //Methode Listener de WindowHomeShoppingListController

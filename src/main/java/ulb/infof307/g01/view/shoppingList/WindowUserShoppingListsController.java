@@ -35,7 +35,7 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
      */
     @FXML
     public void confirmMyCreateShoppingList() {
-        listener.confirmUserCreateShoppingList(currentShoppingListName);
+        listener.confirmUserModifyShoppingList(currentShoppingListName);
     }
 
     @FXML

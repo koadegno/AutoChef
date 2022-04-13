@@ -6,13 +6,9 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import ulb.infof307.g01.controller.shoppingList.ExportShoppingListController;
-import ulb.infof307.g01.controller.MailController;
-import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.ViewController;
-import java.sql.SQLException;
 import java.util.ArrayList;
 
 /**
@@ -150,28 +146,29 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
         tableViewDisplayProductList.getItems().add(product);
     }
 
+    public void exportShoppingList(){
+        listener.exportShoppingList(currentShoppingListName);
+    }
+
+    public void sendShoppingListByMail() {
+        listener.sendShoppingListByMail(currentShoppingListName);
+    }
+
+
     public interface Listener{
         void returnHomeShoppingList();
         void returnToUserMenu();
         void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
         void initInformationShoppingList(boolean isCreateUserShoppingListController);
+        void exportShoppingList(String currentShoppingListName);
+        void sendShoppingListByMail(String currentShoppingListName);
 
         //TODO: creer un autre Controller??
         void seeUserShoppingList(Object nameUserShoppingList);
-        void confirmUserCreateShoppingList(String currentShoppingListName);
+        void confirmUserModifyShoppingList(String currentShoppingListName);
         void addProductToShoppingListToSend(Product product);
 
         //TODO: controller pour le create??
-        void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
+        void confirmUserModifyShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
         }
-
-    public void exportShoppingList(){
-        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListName);
-    }
-
-    public void sendShoppingListByMail() throws SQLException {
-        ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
-        MailController mailController = new MailController(shoppingList);
-        mailController.initMailView();
-    }
 }

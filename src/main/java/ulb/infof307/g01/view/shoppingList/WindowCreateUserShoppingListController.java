@@ -62,7 +62,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
         int sizeTableViewDisplayProductList = tableViewDisplayProductList.getItems().size();
-        listener.confirmUserCreateShoppingList(shoppingListName, sizeTableViewDisplayProductList);
+        listener.confirmUserModifyShoppingList(shoppingListName, sizeTableViewDisplayProductList);
     }
 
     //TODO: changer ça pparce que ce n'est pas MVC
