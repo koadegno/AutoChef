@@ -26,6 +26,9 @@ public class WindowUserShoppingListsController extends WindowUserShoppingListsCo
          listener.seeUserShoppingList(nameUserShoppingList);
     }
 
+    public void setCurrentShoppingListName(String currentShoppingListName){
+        this.currentShoppingListName = currentShoppingListName;
+    }
     public void addProductListToTableView(Vector<Product> productOfShoppingList){
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
     }

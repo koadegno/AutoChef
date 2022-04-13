@@ -76,6 +76,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
                 windowUserShoppingListsController.addProductListToTableView(productOfShoppingList);
                 windowUserShoppingListsController.isVisibleElementToModifyMyShoppingList(true);
+                windowUserShoppingListsController.setCurrentShoppingListName(currentShoppingListName);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -150,6 +151,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
     }
 
     public void exportShoppingList(String currentShoppingListName){
+        System.out.println("nom = " + currentShoppingListName);
         ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListName);
     }
 
