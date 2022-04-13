@@ -59,12 +59,14 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
+                System.out.println("probleme but i dont know hwy");
+                e.printStackTrace();
                 createUserShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             // else tout ce passe bien
-            mainController.onShoppingListButtonClick();
+            //mainController.onShoppingListButtonClick();
         }
     }
 
