@@ -22,7 +22,7 @@
         </Menu>
       <Menu mnemonicParsing="false">
          <graphic>
-            <Button fx:id="returnButton" mnemonicParsing="false" text="Retour" />
+            <Button fx:id="returnButton" mnemonicParsing="false" onAction="#returnMainMenu" text="Retour" />
          </graphic>
       </Menu>
     </MenuBar>

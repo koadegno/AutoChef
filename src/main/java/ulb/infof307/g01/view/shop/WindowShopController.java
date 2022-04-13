@@ -28,6 +28,7 @@ public class WindowShopController extends ViewController<WindowShopController.Li
 
     public void createPopup(){
         try {
+            if(comboBoxProduct == null) System.out.println("je suis vide mon gars");
             listener.fillTableViewShop();
             listener.fillComboBoxProduct(comboBoxProduct);
 

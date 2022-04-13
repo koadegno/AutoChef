@@ -9,14 +9,14 @@ import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import ulb.infof307.g01.view.HomePageController;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
@@ -145,8 +145,8 @@ public class WindowMapController extends ViewController<WindowMapController.List
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 if (mouseEvent.getClickCount() == ONCE_CLICKED) {
 
-                    Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
-                    listener.highlightGraphicPoint(mapViewPoint);
+                    shopGraphicsCercleOverlay.clearSelection();
+                    listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
 
                 }
             }
@@ -183,11 +183,10 @@ public class WindowMapController extends ViewController<WindowMapController.List
         });
     }
 
-//    @FXML
-//    public void returnMainMenu() {
-//        WindowHomeController windowHomeController = new WindowHomeController();
-//        windowHomeController.displayMain(primaryStage);
-//    }
+    @FXML
+    public void returnMainMenu() {
+        listener.onBackButtonClicked();
+    }
 
     public MenuItem getAddShopMenuItem() {
         return addShopMenuItem;
@@ -207,8 +206,9 @@ public class WindowMapController extends ViewController<WindowMapController.List
         void onDeleteShopClicked() throws SQLException;
         void onUpdateShopClicked() throws SQLException;
         void onSearchShop(String shopName);
-        void highlightGraphicPoint(Point2D mapViewPoint);
+        void highlightGraphicPoint(double mouseX, double mouseY);
         boolean onSearchAddress(String address);
+        void onBackButtonClicked();
     }
 }
 

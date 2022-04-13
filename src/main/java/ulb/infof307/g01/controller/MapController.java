@@ -12,8 +12,6 @@ import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
@@ -21,6 +19,7 @@ import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.view.HomePageController;
 import ulb.infof307.g01.view.Window;
 import ulb.infof307.g01.view.map.WindowMapController;
 
@@ -93,7 +92,7 @@ public class MapController extends Controller implements WindowMapController.Lis
         //il y a une correction fait attention ca peut faire des erreurs tu penses ?
         Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + 10, addShopMenuItem.getParentPopup().getY() + 5);
         Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        Point mapPoint = mapView.screenToLocation(cursorPoint2D);
+        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
 
         Stage popUpStage = new Stage();
         ShopController shopController = new ShopController(popUpStage,new Shop(mapPoint),false,  this);
@@ -118,14 +117,26 @@ public class MapController extends Controller implements WindowMapController.Lis
         Pair shopOverlays = getSelectedShop();
         if(shopOverlays == null) return;
         Graphic cercleGraphic = (Graphic) shopOverlays.getLeft();
-        Graphic textGraphic = (Graphic) shopOverlays.getLeft();
+        Graphic textGraphic = (Graphic) shopOverlays.getRight();
 
         Point mapPoint = (Point) cercleGraphic.getGeometry();
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
 
         Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
-        ShopController showShopController = new ShopController(currentStage,shopToModify,true, this);
+        Stage popupStage = new Stage();
+        ShopController showShopController = new ShopController(popupStage,shopToModify,true, this);
         showShopController.show();
+    }
+
+    @Override
+    public void onBackButtonClicked() {
+        MainController mainController = new MainController();
+        FXMLLoader loader = this.loadFXML("HomePage.fxml");
+        HomePageController viewController = loader.getController();
+
+        viewController.setListener(mainController);
+        mainController.displayMain(currentStage);
+
     }
 
     @Override
@@ -179,7 +190,7 @@ public class MapController extends Controller implements WindowMapController.Lis
         GraphicsOverlay mapTextOverlay = viewController.getShopGraphicsTextList();
         List<Graphic> mapTextGraphics = mapTextOverlay.getGraphics();
 
-        GraphicsOverlay mapCercleOverlay = viewController.getShopGraphicsTextList();
+        GraphicsOverlay mapCercleOverlay = viewController.getShopGraphicsCercleList();
         List<Graphic> mapCercleGraphics = mapCercleOverlay.getGraphics();
 
         for(int index = 0; index < mapTextGraphics.size(); index++){
@@ -201,9 +212,11 @@ public class MapController extends Controller implements WindowMapController.Lis
     /**
      * Met en evidence un point sur la carte
      *
-     * @param mapViewPoint les coordonnées du point à mettre en evidence
+     * @param mouseX
+     * @param mouseY
      */
-    public void highlightGraphicPoint(Point2D mapViewPoint) {
+    public void highlightGraphicPoint(double mouseX, double mouseY) {
+        Point2D mapViewPoint = new Point2D(mouseX, mouseY);
         ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = viewController.getMapView().identifyGraphicsOverlayAsync(
                 viewController.getShopGraphicsCercleList(),
                 mapViewPoint, SIZE, false, 1);
@@ -213,9 +226,7 @@ public class MapController extends Controller implements WindowMapController.Lis
                 // recup la liste retourner par identify
                 List<Graphic> identifiedGraphics = identifyFuture.get().getGraphics();
                 if (identifiedGraphics.size() == 1) {
-
                     identifiedGraphics.get(0).setSelected(true);
-
                 }
             } catch (InterruptedException | ExecutionException ex) {
                 ex.printStackTrace();

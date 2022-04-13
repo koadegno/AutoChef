@@ -124,15 +124,13 @@ public class MainController extends Controller implements HomePageListener, Home
 
     /**
      * Revient à la page d'accueil de l'application.
-     * @see WindowHomeController
+     * @see HomePageController
      * */
     @Override
     public void onBackButtonClick() {
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
         HomePageController viewController = loader.getController();
         viewController.setListener(this);
-
-        setNewScene(loader);
     }
 
     // Méthodes de la fenêtre principale des Menus
