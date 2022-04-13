@@ -15,14 +15,14 @@ public class WindowHomeShoppingListController extends ViewController<WindowHomeS
      */
     @FXML
     public void displayUserShoppingListController(){
-        listener.displayUserSHoppingListController();}
+        listener.onMyShoppingListsButtonClick();}
 
     /**
      * Affiche la page pour créer une liste de courses
      */
     @FXML
     public void displayCreateUserShoppingListController(){
-        listener.displayCreateUserShoppingListController();
+        listener.onCreateShoppingListsButtonClick();
         }
 
     /**
@@ -30,12 +30,12 @@ public class WindowHomeShoppingListController extends ViewController<WindowHomeS
       */
     @FXML
     public void returnHomeShoppingListController() {
-        listener.returnHomePageController();
+        listener.onBackButtonClick();
     }
 
     public interface Listener{
-        void displayUserSHoppingListController();
-        void displayCreateUserShoppingListController();
-        void returnHomePageController();
+        void onMyShoppingListsButtonClick();
+        void onCreateShoppingListsButtonClick();
+        void onBackButtonClick();
     }
 }

@@ -2,6 +2,7 @@ package ulb.infof307.g01.view;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.MainController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.map.DisplayMapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
@@ -40,10 +41,10 @@ public class WindowHomeController extends Window{
      * */
     @FXML
     public void redirectToShoppingList(){
-        //TODO: solution pas ouf pour la primaryStage
-        ShoppingListController shoppingListController = new ShoppingListController();
-        shoppingListController.setStage(primaryStage);
-        shoppingListController.displayHomeShoppingListController();
+        //TODO: solution pas ouf ??? pour la primaryStage
+        MainController mainController = new MainController();
+        mainController.setStage(primaryStage);
+        mainController.onShoppingListButtonClick();
 
     }
 

@@ -4,6 +4,7 @@ import javafx.stage.Stage;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.MailController;
+import ulb.infof307.g01.controller.MainController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
@@ -15,21 +16,31 @@ import java.sql.SQLException;
 import java.util.*;
 
 
-public class ShoppingListController extends Controller implements WindowUserShoppingListsControllerTools.Listener, WindowHomeShoppingListController.Listener  {
+public class ShoppingListController extends Controller implements WindowUserShoppingListsControllerTools.Listener  {
     private WindowUserShoppingListsControllerTools windowUserShoppingListsControllerTools;
-    private WindowHomeShoppingListController windowHomeShoppingListController;
     private WindowUserShoppingListsController windowUserShoppingListsController;
     private WindowCreateUserShoppingListController windowCreateUserShoppingListController;
+    private MainController mainController;
     private ShoppingList shoppingListToSend;
+
+    public ShoppingListController(WindowCreateUserShoppingListController windowCreateUserShoppingListController, MainController mainController){
+        this.windowUserShoppingListsControllerTools = this.windowCreateUserShoppingListController = windowCreateUserShoppingListController;
+        this.mainController = mainController;
+        this.windowCreateUserShoppingListController.setListener(this);
+        this.windowUserShoppingListsControllerTools.setListener(this);
+    }
+
+    public ShoppingListController(WindowUserShoppingListsController windowUserShoppingListsController,MainController mainController){
+        this.windowUserShoppingListsControllerTools = this.windowUserShoppingListsController = windowUserShoppingListsController;
+        this.mainController = mainController;
+        this.windowUserShoppingListsController.setListener(this);
+        this.windowUserShoppingListsControllerTools.setListener(this);
+
+    }
 
     public ShoppingListController(){
         this.windowUserShoppingListsControllerTools = new WindowUserShoppingListsControllerTools();
         windowUserShoppingListsControllerTools.setListener(this);
-
-        //TODO: creer un autre controller??
-        this.windowHomeShoppingListController = new WindowHomeShoppingListController();
-        windowHomeShoppingListController.setListener(this);
-
     }
 
     //Methode Listener de WindowCreateUserShoppingListController
@@ -169,36 +180,12 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     //Methode Listener de WindowHomeShoppingListController
 
-    @Override
-    public void returnHomePageController(){
-        loadFXML("HomePage.fxml");
-    }
 
     //TODO: ne devrait pas se trouver dans la HomeSHopping
     public void displayHomeShoppingListController(){
-        loadFXML(windowHomeShoppingListController, "HomeShoppingList.fxml");
-    }
+        mainController.onShoppingListButtonClick();
+       }
 
-    @Override
-    public void displayUserSHoppingListController(){
-        this.windowUserShoppingListsControllerTools = this.windowUserShoppingListsController = new WindowUserShoppingListsController();
-        windowUserShoppingListsController.setListener(this);
-        loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
-
-        //Initialise la page avec les informations de la bdd
-        this.initInformationShoppingList(false);
-    }
-
-    @Override
-    public void displayCreateUserShoppingListController(){
-        this.windowUserShoppingListsControllerTools = this.windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
-        windowCreateUserShoppingListController.setListener(this);
-        loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
-
-        //Initialise la page avec les informations de la bdd
-        this.initInformationShoppingList(true);
-
-    }
 
     //Fin Methode Listener de WindowHomeShoppingListController
 
