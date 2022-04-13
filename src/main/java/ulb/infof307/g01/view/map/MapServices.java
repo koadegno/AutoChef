@@ -23,7 +23,7 @@ import javafx.scene.input.MouseButton;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shop.ShowShopController;
+import ulb.infof307.g01.view.shop.WindowShopController;
 
 import java.sql.SQLException;
 import java.util.List;
@@ -57,22 +57,22 @@ public class MapServices {
         return shopGraphicsTextOverlay.getGraphics();
     }
 
-//    public MapServices() {
-//
-////         Initialisation de la carte pour correspondre au point de vue la Belgique
-////         et mise en place de la clé d'API
-//        mapView = new MapView();
-//        //TODO trouver un meilleur moyen de mettre la clé
-//        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
-//        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
-//        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
-//        mapView.setMap(map);
-//        //TODO changer ces nombres magique
-//        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
-//        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
-//        mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
-//        mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
-//    }
+    public MapServices() {
+
+//         Initialisation de la carte pour correspondre au point de vue la Belgique
+//         et mise en place de la clé d'API
+        mapView = new MapView();
+        //TODO trouver un meilleur moyen de mettre la clé
+        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
+        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
+        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
+        mapView.setMap(map);
+        //TODO changer ces nombres magique
+        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
+        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
+        mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
+        mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
+    }
 
     /**
      * lance la popup pour ajouter un magasin sur la map
@@ -80,34 +80,34 @@ public class MapServices {
      */
     void setShopOnMap(Point2D cursorPoint2D) {
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-        ShowShopController showShopController = new ShowShopController();
-        showShopController.createPopup(new Shop(mapPoint),this,false);
+        WindowShopController showShopController = new WindowShopController();
+        //showShopController.createPopup(new Shop(mapPoint),this,false);
     }
 
-//    /**
-//     * Methode initialisant les evenements sur la map
-//     */
-//    void initializeMapEvent() {
-//        mapView.setOnMouseClicked(mouseEvent -> {
-//            mapView.setCursor(Cursor.DEFAULT);
-//            // selectionner un point avec un simple clique droit
-//            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-//                if (mouseEvent.getClickCount() == ONCE_CLICKED) {
-//
-//                    Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
-//                    highlightGraphicPoint(mapViewPoint);
-//
-//                }
-//                // ajouter un point sur la map ou suppression
-//                else if (mouseEvent.getClickCount() == DOUBLE_CLICKED) {
-//                    Point2D cursorPoint2D = new Point2D(mouseEvent.getX(), mouseEvent.getY());
-//                    setShopOnMap(cursorPoint2D);
-//
-//                }
-//                shopGraphicsCercleOverlay.clearSelection();
-//            }
-//        });
-//    }
+    /**
+     * Methode initialisant les evenements sur la map
+     */
+    void initializeMapEvent() {
+        mapView.setOnMouseClicked(mouseEvent -> {
+            mapView.setCursor(Cursor.DEFAULT);
+            // selectionner un point avec un simple clique droit
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
+                if (mouseEvent.getClickCount() == ONCE_CLICKED) {
+
+                    Point2D mapViewPoint = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                    highlightGraphicPoint(mapViewPoint);
+
+                }
+                // ajouter un point sur la map ou suppression
+                else if (mouseEvent.getClickCount() == DOUBLE_CLICKED) {
+                    Point2D cursorPoint2D = new Point2D(mouseEvent.getX(), mouseEvent.getY());
+                    setShopOnMap(cursorPoint2D);
+
+                }
+                shopGraphicsCercleOverlay.clearSelection();
+            }
+        });
+    }
 
     /**
      * Supprime les points selectioner de l'overlay
@@ -166,28 +166,28 @@ public class MapServices {
         });
     }
 
-//    /**
-//     * Ajout d'un point avec son texte sur la map
-//     *
-//     * @param shopToAdd la ou doit se trouver le point
-//     */
-//    public void addShop(Shop shopToAdd) {
-//        //cree un cercle rouge
-//        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
-//        // cree un texte attacher au point
-//        TextSymbol pierTextSymbol =
-//                new TextSymbol(
-//                        SIZE, shopToAdd.getName(), COLOR_BLACK,
-//                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-//
-//        Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
-//        Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
-//
-//        // ajoute des graphique a l'overlay
-//        shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
-//        shopGraphicsTextOverlay.getGraphics().add(textPoint);
-//
-//    }
+    /**
+     * Ajout d'un point avec son texte sur la map
+     *
+     * @param shopToAdd la ou doit se trouver le point
+     */
+    public void addShop(Shop shopToAdd) {
+        //cree un cercle rouge
+        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
+        // cree un texte attacher au point
+        TextSymbol pierTextSymbol =
+                new TextSymbol(
+                        SIZE, shopToAdd.getName(), COLOR_BLACK,
+                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+
+        Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
+        Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
+
+        // ajoute des graphique a l'overlay
+        shopGraphicsCercleOverlay.getGraphics().add(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().add(textPoint);
+
+    }
 
     /**
      * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis

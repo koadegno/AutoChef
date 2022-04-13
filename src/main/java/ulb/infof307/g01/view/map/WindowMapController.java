@@ -26,7 +26,7 @@ import java.util.*;
 public class WindowMapController extends ViewController<WindowMapController.Listener> implements Initializable  {
 
 // TODO: CONTEXT MENU DANS FXML ?
-    private final MapServices mapServices = new MapServices();
+    private MapServices mapServices;
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
@@ -77,10 +77,9 @@ public class WindowMapController extends ViewController<WindowMapController.List
     }
 
     @FXML
-    void onShopSearchBoxAction(ActionEvent event) {
+    void onShopSearchBoxAction() {
         String fieldText = textFieldMenuBar.getText();
         listener.onSearchShop(fieldText);
-        event.consume();
     }
 
     /**
@@ -159,9 +158,7 @@ public class WindowMapController extends ViewController<WindowMapController.List
         mapView.setContextMenu(contextMenu);
 
         // context menu pour l'ajout
-        addShopMenuItem.setOnAction(event -> {
-            listener.onAddShopClicked();
-        });
+        addShopMenuItem.setOnAction(event -> {listener.onAddShopClicked();});
 
         // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {

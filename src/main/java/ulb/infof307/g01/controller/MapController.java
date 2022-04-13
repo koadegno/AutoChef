@@ -21,26 +21,26 @@ import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.Window;
 import ulb.infof307.g01.view.map.WindowMapController;
-import ulb.infof307.g01.view.shop.ShowShopController;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-public class MapController extends Controller implements WindowMapController.Listener {
+public class MapController extends Controller implements WindowMapController.Listener, ShopController.MapListener{
 
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int SIZE = 10;
-    private static final int DOUBLE_CLICKED = 2;
     public static final int COLOR_BLACK = 0xFF000000;
     public static final int ADDRESS_SIZE = 18;
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
     private WindowMapController viewController;
 
-
-    public void show(Stage primaryStage){
+    public MapController(Stage primaryStage){
         this.setStage(primaryStage);
+    }
+
+    public void show(){
         FXMLLoader loader = this.loadFXML("DisplayMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
@@ -92,7 +92,8 @@ public class MapController extends Controller implements WindowMapController.Lis
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
 
         //TODO cree un controlleur pour le shop et l'appeler avec le point que tu veux ajouter
-        ShopController shopController = new ShopController(new Shop(mapPoint),this,false);
+        ShopController shopController = new ShopController(currentStage,new Shop(mapPoint),false,  this);
+        shopController.show();
     }
 
     /**
@@ -100,18 +101,13 @@ public class MapController extends Controller implements WindowMapController.Lis
      * @param shop le magasin existant qu'il faut mettre a jour
      */
     public void updateShop(Shop shop){
-        GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
-        GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
+        Pair shopOverlay = getSelectedShop();
+        if(shopOverlay == null) return;
 
-        for(int index=0;index < shopGraphicsCercleList.getGraphics().size();index++ ) {
-            Graphic cercleGraphic = shopGraphicsCercleList.getGraphics().get(index);
-            Graphic textGraphic = shopGraphicsTextList.getGraphics().get(index);
-
-            if (cercleGraphic.isSelected()) {
-                ((TextSymbol) textGraphic.getSymbol()).setText(shop.getName());
-            }
+        Graphic textPointOnMap = (Graphic) shopOverlay.getRight();
+        TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
+        shopName.setText(shop.getName());
         }
-    }
 
     @Override
     public void onUpdateShopClicked() throws SQLException {
@@ -124,8 +120,8 @@ public class MapController extends Controller implements WindowMapController.Lis
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
 
         Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
-        ShowShopController showShopController = new ShowShopController();
-        showShopController.createPopup(shopToModify, viewController.getMapView(),true);
+        ShopController showShopController = new ShopController(currentStage,shopToModify,true, this);
+        showShopController.show();
     }
 
     @Override
