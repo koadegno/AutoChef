@@ -26,6 +26,9 @@ public class MailController extends Controller implements MailView.Listener, Fav
         createMailViewController();
     }
 
+    /**
+     * Affiche la popup qui permet d'envoyer un mail
+     */
     private void createMailViewController() {
         this.mailView = new MailView();
         mailView.setListener(this);
@@ -36,6 +39,12 @@ public class MailController extends Controller implements MailView.Listener, Fav
         }
     }
 
+    /**
+     * Permet d'envoyer une liste de course par mail
+     * @param recipientAddress Adresse e-mail du destinataire du mail.
+     * @param subject l'objet du mail
+     * @param mailTextBody texte qui contient la description du mail
+     */
     @Override
     public void sendMail(String recipientAddress, String subject, String mailTextBody){
         mailView.showAddressMailError(false);
@@ -43,18 +52,21 @@ public class MailController extends Controller implements MailView.Listener, Fav
         try {
             if(!Objects.equals(recipientAddress, null)){
                 mail.sendMail(recipientAddress, shoppingList, subject, mailTextBody);
-                popupStageMail.close();
+                popupStageMail.close(); //Fermer la popup
             }
             else{
-                mailView.showAddressMailError(true);
+                mailView.showAddressMailError(true); //l'utilisateur n'a pas choisi de mail
             }
         } catch (MessagingException e) {
             mailView.showAddressMailError(true);
         }
     }
 
+    /**
+     * Affiche la popup qui permet de créer un nouveau mail (favorite)
+     */
     @Override
-    public void chooseFavoriteMail(){
+    public void createFavoriteMail(){
         this.favoriteMailView = new FavoriteMailView();
         favoriteMailView.setListener(this);
         try {
@@ -74,10 +86,15 @@ public class MailController extends Controller implements MailView.Listener, Fav
     }
 
     public void initMailView(){
-        mailView.setShoppingListToMail(shoppingList);
+        mailView.showNameShoppingListToMail(shoppingList);
         initComboboxFavoriteMail();
     }
 
+    /**
+     * Enregistre le mail favorite dans la base de donnée
+     * @param newMail nouvelle adresse e-mail du destinataire du mail.
+     * @param isSave boolean permet de savoir si l'utilisateur veut enregistrer le mail dans la bdd
+     */
     @Override
     public void saveFavoriteMail(String newMail, boolean isSave){
         favoriteMailView.showAddressMailError(false);
@@ -90,14 +107,19 @@ public class MailController extends Controller implements MailView.Listener, Fav
                 e.printStackTrace();
             }
             mailView.addMailToCombobox(newMail);
-            popupFavoriteMail.close();
+            popupFavoriteMail.close(); //Ferme la popup
         }
         else{
-            favoriteMailView.showAddressMailError(true);
+            favoriteMailView.showAddressMailError(true); //l'utilisateur a mal écrit le mail
         }
     }
 
 
+    /**
+     * Permet de savoir si l'adresse e-mail entrée est correcte
+     * @param email adresse e-mail du destinataire du mail.
+     * @return boolean qui indique si c'est une adresse e-mail valide
+     */
     public boolean isValidEmailAddress(String email) {
         boolean result = true;
         try {
