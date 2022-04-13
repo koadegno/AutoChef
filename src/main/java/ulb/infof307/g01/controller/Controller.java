@@ -55,6 +55,7 @@ public abstract class Controller {
         loader.setController(controller);
         popup.setScene(new Scene(loader.load()));
         popup.show();
+
         return popup;
     }
 
