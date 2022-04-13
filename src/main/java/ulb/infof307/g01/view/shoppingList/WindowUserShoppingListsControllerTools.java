@@ -6,7 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
-import ulb.infof307.g01.controller.ExportShoppingListController;
+import ulb.infof307.g01.controller.shoppingList.ExportShoppingListController;
 import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;

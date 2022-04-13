@@ -1,14 +1,11 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.stage.Stage;
-import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.view.WindowHomeController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
 
-import java.io.IOException;
-import java.sql.SQLException;
 
 public class ShoppingListController extends Controller implements WindowUserShoppingListsControllerTools.Listener, WindowHomeShoppingListController.Listener  {
     private WindowUserShoppingListsControllerTools windowUserShoppingListsControllerTools;

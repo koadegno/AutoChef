@@ -1,7 +1,8 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.ODTCreator;
 import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
@@ -17,19 +18,27 @@ public class ExportShoppingListController extends Controller implements WindowEx
     private Stage popupExportShoppingList;
     private ShoppingList shoppingList;
 
+    /**
+     * Constructeur qui fait appel à la base de donnée pour recuperer la liste de courses
+     * @param currentShoppingListName nom de la liste de courses
+     */
     public ExportShoppingListController(String currentShoppingListName){
         this.windowExportShoppingListController = new WindowExportShoppingListController();
         windowExportShoppingListController.setListener(this);
+
         try {
             this.shoppingList =  Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
-        ;
-        displayExportShoppingList(currentShoppingListName);
+
+        this.displayExportShoppingList();
     }
 
-    public void displayExportShoppingList(String currentShoppingListName){
+    /**
+     * Affiche la popup pour pouvoir exporter en PDF ou ODT une liste de courses
+     */
+    public void displayExportShoppingList(){
         try {
             this.popupExportShoppingList = popupFXML("exportShoppingList.fxml", windowExportShoppingListController);
         } catch (IOException e) {
@@ -37,12 +46,18 @@ public class ExportShoppingListController extends Controller implements WindowEx
         }
     }
 
+    /**
+     * Exporter la liste de courses en PDF puis fermer la popup
+     */
     public void exportToPDF(){
         PDFCreator pdfCreator = new PDFCreator();
         pdfCreator.createPDF(shoppingList);
         popupExportShoppingList.close();
     }
 
+    /**
+     * Exporter la liste de courses en ODT puis fermer la popup
+     */
     public void exportToODT(){
         ODTCreator odtCreator = new ODTCreator();
         try {

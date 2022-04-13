@@ -2,8 +2,7 @@ package ulb.infof307.g01.view;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.ShoppingListController;
+import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.map.DisplayMapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.recipe.WindowHomeRecipeController;

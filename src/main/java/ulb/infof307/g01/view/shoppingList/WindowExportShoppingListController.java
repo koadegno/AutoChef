@@ -17,7 +17,7 @@ public class WindowExportShoppingListController extends ViewController<WindowExp
     }
 
     public interface Listener{
-        void displayExportShoppingList(String currentShoppingListname);
+        void displayExportShoppingList();
         void exportToPDF();
         void exportToODT();
     }
