@@ -68,15 +68,19 @@ public abstract class Controller {
 
     public void setNewScene(FXMLLoader loader, String title) {
         Parent root = null;
-        try {root = loader.load();}
+        try {
+            root = loader.load();
+            currentStage.setTitle("Autochef - " + title);
+            currentStage.setScene(new Scene(root));
+            currentStage.show();
+        }
         catch (IOException e) {
+            e.printStackTrace();
             URL missingFXMLFile = loader.getLocation();
             ViewController.showErrorFXMLMissing(missingFXMLFile);
         }
 
-        currentStage.setTitle("Autochef - " + title);
-        currentStage.setScene(new Scene(root));
-        currentStage.show();
+
     }
 
     public void setNewScene(FXMLLoader loader) {
