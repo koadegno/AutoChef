@@ -12,7 +12,6 @@ import java.sql.SQLException;
 
 public class ShoppingListController extends Controller implements WindowUserShoppingListsControllerTools.Listener, WindowHomeShoppingListController.Listener  {
     private WindowUserShoppingListsControllerTools windowUserShoppingListsControllerTools;
-    private ExportShoppingListView exportShoppingListView;
     private WindowHomeShoppingListController windowHomeShoppingListController;
 
     public ShoppingListController(){
@@ -22,7 +21,6 @@ public class ShoppingListController extends Controller implements WindowUserShop
         //TODO: creer un autre controller??
         this.windowHomeShoppingListController = new WindowHomeShoppingListController();
         windowHomeShoppingListController.setListener(this);
-
 
     }
 
@@ -37,16 +35,6 @@ public class ShoppingListController extends Controller implements WindowUserShop
         menusController.displayMyMenus();
     }
 
-    public void displayExportShoppingList(String currentShoppingListname){
-        this.exportShoppingListView = new ExportShoppingListView();
-        try {
-            popupFXML("exportShoppingList.fxml", exportShoppingListView);
-            ShoppingList shoppingListToExport = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListname);
-            exportShoppingListView.setShoppingList(shoppingListToExport);
-        } catch (IOException | SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
 
     //Methode Listener de WindowHomeShoppingListController
@@ -75,7 +63,7 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     }
 
-
+    //Fin Methode Listener de WindowHomeShoppingListController
 
     public void returnHomeController(){
         Stage primaryStage = new Stage();

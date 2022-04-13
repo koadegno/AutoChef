@@ -6,6 +6,7 @@ import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
+import ulb.infof307.g01.controller.ExportShoppingListController;
 import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
@@ -166,7 +167,7 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
     }
 
     public void exportShoppingList(){
-        listener.displayExportShoppingList(currentShoppingListname);
+        ExportShoppingListController exportShoppingListController = new ExportShoppingListController(currentShoppingListname);
     }
 
     public void sendShoppingListByMail() throws SQLException {
@@ -178,7 +179,6 @@ public class WindowUserShoppingListsControllerTools extends ViewController<Windo
     public interface Listener{
         void returnHomeShoppingList();
         void returnToUserMenu();
-        void displayExportShoppingList(String currentShoppingListname );
     }
 
 }
