@@ -56,6 +56,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             this.shoppingListToSend = new ShoppingList(shoppingListName);
             createUserShoppingListViewController.fillShoppingListToSend();
             try {
+                //for(Product p: shoppingListToSend){System.out.println("Nom: "+p.getName());}
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
@@ -165,7 +166,6 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     }
 
     public void exportShoppingList(String currentShoppingListName){
-        System.out.println("nom = " + currentShoppingListName);
         new ExportShoppingListController(currentShoppingListName);
     }
 

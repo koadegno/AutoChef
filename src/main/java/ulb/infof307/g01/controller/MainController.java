@@ -8,6 +8,7 @@ import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageController.*;
 import ulb.infof307.g01.view.menu.HomeMenuController;
 import ulb.infof307.g01.view.menu.WindowCreateMenuController;
+import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
@@ -56,11 +57,13 @@ public class MainController extends Controller implements HomePageListener, Home
      * */
     @Override
     public void onMenuButtonClick() {
-        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        HomeMenuController viewController = loader.getController();
-        viewController.setListener(this);
+        //FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
+        //HomeMenuController viewController = loader.getController();
+        //viewController.setListener(this);
 
-        setNewScene(loader);
+        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
+        mainMenuController.setStage(currentStage);
+        mainMenuController.displayMainMenuController();
     }
 
     /**

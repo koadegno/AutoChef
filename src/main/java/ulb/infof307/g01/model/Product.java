@@ -20,6 +20,11 @@ public class Product {
         this.quantity = quantity;
     }
 
+    @Override
+    public int hashCode() {
+        return name.hashCode();
+    }
+
     /**
      * @param productName Nom du produit
      * @param quantity Quantité du produit
@@ -62,7 +67,11 @@ public class Product {
     /**
      * Augmente la quantité du Produit de 1
      */
-    public void increase() {
+    public void increase(int quantity) {
+        this.quantity+=quantity;
+    }
+
+    public void increase(){
         quantity++;
     }
 
