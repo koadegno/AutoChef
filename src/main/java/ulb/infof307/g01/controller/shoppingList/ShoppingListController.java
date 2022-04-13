@@ -150,14 +150,6 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
     //Fin Methode Listener de WindowUserShoppingListController
 
-    public void returnHomeController(){
-        Stage primaryStage = new Stage();
-        //TODO: changer ça -> ? loadFXML("HomePage.fxml");
-        WindowHomeController windowHomeController = new WindowHomeController();
-        windowHomeController.displayMain(primaryStage);
-    }
-
-
     //Methode Listener de WindowHomeShoppingListController
 
     @Override
