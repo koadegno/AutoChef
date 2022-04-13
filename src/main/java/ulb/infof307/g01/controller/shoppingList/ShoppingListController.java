@@ -159,7 +159,13 @@ public class ShoppingListController extends Controller implements WindowUserShop
 
 
     //Methode Listener de WindowHomeShoppingListController
+
     @Override
+    public void returnHomePageController(){
+        loadFXML("HomePage.fxml");
+    }
+
+    //TODO: ne devrait pas se trouver dans la HomeSHopping
     public void displayHomeShoppingListController(){
         loadFXML(windowHomeShoppingListController, "HomeShoppingList.fxml");
     }

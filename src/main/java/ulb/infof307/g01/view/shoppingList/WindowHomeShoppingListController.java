@@ -30,12 +30,12 @@ public class WindowHomeShoppingListController extends ViewController<WindowHomeS
       */
     @FXML
     public void returnHomeShoppingListController() {
-        listener.displayHomeShoppingListController();
+        listener.returnHomePageController();
     }
 
     public interface Listener{
         void displayUserSHoppingListController();
         void displayCreateUserShoppingListController();
-        void displayHomeShoppingListController();
+        void returnHomePageController();
     }
 }
