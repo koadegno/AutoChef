@@ -6,21 +6,17 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import org.sqlite.SQLiteException;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.db.Configuration;
 
-import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
  * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
  */
 
-public class WindowCreateUserShoppingListController extends WindowUserShoppingListsControllerTools implements Initializable {
+public class CreateUserShoppingListViewController extends ShoppingListViewController implements Initializable {
 
     @FXML
     TextField nameMyCreateShoppingList;
@@ -30,7 +26,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
     Label labelNameShoppingList;
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        activeElementVisibility();
+        activeElementVisibility(true);
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
@@ -40,11 +36,7 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
         returnToMenu.setOnAction((event) ->{
-            try {
-                returnShoppingList();
-            } catch (IOException e) {
-                e.printStackTrace();
-            }
+            returnShoppingList();
         });
 
     }
@@ -52,14 +44,14 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
     /**
      * Methode qui rend visible les boutons utilisée
      */
-    private void activeElementVisibility() {
-        btnAddNewProduct.setVisible(true);
-        nameMyCreateShoppingList.setVisible(true);
-        labelNameShoppingList.setVisible(true);
-        comboBoxListUnity.setVisible(true);
-        comboBoxListProduct.setVisible(true);
-        spinnerQuantityOrNumber.setVisible(true);
-        btnConfirm.setVisible(true);
+    private void activeElementVisibility(boolean isVisible) {
+        btnAddNewProduct.setVisible(isVisible);
+        nameMyCreateShoppingList.setVisible(isVisible);
+        labelNameShoppingList.setVisible(isVisible);
+        comboBoxListUnity.setVisible(isVisible);
+        comboBoxListProduct.setVisible(isVisible);
+        spinnerQuantityOrNumber.setVisible(isVisible);
+        btnConfirm.setVisible(isVisible);
     }
 
     /**
@@ -67,31 +59,12 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
      */
     @FXML
     public void confirmMyCreateShoppingList() {
-        removeBorderColor();
         String shoppingListName = nameMyCreateShoppingList.getText();
-
-        if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
-            this.setNodeColor(nameMyCreateShoppingList,true);
-        }
-        else if(tableViewDisplayProductList.getItems().size() == 0){ // table view est vide
-            this.setNodeColor(tableViewDisplayProductList,true);
-        }
-        else {
-            ShoppingList shoppingListToSend = new ShoppingList(shoppingListName);
-            fillShoppingListToSend(shoppingListToSend);
-            try {
-                Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
-            }
-            catch (SQLiteException e) { //Erreur de doublon
-                this.setNodeColor(nameMyCreateShoppingList,true);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            // else tout ce passe bien
-            returnToMenu.fire();
-        }
+        int sizeTableViewDisplayProductList = tableViewDisplayProductList.getItems().size();
+        listener.confirmUserCreateShoppingList(shoppingListName, sizeTableViewDisplayProductList);
     }
 
+    //TODO: changer ça parce que ce n'est pas MVC
     /**Methode permettant de remplir le tableau des elements d'une liste de courses
      * @param myExistentShoppingList : liste de shopping contenant la liste de courses
      */
@@ -105,9 +78,18 @@ public class WindowCreateUserShoppingListController extends WindowUserShoppingLi
             returnToMyMenu();
         });
     }
+
     @Override
-    protected void removeBorderColor() {
+    public void removeBorderColor() {
         super.removeBorderColor();
         this.setNodeColor(nameMyCreateShoppingList, false);
+    }
+
+    public void showNameUserCreateShoppingListError(){
+        this.setNodeColor(nameMyCreateShoppingList,true);
+    }
+
+    public void showIsEmptyTableViewError(){
+        this.setNodeColor(tableViewDisplayProductList,true);
     }
 }

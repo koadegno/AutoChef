@@ -22,19 +22,19 @@ public class HomePageController extends ViewController<HomePageController.HomePa
     public Button mapButton;
 
     @FXML
-    public void onShoppingListButtonClick() {listener.onShoppingListButtonClick();}
+    public void redirectToShoppingList() {listener.onShoppingListButtonClick();}
 
     @FXML
-    public void onMenuButtonClick() {listener.onMenuButtonClick();}
+    public void redirectToMenu() {listener.onMenuButtonClick();}
 
     @FXML
-    public void onMapButtonClick(){listener.onMapButtonClick();}
+    public void redirectToMap(){listener.onMapButtonClick();}
 
     @FXML
-    public void onRecipeButtonClick(){listener.onRecipeButtonClick();}
+    public void redirectToRecipe(){listener.onRecipeButtonClick();}
 
     @FXML
-    public void onQuitButtonClick(){
+    public void closeApplication(){
         listener.onQuitButtonClick();
     }
 

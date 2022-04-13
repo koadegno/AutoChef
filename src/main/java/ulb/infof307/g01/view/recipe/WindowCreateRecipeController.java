@@ -11,7 +11,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -111,7 +111,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
                 e.printStackTrace();
                 Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
             }
-            onCancelButton();
+            returnHomeRecipeWindow();
         }
     }
 
@@ -124,7 +124,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
     }
 
 
-    public void onCancelButton() {
+    public void returnHomeRecipeWindow() {
         if(mainController==null) {
             WindowHomeRecipeController myRecipeWindow = new WindowHomeRecipeController();
             myRecipeWindow.displayMain();
@@ -134,7 +134,7 @@ public class WindowCreateRecipeController extends Window implements Initializabl
         }
     }
 
-    public void onModifyProductsButton() {
+    public void addIngredients() {
         this.scene = this.primaryStage.getScene();
         WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
         this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");

@@ -1,8 +1,11 @@
 package ulb.infof307.g01;
 
 
-import ulb.infof307.g01.view.Autochef;
-
+/**
+ * Classe qui sert seulement à lancer l'application
+ * <br>
+ * Nécessaire pour faire un JAR avec {@code JavaFX}
+ */
 public class Main  {
     public static void main(String[] args){
         Autochef app = new Autochef();

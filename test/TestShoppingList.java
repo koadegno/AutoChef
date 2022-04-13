@@ -36,8 +36,9 @@ class TestShoppingList {
 
     @Test
     void add() {
+        Product product = new Product("Dinde");
 
-        assertTrue(list.contains(testList.get(0)));
+        assertTrue(list.contains(product));
         assertTrue(list.contains(testList.get(1)));
 
 

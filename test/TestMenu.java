@@ -100,8 +100,8 @@ class TestMenu {
         menu.addRecipeTo(Day.Monday, recipes[1]);
         menu.addRecipeTo(Day.Friday, recipes[1]);
 
-        MENU_PRODUCT_QUANTITY[0] = RECIPE_PRODUCT_QUANTITY[0][0] * 2 + RECIPE_PRODUCT_QUANTITY[1][0];
-        MENU_PRODUCT_QUANTITY[1] = RECIPE_PRODUCT_QUANTITY[0][1] + RECIPE_PRODUCT_QUANTITY[1][1] * 2;
+        MENU_PRODUCT_QUANTITY[0] = (RECIPE_PRODUCT_QUANTITY[0][0] + RECIPE_PRODUCT_QUANTITY[1][0] ) * 2;
+        MENU_PRODUCT_QUANTITY[1] = (RECIPE_PRODUCT_QUANTITY[0][1] + RECIPE_PRODUCT_QUANTITY[1][1] ) * 2;
     }
 
     @AfterEach

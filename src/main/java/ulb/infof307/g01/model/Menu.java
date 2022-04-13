@@ -74,7 +74,6 @@ public class Menu {
      * @param day:
      */
     public void addRecipeToIndex(int day, int index, Recipe meal){
-        System.out.println(index + " " + day + meal.getName());
         menu.get(day).add(index,meal);
     }
 
@@ -118,7 +117,6 @@ public class Menu {
         for(int i = 0; i < menu.size(); i++){
             for(Recipe meal: menu.get(i)){
                 for (Product p : meal) {
-                    //TODO : Verifier si le prouit est déj dans liste , si oui, sommer les quantités
                     shopList.add(p);
                 }
             }

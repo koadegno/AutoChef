@@ -2,24 +2,26 @@ package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.WindowHomeController;
 import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageController.*;
 import ulb.infof307.g01.view.menu.HomeMenuController;
 import ulb.infof307.g01.view.menu.WindowCreateMenuController;
+import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
-import ulb.infof307.g01.view.shoppingList.HomeShoppingListController;
-import ulb.infof307.g01.view.shoppingList.HomeShoppingListController.*;
-import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController;
-import ulb.infof307.g01.view.shoppingList.WindowUserShoppingListsController;
+import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 /**
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class MainController extends Controller implements HomePageListener, HomeShoppingListListener, HomeMenuController.HomeMenuListener {
+public class MainController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuController.HomeMenuListener {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -28,7 +30,8 @@ public class MainController extends Controller implements HomePageListener, Home
      * @see ulb.infof307.g01.Main
      * */
     public void displayMain(Stage mainStage) {
-        FXMLLoader loader = this.loadFXML("HomePage.fxml");
+        setStage(mainStage);
+        FXMLLoader loader = loadFXML("HomePage.fxml");
         HomePageController viewController = loader.getController();
         viewController.setListener(this);
 
@@ -37,15 +40,15 @@ public class MainController extends Controller implements HomePageListener, Home
 
     /**
      * Affiche la page principale des Listes de Courses.
-     * @see HomeShoppingListController
+     * @see HomeShoppingListViewController
      * */
     @Override
     public void onShoppingListButtonClick() {
-        FXMLLoader loader = this.loadFXML("HomeShoppingList.fxml");
-        HomeShoppingListController viewController = loader.getController();
-        viewController.setListener(this);
+        //TODO: reprendre le code de nathan plus tard
+        HomeShoppingListViewController homeShoppingListViewController = new HomeShoppingListViewController();
+        homeShoppingListViewController.setListener(this);
+        loadFXML(homeShoppingListViewController, "HomeShoppingList.fxml");
 
-        setNewScene(loader);
     }
 
     /**
@@ -54,11 +57,13 @@ public class MainController extends Controller implements HomePageListener, Home
      * */
     @Override
     public void onMenuButtonClick() {
-        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        HomeMenuController viewController = loader.getController();
-        viewController.setListener(this);
+        //FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
+        //HomeMenuController viewController = loader.getController();
+        //viewController.setListener(this);
 
-        setNewScene(loader);
+        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
+        mainMenuController.setStage(currentStage);
+        mainMenuController.displayMainMenuController();
     }
 
     /**
@@ -67,7 +72,8 @@ public class MainController extends Controller implements HomePageListener, Home
      */
     @Override
     public void onMapButtonClick() {
-
+        MapController mapController = new MapController(currentStage);
+        mapController.show();
     }
 
     /**
@@ -96,13 +102,13 @@ public class MainController extends Controller implements HomePageListener, Home
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        // TODO: REFACTOR MVC
-        WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
-        this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
+        UserShoppingListViewViewController windowUserShoppingListsController = new UserShoppingListViewViewController();
+        loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
+        ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
 
         //Initialise la page avec les informations de la bdd
-        windowsMyShoppingListsController.initShoppingListElement();
-        windowsMyShoppingListsController.initComboBox();
+        shoppingListController.initInformationShoppingList(false);
+
     }
 
     /**
@@ -112,24 +118,24 @@ public class MainController extends Controller implements HomePageListener, Home
      */
     @Override
     public void onCreateShoppingListsButtonClick() {
-        WindowCreateUserShoppingListController windowsCreateMyShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowsCreateMyShoppingListController, "CreateUserShoppingList.fxml");
+        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
+        loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
+        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController, this );
+
         //Initialise la page avec les informations de la bdd
-        windowsCreateMyShoppingListController.initShoppingListElement();
-        windowsCreateMyShoppingListController.initComboBox();
+        shoppingListController.initInformationShoppingList(true);
+
     }
 
     /**
      * Revient à la page d'accueil de l'application.
-     * @see WindowHomeController
+     * @see HomePageController
      * */
     @Override
     public void onBackButtonClick() {
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
         HomePageController viewController = loader.getController();
         viewController.setListener(this);
-
-        setNewScene(loader);
     }
 
     // Méthodes de la fenêtre principale des Menus

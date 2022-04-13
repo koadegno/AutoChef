@@ -12,11 +12,14 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+import ulb.infof307.g01.controller.MainController;
+import ulb.infof307.g01.controller.MenuController;
+import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.WindowCreateUserShoppingListController;
+import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.UtilisationContrat;
 
 
@@ -98,18 +101,18 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * */
     @FXML
     public void generateShoppingList() {
-        WindowCreateUserShoppingListController windowCreateUserShoppingListController = new WindowCreateUserShoppingListController();
-        this.loadFXML(windowCreateUserShoppingListController, "CreateUserShoppingList.fxml");
-        windowCreateUserShoppingListController.initShoppingListElement();
-        windowCreateUserShoppingListController.initComboBox();
-        fillShoppingList(windowCreateUserShoppingListController);
+        //TODO: regler ce probleme pour le MVC
+        MenuController menuController = new MenuController(this);
+        menuController.setStage(primaryStage);
+        menuController.displayCreateUserShoppingList();
 
     }
 
-
-    public void fillShoppingList(WindowCreateUserShoppingListController controller){
+    public ShoppingList fillShoppingList(CreateUserShoppingListViewController controller){
+        //TODO: changer ça qd il y aura le MVC
         ShoppingList myShoppingList = menu.generateShoppingList();
         controller.fillTableViewWithExistentShoppingList(myShoppingList);
+        return myShoppingList;
     }
 
 

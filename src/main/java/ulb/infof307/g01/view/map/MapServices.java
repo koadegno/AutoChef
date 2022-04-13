@@ -23,13 +23,13 @@ import javafx.scene.input.MouseButton;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shop.ShowShopController;
+import ulb.infof307.g01.view.shop.WindowShopController;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
-public class MapTools {
+public class MapServices {
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int SIZE = 10;
     private static final int ONCE_CLICKED = 1;
@@ -57,7 +57,7 @@ public class MapTools {
         return shopGraphicsTextOverlay.getGraphics();
     }
 
-    public MapTools() {
+    public MapServices() {
 
 //         Initialisation de la carte pour correspondre au point de vue la Belgique
 //         et mise en place de la clé d'API
@@ -80,8 +80,8 @@ public class MapTools {
      */
     void setShopOnMap(Point2D cursorPoint2D) {
         Point mapPoint = mapView.screenToLocation(cursorPoint2D);
-        ShowShopController showShopController = new ShowShopController();
-        showShopController.createPopup(new Shop(mapPoint),this,false);
+        WindowShopController showShopController = new WindowShopController();
+        //showShopController.createPopup(new Shop(mapPoint),this,false);
     }
 
     /**
@@ -171,7 +171,7 @@ public class MapTools {
      *
      * @param shopToAdd la ou doit se trouver le point
      */
-    public void addPointToOverlay(Shop shopToAdd) {
+    public void addShop(Shop shopToAdd) {
         //cree un cercle rouge
         SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.CIRCLE, COLOR_RED, SIZE);
         // cree un texte attacher au point

@@ -41,7 +41,7 @@ public class PDFCreator {
         }}
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
-        if (!productList.isEmpty()){
+        if (productList.isEmpty()){
             System.err.println("Warning: ShoppingList is empty!");
         }
         String nameFamilyProduct = productList.get(0).getFamillyProduct();

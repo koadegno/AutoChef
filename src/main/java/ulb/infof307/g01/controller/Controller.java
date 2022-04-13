@@ -26,14 +26,14 @@ public abstract class Controller {
     }
 
     public FXMLLoader loadFXML(String filename) {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource(filename));
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         setNewScene(loader);
         return loader;
     }
 
 
-    public FXMLLoader loadFXML(Controller controller, String filename) {
-        FXMLLoader loader= new FXMLLoader(getClass().getResource(filename));
+    public FXMLLoader loadFXML(ViewController controller, String filename) {
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         loader.setController(controller);
         setNewScene(loader);
 
@@ -48,13 +48,15 @@ public abstract class Controller {
         setNewScene(loader);
     }
 
-    protected void popupFXML(String filename, Controller controller) throws IOException {
+    protected Stage popupFXML(String filename, ViewController controller) throws IOException {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
-        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Controller.class.getResource(filename)));
+        FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         loader.setController(controller);
         popup.setScene(new Scene(loader.load()));
         popup.show();
+
+        return popup;
     }
 
 
@@ -66,15 +68,19 @@ public abstract class Controller {
 
     public void setNewScene(FXMLLoader loader, String title) {
         Parent root = null;
-        try {root = loader.load();}
+        try {
+            root = loader.load();
+            currentStage.setTitle("Autochef - " + title);
+            currentStage.setScene(new Scene(root));
+            currentStage.show();
+        }
         catch (IOException e) {
+            e.printStackTrace();
             URL missingFXMLFile = loader.getLocation();
             ViewController.showErrorFXMLMissing(missingFXMLFile);
         }
 
-        currentStage.setTitle("Autochef - " + title);
-        currentStage.setScene(new Scene(root));
-        currentStage.show();
+
     }
 
     public void setNewScene(FXMLLoader loader) {

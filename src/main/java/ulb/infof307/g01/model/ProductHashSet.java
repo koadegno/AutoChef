@@ -16,10 +16,12 @@ abstract class ProductHashSet extends HashSet<Product> {
      */
     @Override
     public boolean add(Product p) {
-        if(contains(p))
-            this.getProduct(p).increase();
-        else
-            super.add(p);
+        if(contains(p)) {
+            this.getProduct(p).increase(p.getQuantity());
+        }
+        else {
+            super.add(p.clone());
+        }
         return true;
     }
 
