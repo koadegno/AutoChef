@@ -51,11 +51,8 @@ public class MailController extends Controller implements WindowMailController.L
         Mail mail = new Mail();
         try {
             if(!Objects.equals(recipientAddress, null)){
-                System.out.println("jenvoie un mail");
                 mail.sendMail(recipientAddress, shoppingList, subject, mailTextBody);
-                System.out.println("mail envoyer ");
                 popupStageMail.close(); //Fermer la popup
-                System.out.println("la popup doit se referflker");
             }
             else{
                 windowMailController.showAddressMailError(true); //l'utilisateur n'a pas choisi de mail
