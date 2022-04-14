@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
 
 
 public class GenerateMenuDialog extends Window implements Initializable {
-    CreateMenuViewController mainController = null;
+    GenerateMenuListener listener;
     @FXML
     private Spinner vegetarianSpinner,meatSpinner,fishSpinner;
     @FXML
@@ -40,16 +40,21 @@ public class GenerateMenuDialog extends Window implements Initializable {
             int nbVegetarianDishes = (int) vegetarianSpinner.getValue();
             int nbMeatDishes = (int) meatSpinner.getValue();
             int nbFishDishes = (int) fishSpinner.getValue();
-            this.mainController.addValuesToGenerateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+            listener.addValuesToGenerateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
         });
 
         cancelButton.setOnAction(event -> {
-            this.mainController.cancelGeneratingMenu();
+            listener.cancelGenerateMenu();
         });
     }
 
-    public void setMainController(CreateMenuViewController mainController) {
-        this.mainController = mainController;
+    public void setListener(GenerateMenuListener listener) {
+        this.listener = listener;
+    }
+
+    public interface GenerateMenuListener{
+        void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes)
+        void cancelGenerateMenu();
     }
 }
 
