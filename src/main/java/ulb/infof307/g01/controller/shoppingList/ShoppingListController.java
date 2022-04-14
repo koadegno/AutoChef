@@ -4,7 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.HomePageController;
-import ulb.infof307.g01.controller.UserMenusController;
+import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.controller.tools.AlertMessageController;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.mail.MailController;

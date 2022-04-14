@@ -1,8 +1,10 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.menu;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;

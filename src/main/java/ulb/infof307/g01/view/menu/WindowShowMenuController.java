@@ -4,7 +4,6 @@ package ulb.infof307.g01.view.menu;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -12,7 +11,6 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import ulb.infof307.g01.controller.MenuController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;

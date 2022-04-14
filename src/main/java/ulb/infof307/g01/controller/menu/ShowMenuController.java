@@ -1,10 +1,11 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.menu;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
