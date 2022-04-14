@@ -38,8 +38,8 @@ public class WindowHomeMenuController extends Window {
      * @see WindowUserMenuListController
      * */
     public void redirectToMyMenusController(){
-        WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus();
+//        WindowUserMenuListController menusController = new WindowUserMenuListController();
+//        menusController.displayMyMenus();
     }
 
     /**

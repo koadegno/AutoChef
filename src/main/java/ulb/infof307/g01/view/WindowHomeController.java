@@ -41,8 +41,7 @@ public class WindowHomeController extends Window{
     @FXML
     public void redirectToShoppingList(){
         //TODO: solution pas ouf ??? pour la primaryStage
-        HomePageController homePageController = new HomePageController();
-        homePageController.setStage(primaryStage);
+        HomePageController homePageController = new HomePageController(primaryStage);
         homePageController.onShoppingListButtonClick();
 
     }

@@ -58,6 +58,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
         }
     }
 
+
+
     public void showCreateMenu(){
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
@@ -87,7 +89,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
                 Configuration.getCurrent().getMenuDao().insert(menu);
                 FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
                 HomeMenuViewController viewController = loader.getController();
-                viewController.setListener(new HomePageController());
+                viewController.setListener(new HomePageController(currentStage));
                 return isSaved;
             }
         } catch(SQLException e) {
@@ -114,12 +116,12 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onReturnClicked(){
-        HomePageController homePageController = new HomePageController();
+        HomePageController homePageController = new HomePageController(currentStage);
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
         HomePageViewController viewController = loader.getController();
 
         viewController.setListener(homePageController);
-        homePageController.displayMain(currentStage);
+        homePageController.displayMain();
 
     }
 

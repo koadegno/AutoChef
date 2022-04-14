@@ -130,12 +130,12 @@ public class MapController extends Controller implements WindowMapController.Lis
 
     @Override
     public void onBackButtonClicked() {
-        HomePageController homePageController = new HomePageController();
+        HomePageController homePageController = new HomePageController(currentStage);
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
         HomePageViewController viewController = loader.getController();
 
         viewController.setListener(homePageController);
-        homePageController.displayMain(currentStage);
+        homePageController.displayMain();
 
     }
 

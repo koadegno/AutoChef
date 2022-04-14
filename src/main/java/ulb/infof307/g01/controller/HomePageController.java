@@ -6,7 +6,6 @@ import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
-import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
@@ -19,17 +18,20 @@ public class HomePageController extends Controller implements HomePageListener, 
 
     // Méthodes de la fenêtre d'accueil
 
+    public HomePageController(Stage primaryStage){
+        setStage(primaryStage);
+    }
+
+
     /**
      * Affiche la page principale de l'application.
      * @see ulb.infof307.g01.Main
      * */
-    public void displayMain(Stage mainStage) {
-        setStage(mainStage);
+    public void displayMain() {
         FXMLLoader loader = loadFXML("HomePage.fxml");
         ulb.infof307.g01.view.HomePageViewController viewController = loader.getController();
         viewController.setListener(this);
 
-        setStage(mainStage);
     }
 
     /**
@@ -54,7 +56,7 @@ public class HomePageController extends Controller implements HomePageListener, 
         FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
         HomeMenuViewController viewController = loader.getController();
         viewController.setListener(this);
-        System.out.println("je suis venue");
+
 //        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
 //        mainMenuController.setStage(currentStage);
 //        mainMenuController.displayMainMenuController();
@@ -128,7 +130,7 @@ public class HomePageController extends Controller implements HomePageListener, 
     @Override
     public void onBackButtonClick() {
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        ulb.infof307.g01.view.HomePageViewController viewController = loader.getController();
+        HomePageViewController viewController = loader.getController();
         viewController.setListener(this);
     }
 
@@ -143,8 +145,10 @@ public class HomePageController extends Controller implements HomePageListener, 
     public void onUserMenusButtonClick() {
         // TODO: REFACTOR MVC
         // TODO appeler le controlleur pour afficher le menu (WUMLC)
-        WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus();
+        UserMenusController userMenusController = new UserMenusController(currentStage);
+        userMenusController.showAllMenus();
+//        WindowUserMenuListController menusController = new WindowUserMenuListController();
+//        menusController.displayMyMenus();
     }
 
     /**

@@ -162,8 +162,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     }
 
     public void returnToUserMenu(){
-        WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus();
+        //WindowUserMenuListController menusController = new WindowUserMenuListController();
+//        menusController.displayMyMenus();
     }
 
     public void exportShoppingList(String currentShoppingListName){

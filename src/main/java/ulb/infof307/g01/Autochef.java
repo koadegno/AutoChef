@@ -16,8 +16,8 @@ public class Autochef extends Application {
     public void start(Stage primaryStage){
 
         try{
-            HomePageController homePageController = new HomePageController();
-            homePageController.displayMain(primaryStage);
+            HomePageController homePageController = new HomePageController(primaryStage);
+            homePageController.displayMain();
 
         }catch (Exception e ){
             e.printStackTrace();
