@@ -58,7 +58,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
         }
     }
 
-
     public void showCreateMenu(){
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
