@@ -1,14 +1,22 @@
 package ulb.infof307.g01.view.recipe;
 
 
+import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
+
+import java.net.URL;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
 
 /**
  * Contrôleur de Vue pour l'interface de Création de Recettes
  */
-public class CreateRecipeController extends ViewController<CreateRecipeController.CreateRecipeListener> {
+public class CreateRecipeViewController extends ViewController<CreateRecipeViewController.CreateRecipeListener> implements Initializable {
     @FXML
     private TableView ingredientTableView;
     @FXML
@@ -16,13 +24,29 @@ public class CreateRecipeController extends ViewController<CreateRecipeControlle
     @FXML
     private TextArea preparationTextArea;
     @FXML
-    private ComboBox typeComboBox;
+    private ComboBox<String> typeComboBox;
     @FXML
-    private ComboBox dietComboBox;
+    private ComboBox<String> dietComboBox;
     @FXML
     private Spinner nbPersonSpinner;
     @FXML
     private TextField recipeNameTextField;
+
+    /**
+     * Initialise la scène
+     */
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        try {
+            ArrayList<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            ArrayList<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+
+            dietComboBox.setItems(FXCollections.observableArrayList(recipeCategoriesList));
+            typeComboBox.setItems(FXCollections.observableArrayList(recipeTypesList));
+        } catch (SQLException e) {
+            showErrorSQL();
+        }
+    }
 
     public void onSubmitButton() {
         int dietIndex = dietComboBox.getSelectionModel().getSelectedIndex();
@@ -64,6 +88,10 @@ public class CreateRecipeController extends ViewController<CreateRecipeControlle
      */
     public void recipeNameTextFieldError() {
         setNodeColor(recipeNameTextField, true);
+    }
+
+    public void nbPersonSpinnerError() {
+        setNodeColor(nbPersonSpinner, true);
     }
 
     public interface CreateRecipeListener {
