@@ -43,6 +43,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
         daysName.addAll(Arrays.asList(Day.values()).subList(DAY_ONE, NUMBERS_DAYS_IN_WEEK));
     }
 
+
     public void start(){
         createMenuViewController.getDaysComboBox().setItems(FXCollections.observableArrayList(daysName));
         createMenuViewController.getMenuTableColumn().setText(daysName.get(DAY_ONE).toString());
@@ -58,8 +59,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
         }
     }
 
-
-
     public void showCreateMenu(){
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
@@ -67,7 +66,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
         start();
     }
 
-    public void showModifyMenu() {
+    public void showModifyMenu(Menu menu) {
+        this.menu = menu;
         showCreateMenu();
         createMenuViewController.setModifyMode();
     }

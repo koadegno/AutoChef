@@ -68,7 +68,7 @@ public class ShowMenuController extends Controller implements WindowShowMenuCont
     @Override
     public void onModifyMenuClicked(){
         MenuController menuController = new MenuController(currentStage);
-        menuController.showModifyMenu();
+        menuController.showModifyMenu(menu);
     }
 
     @Override
