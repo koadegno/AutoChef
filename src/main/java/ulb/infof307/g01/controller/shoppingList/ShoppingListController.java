@@ -1,6 +1,7 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import org.sqlite.SQLiteException;
+import ulb.infof307.g01.controller.AlertMessageController;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.MailController;
 import ulb.infof307.g01.controller.MainController;
@@ -9,12 +10,14 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
+import ulb.infof307.g01.view.tools.AlertMessageViewController;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
 
-public class ShoppingListController extends Controller implements ShoppingListViewController.Listener  {
+public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     private ShoppingListViewController shoppingListViewController;
     private UserShoppingListViewViewController userShoppingListViewViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
@@ -65,7 +68,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 e.printStackTrace();
             }
             // else tout ce passe bien
-            //mainController.onShoppingListButtonClick();
+            createUserShoppingListViewController.returnToMenu.fire();
         }
     }
 
@@ -103,8 +106,10 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             userShoppingListViewViewController.fillShoppingListToSend();
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
-            //Confirmer que la liste de courses est enregistrer
-            //TODO: faire une popup
+            //Popup : confirmer que la liste de courses est enregistrer
+            AlertMessageController alertMessageViewController = new AlertMessageController();
+            alertMessageViewController.displayAlertMessage();
+            alertMessageViewController.createShoppingListAlertMessage();
 
 
         } catch (SQLException e) {
