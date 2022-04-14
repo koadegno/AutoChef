@@ -1,14 +1,10 @@
 package ulb.infof307.g01.controller;
 
-import javafx.fxml.FXMLLoader;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.HomePageController;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
-
 import java.sql.SQLException;
-import java.util.Objects;
 
 public class RecipeController extends Controller implements CreateRecipeViewController.CreateRecipeListener {
 
