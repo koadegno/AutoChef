@@ -3,9 +3,8 @@ package ulb.infof307.g01.controller;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
-import ulb.infof307.g01.view.WindowHomeController;
 import ulb.infof307.g01.view.*;
-import ulb.infof307.g01.view.HomePageController.*;
+import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuController;
 import ulb.infof307.g01.view.menu.WindowCreateMenuController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
@@ -15,13 +14,12 @@ import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class MainController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuController.HomeMenuListener {
+public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuController.HomeMenuListener {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -32,7 +30,7 @@ public class MainController extends Controller implements HomePageListener, Home
     public void displayMain(Stage mainStage) {
         setStage(mainStage);
         FXMLLoader loader = loadFXML("HomePage.fxml");
-        HomePageController viewController = loader.getController();
+        ulb.infof307.g01.view.HomePageViewController viewController = loader.getController();
         viewController.setListener(this);
 
         setStage(mainStage);
@@ -129,12 +127,12 @@ public class MainController extends Controller implements HomePageListener, Home
 
     /**
      * Revient à la page d'accueil de l'application.
-     * @see HomePageController
+     * @see HomePageViewController
      * */
     @Override
     public void onBackButtonClick() {
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageController viewController = loader.getController();
+        ulb.infof307.g01.view.HomePageViewController viewController = loader.getController();
         viewController.setListener(this);
     }
 

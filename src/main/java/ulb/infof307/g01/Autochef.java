@@ -2,7 +2,7 @@ package ulb.infof307.g01;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.MainController;
+import ulb.infof307.g01.controller.HomePageController;
 
 /**
  * Vrai classe {@code Main}, point d'entrée du programme
@@ -16,8 +16,8 @@ public class Autochef extends Application {
     public void start(Stage primaryStage){
 
         try{
-            MainController mainController = new MainController();
-            mainController.displayMain(primaryStage);
+            HomePageController homePageController = new HomePageController();
+            homePageController.displayMain(primaryStage);
 
         }catch (Exception e ){
             e.printStackTrace();

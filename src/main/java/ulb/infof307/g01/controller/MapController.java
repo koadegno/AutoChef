@@ -19,7 +19,7 @@ import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.HomePageController;
+import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.Window;
 import ulb.infof307.g01.view.map.WindowMapController;
 
@@ -130,12 +130,12 @@ public class MapController extends Controller implements WindowMapController.Lis
 
     @Override
     public void onBackButtonClicked() {
-        MainController mainController = new MainController();
+        HomePageController homePageController = new HomePageController();
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageController viewController = loader.getController();
+        HomePageViewController viewController = loader.getController();
 
-        viewController.setListener(mainController);
-        mainController.displayMain(currentStage);
+        viewController.setListener(homePageController);
+        homePageController.displayMain(currentStage);
 
     }
 
