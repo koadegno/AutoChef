@@ -49,13 +49,13 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     public void onSubmitButton() {
-        int dietIndex = dietComboBox.getSelectionModel().getSelectedIndex();
-        int typeIndex = typeComboBox.getSelectionModel().getSelectedIndex();
+        String diet = dietComboBox.getSelectionModel().getSelectedItem();
+        String type = typeComboBox.getSelectionModel().getSelectedItem();
         int nbPerson = (int) nbPersonSpinner.getValue();
         String preparation = preparationTextArea.getText();
         String recipeName = recipeNameTextField.getText();
 
-        listener.onSubmitButton(dietIndex, typeIndex, nbPerson, preparation, recipeName);
+        listener.onSubmitButton(diet, type, nbPerson, preparation, recipeName);
     }
 
     public void onModifyProductsButton() {listener.onModifyProductsButton();}
@@ -95,7 +95,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     public interface CreateRecipeListener {
-        void onSubmitButton(int dietIndex, int typeIndex, int nbPerson, String preparation, String recipeName);
+        void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName);
         void onModifyProductsButton();
         void onCancelButton();
     }
