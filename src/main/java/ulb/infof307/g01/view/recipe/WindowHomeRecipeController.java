@@ -7,7 +7,7 @@ import ulb.infof307.g01.view.WindowHomeController;
 public class WindowHomeRecipeController extends Window {
 
     public void displayMain() {
-        this.loadFXML("menuRecipe.fxml");
+        this.loadFXML("HomeRecipe.fxml");
     }
 
     public void returnMainMenu() { // use by fxml

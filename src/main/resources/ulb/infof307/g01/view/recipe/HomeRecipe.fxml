@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.recipe.WindowHomeRecipeController">
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.recipe.HomeRecipeViewController">
     <children>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
             <children>
@@ -18,13 +18,13 @@
         </HBox>
         <HBox alignment="CENTER" prefHeight="339.0" prefWidth="750.0" spacing="80.0">
             <children>
-                <Button  mnemonicParsing="false" onAction="#displayViewRecipeWindow" prefHeight="50.0" prefWidth="170.0" text="Mes recettes" />
-                <Button  mnemonicParsing="false" onAction="#displayCreateRecipeWindow" prefHeight="50.0" prefWidth="170.0" text="Nouvelle recette" />
+                <Button  mnemonicParsing="false" onAction="#onUserRecipesButtonClick" prefHeight="50.0" prefWidth="170.0" text="Mes recettes" />
+                <Button  mnemonicParsing="false" onAction="#onCreateRecipeButtonClick" prefHeight="50.0" prefWidth="170.0" text="Nouvelle recette" />
             </children>
         </HBox>
         <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
          <children>
-                <Button  mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="50.0" prefWidth="294.0" text="Retour" />
+                <Button  mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="50.0" prefWidth="294.0" text="Retour" />
          </children>
         </HBox>
     </children>

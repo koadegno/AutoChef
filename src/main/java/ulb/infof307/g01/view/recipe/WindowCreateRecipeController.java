@@ -20,6 +20,7 @@ import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
+@Deprecated
 public class WindowCreateRecipeController extends Window implements Initializable {
     private WindowViewRecipeController mainController = null; //to modify a recipe from WindowviewRecipeController
     private ArrayList<String> dietList;
