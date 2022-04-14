@@ -53,7 +53,7 @@ public class MenuDao extends Database implements Dao<Menu> {
             String categoryName = querySelectMenu.getString(8);
             String typeName = querySelectMenu.getString(9);
             Recipe recipe = new Recipe(recipeID,recipeName,recipeDuration,categoryName,typeName,recipeNumberPersons,recipePreparation);
-            menu.addRecipeToIndex(menuDay,menuHour,recipe);
+            menu.addRecipeTo(menuDay,recipe);
         }
         return menu;
     }

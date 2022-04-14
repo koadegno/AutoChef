@@ -149,6 +149,6 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String[] constraint = {"RecetteID = "+ displayedRecipe.getId()};
         delete("RecetteIngredient", List.of(constraint));
         delete("Recette",List.of(constraint));
-        //delete("MenuRecette",List.of(constraint));
+        delete("MenuRecette",List.of(constraint));
     }
 }
