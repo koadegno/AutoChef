@@ -77,7 +77,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
                 ShowMenuController showMenuController = new ShowMenuController(currentStage,menu);
                 showMenuController.showMenu();
                 //TODO appeler le controlleur de show menu
-//                WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
+//                ShowMenuViewController controller = (ShowMenuViewController) this.loadFXML("ShowMenu.fxml");
 //                controller.setMenu(menu);
 
             } catch (SQLException e) {

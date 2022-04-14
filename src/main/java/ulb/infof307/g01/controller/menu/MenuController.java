@@ -11,10 +11,9 @@ import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
-import ulb.infof307.g01.view.menu.WindowShowMenuController;
+import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.GenerateMenuDialog;
 
@@ -27,15 +26,15 @@ import java.util.List;
 public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
-    private WindowShowMenuController windowShowMenuViewController;
+    private ShowMenuViewController windowShowMenuViewController;
     private CreateMenuViewController createMenuViewController;
     private Menu menu;
     protected ArrayList<Day> daysName;
     private Stage popup = null;
 
-    public MenuController(WindowShowMenuController windowShowMenuController){
+    public MenuController(ShowMenuViewController showMenuViewController){
         //TODO: changer ça avec le MVC of course
-        this.windowShowMenuViewController = windowShowMenuController;
+        this.windowShowMenuViewController = showMenuViewController;
     }
 
     public MenuController(Stage primaryStage){

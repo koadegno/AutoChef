@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
  * menu. Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
  * @see ulb.infof307.g01.model.Menu
- * @see WindowShowMenuController
+ * @see ShowMenuViewController
  * */
 public class UserMenusViewController extends ViewController<UserMenusViewController.Listener> implements Initializable {
     @FXML

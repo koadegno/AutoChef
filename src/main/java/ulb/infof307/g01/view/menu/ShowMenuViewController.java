@@ -20,16 +20,16 @@ import ulb.infof307.g01.view.tools.UtilisationContrat;
 
 
 /**
- * La classe WindowShowMenuController représente le controleur
+ * La classe ShowMenuViewController représente le controleur
  * pour la page qui affiche le contenu du menu selectionné. Elle
  * permet aux utilisateurs de le modifier, et de générer une liste
  * de courses.
  * Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
  * @see ulb.infof307.g01.model.Menu
- * @see WindowShowMenuController
+ * @see ShowMenuViewController
  * */
-public class WindowShowMenuController extends ViewController<WindowShowMenuController.Listener> implements Initializable, UtilisationContrat<Menu> {
+public class ShowMenuViewController extends ViewController<ShowMenuViewController.Listener> implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
 
@@ -131,7 +131,7 @@ public class WindowShowMenuController extends ViewController<WindowShowMenuContr
 
     @Override
     public void add(Menu menu) {
-//        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
+//        ShowMenuViewController controller = (ShowMenuViewController) this.loadFXML("ShowMenu.fxml");
 //        controller.setMenu(menu);
     }
 

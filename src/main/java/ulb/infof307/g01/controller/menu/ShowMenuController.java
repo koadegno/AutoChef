@@ -11,17 +11,17 @@ import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.view.menu.WindowShowMenuController;
+import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowMenuController extends Controller implements WindowShowMenuController.Listener {
+public class ShowMenuController extends Controller implements ShowMenuViewController.Listener {
 
     private Menu menu;
-    private WindowShowMenuController viewController;
+    private ShowMenuViewController viewController;
 
 
     public ShowMenuController(Stage primaryStage, Menu menu) {
