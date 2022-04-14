@@ -18,11 +18,6 @@ import java.util.List;
 import java.util.ResourceBundle;
 
 public class CreateMenuViewController extends ViewController<CreateMenuViewController.Listener> implements Initializable{
-    Stage popup=null;
-
-    static Scene scene;
-    protected Menu myMenu;
-    protected ArrayList<Day> daysName;
     @FXML
     ComboBox<Day> daysComboBox;
     @FXML
@@ -69,11 +64,12 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
     }
 
     /**
-     * Action lié à la daysComboBox
+     * Action liée à la daysComboBox
      */
     @FXML
     public void refreshTableView() {
-        this.setNodeColor(menuTableView, false);
+        setNodeColor(menuNameTextField, false);
+        setNodeColor(menuTableView, false);
         int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
         listener.onDaysComboBoxClicked(dayIndex);
 //        menuTableColumn.setText(daysName.get(dayIndex).toString());
@@ -133,7 +129,6 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        daysComboBox.getSelectionModel().selectFirst();
 //        daysComboBox.setItems(FXCollections.observableArrayList(daysName));
 //        menuTableColumn.setText(daysName.get(0).toString());
         menuTableColumn.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
@@ -186,7 +181,8 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
     @FXML
     public void saveMenu(){
         boolean isSaved = listener.onSaveMenu(menuNameTextField.getText());
-        this.setNodeColor(menuNameTextField,isSaved);
+        setNodeColor(menuNameTextField,!isSaved);
+        setNodeColor(menuTableView,!isSaved);
     }
 
 //    public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) {

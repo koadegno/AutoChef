@@ -11,6 +11,7 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
+import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.WindowShowMenuController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.GenerateMenuDialog;
@@ -30,9 +31,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
     protected ArrayList<Day> daysName;
     private Stage popup = null;
 
-
-
-
     public MenuController(WindowShowMenuController windowShowMenuController){
         //TODO: changer ça avec le MVC of course
         this.windowShowMenuController = windowShowMenuController;
@@ -49,6 +47,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
         createMenuViewController.getDaysComboBox().setItems(FXCollections.observableArrayList(daysName));
         createMenuViewController.getMenuTableColumn().setText(daysName.get(DAY_ONE).toString());
         fillMenuTableView(daysName.get(DAY_ONE));
+        createMenuViewController.getDaysComboBox().getSelectionModel().selectFirst();
+
     }
 
     public void fillMenuTableView(Day day) {
@@ -79,15 +79,15 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public boolean onSaveMenu(String menuName){
         boolean isSaved = true;
-        if(menuName.isBlank()) return !isSaved;
+        if(menuName.isBlank() || menuName.isEmpty() ) return !isSaved;
         try{
             if(menu.size() == 0) {
                 return !isSaved;
             } else {
                 Configuration.getCurrent().getMenuDao().insert(menu);
-                //TODO Changer de fenetre
-//                WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-//                mainMenuController.displayMainMenuController();
+                FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
+                HomeMenuViewController viewController = loader.getController();
+                viewController.setListener(new HomePageController());
                 return isSaved;
             }
         } catch(SQLException e) {
@@ -107,7 +107,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public void onAddRecipeClicked() {
         //TODO Appeler le controlleur pour l'ajout de recette dans le menu
-        FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
+        FXMLLoader loader = this.loadFXML("SearchRecipe.fxml");
         createMenuViewController = loader.getController();
         createMenuViewController.setListener(this);
     }
@@ -150,6 +150,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) throws SQLException {
         menu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
         createMenuViewController.refreshTableView();
+        cancelGenerateMenu();
     }
 
     @Override

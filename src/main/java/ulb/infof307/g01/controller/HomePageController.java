@@ -54,7 +54,7 @@ public class HomePageController extends Controller implements HomePageListener, 
         FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
         HomeMenuViewController viewController = loader.getController();
         viewController.setListener(this);
-
+        System.out.println("je suis venue");
 //        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
 //        mainMenuController.setStage(currentStage);
 //        mainMenuController.displayMainMenuController();
@@ -142,6 +142,7 @@ public class HomePageController extends Controller implements HomePageListener, 
     @Override
     public void onUserMenusButtonClick() {
         // TODO: REFACTOR MVC
+        // TODO appeler le controlleur pour afficher le menu (WUMLC)
         WindowUserMenuListController menusController = new WindowUserMenuListController();
         menusController.displayMyMenus();
     }
