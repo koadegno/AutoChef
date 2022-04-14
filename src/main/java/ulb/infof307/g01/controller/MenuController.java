@@ -21,13 +21,14 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MenuController extends Controller implements CreateMenuViewController.Listener {
+public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private WindowShowMenuController windowShowMenuController;
     private CreateMenuViewController createMenuViewController;
     private Menu menu;
     protected ArrayList<Day> daysName;
+    private Stage popup = null;
 
 
 
@@ -146,5 +147,14 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
 
+    @Override
+    public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) throws SQLException {
+        menu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+        createMenuViewController.refreshTableView();
+    }
 
+    @Override
+    public void cancelGenerateMenu() {
+        popup.close();
+    }
 }

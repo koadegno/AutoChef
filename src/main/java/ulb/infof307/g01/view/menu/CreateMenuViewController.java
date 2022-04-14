@@ -189,19 +189,19 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         this.setNodeColor(menuNameTextField,isSaved);
     }
 
-    public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) {
-        popup.close();
-        try {
-            myMenu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
-            this.refreshTableView();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+//    public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) {
+//        popup.close();
+//        try {
+//            myMenu.generateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+//            this.refreshTableView();
+//        } catch (SQLException e) {
+//            e.printStackTrace();
+//        }
+//    }
 
-    public void cancelGeneratingMenu() {
-        popup.close();
-    }
+//    public void cancelGeneratingMenu() {
+//        popup.close();
+//    }
 
     public void setListener(Listener listener) {
         this.listener = listener;
