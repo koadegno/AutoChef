@@ -74,7 +74,6 @@ public class Menu {
      * @param day:
      */
     public void addRecipeToIndex(int day, int index, Recipe meal){
-        System.out.println(index + " " + day + meal.getName());
         menu.get(day).add(index,meal);
     }
 
