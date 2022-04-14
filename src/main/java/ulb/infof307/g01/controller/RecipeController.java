@@ -15,12 +15,48 @@ public class RecipeController extends Controller implements CreateRecipeViewCont
     private CreateRecipeViewController createRecipeViewController; //TODO
     private Recipe currentRecipe;
 
+    public void displayMain() {
+
+    }
     @Override
-    public void onSubmitButton(int dietIndex, int typeIndex, int nbPerson, String preparation, String recipeName) {
-        if (dietIndex < 0)
-            createRecipeController.dietComboBoxError();
-        if (typeIndex < 0)
-            createRecipeController.typeComboBoxError();
+    public void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName) {
+
+        boolean isValid = isValidRecipe(diet, type, nbPerson, preparation, recipeName);
+
+        if (isValid) {
+            currentRecipe = new Recipe(recipeName);
+            currentRecipe.setCategory(diet);
+            currentRecipe.setPreparation(preparation);
+            currentRecipe.setType(type);
+            currentRecipe.setNbrPerson(nbPerson);
+
+            try {
+                Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
+            } catch (SQLException e) {
+                ViewController.showErrorSQL();
+            }
+
+            // TODO: ReturnHomeRecipeWindow
+
+        }
+    }
+
+    /**
+     * Vérifie que les paramètres sont valides pour créer un objet {@link Recipe}
+     * @return {@code true} si les paramètres sont valides, {@code false} sinon
+     */
+    private boolean isValidRecipe(String diet, String type, int nbPerson, String preparation, String recipeName) {
+        boolean isValid = true;
+        // Vérifie qu'un Régime a été sélectionné
+        if (diet == null) {
+            createRecipeViewController.dietComboBoxError();
+            isValid = false;
+        }
+        // Vérifie qu'un type a été sélectionné
+        if (type == null) {
+            createRecipeViewController.typeComboBoxError();
+            isValid = false;
+        }
         // TODO Vérifier que la liste d'ingrédients n'est pas vide
 
         // Vérifie que la préparation n'est pas vide

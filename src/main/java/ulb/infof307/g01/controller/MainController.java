@@ -3,7 +3,6 @@ package ulb.infof307.g01.controller;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
-import ulb.infof307.g01.view.WindowHomeController;
 import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageController.*;
 import ulb.infof307.g01.view.menu.HomeMenuController;
@@ -15,7 +14,6 @@ import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.sql.SQLException;
-import java.util.Objects;
 
 /**
  * Contrôleur principal de l'application.
@@ -82,7 +80,8 @@ public class MainController extends Controller implements HomePageListener, Home
      */
     @Override
     public void onRecipeButtonClick() {
-
+        RecipeController controller = new RecipeController();
+        controller.displayMain();
     }
 
     /**
