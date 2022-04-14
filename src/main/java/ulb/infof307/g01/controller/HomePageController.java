@@ -147,7 +147,7 @@ public class HomePageController extends Controller implements HomePageListener, 
         // TODO appeler le controlleur pour afficher le menu (WUMLC)
         UserMenusController userMenusController = new UserMenusController(currentStage);
         userMenusController.showAllMenus();
-//        WindowUserMenuListController menusController = new WindowUserMenuListController();
+//        UserMenusViewController menusController = new UserMenusViewController();
 //        menusController.displayMyMenus();
     }
 

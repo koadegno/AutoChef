@@ -35,16 +35,16 @@ public class WindowHomeMenuController extends Window {
 
     /**
      * Affiche la page qui contient la liste des menus.
-     * @see WindowUserMenuListController
+     * @see UserMenusViewController
      * */
     public void redirectToMyMenusController(){
-//        WindowUserMenuListController menusController = new WindowUserMenuListController();
+//        UserMenusViewController menusController = new UserMenusViewController();
 //        menusController.displayMyMenus();
     }
 
     /**
      * Affiche la page pour créer un menu.
-     * @see WindowUserMenuListController
+     * @see UserMenusViewController
      * @throws IOException
      * */
     public void redirectToCreateMenuController() throws IOException, SQLException {

@@ -115,7 +115,7 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
 
     public void back(){
-        //WindowUserMenuListController menu = new WindowUserMenuListController();
+        //UserMenusViewController menu = new UserMenusViewController();
         //menu.displayMyMenus();
     }
 

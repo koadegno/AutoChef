@@ -8,7 +8,6 @@ import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
 
 import java.sql.SQLException;
@@ -162,7 +161,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     }
 
     public void returnToUserMenu(){
-        //WindowUserMenuListController menusController = new WindowUserMenuListController();
+        //UserMenusViewController menusController = new UserMenusViewController();
 //        menusController.displayMyMenus();
     }
 

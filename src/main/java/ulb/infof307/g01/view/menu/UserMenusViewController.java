@@ -7,15 +7,10 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.model.Menu;
-import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
-import java.sql.SQLException;
-import java.util.ArrayList;
-import java.util.Objects;
 import java.util.ResourceBundle;
 
 /**
@@ -28,7 +23,7 @@ import java.util.ResourceBundle;
  * @see ulb.infof307.g01.model.Menu
  * @see WindowShowMenuController
  * */
-public class WindowUserMenuListController extends ViewController<WindowUserMenuListController.Listener> implements Initializable {
+public class UserMenusViewController extends ViewController<UserMenusViewController.Listener> implements Initializable {
     @FXML
     TextField menuName;
     @FXML
