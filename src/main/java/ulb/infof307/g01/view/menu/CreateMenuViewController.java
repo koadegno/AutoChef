@@ -17,9 +17,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.ResourceBundle;
 
-public class WindowCreateMenuController extends WindowEditMenuController implements Initializable{
+public class CreateMenuViewController extends WindowEditMenuController implements Initializable{
     Stage popup=null;
-    public WindowCreateMenuController() throws SQLException {
+
+    public CreateMenuViewController() throws SQLException {
         this.myMenu = new Menu();
         this.daysName = new ArrayList<>();
         for (int i = 0; i < 7; i++) daysName.add(Day.values()[i]);

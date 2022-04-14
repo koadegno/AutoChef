@@ -5,21 +5,17 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageViewController.*;
-import ulb.infof307.g01.view.menu.HomeMenuController;
-import ulb.infof307.g01.view.menu.WindowCreateMenuController;
-import ulb.infof307.g01.view.menu.WindowHomeMenuController;
+import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
-import java.sql.SQLException;
-
 /**
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuController.HomeMenuListener {
+public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuViewController.HomeMenuListener {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -51,17 +47,17 @@ public class HomePageController extends Controller implements HomePageListener, 
 
     /**
      * Affiche la page principale des Menus.
-     * @see ulb.infof307.g01.view.menu.HomeMenuController
+     * @see HomeMenuViewController
      * */
     @Override
     public void onMenuButtonClick() {
-        //FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        //HomeMenuController viewController = loader.getController();
-        //viewController.setListener(this);
+        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
+        HomeMenuViewController viewController = loader.getController();
+        viewController.setListener(this);
 
-        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
-        mainMenuController.setStage(currentStage);
-        mainMenuController.displayMainMenuController();
+//        WindowHomeMenuController mainMenuController = new WindowHomeMenuController();
+//        mainMenuController.setStage(currentStage);
+//        mainMenuController.displayMainMenuController();
     }
 
     /**
@@ -158,12 +154,14 @@ public class HomePageController extends Controller implements HomePageListener, 
     @Override
     public void onUserCreateMenuButtonClick() {
         // TODO: REFACTOR MVC
-        WindowCreateMenuController createMenu = null;
-        try {
-            createMenu = new WindowCreateMenuController();
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
-        }
-        createMenu.displayEditMeal();
+        MenuController menuController = new MenuController(currentStage);
+        menuController.showCreateMenu();
+//        CreateMenuViewController createMenu = null;
+//        try {
+//            createMenu = new CreateMenuViewController();
+//        } catch (SQLException e) {
+//            ViewController.showErrorSQL();
+//        }
+//        createMenu.displayEditMeal();
     }
 }

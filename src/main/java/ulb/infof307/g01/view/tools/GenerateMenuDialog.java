@@ -6,14 +6,14 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.menu.WindowCreateMenuController;
+import ulb.infof307.g01.view.menu.CreateMenuViewController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
 
 
 public class GenerateMenuDialog extends Window implements Initializable {
-    WindowCreateMenuController mainController = null;
+    CreateMenuViewController mainController = null;
     @FXML
     private Spinner vegetarianSpinner,meatSpinner,fishSpinner;
     @FXML
@@ -48,7 +48,7 @@ public class GenerateMenuDialog extends Window implements Initializable {
         });
     }
 
-    public void setMainController(WindowCreateMenuController mainController) {
+    public void setMainController(CreateMenuViewController mainController) {
         this.mainController = mainController;
     }
 }

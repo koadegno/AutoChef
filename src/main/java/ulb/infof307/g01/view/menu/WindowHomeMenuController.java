@@ -48,7 +48,7 @@ public class WindowHomeMenuController extends Window {
      * @throws IOException
      * */
     public void redirectToCreateMenuController() throws IOException, SQLException {
-        WindowCreateMenuController createMenu = new WindowCreateMenuController();
+        CreateMenuViewController createMenu = new CreateMenuViewController();
         createMenu.displayEditMeal();
     }
 
