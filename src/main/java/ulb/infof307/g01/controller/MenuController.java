@@ -24,8 +24,7 @@ public class MenuController extends Controller {
     public void showCreateMenu(){
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
-        createMenuViewController.setListener(this);
-        createMenuViewController.start();
+
     }
 
     public void displayCreateUserShoppingList(){
