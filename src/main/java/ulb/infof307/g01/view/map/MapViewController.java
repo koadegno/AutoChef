@@ -21,10 +21,12 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-public class WindowMapController extends ViewController<WindowMapController.Listener> implements Initializable  {
+public class MapViewController extends ViewController<MapViewController.Listener> implements Initializable  {
 
-// TODO: CONTEXT MENU DANS FXML ?
-    private MapServices mapServices;
+    public static final double LATITUDE_BRUSSELS = 50.85045;
+    public static final double LONGITUDE_BRUSSELS = 5.34878;
+    public static final double MAP_SCALE = 4000000.638572;
+    // TODO: CONTEXT MENU DANS FXML ?
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
@@ -67,8 +69,7 @@ public class WindowMapController extends ViewController<WindowMapController.List
         ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
         ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
         mapView.setMap(map);
-        //TODO changer ces nombres magique
-        mapView.setViewpoint(new Viewpoint(50.85045,5.34878, 4000000.638572));
+        mapView.setViewpoint(new Viewpoint(LATITUDE_BRUSSELS, LONGITUDE_BRUSSELS, MAP_SCALE));
         mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
         mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
         mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
@@ -159,7 +160,7 @@ public class WindowMapController extends ViewController<WindowMapController.List
         mapView.setContextMenu(contextMenu);
 
         // context menu pour l'ajout
-        addShopMenuItem.setOnAction(event -> {listener.onAddShopClicked();});
+        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked());
 
         // context menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
