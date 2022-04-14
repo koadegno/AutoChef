@@ -67,6 +67,11 @@ public class MenuController extends Controller implements CreateMenuViewControll
         start();
     }
 
+    public void showModifyMenu() {
+        showCreateMenu();
+        createMenuViewController.setModifyMode();
+    }
+
     @Override
     public void onGenerateMenu(){
         try {
@@ -86,14 +91,18 @@ public class MenuController extends Controller implements CreateMenuViewControll
             if(menu.size() == 0) {
                 return !isSaved;
             } else {
+                menu.setName(menuName);
+                System.out.println(menu.toStringTest());
                 Configuration.getCurrent().getMenuDao().insert(menu);
                 FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
                 HomeMenuViewController viewController = loader.getController();
-                viewController.setListener(new HomePageController(currentStage));
+                HomePageController homePageController = new HomePageController(currentStage);
+                viewController.setListener(homePageController);
                 return isSaved;
             }
         } catch(SQLException e) {
             //TODO Erreur sql a géré
+            e.printStackTrace();
         }
         return isSaved;
     }

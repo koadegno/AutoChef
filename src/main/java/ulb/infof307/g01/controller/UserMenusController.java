@@ -72,6 +72,8 @@ public class UserMenusController extends Controller implements UserMenusViewCont
         if (!isNameBlank) {
             try {
                 Menu menu = Configuration.getCurrent().getMenuDao().get(menuName);
+                ShowMenuController showMenuController = new ShowMenuController(currentStage,menu);
+                showMenuController.showMenu();
                 //TODO appeler le controlleur de show menu
 //                WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
 //                controller.setMenu(menu);

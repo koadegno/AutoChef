@@ -1,7 +1,10 @@
 package ulb.infof307.g01.controller.shoppingList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.UserMenusController;
 import ulb.infof307.g01.controller.tools.AlertMessageController;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.mail.MailController;
@@ -69,6 +72,15 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         }
     }
 
+    public void fillProductTable(ShoppingList shoppingList){
+        createUserShoppingListViewController.clearProductTableView();
+        Vector<Product> temp = new Vector<>(shoppingList);
+        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
+        createUserShoppingListViewController.setProductTableView(data);
+        //Retour menu precedent : MainShoppingList
+        createUserShoppingListViewController.setReturnButtonAction();
+
+    }
     //Fin Methode Listener de CreateUserShoppingListViewController
 
     //Methode Listener de WindowUserShoppingListController
@@ -161,6 +173,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     }
 
     public void returnToUserMenu(){
+        UserMenusController userMenusController = new UserMenusController(currentStage);
+        userMenusController.showAllMenus();
         //UserMenusViewController menusController = new UserMenusViewController();
 //        menusController.displayMyMenus();
     }

@@ -158,7 +158,6 @@ public class HomePageController extends Controller implements HomePageListener, 
      */
     @Override
     public void onUserCreateMenuButtonClick() {
-        // TODO: REFACTOR MVC
         MenuController menuController = new MenuController(currentStage);
         menuController.showCreateMenu();
 //        CreateMenuViewController createMenu = null;

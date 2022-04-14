@@ -55,13 +55,13 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
 //        this.primaryStage.setScene(this.scene);
     }
 
-
-
-    public void fillTableView(TableView<Recipe> table, List<Recipe> valueList) {
-        for (int i = 0; i < valueList.size(); i++) {
-            table.getItems().add(valueList.get(i));
-        }
-    }
+//
+//
+//    public void fillTableView(TableView<Recipe> table, List<Recipe> valueList) {
+//        for (int i = 0; i < valueList.size(); i++) {
+//            table.getItems().add(valueList.get(i));
+//        }
+//    }
 
     /**
      * Action liée à la daysComboBox
@@ -203,6 +203,11 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         this.listener = listener;
     }
 
+    public void setModifyMode() {
+        generateMenuButton.setVisible(false);
+        menuNameTextField.setVisible(false);
+        menuNameLabel.setVisible(false);
+    }
 
 
     public interface Listener{
