@@ -25,7 +25,7 @@ import java.util.List;
 public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
-    private WindowShowMenuController windowShowMenuController;
+    private WindowShowMenuController windowShowMenuViewController;
     private CreateMenuViewController createMenuViewController;
     private Menu menu;
     protected ArrayList<Day> daysName;
@@ -33,7 +33,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     public MenuController(WindowShowMenuController windowShowMenuController){
         //TODO: changer ça avec le MVC of course
-        this.windowShowMenuController = windowShowMenuController;
+        this.windowShowMenuViewController = windowShowMenuController;
     }
 
     public MenuController(Stage primaryStage){
@@ -119,19 +119,14 @@ public class MenuController extends Controller implements CreateMenuViewControll
     public void onAddRecipeClicked() {
         //TODO Appeler le controlleur pour l'ajout de recette dans le menu
         FXMLLoader loader = this.loadFXML("SearchRecipe.fxml");
-        createMenuViewController = loader.getController();
-        createMenuViewController.setListener(this);
+        //windowShowMenuViewController = loader.getController();
+        //windowShowMenuViewController.setListener(this);
     }
 
     @Override
     public void onReturnClicked(){
         HomePageController homePageController = new HomePageController(currentStage);
-        FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageViewController viewController = loader.getController();
-
-        viewController.setListener(homePageController);
-        homePageController.displayMain();
-
+        homePageController.onMenuButtonClick();
     }
 
     @Override
@@ -152,7 +147,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
     public void fillShoppingList(CreateUserShoppingListViewController viewController){
-        ShoppingList shoppingList =  windowShowMenuController.fillShoppingList(viewController);
+        ShoppingList shoppingList =  windowShowMenuViewController.fillShoppingList(viewController);
         viewController.fillTableViewWithExistentShoppingList(shoppingList);
     }
 
