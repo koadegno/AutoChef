@@ -1,19 +1,49 @@
 package ulb.infof307.g01.controller;
 
+import javafx.fxml.FXMLLoader;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
+import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
+
 import java.sql.SQLException;
 
-public class RecipeController extends Controller implements CreateRecipeViewController.CreateRecipeListener {
+public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener, CreateRecipeViewController.CreateRecipeListener {
 
+    private Controller parentController;
     private CreateRecipeViewController createRecipeViewController; //TODO
     private Recipe currentRecipe;
 
     public void displayMain() {
-
+        FXMLLoader loader = loadFXML("HomeRecipe.fxml");
+        HomeRecipeViewController viewController = loader.getController();
+        viewController.setListener(this);
     }
+
+    // <-------------------------- Écran d'accueil des Recettes --------------------------> \\
+
+    @Override
+    public void onUserRecipesButtonClick() {
+        FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
+        // TODO: ViewController UserRecipes
+        viewController.setListener(this);
+    }
+
+    @Override
+    public void onNewRecipeButtonClick() {
+        FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
+        CreateRecipeViewController viewController = loader.getController();
+        viewController.setListener(this);
+    }
+
+    @Override
+    public void onBackButtonClick() {
+        parentController.displayMain();
+    }
+
+    // <-------------------------- Écran de Création des Recettes --------------------------> \\
+
     @Override
     public void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName) {
 
@@ -32,7 +62,7 @@ public class RecipeController extends Controller implements CreateRecipeViewCont
                 ViewController.showErrorSQL();
             }
 
-            // TODO: ReturnHomeRecipeWindow
+            parentController.displayMain();
 
         }
     }
@@ -75,11 +105,11 @@ public class RecipeController extends Controller implements CreateRecipeViewCont
 
     @Override
     public void onModifyProductsButton() {
-
+        // TODO: Connecter au nouveau WindowUserShoppingListsController
     }
 
     @Override
     public void onCancelButton() {
-
+        displayMain();
     }
 }
