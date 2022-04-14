@@ -1,18 +1,16 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import org.sqlite.SQLiteException;
-import ulb.infof307.g01.controller.AlertMessageController;
+import ulb.infof307.g01.controller.tools.AlertMessageController;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.MailController;
+import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.MainController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
-import ulb.infof307.g01.view.tools.AlertMessageViewController;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
