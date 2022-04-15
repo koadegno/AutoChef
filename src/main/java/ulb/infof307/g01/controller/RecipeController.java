@@ -129,7 +129,6 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         if (recipeName.isBlank())
             userRecipesViewController.recipeSearchTextFieldError(true);
 
-        Recipe currentRecipe = null;
         try {
             currentRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
         } catch (SQLException e) {
