@@ -1,18 +1,25 @@
 package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
+import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
+import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
 import java.sql.SQLException;
 
-public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener, CreateRecipeViewController.CreateRecipeListener {
+public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
+                                                            CreateRecipeViewController.CreateRecipeListener,
+                                                            UserRecipesViewController.UserRecipesListener {
 
     private Controller parentController;
+
     private CreateRecipeViewController createRecipeViewController; //TODO
+    private UserRecipesViewController userRecipesViewController;
+
     private Recipe currentRecipe;
 
     public void displayMain() {
@@ -26,15 +33,15 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onUserRecipesButtonClick() {
         FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
-        // TODO: ViewController UserRecipes
-        viewController.setListener(this);
+        userRecipesViewController = loader.getController();
+        userRecipesViewController.setListener(this);
     }
 
     @Override
     public void onNewRecipeButtonClick() {
         FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
-        CreateRecipeViewController viewController = loader.getController();
-        viewController.setListener(this);
+        createRecipeViewController = loader.getController();
+        createRecipeViewController.setListener(this);
     }
 
     @Override
@@ -111,5 +118,59 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onCancelButton() {
         displayMain();
+    }
+
+    // <-------------------------- Écran de Liste des Recettes --------------------------> \\
+
+    @Override
+    public void onRecipeSearchTextFieldSubmit(String recipeName) {
+        if (recipeName.isBlank())
+            userRecipesViewController.recipeSearchTextFieldError(true);
+
+        Recipe currentRecipe = null;
+        try {
+            currentRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
+
+        if (currentRecipe == null)
+            userRecipesViewController.recipeSearchTextFieldError(true);
+        else {
+            userRecipesViewController.recipeSearchTextFieldError(false);
+            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
+                                                        currentRecipe.getPreparation());
+        }
+
+    }
+
+    private String productListToString() {
+        StringBuilder res = new StringBuilder();
+        for (Product p : currentRecipe) {
+            res.append(p.getQuantity());
+            res.append(p.getNameUnity()).append(" ");
+            res.append(p.getName()).append("\n");
+        }
+        return res.toString();
+    }
+
+    @Override
+    public void onModifyRecipeButtonClick() {
+
+    }
+
+    @Override
+    public void onDeleteRecipeButtonClick() {
+
+    }
+
+    @Override
+    public void onSeeAllRecipesButtonClick() {
+
+    }
+
+    @Override
+    public void onImportRecipeFromJSONButtonClick() {
+
     }
 }

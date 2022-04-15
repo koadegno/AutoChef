@@ -22,12 +22,13 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+@Deprecated
 public class WindowViewRecipeController extends Window  implements UtilisationContrat<Recipe>, Initializable {
 
     @FXML
-    public TextField recipeTextField;
+    public TextField recipeSearchTextField;
     @FXML
-    public TextArea displayRecipeTextArea;
+    public TextArea recipeTextArea;
     @FXML
     public Button deleteButton, modifyRecipeButton;
 
@@ -102,7 +103,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     }
 
 
-    public void verifyTextFieldContent(KeyEvent keyEvent) {
+    public void onRecipeSearchTextFieldSubmit(KeyEvent keyEvent) {
         if(keyEvent.getCode() != KeyCode.ENTER)return;
         String recipeName = recipeSearchTextField.getText();
         if(recipeName==null)return;
