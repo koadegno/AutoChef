@@ -2,7 +2,10 @@ package ulb.infof307.g01.view;
 
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.stage.FileChooser;
+import javafx.stage.Window;
 
+import java.io.File;
 import java.net.URL;
 
 /**
@@ -51,5 +54,17 @@ abstract public class ViewController<Listener> {
         alert.setHeaderText("Un problème à eu lieu avec la base de données");
         alert.setContentText("TODO"); //TODO Meilleur erreur
         alert.showAndWait();
+    }
+
+    public static File showFileChooser(String windowTitle, String extensionDescription,
+                                       String extension, Window ownerWindow) {
+
+        FileChooser dialog = new FileChooser();
+        dialog.setTitle(windowTitle);
+
+        final FileChooser.ExtensionFilter extensionFilter = new FileChooser.ExtensionFilter(extensionDescription, extension);
+        dialog.getExtensionFilters().setAll(extensionFilter);
+
+        return dialog.showOpenDialog(ownerWindow);
     }
 }

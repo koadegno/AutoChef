@@ -1,6 +1,7 @@
 package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
+import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.db.Configuration;
@@ -9,6 +10,7 @@ import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
+import java.io.File;
 import java.sql.SQLException;
 
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
@@ -171,6 +173,15 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onImportRecipeFromJSONButtonClick() {
+        final String windowTitle = "Importer une Recette depuis un fichier JSON";
+        String extensionDescription = "Fichier JSON";
+        File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
+                                              "*.json", currentStage);
+
+        if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
+            JSON json = new JSON();
+            json.jsonReader(jsonFile.getAbsolutePath());
+        }
 
     }
 }
