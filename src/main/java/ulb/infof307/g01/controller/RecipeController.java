@@ -41,7 +41,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onNewRecipeButtonClick() {
-        FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
+        FXMLLoader loader = this.loadFXML("createRecipe.fxml");
         createRecipeViewController = loader.getController();
         createRecipeViewController.setListener(this);
     }
