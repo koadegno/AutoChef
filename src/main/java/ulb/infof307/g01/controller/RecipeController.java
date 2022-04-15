@@ -139,6 +139,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             userRecipesViewController.recipeSearchTextFieldError(true);
         else {
             userRecipesViewController.recipeSearchTextFieldError(false);
+            userRecipesViewController.setDisableRecipeButtons(false);
             userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
                                                         currentRecipe.getPreparation());
         }
@@ -162,7 +163,14 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onDeleteRecipeButtonClick() {
-
+        try {
+            Configuration.getCurrent().getRecipeDao().delete(currentRecipe);
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
+        userRecipesViewController.setDisableRecipeButtons(true);
+        userRecipesViewController.resetRecipeTextArea();
+        currentRecipe = null;
     }
 
     @Override

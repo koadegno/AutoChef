@@ -1,6 +1,7 @@
 package ulb.infof307.g01.view.recipe;
 
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
@@ -11,9 +12,12 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
 
     @FXML
     private TextField recipeSearchTextField;
-
     @FXML
     private TextArea recipeTextArea;
+    @FXML
+    private Button deleteRecipeButton;
+    @FXML
+    private Button modifyRecipeButton;
 
     public void onRecipeSearchTextFieldSubmit(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER)
@@ -25,7 +29,7 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     public void onSeeAllRecipesButtonClick()        {listener.onSeeAllRecipesButtonClick();}
     public void onImportRecipeFromJSONButtonClick() {listener.onImportRecipeFromJSONButtonClick();}
 
-    public void recipeSearchTextFieldError(boolean isError) {setNodeColor(recipeSearchTextField, true);}
+    public void recipeSearchTextFieldError(boolean isError) {setNodeColor(recipeSearchTextField, isError);}
 
     public void setRecipeTextArea(String recipeName, String recipeProducts, String recipePreparation) {
         final String nameHeader = "Nom de la recette :  ";
@@ -38,6 +42,19 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
 
         recipeTextArea.setText(recipeText);
     }
+    public void resetRecipeTextArea() {
+        recipeTextArea.setText("Aucune recette sélectionnée");
+    }
+
+    public void setDisableRecipeButtons(boolean value) {
+        deleteRecipeButton.setDisable(value);
+        modifyRecipeButton.setDisable(value);
+    }
+
+    public void onBackToHomeRecipeButtonClick() {
+
+    }
+
     public interface UserRecipesListener {
         void onRecipeSearchTextFieldSubmit(String recipeName);
         void onModifyRecipeButtonClick();
