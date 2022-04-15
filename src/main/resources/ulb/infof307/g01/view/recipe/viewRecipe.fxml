@@ -21,10 +21,10 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="427.0" prefWidth="1024.0" spacing="30.0">
          <children>
-            <TextArea fx:id="displayRecipeTextArea" prefHeight="422.0" prefWidth="386.0" />
+            <TextArea fx:id="recipeTextArea" prefHeight="422.0" prefWidth="386.0" />
             <VBox alignment="CENTER" prefHeight="422.0" prefWidth="276.0" spacing="40.0">
                <children>
-                  <TextField fx:id="recipeTextField" onKeyPressed="#verifyTextFieldContent" />
+                  <TextField fx:id="recipeSearchTextField" onKeyPressed="#onRecipeSearchTextFieldSubmit" />
                   <Button fx:id="modifyRecipeButton"  onAction="#modifyRecipe" mnemonicParsing="false" prefHeight="30.0" prefWidth="220.0" text="Modifier" />
                   <Button fx:id="deleteButton" mnemonicParsing="false" onAction="#deleteRecipe" prefHeight="30.0" prefWidth="220.0" text="Supprimer" />
                   <Button mnemonicParsing="false" onAction="#searchRecipe" prefHeight="30.0" prefWidth="220.0" text="Voir toutes les recettes" />

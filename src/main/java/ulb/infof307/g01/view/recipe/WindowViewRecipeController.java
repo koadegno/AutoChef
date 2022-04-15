@@ -49,9 +49,9 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        displayRecipeTextArea.setEditable(false);
-        displayRecipeTextArea.setWrapText(true);
-        recipeTextField.setPromptText("Entrer nom de la recette");
+        recipeTextArea.setEditable(false);
+        recipeTextArea.setWrapText(true);
+        recipeSearchTextField.setPromptText("Entrer nom de la recette");
         deleteButton.setVisible(false);
         modifyRecipeButton.setVisible(false);
         refreshTextArea();
@@ -62,12 +62,12 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             String preparation = preparationTitle + "\n" + displayedRecipe.getPreparation() + "\n";
             String ingredient = ingredientTitle + "\n" + productListToString(displayedRecipe) + "\n";
             String toDisplay = "Nom de la recette :  " + displayedRecipe.getName()  + "\n" + ingredient + preparation;
-            displayRecipeTextArea.setText(toDisplay);
+            recipeTextArea.setText(toDisplay);
             deleteButton.setVisible(true);
             modifyRecipeButton.setVisible(true);
         }
         else{
-            displayRecipeTextArea.setText("Aucune recette sélectionnée");
+            recipeTextArea.setText("Aucune recette sélectionnée");
         }
     }
 
@@ -104,12 +104,12 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
 
     public void verifyTextFieldContent(KeyEvent keyEvent) {
         if(keyEvent.getCode() != KeyCode.ENTER)return;
-        String recipeName = recipeTextField.getText();
+        String recipeName = recipeSearchTextField.getText();
         if(recipeName==null)return;
         try {
             displayedRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
-            if(displayedRecipe == null) setNodeColor(recipeTextField,true);
-            else setNodeColor(recipeTextField,false);
+            if(displayedRecipe == null) setNodeColor(recipeSearchTextField,true);
+            else setNodeColor(recipeSearchTextField,false);
             refreshTextArea();
         } catch (SQLException e) {
             e.printStackTrace();
