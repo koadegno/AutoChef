@@ -191,4 +191,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         }
 
     }
+
+    @Override
+    public void onBackToHomeRecipeButtonClick() {
+        this.displayMain();
+    }
 }

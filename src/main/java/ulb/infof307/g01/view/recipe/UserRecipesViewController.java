@@ -28,6 +28,7 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     public void onDeleteRecipeButtonClick()         {listener.onDeleteRecipeButtonClick();}
     public void onSeeAllRecipesButtonClick()        {listener.onSeeAllRecipesButtonClick();}
     public void onImportRecipeFromJSONButtonClick() {listener.onImportRecipeFromJSONButtonClick();}
+    public void onBackToHomeRecipeButtonClick()     {listener.onBackToHomeRecipeButtonClick();}
 
     public void recipeSearchTextFieldError(boolean isError) {setNodeColor(recipeSearchTextField, isError);}
 
@@ -51,9 +52,6 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
         modifyRecipeButton.setDisable(value);
     }
 
-    public void onBackToHomeRecipeButtonClick() {
-
-    }
 
     public interface UserRecipesListener {
         void onRecipeSearchTextFieldSubmit(String recipeName);
@@ -61,5 +59,6 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
         void onDeleteRecipeButtonClick();
         void onSeeAllRecipesButtonClick();
         void onImportRecipeFromJSONButtonClick();
+        void onBackToHomeRecipeButtonClick();
     }
 }
