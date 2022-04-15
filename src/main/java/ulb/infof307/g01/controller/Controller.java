@@ -16,7 +16,7 @@ import java.util.Objects;
 public abstract class Controller {
 
     protected static Configuration applicationConfiguration;
-    protected Stage currentStage;
+    protected static Stage currentStage;
 
     protected static String dataBaseName = "autochef.sqlite";
 
