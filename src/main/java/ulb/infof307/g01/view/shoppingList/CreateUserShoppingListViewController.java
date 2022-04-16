@@ -21,7 +21,13 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     @FXML
     TextField nameMyCreateShoppingList;
     @FXML
-    TableColumn columnProduct, columnQuantityOrNumber, columnUnity, columnDelete;
+    TableColumn<Product, String> columnProduct;
+    @FXML
+    TableColumn<Product, String> columnQuantityOrNumber;
+    @FXML
+    TableColumn<Product, String> columnUnity;
+    @FXML
+    TableColumn<Product, Void> columnDelete;
     @FXML
     Label labelNameShoppingList;
     @Override
@@ -77,6 +83,20 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
         returnToMenu.setOnAction((event) ->{
             returnToMyMenu();
         });
+    }
+
+    public void setReturnButtonAction(){
+        returnToMenu.setOnAction((event) ->{
+            returnToMyMenu();
+        });
+    }
+
+    public void clearProductTableView(){
+        tableViewDisplayProductList.getItems().clear();
+    }
+
+    public void setProductTableView(ObservableList<Product> data){
+        tableViewDisplayProductList.setItems(data);
     }
 
     @Override

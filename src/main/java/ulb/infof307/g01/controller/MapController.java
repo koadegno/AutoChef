@@ -19,23 +19,23 @@ import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.HomePageController;
+import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.map.WindowMapController;
+import ulb.infof307.g01.view.map.MapViewController;
 
 import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-public class MapController extends Controller implements WindowMapController.Listener, ShopController.MapListener{
+public class MapController extends Controller implements MapViewController.Listener, ShopController.MapListener{
 
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int SIZE = 10;
     public static final int COLOR_BLACK = 0xFF000000;
     public static final int ADDRESS_SIZE = 18;
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
-    private WindowMapController viewController;
+    private MapViewController viewController;
 
     public MapController(Stage primaryStage){
         setStage(primaryStage);
@@ -104,20 +104,20 @@ public class MapController extends Controller implements WindowMapController.Lis
      * @param shop le magasin existant qu'il faut mettre a jour
      */
     public void updateShop(Shop shop){
-        Pair shopOverlay = getSelectedShop();
+        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
 
-        Graphic textPointOnMap = (Graphic) shopOverlay.getRight();
+        Graphic textPointOnMap = shopOverlay.getRight();
         TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
         shopName.setText(shop.getName());
         }
 
     @Override
     public void onUpdateShopClicked() throws SQLException {
-        Pair shopOverlays = getSelectedShop();
+        Pair<Graphic, Graphic> shopOverlays = getSelectedShop();
         if(shopOverlays == null) return;
-        Graphic cercleGraphic = (Graphic) shopOverlays.getLeft();
-        Graphic textGraphic = (Graphic) shopOverlays.getRight();
+        Graphic cercleGraphic = shopOverlays.getLeft();
+        Graphic textGraphic = shopOverlays.getRight();
 
         Point mapPoint = (Point) cercleGraphic.getGeometry();
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
@@ -130,12 +130,12 @@ public class MapController extends Controller implements WindowMapController.Lis
 
     @Override
     public void onBackButtonClicked() {
-        MainController mainController = new MainController();
+        HomePageController homePageController = new HomePageController(currentStage);
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageController viewController = loader.getController();
+        HomePageViewController viewController = loader.getController();
 
-        viewController.setListener(mainController);
-        mainController.displayMain(currentStage);
+        viewController.setListener(homePageController);
+        homePageController.displayMain();
 
     }
 
@@ -151,13 +151,13 @@ public class MapController extends Controller implements WindowMapController.Lis
     public void onDeleteShopClicked() throws SQLException {
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
-        Pair shopOverlay = getSelectedShop();
+        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
 
         ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
         if (alertResult == ButtonType.OK) {
-            Graphic cerclePointOnMap = (Graphic) shopOverlay.getLeft();
-            Graphic textPointOnMap = (Graphic) shopOverlay.getRight();
+            Graphic cerclePointOnMap = shopOverlay.getLeft();
+            Graphic textPointOnMap = shopOverlay.getRight();
 
             TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
             Point shopPoint = (Point) textPointOnMap.getGeometry();
@@ -170,7 +170,7 @@ public class MapController extends Controller implements WindowMapController.Lis
         }
     }
 
-    private Pair getSelectedShop(){
+    private Pair<Graphic, Graphic> getSelectedShop(){
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
@@ -179,7 +179,7 @@ public class MapController extends Controller implements WindowMapController.Lis
             Graphic textPointOnMap = shopGraphicsTextList.getGraphics().get(i); // le symbole texte associer au point aussi
 
             if (cerclePointOnMap.isSelected()) {
-                return new Pair(cerclePointOnMap, textPointOnMap);
+                return new Pair<>(cerclePointOnMap, textPointOnMap);
             }
         }
         return null;
@@ -212,8 +212,8 @@ public class MapController extends Controller implements WindowMapController.Lis
     /**
      * Met en evidence un point sur la carte
      *
-     * @param mouseX
-     * @param mouseY
+     * @param mouseX La position en X de la souris
+     * @param mouseY La position en Y de la souris
      */
     public void highlightGraphicPoint(double mouseX, double mouseY) {
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);

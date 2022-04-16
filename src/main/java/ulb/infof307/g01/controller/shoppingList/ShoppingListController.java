@@ -1,34 +1,37 @@
 package ulb.infof307.g01.controller.shoppingList;
 
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
+import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.menu.UserMenusController;
+import ulb.infof307.g01.controller.tools.AlertMessageController;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.MailController;
-import ulb.infof307.g01.controller.MainController;
+import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.menu.WindowUserMenuListController;
 import ulb.infof307.g01.view.shoppingList.*;
 
 import java.sql.SQLException;
 import java.util.*;
 
 
-public class ShoppingListController extends Controller implements ShoppingListViewController.Listener  {
+public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     private ShoppingListViewController shoppingListViewController;
     private UserShoppingListViewViewController userShoppingListViewViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
-    private MainController mainController;
+    private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
 
-    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, MainController mainController){
+    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, HomePageController homePageController){
         this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
-        initShoppingListController(mainController);
+        initShoppingListController(homePageController);
     }
 
-    public ShoppingListController(UserShoppingListViewViewController userShoppingListViewViewController, MainController mainController){
+    public ShoppingListController(UserShoppingListViewViewController userShoppingListViewViewController, HomePageController homePageController){
         this.shoppingListViewController = this.userShoppingListViewViewController = userShoppingListViewViewController;
-        initShoppingListController(mainController);
+        initShoppingListController(homePageController);
     }
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController){
@@ -36,8 +39,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         this.shoppingListViewController.setListener(this);
     }
 
-    private void initShoppingListController(MainController mainController) {
-        this.mainController = mainController;
+    private void initShoppingListController(HomePageController homePageController) {
+        this.homePageController = homePageController;
         this.shoppingListViewController.setListener(this);
     }
 
@@ -65,10 +68,19 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 e.printStackTrace();
             }
             // else tout ce passe bien
-            //mainController.onShoppingListButtonClick();
+            createUserShoppingListViewController.returnToMenu.fire();
         }
     }
 
+    public void fillProductTable(ShoppingList shoppingList){
+        createUserShoppingListViewController.clearProductTableView();
+        Vector<Product> temp = new Vector<>(shoppingList);
+        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
+        createUserShoppingListViewController.setProductTableView(data);
+        //Retour menu precedent : MainShoppingList
+        createUserShoppingListViewController.setReturnButtonAction();
+
+    }
     //Fin Methode Listener de CreateUserShoppingListViewController
 
     //Methode Listener de WindowUserShoppingListController
@@ -103,8 +115,10 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             userShoppingListViewViewController.fillShoppingListToSend();
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
-            //Confirmer que la liste de courses est enregistrer
-            //TODO: faire une popup
+            //Popup : confirmer que la liste de courses est enregistrer
+            AlertMessageController alertMessageViewController = new AlertMessageController();
+            alertMessageViewController.displayAlertMessage();
+            alertMessageViewController.createShoppingListAlertMessage();
 
 
         } catch (SQLException e) {
@@ -155,12 +169,14 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     @Override
     public void returnHomeShoppingList() {
-        mainController.onShoppingListButtonClick();
+        homePageController.onShoppingListButtonClick();
     }
 
     public void returnToUserMenu(){
-        WindowUserMenuListController menusController = new WindowUserMenuListController();
-        menusController.displayMyMenus();
+        UserMenusController userMenusController = new UserMenusController(currentStage);
+        userMenusController.showAllMenus();
+        //UserMenusViewController menusController = new UserMenusViewController();
+//        menusController.displayMyMenus();
     }
 
     public void exportShoppingList(String currentShoppingListName){

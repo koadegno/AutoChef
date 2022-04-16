@@ -4,7 +4,6 @@ package ulb.infof307.g01.view.menu;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
-import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 
 import java.io.IOException;
@@ -12,36 +11,45 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-import ulb.infof307.g01.controller.MainController;
-import ulb.infof307.g01.controller.MenuController;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.Menu;
-import ulb.infof307.g01.view.Window;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.UtilisationContrat;
 
 
 /**
- * La classe WindowShowMenuController représente le controleur
+ * La classe ShowMenuViewController représente le controleur
  * pour la page qui affiche le contenu du menu selectionné. Elle
  * permet aux utilisateurs de le modifier, et de générer une liste
  * de courses.
  * Elle implémente la classe Initializable pour pouvoir
  * acceder aux composants FXML.
  * @see ulb.infof307.g01.model.Menu
- * @see WindowShowMenuController
+ * @see ShowMenuViewController
  * */
-public class WindowShowMenuController extends Window implements Initializable, UtilisationContrat<Menu> {
+public class ShowMenuViewController extends ViewController<ShowMenuViewController.Listener> implements Initializable, UtilisationContrat<Menu> {
 
     private Menu menu;
 
     @FXML
-    Label menuName, nbOfdays;
+    Label menuNameLabel, nbOfDayLabel;
     @FXML
     HBox menuHBox;
 
+
+    public Label getMenuNameLabel() {
+        return menuNameLabel;
+    }
+
+    public Label getNbOfDayLabel() {
+        return nbOfDayLabel;
+    }
+
+    public HBox getMenuHBox() {
+        return menuHBox;
+    }
 
     /**
      * Récupère le menu envoyé par la page précédente, affiche son
@@ -55,14 +63,13 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        this.menuName.setText(" ");
+        this.menuNameLabel.setText(" ");
     }
 
 
-    @FXML
     public void displayMenuInfo(String name, int nbOfDays){
-        this.menuName.setText(name);
-        this.nbOfdays.setText("Durée : "+ nbOfDays +"jours");
+//        this.menuNameLabel.setText(name);
+//        this.nbOfDayLabel.setText("Durée : "+ nbOfDays +"jours");
     }
 
     /**
@@ -70,27 +77,26 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * par jour.*/
     @FXML
     public void displayMenuTable(ArrayList<Day> days){
-        for (Day day : days){
-            TableView<Recipe> dayTable = new TableView<>();
-            dayTable.getColumns().clear();
-            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
-            dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
-            List<Recipe> mealForDay = menu.getRecipesfor(day);
-            dayTable.getColumns().add(dayCol);
-            dayTable.getItems().addAll(mealForDay);
-            dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
-            menuHBox.getChildren().add(dayTable);
-        }
+//        for (Day day : days){
+//            TableView<Recipe> dayTable = new TableView<>();
+//            dayTable.getColumns().clear();
+//            TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
+//            dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+//            List<Recipe> mealForDay = menu.getRecipesfor(day);
+//            dayTable.getColumns().add(dayCol);
+//            dayTable.getItems().addAll(mealForDay);
+//            dayTable.setColumnResizePolicy(TableView.CONSTRAINED_RESIZE_POLICY); //Column width = table width
+//            menuHBox.getChildren().add(dayTable);
+//        }
     }
 
     /**
      * Affiche la page pour modifier le menu.
      * @throws  SQLException : si le menu envoyé ne se trouve pas dans la base de données*/
     @FXML
-    public void goToModifyMenu() throws SQLException {
-        WindowModifyMenuController modifyMenu = new WindowModifyMenuController(this.menu);
-        modifyMenu.setMainController(this);
-        this.loadFXML(modifyMenu,"CreateDisplayMenu.fxml" );
+    public void goToModifyMenu()  {
+        listener.onModifyMenuClicked();
+        //this.loadFXML(modifyMenu,"CreateDisplayMenu.fxml" );
     }
 
     /**
@@ -101,10 +107,11 @@ public class WindowShowMenuController extends Window implements Initializable, U
      * */
     @FXML
     public void generateShoppingList() {
-        //TODO: regler ce probleme pour le MVC
-        MenuController menuController = new MenuController(this);
-        menuController.setStage(primaryStage);
-        menuController.displayCreateUserShoppingList();
+        listener.onGenerateShoppingListClicked();
+//        //TODO: regler ce probleme pour le MVC
+//        MenuController menuController = new MenuController(this);
+//        //menuController.setStage(primaryStage);
+//        menuController.displayCreateUserShoppingList();
 
     }
 
@@ -117,14 +124,15 @@ public class WindowShowMenuController extends Window implements Initializable, U
 
 
     public void back(){
-        WindowUserMenuListController menu = new WindowUserMenuListController();
-        menu.displayMyMenus();
+        listener.onBackClicked();
+        //UserMenusViewController menu = new UserMenusViewController();
+        //menu.displayMyMenus();
     }
 
     @Override
     public void add(Menu menu) {
-        WindowShowMenuController controller = (WindowShowMenuController) this.loadFXML("ShowMenu.fxml");
-        controller.setMenu(menu);
+//        ShowMenuViewController controller = (ShowMenuViewController) this.loadFXML("ShowMenu.fxml");
+//        controller.setMenu(menu);
     }
 
     @Override
@@ -134,5 +142,11 @@ public class WindowShowMenuController extends Window implements Initializable, U
             add(Configuration.getCurrent().getMenuDao().get(this.menu.getName()));
         }
         catch (SQLException e){System.out.println(e);}
+    }
+
+    public interface Listener{
+        void onModifyMenuClicked();
+        void onGenerateShoppingListClicked();
+        void onBackClicked();
     }
 }

@@ -2,7 +2,7 @@ package ulb.infof307.g01.view;
 
 import javafx.fxml.FXML;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.MainController;
+import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.MapController;
 import ulb.infof307.g01.view.menu.WindowHomeMenuController;
 import ulb.infof307.g01.view.recipe.WindowHomeRecipeController;
@@ -41,9 +41,8 @@ public class WindowHomeController extends Window{
     @FXML
     public void redirectToShoppingList(){
         //TODO: solution pas ouf ??? pour la primaryStage
-        MainController mainController = new MainController();
-        mainController.setStage(primaryStage);
-        mainController.onShoppingListButtonClick();
+        HomePageController homePageController = new HomePageController(primaryStage);
+        homePageController.onShoppingListButtonClick();
 
     }
 

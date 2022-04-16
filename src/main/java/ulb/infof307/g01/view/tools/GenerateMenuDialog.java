@@ -5,17 +5,24 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.menu.WindowCreateMenuController;
 
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
-public class GenerateMenuDialog extends Window implements Initializable {
-    WindowCreateMenuController mainController = null;
+public class GenerateMenuDialog extends ViewController<GenerateMenuDialog.GenerateMenuListener> implements Initializable {
+    public static final int SPINNER_MAX = 1000;
+    public static final int SPINNER_MIN = 1;
+    GenerateMenuListener listener;
     @FXML
-    private Spinner vegetarianSpinner,meatSpinner,fishSpinner;
+    private Spinner<Integer> vegetarianSpinner;
+    @FXML
+    private Spinner<Integer> meatSpinner;
+    @FXML
+    private Spinner<Integer> fishSpinner;
     @FXML
     private Button  cancelButton,validateButton;
 
@@ -23,33 +30,43 @@ public class GenerateMenuDialog extends Window implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         vegetarianSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(SPINNER_MIN, SPINNER_MAX)
         );
         this.onlyIntValue(vegetarianSpinner);
         meatSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(SPINNER_MIN, SPINNER_MAX)
         );
         this.onlyIntValue(meatSpinner);
         fishSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(SPINNER_MIN, SPINNER_MAX)
         );
         this.onlyIntValue(fishSpinner);
 
         //connecting button
         validateButton.setOnAction(event -> {
-            int nbVegetarianDishes = (int) vegetarianSpinner.getValue();
-            int nbMeatDishes = (int) meatSpinner.getValue();
-            int nbFishDishes = (int) fishSpinner.getValue();
-            this.mainController.addValuesToGenerateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+            int nbVegetarianDishes = vegetarianSpinner.getValue();
+            int nbMeatDishes = meatSpinner.getValue();
+            int nbFishDishes = fishSpinner.getValue();
+            try {
+                listener.addValuesToGenerateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
+            } catch (SQLException e) {
+                //TODO gerer l'erreur
+                e.printStackTrace();
+            }
         });
 
         cancelButton.setOnAction(event -> {
-            this.mainController.cancelGeneratingMenu();
+            listener.cancelGenerateMenu();
         });
     }
 
-    public void setMainController(WindowCreateMenuController mainController) {
-        this.mainController = mainController;
+    public void setListener(GenerateMenuListener listener) {
+        this.listener = listener;
+    }
+
+    public interface GenerateMenuListener{
+        void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) throws SQLException;
+        void cancelGenerateMenu();
     }
 }
 

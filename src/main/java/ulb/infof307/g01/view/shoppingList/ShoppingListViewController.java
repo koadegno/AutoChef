@@ -34,7 +34,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     protected TableView tableViewDisplayProductList;
     @FXML
-    protected Button returnToMenu, btnSendMail;
+    public Button returnToMenu, btnSendMail;
     protected String currentShoppingListName;
 
 

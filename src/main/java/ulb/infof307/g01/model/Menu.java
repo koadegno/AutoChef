@@ -166,7 +166,18 @@ public class Menu {
     }
 
     @Override
-    public String toString(){
-        return this.name;
-    }
+    public String toString(){return name;}
+
+    public String toStringTest(){
+        StringBuilder toReturn = new StringBuilder(this.name + ": \n");
+        for(Vector<Recipe> vector : menu){
+            toReturn.append("\t");
+            for(Recipe recipe: vector){
+                toReturn.append(recipe.getName()).append(" - ");
+            }
+            toReturn.append("\n");
+        }
+
+        return toReturn.toString();
+        }
 }

@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="75.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.HomePageController">
+<VBox alignment="CENTER" prefHeight="600.0" prefWidth="750.0" spacing="75.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.HomePageViewController">
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="516.0" text="Bienvenue dans Autochef" textAlignment="CENTER">
          <font>

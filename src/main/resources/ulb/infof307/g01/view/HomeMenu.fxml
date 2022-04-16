@@ -6,7 +6,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.menu.WindowHomeMenuController" >
+<VBox alignment="TOP_CENTER" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.menu.HomeMenuViewController" >
    <children>
       <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="221.0" prefWidth="553.0" text="Bienvenue aux Menus">
          <font>
@@ -15,10 +15,10 @@
       </Label>
       <HBox alignment="CENTER" prefHeight="267.0" prefWidth="750.0" spacing="40.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#redirectToMyMenusController" prefHeight="45.0" prefWidth="150.0" text="Voir mes Menus" />
-            <Button mnemonicParsing="false" onAction="#redirectToCreateMenuController" prefHeight="45.0" prefWidth="150.0" text="Créer un Menu" />
+            <Button mnemonicParsing="false" onAction="#onUserMenusButtonClick" prefHeight="45.0" prefWidth="150.0" text="Voir mes Menus" />
+            <Button mnemonicParsing="false" onAction="#onCreateMenuButtonClick" prefHeight="45.0" prefWidth="150.0" text="Créer un Menu" />
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#backToMainController" prefHeight="43.0" prefWidth="335.0" text="Retour" />
+      <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="43.0" prefWidth="335.0" text="Retour" />
    </children>
 </VBox>

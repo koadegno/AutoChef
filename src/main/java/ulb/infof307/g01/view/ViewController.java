@@ -1,9 +1,13 @@
 package ulb.infof307.g01.view;
 
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
+import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
+import javafx.scene.control.Spinner;
 
 import java.io.File;
 import java.net.URL;
@@ -54,6 +58,19 @@ abstract public class ViewController<Listener> {
         alert.setHeaderText("Un problème à eu lieu avec la base de données");
         alert.setContentText("TODO"); //TODO Meilleur erreur
         alert.showAndWait();
+    }
+
+    @FXML
+    protected void onlyIntValue(Spinner<Integer> numberOfPersonSpinner){
+        numberOfPersonSpinner.getEditor().textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
+                }
+            }
+        });
     }
 
     public static File showFileChooser(String windowTitle, String extensionDescription,
