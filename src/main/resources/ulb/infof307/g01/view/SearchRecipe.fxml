@@ -3,7 +3,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.recipe.WindowSearchRecipeController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.recipe.SearchRecipeViewController">
    <children>
       <HBox prefHeight="118.0" prefWidth="750.0">
          <children>
@@ -21,24 +21,24 @@
                   <HBox alignment="CENTER" prefHeight="67.0" prefWidth="343.0" spacing="50.0">
                      <children>
                         <Label prefHeight="16.0" prefWidth="87.0" text="Type :" textAlignment="CENTER" />
-                        <ComboBox fx:id="recipeTypeComboBox" onAction="#refreshTableView" prefWidth="150.0" />
+                        <ComboBox fx:id="typeComboBox" onAction="#onTypeComboBoxSelected" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="61.0" prefWidth="318.0" spacing="30.0">
                      <children>
                         <Label prefHeight="37.0" prefWidth="107.0" text="Régime :" />
-                        <ComboBox fx:id="recipeDietComboBox" onAction="#refreshTableView" prefWidth="150.0" />
+                        <ComboBox fx:id="dietComboBox" onAction="#onDietComboBoxSelected" prefWidth="150.0" />
                      </children>
                   </HBox>
                   <HBox alignment="CENTER" prefHeight="83.0" prefWidth="281.0" spacing="30.0">
                      <children>
-                        <CheckBox fx:id="activateSpinnerCheckBox" mnemonicParsing="false" onMouseClicked="#checkBoxEvent" prefHeight="18.0" prefWidth="203.0" text="ajouter nb personne" />
-                        <Spinner fx:id="numberOfPersonSpinner" editable="true" onKeyPressed="#refreshTableView" onMouseClicked="#refreshTableView" prefHeight="24.0" prefWidth="112.0" />
+                        <CheckBox fx:id="nbPersonCheckBox" mnemonicParsing="false" onMouseClicked="#onNbPersonCheckBoxChecked" prefHeight="18.0" prefWidth="203.0" text="ajouter nb personne" />
+                        <Spinner fx:id="nbPersonSpinner" disable="true" editable="true" onKeyPressed="#onNbPersonSpinnerKeyPressed" onMouseClicked="#onNbPersonSpinnerClicked" prefHeight="24.0" prefWidth="112.0" />
                      </children>
                   </HBox>
                </children>
             </VBox>
-            <TableView fx:id="recipeTableView" onMouseClicked="#addRecipe" prefHeight="488.0" prefWidth="296.0">
+            <TableView fx:id="recipesTableView" onMouseClicked="#onRecipesTableViewClicked" prefHeight="488.0" prefWidth="296.0">
               <columns>
                 <TableColumn fx:id="columnRecipeName" prefWidth="295.0" text="Recettes" />
               </columns>
@@ -47,7 +47,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="147.0" prefWidth="736.0" spacing="200.0">
          <children>
-            <Button fx:id="cancelSearchRecipeButton" lineSpacing="200.0" mnemonicParsing="false" onAction="#returnToCreateMenu" prefHeight="24.0" prefWidth="586.0" text="Annuler" />
+            <Button fx:id="cancelButton" lineSpacing="200.0" mnemonicParsing="false" onAction="#onCancelButtonClicked" prefHeight="24.0" prefWidth="586.0" text="Annuler" />
          </children>
       </HBox>
    </children>

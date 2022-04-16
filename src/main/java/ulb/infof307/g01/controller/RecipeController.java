@@ -11,23 +11,28 @@ import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
+import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
 import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
                                                             CreateRecipeViewController.CreateRecipeListener,
-                                                            UserRecipesViewController.UserRecipesListener {
+                                                            UserRecipesViewController.UserRecipesListener,
+                                                            SearchRecipeViewController.Listener {
 
     private Controller parentController;
 
     Scene scene = null;
 
-    private CreateRecipeViewController createRecipeViewController; //TODO
+    private CreateRecipeViewController createRecipeViewController;
     private UserRecipesViewController userRecipesViewController;
+    private SearchRecipeViewController searchRecipeViewController;
 
     private Recipe currentRecipe;
 
@@ -125,7 +130,6 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         ShoppingListController shoppingListController = new ShoppingListController(this);
 
         shoppingListController.initForCreateRecipe(products);
-        // TODO: Connecter au nouveau WindowUserShoppingListsController
     }
 
     public void modifyProductsCallback(@Nullable ShoppingList products) {
@@ -195,7 +199,18 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onSeeAllRecipesButtonClick() {
-        // TODO Filtre
+        FXMLLoader loader = loadFXML("SearchRecipe.fxml");
+        searchRecipeViewController = loader.getController();
+        searchRecipeViewController.setListener(this);
+
+        try {
+            ArrayList<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
+            ArrayList<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+            ArrayList<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            searchRecipeViewController.initialize(dietsList, typesList, recipesList);
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
     }
 
     @Override
@@ -215,5 +230,57 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onBackToHomeRecipeButtonClick() {
         this.displayMain();
+    }
+
+    // <-------------------------- Écran de Recherche de Recette --------------------------> \\
+
+    @Override
+    public void onTypeComboBoxSelected(String recipeType) {
+        String recipeDiet = searchRecipeViewController.getDietComboBoxSelectedItem();
+        int recipeNbPerson = searchRecipeViewController.getNbPersonSpinnerValue();
+
+        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
+    }
+
+    @Override
+    public void onDietComboBoxSelected(String recipeDiet) {
+        String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
+        int recipeNbPerson = searchRecipeViewController.getNbPersonSpinnerValue();
+
+        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
+    }
+
+    @Override
+    public void onNbPersonCheckBoxChecked(boolean isChecked) {
+        searchRecipeViewController.setDisableNbPersonSpinner(!isChecked);
+
+        onNbPersonSpinnerClicked(searchRecipeViewController.getNbPersonSpinnerValue());
+    }
+
+    @Override
+    public void onNbPersonSpinnerClicked(int recipeNbPerson) {
+        String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
+        String recipeDiet = searchRecipeViewController.getDietComboBoxSelectedItem();
+
+        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
+    }
+
+    @Override
+    public void onNbPersonSpinnerKeyPressed(int recipeNbPerson) {
+        onNbPersonSpinnerClicked(recipeNbPerson);
+    }
+
+    private void refreshRecipeList(String recipeType, String recipeDiet, int nbPerson) {
+        try {
+            List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(recipeDiet, recipeType, nbPerson);
+            searchRecipeViewController.refreshRecipesTableView(recipesList);
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
+    }
+
+    @Override
+    public void onRecipesTableViewClicked() {
+
     }
 }
