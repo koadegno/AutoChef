@@ -6,12 +6,11 @@ import javafx.fxml.Initializable;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.Window;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.net.URL;
 import java.sql.SQLException;
@@ -137,13 +136,13 @@ public class WindowCreateRecipeController extends Window implements Initializabl
 
     public void addIngredients() {
         this.scene = this.primaryStage.getScene();
-        WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
-        this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
-        windowsMyShoppingListsController.setCallerClass(this);
+        //WindowUserShoppingListsController windowsMyShoppingListsController = new WindowUserShoppingListsController();
+        //this.loadFXML(windowsMyShoppingListsController, "CreateUserShoppingList.fxml");
+        //windowsMyShoppingListsController.setCallerClass(this);
 
         //Initialise la page avec les informations de la bdd
-        windowsMyShoppingListsController.initShoppingListElement();
-        windowsMyShoppingListsController.initForCreateRecipe(recipeIngredients);
+        //windowsMyShoppingListsController.initShoppingListElement();
+        //windowsMyShoppingListsController.initForCreateRecipe(recipeIngredients);
     }
 
 

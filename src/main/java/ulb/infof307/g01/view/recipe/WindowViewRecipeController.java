@@ -10,10 +10,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.stage.FileChooser;
-import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.Window;
 import ulb.infof307.g01.view.tools.UtilisationContrat;
 
@@ -30,7 +30,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
     @FXML
     public TextArea recipeTextArea;
     @FXML
-    public Button deleteButton, modifyRecipeButton;
+    public Button deleteRecipeButton, modifyRecipeButton;
 
     private static Scene scene;
     private String ingredientTitle = "Ingrédients : ";
@@ -53,7 +53,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         recipeTextArea.setEditable(false);
         recipeTextArea.setWrapText(true);
         recipeSearchTextField.setPromptText("Entrer nom de la recette");
-        deleteButton.setVisible(false);
+        deleteRecipeButton.setVisible(false);
         modifyRecipeButton.setVisible(false);
         refreshTextArea();
     }
@@ -64,7 +64,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             String ingredient = ingredientTitle + "\n" + productListToString(displayedRecipe) + "\n";
             String toDisplay = "Nom de la recette :  " + displayedRecipe.getName()  + "\n" + ingredient + preparation;
             recipeTextArea.setText(toDisplay);
-            deleteButton.setVisible(true);
+            deleteRecipeButton.setVisible(true);
             modifyRecipeButton.setVisible(true);
         }
         else{
@@ -118,6 +118,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
         }
     }
 
+    @Deprecated
     public void deleteRecipe() {
         try {
             Configuration.getCurrent().getRecipeDao().delete(displayedRecipe);
@@ -126,7 +127,7 @@ public class WindowViewRecipeController extends Window  implements UtilisationCo
             e.printStackTrace();
             Window.showAlert(Alert.AlertType.ERROR, "ERROR", "MESSAGE D'ERREUR");
         }
-        deleteButton.setVisible(false);
+        deleteRecipeButton.setVisible(false);
         modifyRecipeButton.setVisible(false);
         displayedRecipe = null;
         refreshTextArea();
