@@ -8,13 +8,14 @@ import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
+
 import java.util.ArrayList;
 
 /**
- * Super Classe contenant les methodes doublons qu'utilise la fenetre creation/modif liste de courses
+ * Super Classe contenant les méthodes doublons qu'utilise la fenêtre creation/modif liste de courses
  */
 
-public class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
+public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
     @FXML
     protected HBox hBoxToCreateProduct;
@@ -80,7 +81,7 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
     }
 
     /**
-     * Rajoute les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
+     * Rajoute-les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
      */
     @FXML
     public void addElementOfListToComboBoxProduct() {
@@ -162,12 +163,10 @@ public class ShoppingListViewController extends ViewController<ShoppingListViewC
         void exportShoppingList(String currentShoppingListName);
         void sendShoppingListByMail(String currentShoppingListName);
 
-        //TODO: creer un autre Controller??
         void seeUserShoppingList(Object nameUserShoppingList);
         void confirmUserModifyShoppingList(String currentShoppingListName);
         void addProductToShoppingListToSend(Product product);
 
-        //TODO: controller pour le create??
         void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
         }
 }

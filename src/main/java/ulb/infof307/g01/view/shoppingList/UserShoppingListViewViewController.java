@@ -3,13 +3,19 @@ package ulb.infof307.g01.view.shoppingList;
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
-import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.recipe.WindowCreateRecipeController;
+
 import java.net.URL;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 public class UserShoppingListViewViewController extends ShoppingListViewController implements Initializable {
     @FXML
@@ -17,7 +23,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
     private WindowCreateRecipeController callerClass=null;
 
     /**
-     * Permet d'afficher sur le tableView les listes de courses a partir d'un nom d'une
+     * Permet d'afficher sur le tableView les listes de courses à partir d'un nom d'une
      * liste de courses
      */
     @FXML
@@ -35,7 +41,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
     }
 
     /**
-     * Permet d'enregistrer une liste de courses que l'utilisateur aurait modifie
+     * Permet d'enregistrer une liste de courses que l'utilisateur aurait modifié
      */
     @FXML
     public void confirmMyCreateShoppingList() {
@@ -58,6 +64,7 @@ public class UserShoppingListViewViewController extends ShoppingListViewControll
      */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        // TODO DUPLICATE
         activeElementVisibility(true);
 
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
