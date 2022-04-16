@@ -48,7 +48,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onBackButtonClick() {
-        parentController.displayMain();
+        //parentController.displayMain();
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
@@ -71,8 +71,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 ViewController.showErrorSQL();
             }
 
-            parentController.displayMain();
-
+            //parentController.displayMain();
         }
     }
 
@@ -158,7 +157,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onModifyRecipeButtonClick() {
-
+        // TODO Créer une recette
     }
 
     @Override
@@ -175,7 +174,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onSeeAllRecipesButtonClick() {
-
+        // TODO Filtre
     }
 
     @Override
