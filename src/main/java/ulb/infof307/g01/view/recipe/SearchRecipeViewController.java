@@ -73,8 +73,11 @@ public class SearchRecipeViewController extends ViewController<SearchRecipeViewC
         listener.onNbPersonSpinnerKeyPressed(nbPersonSpinner.getValue());
     }
 
-    public void onRecipesTableViewClicked() {listener.onRecipesTableViewClicked();}
-    public void onCancelButtonClicked()  {listener.onCancelButton();} // FIXME : Retourne sur HomeRecipe
+    public void onRecipesTableViewClicked() {
+        Recipe recipe = recipesTableView.getSelectionModel().getSelectedItem();
+        listener.onRecipesTableViewClicked(recipe);
+    }
+    public void onCancelButtonClicked()  {listener.onCancelSearchButton();} // FIXME : Retourne sur HomeRecipe
 
     public String getDietComboBoxSelectedItem() {return dietComboBox.getSelectionModel().getSelectedItem();}
     public String getTypeComboBoxSelectedItem() {return typeComboBox.getSelectionModel().getSelectedItem();}
@@ -93,7 +96,7 @@ public class SearchRecipeViewController extends ViewController<SearchRecipeViewC
         void onNbPersonCheckBoxChecked(boolean isChecked);
         void onNbPersonSpinnerClicked   (int recipeNbPerson);
         void onNbPersonSpinnerKeyPressed(int recipeNbPerson);
-        void onRecipesTableViewClicked();
-        void onCancelButton();
+        void onRecipesTableViewClicked(Recipe selectedRecipe);
+        void onCancelSearchButton();
     }
 }

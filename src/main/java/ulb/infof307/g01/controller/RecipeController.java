@@ -280,7 +280,18 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     }
 
     @Override
-    public void onRecipesTableViewClicked() {
+    public void onRecipesTableViewClicked(Recipe selectedRecipe) {
+        onUserRecipesButtonClick();
+        currentRecipe = selectedRecipe;
+        if (currentRecipe != null) {
+            userRecipesViewController.recipeSearchTextFieldError(false);
+            userRecipesViewController.setDisableRecipeButtons(false);
+            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getName());
+        }
+    }
 
+    @Override
+    public void onCancelSearchButton() {
+        onRecipesTableViewClicked(currentRecipe);
     }
 }
