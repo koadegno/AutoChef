@@ -1,23 +1,30 @@
 package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
+import javax.annotation.Nullable;
 import java.io.File;
 import java.sql.SQLException;
+import java.util.Vector;
 
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
                                                             CreateRecipeViewController.CreateRecipeListener,
                                                             UserRecipesViewController.UserRecipesListener {
 
     private Controller parentController;
+
+    Scene scene = null;
 
     private CreateRecipeViewController createRecipeViewController; //TODO
     private UserRecipesViewController userRecipesViewController;
@@ -48,7 +55,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onBackButtonClick() {
-        //parentController.displayMain();
+        //parentController.displayMain(); //TODO
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
@@ -71,7 +78,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 ViewController.showErrorSQL();
             }
 
-            //parentController.displayMain();
+            //parentController.displayMain(); TODO
         }
     }
 
@@ -113,8 +120,22 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onModifyProductsButton() {
+        this.scene = currentStage.getScene();
+        ShoppingList products = new ShoppingList("temporary");
+        ShoppingListController shoppingListController = new ShoppingListController(this);
+
+        shoppingListController.initForCreateRecipe(products);
         // TODO: Connecter au nouveau WindowUserShoppingListsController
     }
+
+    public void modifyProductsCallback(@Nullable ShoppingList products) {
+        currentStage.setScene(scene);
+        if (products != null) {
+            Vector<Product> productOfShoppingList = new Vector<>(products);
+            createRecipeViewController.fillProductsTable(productOfShoppingList);
+        }
+    }
+
 
     @Override
     public void onCancelButton() {

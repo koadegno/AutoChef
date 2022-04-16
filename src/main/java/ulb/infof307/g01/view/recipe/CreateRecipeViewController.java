@@ -5,12 +5,15 @@ import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
+import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -18,7 +21,7 @@ import java.util.ResourceBundle;
  */
 public class CreateRecipeViewController extends ViewController<CreateRecipeViewController.CreateRecipeListener> implements Initializable {
     @FXML
-    private TableView ingredientTableView;
+    private TableView<Product> ingredientTableView;
     @FXML
     private TableColumn tableColumnProduct, tableColumnQuantityOrNumber, tableColumnUnity;
     @FXML
@@ -28,7 +31,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     @FXML
     private ComboBox<String> dietComboBox;
     @FXML
-    private Spinner nbPersonSpinner;
+    private Spinner<Integer> nbPersonSpinner;
     @FXML
     private TextField recipeNameTextField;
 
@@ -46,6 +49,14 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         } catch (SQLException e) {
             showErrorSQL();
         }
+
+        nbPersonSpinner.setValueFactory(
+                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
+        );
+        this.onlyIntValue(nbPersonSpinner);
+        tableColumnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
+        tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
+        tableColumnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
     }
 
     public void onSubmitButton() {
@@ -92,6 +103,10 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
 
     public void nbPersonSpinnerError() {
         setNodeColor(nbPersonSpinner, true);
+    }
+
+    public void fillProductsTable(List<Product> productsList) {
+        ingredientTableView.setItems(FXCollections.observableArrayList(productsList));
     }
 
     public interface CreateRecipeListener {

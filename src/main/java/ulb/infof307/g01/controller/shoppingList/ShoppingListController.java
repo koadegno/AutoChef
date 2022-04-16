@@ -3,18 +3,24 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
+import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.RecipeController;
+import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.controller.tools.AlertMessageController;
-import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.shoppingList.*;
+import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
 
 import java.sql.SQLException;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Objects;
+import java.util.Vector;
 
 
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
@@ -23,6 +29,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
+
+    RecipeController recipeController = null;
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, HomePageController homePageController){
         this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
@@ -44,6 +52,9 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         this.shoppingListViewController.setListener(this);
     }
 
+    public ShoppingListController(RecipeController recipeController) {
+        this.recipeController = recipeController;
+    }
     //Methode Listener de CreateUserShoppingListViewController
 
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
@@ -62,7 +73,6 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
-                e.printStackTrace();
                 createUserShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
                 e.printStackTrace();
@@ -196,4 +206,23 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     //Fin Methode Listener de WindowUserShoppingListController
 
+    public void initForCreateRecipe(ShoppingList shoppingList) {
+        shoppingListViewController = userShoppingListViewViewController = new UserShoppingListViewViewController();
+
+        shoppingListToSend = new ShoppingList("temporary");
+        loadFXML(userShoppingListViewViewController, "CreateUserShoppingList.fxml");
+        userShoppingListViewViewController.setListener(this);
+        userShoppingListViewViewController.initForCreateRecipe(shoppingList);
+        initInformationShoppingList(false);
+    }
+
+    @Override
+    public void cancelRecipeCreation() {
+        recipeController.modifyProductsCallback(null);
+    }
+
+    @Override
+    public void returnAddedProducts() {
+        recipeController.modifyProductsCallback(shoppingListToSend);
+    }
 }

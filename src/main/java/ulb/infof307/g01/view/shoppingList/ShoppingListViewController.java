@@ -168,5 +168,9 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void addProductToShoppingListToSend(Product product);
 
         void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
-        }
+
+        void cancelRecipeCreation();
+
+        void returnAddedProducts();
+    }
 }
