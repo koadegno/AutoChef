@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller;
 
 import javafx.collections.FXCollections;
-import javafx.fxml.FXMLLoader;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.model.Product;
@@ -20,21 +19,26 @@ public class ShopController extends Controller implements WindowShopController.L
     private Shop shop;
     private boolean isModifying; // POPUP pour la modification ou non
 
-    public ShopController(Stage primaryStage, Shop shop, boolean isModifying, MapListener listener){
+    public ShopController(Shop shop, boolean isModifying, MapListener listener){
         this.listener = listener;
         this.shop = shop;
-        setStage(primaryStage);
         this.isModifying = isModifying;
     }
 
-    public void show(){
+    public Stage show(){
+        try {
+            viewController = new WindowShopController();
+            Stage shopStage = popupFXML("ShowShop.fxml",viewController);
+            viewController.setListener(this);
+            viewController.createPopup();
+            if(isModifying) viewController.setNameShopTextField(shop.getName());
+            setStage(shopStage);
+            return shopStage;
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
 
-        FXMLLoader loader = loadFXML("ShowShop.fxml");
-        viewController = loader.getController();
-        viewController.setListener(this);
-        viewController.createPopup();
-        if(isModifying) viewController.setNameShopTextField(shop.getName());
-
+        return null;
     }
 
     @Override

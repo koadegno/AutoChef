@@ -82,7 +82,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
             popup = popupFXML("GenerateMenuDialog.fxml", generateMenuDialog);
             generateMenuDialog.setListener(this);
         } catch (IOException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
     }
 

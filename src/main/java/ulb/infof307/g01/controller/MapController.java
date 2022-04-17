@@ -94,8 +94,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
         Point mapPoint = mapView.screenToLocation(cursorCoordinate);
 
-        Stage popUpStage = new Stage();
-        ShopController shopController = new ShopController(popUpStage,new Shop(mapPoint),false,  this);
+        ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
         shopController.show();
     }
 
@@ -123,8 +122,7 @@ public class MapController extends Controller implements MapViewController.Liste
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
 
         Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
-        Stage popupStage = new Stage();
-        ShopController showShopController = new ShopController(popupStage,shopToModify,true, this);
+        ShopController showShopController = new ShopController(shopToModify,true, this);
         showShopController.show();
     }
 
