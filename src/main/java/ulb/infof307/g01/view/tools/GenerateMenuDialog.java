@@ -15,7 +15,7 @@ import java.util.ResourceBundle;
 
 public class GenerateMenuDialog extends ViewController<GenerateMenuDialog.GenerateMenuListener> implements Initializable {
     public static final int SPINNER_MAX = 1000;
-    public static final int SPINNER_MIN = 1;
+    public static final int SPINNER_MIN = 0;
     GenerateMenuListener listener;
     @FXML
     private Spinner<Integer> vegetarianSpinner;

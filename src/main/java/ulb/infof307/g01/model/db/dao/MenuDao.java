@@ -98,6 +98,7 @@ public class MenuDao extends Database implements Dao<Menu> {
                 fillRecipeWithProducts(recipe);
             }
         }
+        menu.setName(name);
         return menu;
     }
 

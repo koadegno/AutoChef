@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.menu;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
@@ -33,6 +34,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
     private Menu menu;
     protected ArrayList<Day> daysName;
     private Stage popup = null;
+    private Scene currentScene;
+    private boolean isModifying;
 
     public MenuController(ShowMenuViewController showMenuViewController){
         //TODO: changer ça avec le MVC of course
@@ -67,12 +70,14 @@ public class MenuController extends Controller implements CreateMenuViewControll
         createMenuViewController = loader.getController();
         createMenuViewController.setListener(this);
         start();
+        isModifying = false;
     }
 
     public void showModifyMenu(Menu menu) {
         this.menu = menu;
         showCreateMenu();
         createMenuViewController.setModifyMode();
+        isModifying = true;
     }
 
     @Override
@@ -89,14 +94,19 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public boolean onSaveMenu(String menuName){
         boolean isSaved = true;
-        if(menuName.isBlank() || menuName.isEmpty() ) return !isSaved;
+        System.out.println(menuName.isBlank() || menuName.isEmpty());
+        if((menuName.isBlank() || menuName.isEmpty() ) && !isModifying ) return !isSaved;
         try{
             if(menu.size() == 0) {
                 return !isSaved;
             } else {
-                menu.setName(menuName);
-                System.out.println(menu.toStringTest());
-                Configuration.getCurrent().getMenuDao().insert(menu);
+                if(!isModifying){
+                    menu.setName(menuName);
+                    Configuration.getCurrent().getMenuDao().insert(menu);
+                }
+                else Configuration.getCurrent().getMenuDao().update(menu);
+
+
                 FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
                 HomeMenuViewController viewController = loader.getController();
                 HomePageController homePageController = new HomePageController(currentStage);
@@ -160,6 +170,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onAddRecipeClicked() {
+        currentScene = currentStage.getScene();
         RecipeController recipeController = new RecipeController();
         recipeController.setStage(currentStage);
         recipeController.setListener(this);
@@ -167,10 +178,16 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
     @Override
+    public void onCancelButtonClicked() {
+        currentStage.setScene(currentScene);
+    }
+
+    @Override
     public void onRecipeSelected(Recipe selectedRecipe) {
+        currentStage.setScene(currentScene);
         int selectedIndex = createMenuViewController.getDaysComboBox().getSelectionModel().getSelectedIndex();
         Day day = daysName.get(selectedIndex);
         menu.addRecipeTo(day,selectedRecipe);
-        showCreateMenu();
+        createMenuViewController.refreshTableView();
     }
 }

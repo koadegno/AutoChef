@@ -4,10 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
-import ulb.infof307.g01.model.JSON;
-import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
@@ -39,6 +36,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     private SearchRecipeViewController searchRecipeViewController;
 
     private Recipe currentRecipe;
+    private ShoppingList currentShoppingList;
     private SearchRecipeListener listener;
 
     public void displayMain() {
@@ -86,7 +84,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             currentRecipe.setPreparation(preparation);
             currentRecipe.setType(type);
             currentRecipe.setNbrPerson(nbPerson);
-
+            currentRecipe.addAll(currentShoppingList);
             try {
                 if (isWaitingModification) {
                     Configuration.getCurrent().getRecipeDao().update(currentRecipe);
@@ -97,7 +95,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 ViewController.showErrorSQL();
             }
 
-            //parentController.displayMain(); TODO
+            displayMain();
         }
     }
 
@@ -141,17 +139,17 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     public void onModifyProductsButton() {
         this.sceneModifyRecipe = currentStage.getScene();
 
-        ShoppingList products = new ShoppingList("temporary");
-        products.addAll(currentRecipe);
+        if (currentShoppingList == null) currentShoppingList = new ShoppingList("temporary");
         ShoppingListController shoppingListController = new ShoppingListController(this);
 
-        shoppingListController.initForCreateRecipe(products);
+        shoppingListController.initForCreateRecipe(currentShoppingList);
     }
 
     public void modifyProductsCallback(@Nullable ShoppingList products) {
         currentStage.setScene(sceneModifyRecipe);
 
         if (products != null) {
+            currentShoppingList = products;
             Vector<Product> productOfShoppingList = new Vector<>(products);
             createRecipeViewController.fillProductsTable(productOfShoppingList);
         }
@@ -334,10 +332,12 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onCancelSearchButton() {
-        onRecipesTableViewClicked(currentRecipe);
+        if(listener == null)onRecipesTableViewClicked(currentRecipe);
+        else listener.onCancelButtonClicked();
     }
 
     public interface SearchRecipeListener{
         void onRecipeSelected(Recipe selectedRecipe);
+        void onCancelButtonClicked();
     }
 }
