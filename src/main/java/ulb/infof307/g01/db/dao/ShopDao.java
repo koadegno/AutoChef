@@ -11,6 +11,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les magasins
+ */
 public class ShopDao extends Database implements Dao<Shop> {
 
     public static final int SHOP_ID_INDEX = 1;

@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les listes de courses
+ */
 public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB

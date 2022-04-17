@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les menus
+ */
 public class MenuDao extends Database implements Dao<Menu> {
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB

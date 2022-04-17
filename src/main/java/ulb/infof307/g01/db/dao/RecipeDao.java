@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les recettes
+ */
 public class RecipeDao extends Database implements Dao<Recipe> {
 
     /**

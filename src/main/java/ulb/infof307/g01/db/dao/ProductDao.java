@@ -8,6 +8,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les Ingredients
+ */
 public class ProductDao extends Database implements Dao<Product> {
 
     /**
