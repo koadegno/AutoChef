@@ -110,10 +110,10 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     }
 
     public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<TableColumn<Product, Void>, TableCell<Product, Void>>() {
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<>() {
             @Override
             public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
-                final TableCell<Product, Void> cell = new TableCell<Product, Void>() {
+                final TableCell<Product, Void> cell = new TableCell<>() {
 
                     //Creer un bouton supprimer
                     private final Button btnDelete = new Button("Supprimer");

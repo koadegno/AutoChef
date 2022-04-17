@@ -1,16 +1,21 @@
 package ulb.infof307.g01.view.shoppingList;
+
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
+import javafx.scene.control.Label;
+import javafx.scene.control.TableCell;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TextField;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
 import java.net.URL;
-import java.util.*;
+import java.util.ResourceBundle;
+import java.util.Vector;
 
 /**
  * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
@@ -86,9 +91,7 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     }
 
     public void setReturnButtonAction(){
-        returnToMenu.setOnAction((event) ->{
-            returnToMyMenu();
-        });
+        returnToMenu.setOnAction((event) -> returnToMyMenu());
     }
 
     public void clearProductTableView(){

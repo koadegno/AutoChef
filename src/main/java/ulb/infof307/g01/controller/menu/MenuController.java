@@ -11,6 +11,7 @@ import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
@@ -102,8 +103,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
                 return isSaved;
             }
         } catch(SQLException e) {
-            //TODO Erreur sql a géré
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
         return isSaved;
     }
