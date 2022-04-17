@@ -28,7 +28,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     // private Controller parentController; //TODO
 
-    Scene scene = null;
+    Scene sceneViewRecipe = null;
+    Scene sceneModifyRecipe = null;
+
+    boolean isWaitingModification = false;
 
     private CreateRecipeViewController createRecipeViewController;
     private UserRecipesViewController userRecipesViewController;
@@ -80,7 +83,11 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             currentRecipe.setNbrPerson(nbPerson);
 
             try {
-                Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
+                if (isWaitingModification) {
+                    Configuration.getCurrent().getRecipeDao().update(currentRecipe);
+                    isWaitingModification = false;
+                } else
+                    Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
             } catch (SQLException e) {
                 ViewController.showErrorSQL();
             }
@@ -106,7 +113,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             isValid = false;
         }
         // TODO Vérifier que la liste d'ingrédients n'est pas vide
-
+        // TODO: Reset erreur quand condition OK
         // Vérifie que la préparation n'est pas vide
         if (preparation.isBlank()) {
             createRecipeViewController.preparationTextAreaError();
@@ -127,15 +134,18 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onModifyProductsButton() {
-        this.scene = currentStage.getScene();
+        this.sceneModifyRecipe = currentStage.getScene();
+
         ShoppingList products = new ShoppingList("temporary");
+        products.addAll(currentRecipe);
         ShoppingListController shoppingListController = new ShoppingListController(this);
 
         shoppingListController.initForCreateRecipe(products);
     }
 
     public void modifyProductsCallback(@Nullable ShoppingList products) {
-        currentStage.setScene(scene);
+        currentStage.setScene(sceneModifyRecipe);
+
         if (products != null) {
             Vector<Product> productOfShoppingList = new Vector<>(products);
             createRecipeViewController.fillProductsTable(productOfShoppingList);
@@ -184,8 +194,26 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onModifyRecipeButtonClick() {
-        // TODO Créer une recette
+        isWaitingModification = true;
+
+        this.sceneViewRecipe = currentStage.getScene();
+        FXMLLoader loader = this.loadFXML("createRecipe.fxml");
+        createRecipeViewController = loader.getController();
+        createRecipeViewController.setListener(this);
+
+        List<Product> productList = new ArrayList<>(currentRecipe);
+        createRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
+                                                 currentRecipe.getType(), currentRecipe.getType(),
+                                                 currentRecipe.getNbrPerson(), productList);
+
+        createRecipeViewController.setCancelButtonToModifyRecipe();
     }
+
+    @Override
+    public void onCancelModifyButton() {
+        currentStage.setScene(sceneViewRecipe);
+    }
+
 
     @Override
     public void onDeleteRecipeButtonClick() {

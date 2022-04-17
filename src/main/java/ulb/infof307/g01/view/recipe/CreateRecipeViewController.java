@@ -23,7 +23,9 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     @FXML
     private TableView<Product> ingredientTableView;
     @FXML
-    private TableColumn tableColumnProduct, tableColumnQuantityOrNumber, tableColumnUnity;
+    private TableColumn<Product, String> tableColumnProduct, tableColumnUnity;
+    @FXML
+    private TableColumn<Product, Integer> tableColumnQuantityOrNumber;
     @FXML
     private TextArea preparationTextArea;
     @FXML
@@ -34,6 +36,8 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     private Spinner<Integer> nbPersonSpinner;
     @FXML
     private TextField recipeNameTextField;
+    @FXML
+    private Button cancelButton;
 
     /**
      * Initialise la scène
@@ -54,15 +58,15 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
         );
         this.onlyIntValue(nbPersonSpinner);
-        tableColumnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
-        tableColumnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
+        tableColumnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
+        tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        tableColumnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
     }
 
     public void onSubmitButton() {
         String diet = dietComboBox.getSelectionModel().getSelectedItem();
         String type = typeComboBox.getSelectionModel().getSelectedItem();
-        int nbPerson = (int) nbPersonSpinner.getValue();
+        int nbPerson = nbPersonSpinner.getValue();
         String preparation = preparationTextArea.getText();
         String recipeName = recipeNameTextField.getText();
 
@@ -109,9 +113,26 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         ingredientTableView.setItems(FXCollections.observableArrayList(productsList));
     }
 
+    public void prefillFields(String recipeName, String recipePreparation, String recipeType, String recipeDiet,
+                              int recipeNbPerson, List<Product> productsList) {
+        recipeNameTextField.setText(recipeName);
+        recipeNameTextField.setDisable(true);
+        preparationTextArea.setText(recipePreparation);
+        typeComboBox.getSelectionModel().select(recipeType);
+        dietComboBox.getSelectionModel().select(recipeDiet);
+        nbPersonSpinner.getValueFactory().setValue(recipeNbPerson);
+        fillProductsTable(productsList);
+
+    }
+
+    public void setCancelButtonToModifyRecipe() {
+        cancelButton.setOnAction(event -> listener.onCancelModifyButton());
+    }
+
     public interface CreateRecipeListener {
         void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName);
         void onModifyProductsButton();
         void onCancelButton();
+        void onCancelModifyButton();
     }
 }
