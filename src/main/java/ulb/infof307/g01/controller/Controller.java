@@ -25,7 +25,7 @@ public abstract class Controller {
         Configuration.getCurrent().setDatabase(dataBaseName);
     }
 
-    //public abstract void displayMain();
+    //public abstract void displayMain(); // TODO
     public FXMLLoader loadFXML(String filename) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         setNewScene(loader);

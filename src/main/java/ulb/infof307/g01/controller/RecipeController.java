@@ -26,7 +26,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                                                             UserRecipesViewController.UserRecipesListener,
                                                             SearchRecipeViewController.Listener {
 
-    private Controller parentController;
+    // private Controller parentController; //TODO
 
     Scene scene = null;
 
@@ -60,7 +60,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onBackButtonClick() {
-        //parentController.displayMain(); //TODO
+        //parentController.displayMain(); TODO
+        HomePageController homePageController = new HomePageController(currentStage);
+        homePageController.displayMain();
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
