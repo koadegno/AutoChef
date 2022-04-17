@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.JSON;
 import ulb.infof307.g01.model.Product;
@@ -38,6 +39,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     private SearchRecipeViewController searchRecipeViewController;
 
     private Recipe currentRecipe;
+    private SearchRecipeListener listener;
 
     public void displayMain() {
         FXMLLoader loader = loadFXML("HomeRecipe.fxml");
@@ -45,6 +47,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         viewController.setListener(this);
     }
 
+    public void setListener(SearchRecipeListener searchRecipeListener){
+        this.listener = searchRecipeListener;
+    }
     // <-------------------------- Écran d'accueil des Recettes --------------------------> \\
 
     @Override
@@ -311,17 +316,28 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     @Override
     public void onRecipesTableViewClicked(Recipe selectedRecipe) {
-        onUserRecipesButtonClick();
+        if(listener == null) onUserRecipesButtonClick();
+
         currentRecipe = selectedRecipe;
         if (currentRecipe != null) {
-            userRecipesViewController.recipeSearchTextFieldError(false);
-            userRecipesViewController.setDisableRecipeButtons(false);
-            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getName());
+            if(listener == null){
+                userRecipesViewController.recipeSearchTextFieldError(false);
+                userRecipesViewController.setDisableRecipeButtons(false);
+                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getName());
+
+            }else {
+                listener.onRecipeSelected(selectedRecipe);
+
+            }
         }
     }
 
     @Override
     public void onCancelSearchButton() {
         onRecipesTableViewClicked(currentRecipe);
+    }
+
+    public interface SearchRecipeListener{
+        void onRecipeSelected(Recipe selectedRecipe);
     }
 }

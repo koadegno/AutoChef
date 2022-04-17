@@ -5,6 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.RecipeController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
@@ -24,7 +25,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener {
+public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener, RecipeController.SearchRecipeListener {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private ShowMenuViewController windowShowMenuViewController;
@@ -117,14 +118,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
     @Override
-    public void onAddRecipeClicked() {
-        //TODO Appeler le controlleur pour l'ajout de recette dans le menu
-        FXMLLoader loader = this.loadFXML("SearchRecipe.fxml");
-        //windowShowMenuViewController = loader.getController();
-        //windowShowMenuViewController.setListener(this);
-    }
-
-    @Override
     public void onReturnClicked(){
         HomePageController homePageController = new HomePageController(currentStage);
         homePageController.onMenuButtonClick();
@@ -163,5 +156,21 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public void cancelGenerateMenu() {
         popup.close();
+    }
+
+    @Override
+    public void onAddRecipeClicked() {
+        RecipeController recipeController = new RecipeController();
+        recipeController.setStage(currentStage);
+        recipeController.setListener(this);
+        recipeController.onSeeAllRecipesButtonClick();
+    }
+
+    @Override
+    public void onRecipeSelected(Recipe selectedRecipe) {
+        int selectedIndex = createMenuViewController.getDaysComboBox().getSelectionModel().getSelectedIndex();
+        Day day = daysName.get(selectedIndex);
+        menu.addRecipeTo(day,selectedRecipe);
+        showCreateMenu();
     }
 }
