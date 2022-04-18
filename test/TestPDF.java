@@ -30,7 +30,8 @@ class TestPDF {
 
     @Test
      public void testCreatePDF() throws IOException {
-        PDFCreator.createPDF(shoppingList);
+        PDFCreator pdfCreator = new PDFCreator();
+        pdfCreator.createPDF(shoppingList);
         String text = """
                 1. Liste de courses : test/testShoppingList
                 1.1. Fruits

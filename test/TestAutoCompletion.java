@@ -68,7 +68,9 @@ class TestAutoCompletion {
         testRecipes.put("Pesto", 0);
         testRecipes.put("Tiramisu", 0);
 
-        List<Recipe> recipes = AutoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null);
+        List<Recipe> recipes;
+        AutoCompletion autoCompletion = new AutoCompletion();
+        recipes = autoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null);
 
         // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {
@@ -94,13 +96,17 @@ class TestAutoCompletion {
     void TestFindMax() {
 
         HashMap<String, Integer> recipes = new HashMap<>();
-        assertNull(AutoCompletion.findMax(recipes), "Test si HashMap donne est vide");
+        AutoCompletion autoCompletion= new AutoCompletion();
+        assertNull(autoCompletion.findMax(recipes),
+                "Test si HashMap donne est vide");
 
         recipes.put("Poisson", 1);
         recipes.put("Viande", 10);
         recipes.put("Vegetarien", 3);
-        recipes.put("Poulet", 7);
-        assertEquals("Viande",AutoCompletion.findMax(recipes), "Test si bonne Key trouver");
+
+        assertEquals("Viande",
+                autoCompletion.findMax(recipes),
+                "Test si bonne Key trouver");
     }
 
 
@@ -119,7 +125,8 @@ class TestAutoCompletion {
         recipesAllReadyUsed.add(tiramisu);
         recipesAllReadyUsed.add(carbo);
 
-        assertNull(AutoCompletion.choiceRecipe(empty, recipesAllReadyUsed),            "Test si choix de recette vide");
-        assertEquals(pesto, AutoCompletion.choiceRecipe(recipes, recipesAllReadyUsed), "Test si choix de la bonne recette");
+        AutoCompletion autoCompletion = new AutoCompletion();
+        assertNull(autoCompletion.choiceRecipe(empty, recipesAllReadyUsed),            "Test si choix de recette vide");
+        assertEquals(pesto, autoCompletion.choiceRecipe(recipes, recipesAllReadyUsed), "Test si choix de la bonne recette");
     }
 }
