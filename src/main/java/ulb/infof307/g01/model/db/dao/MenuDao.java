@@ -11,6 +11,9 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MenuDao extends Database implements Dao<Menu> {
+
+    public static final String MENU_TABLE_NAME = "Menu";
+
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -33,7 +36,7 @@ public class MenuDao extends Database implements Dao<Menu> {
     }
 
     private Menu fillMenuWithRecipes(String nameMenu) throws SQLException {
-        int nameID = getIDFromName("Menu",nameMenu,"MenuID");
+        int nameID = getIDFromName(MENU_TABLE_NAME,nameMenu,"MenuID");
         ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
                 " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
                 "FROM MenuRecette as M\n" +
@@ -60,13 +63,13 @@ public class MenuDao extends Database implements Dao<Menu> {
 
     @Override
     public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("Menu","ORDER BY Nom ASC");
+        return getAllNameFromTable(MENU_TABLE_NAME,"ORDER BY Nom ASC");
     }
 
     @Override
     public void insert(Menu menu) throws SQLException {
         String[] values = {"null",String.format("'%s'",menu.getName()),String.format("%d",menu.getNbOfdays())};
-        insert("Menu",values);
+        insert(MENU_TABLE_NAME,values);
         int id = getGeneratedID();
         insertRecipesInMenu(menu, id);
     }
@@ -77,12 +80,12 @@ public class MenuDao extends Database implements Dao<Menu> {
     @Override
     public void update(Menu menu) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        int menuID = getIDFromName("Menu",menu.getName(),"MenuID");
+        int menuID = getIDFromName(MENU_TABLE_NAME,menu.getName(),"MenuID");
         constraint.add(String.format("%s = %d","MenuID",menuID));
         delete("MenuRecette",constraint);
-        updateName("Menu", menu.getName(),constraint);
+        updateName(MENU_TABLE_NAME, menu.getName(),constraint);
         if(menu.size() == 0){
-            delete("Menu",constraint);
+            delete(MENU_TABLE_NAME,constraint);
         }
         else {
             insertRecipesInMenu(menu, menuID);

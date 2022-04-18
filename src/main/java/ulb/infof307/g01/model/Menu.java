@@ -13,8 +13,8 @@ import java.util.Collections;
 public class Menu {
 
     private String name;
-    private final int nbOfdays = 7;
-    private Vector<Vector<Recipe>> menu = new Vector<>(nbOfdays);
+    private static final int NB_OF_DAYS = 7;
+    private Vector<Vector<Recipe>> menu = new Vector<>(NB_OF_DAYS);
 
     public Menu(String name) {
         this.name = name;
@@ -28,7 +28,7 @@ public class Menu {
 
     private void initVector() {
         menu = new Vector<>(10);
-        for (int i = 0; i<nbOfdays; i++) {
+        for (int i = 0; i< NB_OF_DAYS; i++) {
             menu.add(new Vector<>());
         }
     }
@@ -47,7 +47,7 @@ public class Menu {
         return size;
     }
 
-    public int getNbOfdays() { return nbOfdays;}
+    public int getNbOfdays() { return NB_OF_DAYS;}
 
     /** @see Day
      * @see Recipe
@@ -158,7 +158,9 @@ public class Menu {
         for (Vector<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
-                List<Recipe> recipesChosed = AutoCompletion.generateRecipesList(recipesUsed, categoriesWanted, nbRecipesToAdd,  null);
+                List<Recipe> recipesChosed;
+                AutoCompletion autoCompletion = new AutoCompletion();
+                recipesChosed = autoCompletion.generateRecipesList(recipesUsed, categoriesWanted, nbRecipesToAdd,  null);
                 menu.get(index).addAll(recipesChosed);
             }
             index++;
@@ -169,7 +171,7 @@ public class Menu {
     public String toString(){return name;}
 
     public String toStringTest(){
-        StringBuilder toReturn = new StringBuilder(this.name + ": \n");
+        StringBuilder toReturn = new StringBuilder(new StringBuilder().append(this.name).append(": \n").toString());
         for(Vector<Recipe> vector : menu){
             toReturn.append("\t");
             for(Recipe recipe: vector){

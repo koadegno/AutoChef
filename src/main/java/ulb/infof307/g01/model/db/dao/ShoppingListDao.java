@@ -9,6 +9,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 
 public class ShoppingListDao extends Database implements Dao<ShoppingList> {
+
+    public static final String LISTE_COURSE_TABLE_NAME = "ListeCourse";
+
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -26,13 +29,13 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     @Override
     public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("ListeCourse","ORDER BY Nom ASC");
+        return getAllNameFromTable(LISTE_COURSE_TABLE_NAME,"ORDER BY Nom ASC");
     }
 
     @Override
     public void insert(ShoppingList shoppingList) throws SQLException {
         String[] values = {"null",String.format("'%s'",shoppingList.getName())};
-        insert("ListeCourse",values);
+        insert(LISTE_COURSE_TABLE_NAME,values);
         int id = getGeneratedID();
         for(Product product : shoppingList){
             int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
@@ -46,12 +49,12 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     @Override
     public void update(ShoppingList shoppingList) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        int id = getIDFromName("ListeCourse", shoppingList.getName(), "ListeCourseID");
+        int id = getIDFromName(LISTE_COURSE_TABLE_NAME, shoppingList.getName(), "ListeCourseID");
         constraint.add(String.format("%s = %d","ListeCourseID", id));
         delete("ListeCourseIngredient",constraint);
-        updateName("ListeCourse", shoppingList.getName(),constraint );
+        updateName(LISTE_COURSE_TABLE_NAME, shoppingList.getName(),constraint );
         if(shoppingList.size() == 0){
-            delete("ListeCourse",constraint);
+            delete(LISTE_COURSE_TABLE_NAME,constraint);
         }
         else{
             for (Product product : shoppingList) {
@@ -63,7 +66,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     @Override
     public ShoppingList get(String name) throws SQLException {
-        int nameID = getIDFromName("ListeCourse",name,"ListeCourseID");
+        int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
         ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
                 "FROM ListeCourseIngredient as S\n" +
                 "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
