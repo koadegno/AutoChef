@@ -13,15 +13,15 @@ import java.util.*;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestShoppingListDao {
-    static String fruit = "Fruit";
-    static String gram = "g";
+    static private final String fruit = "Fruit";
+    static private final String gram = "g";
 
-    static private Product peach = new Product("peche", 1, gram, fruit);
-    static private Product strawberry = new Product( "fraise", 1, gram, fruit);
+    static private final Product peach = new Product("peche", 1, gram, fruit);
+    static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
 
-    static private ShoppingList halloween = new ShoppingList("Halloween");
-    static private ShoppingList christmas = new ShoppingList("Noël");
-    static private ShoppingList easter = new ShoppingList("Pâques");
+    static private final ShoppingList halloween = new ShoppingList("Halloween");
+    static private final ShoppingList christmas = new ShoppingList("Noël");
+    static private final ShoppingList easter = new ShoppingList("Pâques");
 
 
     @BeforeAll

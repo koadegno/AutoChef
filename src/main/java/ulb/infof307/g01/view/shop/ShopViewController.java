@@ -18,8 +18,8 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     public TableView<Product> tableViewShop;
     public ComboBox<String> comboBoxProduct;
     public Spinner<Double> spinnerPrice;
-    public TableColumn columnProduct;
-    public TableColumn columnPrice;
+    public TableColumn<Product,String> columnProduct;
+    public TableColumn<Product,String> columnPrice;
     public TextField nameShopTextField;
     public VBox vBox; 
 

@@ -70,12 +70,13 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     @Override
     public ShoppingList get(String name) throws SQLException {
         int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
-        ResultSet querySelectShoppingList = sendQuery(String.format("SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom\n" +
-                "FROM ListeCourseIngredient as S\n" +
-                "INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID\n" +
-                "INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID \n" +
-                "INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID\n" +
-                "WHERE S.ListeCourseID = %d", nameID));
+        ResultSet querySelectShoppingList = sendQuery(String.format("""
+                SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom
+                FROM ListeCourseIngredient as S
+                INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID
+                INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID\s
+                INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID
+                WHERE S.ListeCourseID = %d""", nameID));
         ShoppingList shoppingList = new ShoppingList(name,nameID);
         while(querySelectShoppingList.next()){
             int productQuantity = querySelectShoppingList.getInt(1);

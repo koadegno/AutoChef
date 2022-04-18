@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestRecipeCategoryDao {
 
-    static String fish = "Poison";
+    static private final String fish = "Poison";
 
 
     @BeforeAll

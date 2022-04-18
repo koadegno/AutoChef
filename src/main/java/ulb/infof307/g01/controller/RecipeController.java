@@ -2,7 +2,6 @@ package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
-import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.db.Configuration;

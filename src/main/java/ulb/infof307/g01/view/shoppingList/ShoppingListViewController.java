@@ -20,7 +20,9 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     protected HBox hBoxToCreateProduct;
     @FXML
-    protected TableColumn columnQuantityOrNumber,columnDelete,columnProduct, columnUnity;
+    protected TableColumn<Product,String> columnQuantityOrNumber,columnProduct, columnUnity;
+    @FXML
+    protected  TableColumn<Product,Void> columnDelete;
     @FXML
     protected ComboBox<String> comboBoxShoppingNameList;
     @FXML
@@ -32,7 +34,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
-    protected TableView tableViewDisplayProductList;
+    protected TableView<Product> tableViewDisplayProductList;
     @FXML
     public Button returnToMenu, btnSendMail;
     protected String currentShoppingListName;

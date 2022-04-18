@@ -47,11 +47,11 @@ public class Shop extends HashSet<Product> {
     }
 
     public String toString(){
-        String toPrint = coordinate + String.format("name : %s\n",name);
+        StringBuilder toPrint = new StringBuilder(coordinate + String.format("name : %s\n", name));
         for(Product product:this){
-            toPrint += product;
+            toPrint.append(product);
         }
-        return toPrint;
+        return toPrint.toString();
     }
 
 }

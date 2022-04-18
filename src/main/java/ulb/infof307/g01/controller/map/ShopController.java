@@ -1,4 +1,4 @@
-package ulb.infof307.g01.controller.Map;
+package ulb.infof307.g01.controller.map;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;

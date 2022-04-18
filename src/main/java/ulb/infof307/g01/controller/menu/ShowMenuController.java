@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ShowMenuController extends Controller implements ShowMenuViewController.Listener {
 
-    private Menu menu;
+    private final Menu menu;
     private ShowMenuViewController viewController;
 
 
@@ -57,7 +57,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
             TableView<Recipe> dayTable = new TableView<>();
             dayTable.getColumns().clear();
             TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
-            dayCol.setCellValueFactory(new PropertyValueFactory<Recipe, String>("name"));
+            dayCol.setCellValueFactory(new PropertyValueFactory<>("name"));
             List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
             dayTable.getItems().addAll(mealForDay);

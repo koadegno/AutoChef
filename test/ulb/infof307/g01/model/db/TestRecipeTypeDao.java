@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestRecipeTypeDao {
-    static private String meal = "Plat";
+    static private final String meal = "Plat";
 
     @BeforeAll
     static public void initConfig() throws SQLException {

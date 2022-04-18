@@ -41,14 +41,12 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
 
-        columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
-        columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
+        columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        columnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
-        returnToMenu.setOnAction((event) ->{
-            returnShoppingList();
-        });
+        returnToMenu.setOnAction((event) -> returnShoppingList());
 
     }
 
@@ -85,9 +83,7 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
         tableViewDisplayProductList.setItems(data);
         //Retour menu precedent : MainShoppingList
-        returnToMenu.setOnAction((event) ->{
-            returnToMyMenu();
-        });
+        returnToMenu.setOnAction((event) -> returnToMyMenu());
     }
 
     public void setReturnButtonAction(){

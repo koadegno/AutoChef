@@ -177,7 +177,6 @@ public class Database {
      * des valeurs et de les placer dans le PreparedStatement
      * @param statement le PreparedStatement à remplir
      * @param valueOfPreparedStatement les types à déterminer
-     * @throws SQLException
      */
     protected void fillPreparedStatementValues(PreparedStatement statement, ArrayList<String> valueOfPreparedStatement) throws SQLException {
         if (valueOfPreparedStatement ==null) return;
@@ -185,8 +184,8 @@ public class Database {
             String columnValue = valueOfPreparedStatement.get(i-1);
             if(columnValue.contains("'")){//string value
                 StringBuilder removeQuotes = new StringBuilder(columnValue.strip());
-                removeQuotes = removeQuotes.deleteCharAt(0);
-                removeQuotes = removeQuotes.deleteCharAt(removeQuotes.length()-1);
+                removeQuotes.deleteCharAt(0);
+                removeQuotes.deleteCharAt(removeQuotes.length() - 1);
 
                 statement.setString(i, String.valueOf(removeQuotes));
             }
@@ -266,8 +265,7 @@ public class Database {
         PreparedStatement statement =  select(table,constraint,null);
         ResultSet res = sendQuery(statement);
         res.next();
-        int idColumn = res.getInt(nameIDColumn);
-        return idColumn;
+        return res.getInt(nameIDColumn);
     }
 
     /**
@@ -286,12 +284,13 @@ public class Database {
     }
 
     protected void fillRecipeWithProducts(Recipe recipe) throws SQLException {
-        ResultSet querySelectProduct = sendQuery(String.format("SELECT I.Nom, F.Nom, U.Nom, R.Quantite\n" +
-                "FROM RecetteIngredient as R\n" +
-                "INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID \n" +
-                "INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID\n" +
-                "INNER JOIN Unite as U ON U.UniteID = I.UniteID\n" +
-                "WHERE R.RecetteID = %d", recipe.getId()));
+        ResultSet querySelectProduct = sendQuery(String.format("""
+                SELECT I.Nom, F.Nom, U.Nom, R.Quantite
+                FROM RecetteIngredient as R
+                INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID\s
+                INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID
+                INNER JOIN Unite as U ON U.UniteID = I.UniteID
+                WHERE R.RecetteID = %d""", recipe.getId()));
 
         while(querySelectProduct.next()){
             String productName = querySelectProduct.getString(1);
@@ -306,8 +305,8 @@ public class Database {
 
     /**
      * Découpe chaque contrainte d'une requête sous forme de String en un ArrayList de 3 Strings
-     * @param s
-     * @return
+     * @param s string a split
+     * @return list de 3 strings
      */
     protected ArrayList<String> splitOnCharacter(String s){
         ArrayList<String> parts = null;

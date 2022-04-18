@@ -17,7 +17,7 @@ public abstract class Controller {
     protected static Configuration applicationConfiguration;
     protected static Stage currentStage;
 
-    protected static String dataBaseName = "autochef.sqlite";
+    protected static final String dataBaseName = "autochef.sqlite";
 
 
     protected Controller(){
@@ -59,7 +59,7 @@ public abstract class Controller {
     }
 
     public void setNewScene(FXMLLoader loader, String title) {
-        Parent root = null;
+        Parent root;
         try {
             root = loader.load();
             currentStage.setTitle("Autochef - " + title);

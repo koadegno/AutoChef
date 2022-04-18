@@ -118,11 +118,9 @@ public class Menu {
      */
     public ShoppingList generateShoppingList() {
         ShoppingList shopList = new ShoppingList(name);
-        for(int i = 0; i < menu.size(); i++){
-            for(Recipe meal: menu.get(i)){
-                for (Product p : meal) {
-                    shopList.add(p);
-                }
+        for (Vector<Recipe> recipes : menu) {
+            for (Recipe meal : recipes) {
+                shopList.addAll(meal);
             }
         }
         return shopList;
@@ -175,7 +173,7 @@ public class Menu {
     public String toString(){return name;}
 
     public String toStringTest(){
-        StringBuilder toReturn = new StringBuilder(new StringBuilder().append(this.name).append(": \n").toString());
+        StringBuilder toReturn = new StringBuilder(this.name + ": \n");
         for(Vector<Recipe> vector : menu){
             toReturn.append("\t");
             for(Recipe recipe: vector){

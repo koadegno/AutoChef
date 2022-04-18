@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestProductUnityDao {
 
-    static String gram = "g";
+    static private final String gram = "g";
 
 
     @BeforeAll

@@ -1,7 +1,5 @@
 package ulb.infof307.g01.view;
 
-import javafx.beans.value.ChangeListener;
-import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
@@ -71,7 +69,7 @@ abstract public class ViewController<Listener> {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur SQL");
         alert.setHeaderText("Un problème à eu lieu avec la base de données");
-        alert.setContentText("TODO"); //TODO Meilleur erreur
+        alert.setContentText("Veuillez contactez l'équipe de développeur.");
         alert.showAndWait();
     }
 

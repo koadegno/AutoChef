@@ -18,8 +18,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestShopDao {
 
-    static String fruit = "Fruit";
-    static String gram = "g";
+    static private final String fruit = "Fruit";
+    static private final String gram = "g";
     static private final Product peach = new Product("peche", 1, gram, fruit);
     static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
     static private final Shop aldiShop = new Shop("1 aldi",new Point(0,0));

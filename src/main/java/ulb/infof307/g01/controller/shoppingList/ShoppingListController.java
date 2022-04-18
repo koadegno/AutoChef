@@ -55,7 +55,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     public ShoppingListController(RecipeController recipeController) {
         this.recipeController = recipeController;
     }
-    //Methode Listener de CreateUserShoppingListViewController
+
+    // Methode Listener de CreateUserShoppingListViewController
 
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
         createUserShoppingListViewController.removeBorderColor();
@@ -91,9 +92,9 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         createUserShoppingListViewController.setReturnButtonAction();
 
     }
-    //Fin Methode Listener de CreateUserShoppingListViewController
+    // Fin Methode Listener de CreateUserShoppingListViewController
 
-    //Methode Listener de WindowUserShoppingListController
+    // Methode Listener de WindowUserShoppingListController
 
     @Override
     public void seeUserShoppingList(Object nameUserShoppingList){
@@ -185,8 +186,6 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     public void returnToUserMenu(){
         UserMenusController userMenusController = new UserMenusController(currentStage);
         userMenusController.showAllMenus();
-        //UserMenusViewController menusController = new UserMenusViewController();
-//        menusController.displayMyMenus();
     }
 
     public void exportShoppingList(String currentShoppingListName){

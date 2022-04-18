@@ -16,10 +16,10 @@ import java.util.ArrayList;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestProductDao {
-    static String fruit = "Fruit";
-    static String gram = "g";
-    static private Product peach = new Product("peche", 1, gram, fruit);
-    static private Product strawberry = new Product( "fraise", 1, gram, fruit);
+    static private final String fruit = "Fruit";
+    static private final String gram = "g";
+    static private final Product peach = new Product("peche", 1, gram, fruit);
+    static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
 
     @BeforeAll
     static public void initConfig() throws SQLException {

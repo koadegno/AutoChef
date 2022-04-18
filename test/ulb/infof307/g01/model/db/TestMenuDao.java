@@ -21,17 +21,17 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestMenuDao {
 
-    static private String meat = "Viande";
-    static private String fish = "Poisson";
-    static private String simmered = "Mijoté";
-    static private String meal = "Plat";
+    static private final String meat = "Viande";
+    static private final String fish = "Poisson";
+    static private final String simmered = "Mijoté";
+    static private final String meal = "Plat";
 
-    static private Menu menu = new Menu("Menu Test");
-    static private Menu menu2 = new Menu("Menu Test2");
+    static private final Menu menu = new Menu("Menu Test");
+    static private final Menu menu2 = new Menu("Menu Test2");
 
-    static private Recipe bolo = new Recipe("Bolognaise", 60, meat, simmered,4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-    static private Recipe carbo = new Recipe("Carbonara", 60, fish, meal,5, "Cuire des pâtes, poisson");
-    static private Recipe pesto = new Recipe("Pesto", 20, fish, meal,3, "Cuire des pâtes, poisson");
+    static private final Recipe bolo = new Recipe("Bolognaise", 60, meat, simmered,4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+    static private final Recipe carbo = new Recipe("Carbonara", 60, fish, meal,5, "Cuire des pâtes, poisson");
+    static private final Recipe pesto = new Recipe("Pesto", 20, fish, meal,3, "Cuire des pâtes, poisson");
 
 
     @BeforeAll

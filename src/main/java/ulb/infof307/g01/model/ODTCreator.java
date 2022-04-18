@@ -5,7 +5,6 @@ import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import java.util.Arrays;
 import java.util.Comparator;
 import java.util.Objects;
 import java.util.Vector;

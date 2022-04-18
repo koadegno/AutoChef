@@ -16,7 +16,7 @@ class TestMailAddressDao {
     static private final String mail1 = "mail1@mail.be";
     static private final String mail2 = "mail2@ulb.ac.be";
     static private final String mail3 = "mail3@google.be";
-    static String databaseName = "test.sqlite";
+    static private final String databaseName = "test.sqlite";
 
 
     @BeforeAll

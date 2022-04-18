@@ -40,13 +40,13 @@ public class MenuDao extends Database implements Dao<Menu> {
 
     private Menu fillMenuWithRecipes(String nameMenu) throws SQLException {
         int nameID = getIDFromName(MENU_TABLE_NAME,nameMenu,"MenuID");
-        ResultSet querySelectMenu = sendQuery(String.format("SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree," +
-                " R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom\n" +
-                "FROM MenuRecette as M\n" +
-                "INNER JOIN Recette as R ON M.RecetteID = R.RecetteID \n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE M.MenuID = %d order by M.Heure", nameID));
+        ResultSet querySelectMenu = sendQuery(String.format("""
+                SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom
+                FROM MenuRecette as M
+                INNER JOIN Recette as R ON M.RecetteID = R.RecetteID\s
+                INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
+                INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
+                WHERE M.MenuID = %d order by M.Heure""", nameID));
         Menu menu = new Menu(nameMenu);
         while(querySelectMenu.next()){
             int menuDay = querySelectMenu.getInt(1);

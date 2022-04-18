@@ -7,17 +7,14 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.RecipeController;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.tools.GenerateMenuDialog;
 
 import java.io.IOException;

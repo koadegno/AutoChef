@@ -54,9 +54,7 @@ public class GenerateMenuDialog extends ViewController<GenerateMenuDialog.Genera
             }
         });
 
-        cancelButton.setOnAction(event -> {
-            listener.cancelGenerateMenu();
-        });
+        cancelButton.setOnAction(event -> listener.cancelGenerateMenu());
     }
 
     public void setListener(GenerateMenuListener listener) {

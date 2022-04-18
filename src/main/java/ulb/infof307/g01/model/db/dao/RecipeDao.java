@@ -63,10 +63,12 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         ArrayList<String> valuesOfPreparedStatement = null;
         ArrayList<String> constraint = new ArrayList<>();
         String stringQuery;
-        StringBuilder query = new StringBuilder("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n");
+        StringBuilder query = new StringBuilder("""
+                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
+                FROM Recette as R
+                INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
+                INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
+                """);
 
         if (nameCategory != null){
             int categoryID = getIDFromName("Categorie",nameCategory,"CategorieID");
@@ -82,11 +84,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         if (constraint.size() > 0){
             query.append(" Where ");
             valuesOfPreparedStatement = appendValuesToWhere(query,constraint);
-            stringQuery = String.valueOf(query);
         }
-        else {
-            stringQuery = String.valueOf(query);
-        }
+        stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
         ResultSet result = sendQuery(statement);
@@ -127,16 +126,17 @@ public class RecipeDao extends Database implements Dao<Recipe> {
 
     @Override
     public Recipe get(String name) throws SQLException {
-        StringBuilder query = new StringBuilder("SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation\n" +
-                "FROM Recette as R\n" +
-                "INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID\n" +
-                "INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID\n" +
-                "WHERE R.Nom = ?");
+        String query = """
+                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
+                FROM Recette as R
+                INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
+                INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
+                WHERE R.Nom = ?""";
 
         ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
         name = "'" + name + "'"; // quotes to recognize it as string and request need it
         valuesOfPreparedStatement.add(name);
-        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
+        PreparedStatement statement = connection.prepareStatement(query);
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
         ResultSet result = sendQuery(statement);
         if(!result.next()) return null;

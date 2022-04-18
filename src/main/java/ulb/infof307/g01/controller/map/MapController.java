@@ -1,4 +1,4 @@
-package ulb.infof307.g01.controller.Map;
+package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;

@@ -4,7 +4,6 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
 import java.util.Comparator;
-import java.util.Iterator;
 import java.util.Vector;
 
 /**
@@ -18,7 +17,7 @@ public class ShoppingListSorter {
      * @param comparator Clé utilisé pour la comparaison
      * @return Vecteur trié créé à partir  de {@code shoppingList}
      */
-    public static Vector<Product> getSortedShoppingList(ShoppingList shoppingList, Comparator comparator) {
+    public static Vector<Product> getSortedShoppingList(ShoppingList shoppingList, Comparator<Product> comparator) {
         Vector<Product> shoppingListVector = new Vector<>(shoppingList);
         shoppingListVector.sort(comparator);
 

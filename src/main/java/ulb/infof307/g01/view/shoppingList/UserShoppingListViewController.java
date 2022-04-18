@@ -77,16 +77,14 @@ public class UserShoppingListViewController extends ShoppingListViewController i
         Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
         columnDelete.setCellFactory(cellFactory);
 
-        returnToMenu.setOnAction((event) ->{
-            returnShoppingList();
-        });
+        returnToMenu.setOnAction((event) -> returnShoppingList());
     }
 
     private void activeElementVisibility(boolean isVisible) {
         comboBoxShoppingNameList.setVisible(isVisible);
         btnConfirm.setText("Enregistrer");
         btnSeeShoppingList.setVisible(isVisible);
-        btnSeeShoppingList.setOnAction(e-> {seeMyShoppingListTableView();});
+        btnSeeShoppingList.setOnAction(e-> seeMyShoppingListTableView());
     }
 
     public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName, ArrayList<String> allShoppinListName ){
@@ -103,9 +101,7 @@ public class UserShoppingListViewController extends ShoppingListViewController i
         Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);
-        returnToMenu.setOnAction(event -> {
-            listener.cancelRecipeCreation();
-        });
+        returnToMenu.setOnAction(event -> listener.cancelRecipeCreation());
         btnConfirm.setOnAction(event -> {
             fillShoppingListToSend();
             listener.returnAddedProducts();

@@ -24,18 +24,18 @@ class TestJSON {
         Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
     }
 
-    @BeforeAll
+    @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
     static public void createJSON() throws IOException {
-        JSONObject recette = new JSONObject();
-        recette.put("Nom", "testRecette");
-        recette.put("Duree", 11);
-        recette.put("NbPersonnes", 2);
-        recette.put("TypePlat", "Desserts");
-        recette.put("Categorie", "Viande");
-        recette.put("Preparation", "mix then eat");
+        JSONObject recipe = new JSONObject();
+        recipe.put("Nom", "testRecette");
+        recipe.put("Duree", 11);
+        recipe.put("NbPersonnes", 2);
+        recipe.put("TypePlat", "Desserts");
+        recipe.put("Categorie", "Viande");
+        recipe.put("Preparation", "mix then eat");
 
         FileWriter fileJSON = new FileWriter(fileNameJSON);
-        fileJSON.write(recette.toJSONString());
+        fileJSON.write(recipe.toJSONString());
         fileJSON.flush();
     }
 

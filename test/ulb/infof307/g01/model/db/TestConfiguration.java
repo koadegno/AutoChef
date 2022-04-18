@@ -16,7 +16,7 @@ import java.util.List;
 
 
 class TestConfiguration {
-    static private Product peach = new Product("peche", 1,"g", "Fruit");
+    static private final Product peach = new Product("peche", 1,"g", "Fruit");
 
 
     @BeforeAll

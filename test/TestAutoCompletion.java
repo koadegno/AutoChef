@@ -17,10 +17,10 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestAutoCompletion {
 
-    static Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-    static Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
-    static Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
-    static Recipe tiramisu = new Recipe(4, "Tiramisu", 20, "Végétarien", "Dessert",3, "Preparer la mascarpone");
+    static private final Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
+    static private final Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
+    static private final Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
+    static private final Recipe tiramisu = new Recipe(4, "Tiramisu", 20, "Végétarien", "Dessert",3, "Preparer la mascarpone");
 
 
     @BeforeAll

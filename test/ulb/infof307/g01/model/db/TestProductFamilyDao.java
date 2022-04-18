@@ -15,7 +15,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestProductFamilyDao {
 
-    static String fruit = "Fruit";
+    static private final String fruit = "Fruit";
 
 
     @BeforeAll

@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Objects;
 
 public class MailController extends Controller implements MailViewController.Listener, FavoriteMailViewController.Listener  {
-    private ShoppingList shoppingList;
+    private final ShoppingList shoppingList;
     private MailViewController mailViewController;
     private FavoriteMailViewController favoriteMailViewController;
     private Stage popupStageMail, popupFavoriteMail;
