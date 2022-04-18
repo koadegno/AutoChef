@@ -147,7 +147,6 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     }
 
     public void delete(Recipe displayedRecipe) throws SQLException {
-
         String[] constraint = {"RecetteID = "+ displayedRecipe.getId()};
         delete("RecetteIngredient", List.of(constraint));
         delete("Recette",List.of(constraint));

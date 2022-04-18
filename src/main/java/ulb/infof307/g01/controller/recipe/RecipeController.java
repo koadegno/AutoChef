@@ -83,6 +83,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         boolean isValid = isValidRecipe(diet, type, nbPerson, preparation, recipeName);
 
         if (isValid) {
+            int idRecipe = currentRecipe.getId();
             currentRecipe = new Recipe(recipeName);
             currentRecipe.setCategory(diet);
             currentRecipe.setPreparation(preparation);
@@ -91,6 +92,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             currentRecipe.addAll(currentShoppingList);
             try {
                 if (isWaitingModification) {
+                    currentRecipe.setId(idRecipe);
                     Configuration.getCurrent().getRecipeDao().update(currentRecipe);
                     isWaitingModification = false;
                 } else
@@ -203,7 +205,6 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onModifyRecipeButtonClick() {
         isWaitingModification = true;
-
         this.sceneViewRecipe = currentStage.getScene();
         FXMLLoader loader = this.loadFXML("createRecipe.fxml");
         createRecipeViewController = loader.getController();
@@ -328,7 +329,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             if(listener == null){
                 userRecipesViewController.recipeSearchTextFieldError(false);
                 userRecipesViewController.setDisableRecipeButtons(false);
-                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getName());
+                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getPreparation());
 
             }else {
                 listener.onRecipeSelected(selectedRecipe);
