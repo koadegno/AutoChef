@@ -1,4 +1,4 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.Map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
@@ -17,6 +17,8 @@ import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
+import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.HomePageViewController;
@@ -28,25 +30,28 @@ import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 
-public class MapController extends Controller implements MapViewController.Listener, ShopController.MapListener{
+public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener {
 
     public static final int COLOR_RED = 0xFFFF0000;
-    public static final int SIZE = 10;
     public static final int COLOR_BLACK = 0xFF000000;
     public static final int ADDRESS_SIZE = 18;
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
+    public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
+    public static final int CORRECTION_POSITION_Y = 5;
     private MapViewController viewController;
 
     public MapController(Stage primaryStage){
         setStage(primaryStage);
     }
 
+    /**
+     * Lance l'affichage de la carte
+     */
     public void show(){
         FXMLLoader loader = this.loadFXML("DisplayMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
-//        this.setNewScene(loader,"Carte");
 
     }
 
@@ -75,6 +80,10 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.getShopGraphicsTextList().getGraphics().add(textPoint);
     }
 
+    /**
+     * Initialise les magasins sur la carte
+     * @throws SQLException erreur au niveau de la base de donnée
+     */
     @Override
     public void onInitializeMapShop() throws SQLException {
         List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
@@ -83,14 +92,17 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
+    /**
+     * Lance le popup pour choisir les informations concernant le magasin
+     */
     @Override
     public void onAddShopClicked() {
         MapView mapView = viewController.getMapView();
         MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
-        //TODO les nombres sont la pour corriger la position du curseur
-        //il y a une correction fait attention ca peut faire des erreurs tu penses ?
-        Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + 10, addShopMenuItem.getParentPopup().getY() + 5);
+        //il y a une correction de la position
+        Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                addShopMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
         Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
         Point mapPoint = mapView.screenToLocation(cursorCoordinate);
 
@@ -111,6 +123,10 @@ public class MapController extends Controller implements MapViewController.Liste
         shopName.setText(shop.getName());
         }
 
+    /**
+     * Cherche le magasin correspondant à la position et lance le popup
+      * @throws SQLException erreur au niveau de la base de donnée
+     */
     @Override
     public void onUpdateShopClicked() throws SQLException {
         Pair<Graphic, Graphic> shopOverlays = getSelectedShop();
@@ -126,6 +142,9 @@ public class MapController extends Controller implements MapViewController.Liste
         showShopController.show();
     }
 
+    /**
+     * Retour à la page d'accueil
+     */
     @Override
     public void onBackButtonClicked() {
         HomePageController homePageController = new HomePageController(currentStage);
@@ -137,6 +156,11 @@ public class MapController extends Controller implements MapViewController.Liste
 
     }
 
+    /**
+     * Recherche avec une l'adresse d'un magasin
+     * @param address l'adresse du magasin (Ville, rue, commune, numéro)
+     * @return l'adresse a été trouver ou non
+     */
     @Override
     public boolean onSearchAddress(String address) {
         return !address.isBlank() && performGeocode(address);
@@ -168,6 +192,11 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
+    /**
+     * Cherche le magasin selectionner par l'utilisateur et
+     * renvoie la paire d'objet graphique associé aux coordonnées cliquer
+     * @return paire d'objet graphique
+     */
     private Pair<Graphic, Graphic> getSelectedShop(){
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
@@ -183,6 +212,10 @@ public class MapController extends Controller implements MapViewController.Liste
         return null;
     }
 
+    /**
+     * Cherche un magasin parmi les magasins enregistrer dans la carte
+     * @param shopName le nom du magasin
+     */
     @Override
     public void onSearchShop(String shopName) {
         GraphicsOverlay mapTextOverlay = viewController.getShopGraphicsTextList();

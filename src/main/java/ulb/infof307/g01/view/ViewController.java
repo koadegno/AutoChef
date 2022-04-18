@@ -51,6 +51,19 @@ abstract public class ViewController<Listener> {
 
     /**
      * Affiche une alerte de type Erreur pour les fichiers FXML manquants.
+     * @param missingFXMLFile L'URL du fichier manquant ayant provoqué l'erreur
+     */
+    public static void showErrorFXMLMissing(String missingFXMLFile) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("La fenêtre n'a pas pu être chargée.");
+        alert.setHeaderText("Un fichier nécessaire n'a pas pu être trouvé");
+        alert.setContentText("Le fichier" + missingFXMLFile + " est manquant.\n" +
+                "Veuillez contactez l'équipe de développeur.");
+        alert.showAndWait();
+    }
+
+    /**
+     * Affiche une alerte de type Erreur pour les fichiers FXML manquants.
      */
     public static void showErrorSQL() {
         Alert alert = new Alert(Alert.AlertType.ERROR);
@@ -62,13 +75,10 @@ abstract public class ViewController<Listener> {
 
     @FXML
     protected void onlyIntValue(Spinner<Integer> numberOfPersonSpinner){
-        numberOfPersonSpinner.getEditor().textProperty().addListener(new ChangeListener<String>() { //Seulement écrire des nombres
-            @Override
-            public void changed(ObservableValue<? extends String> observable, String oldValue,
-                                String newValue) {
-                if (!newValue.matches("\\d*")) {
-                    numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
-                }
+        //Seulement écrire des nombres
+        numberOfPersonSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
             }
         });
     }

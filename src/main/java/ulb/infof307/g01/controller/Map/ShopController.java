@@ -1,11 +1,13 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.Map;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.WindowShopController;
 
 import java.io.IOException;
@@ -14,53 +16,66 @@ import java.util.ArrayList;
 
 public class ShopController extends Controller implements WindowShopController.Listener {
 
+    public static final String SHOW_SHOP_FXML = "ShowShop.fxml";
     private WindowShopController viewController;
-    private MapListener listener;
-    private Shop shop;
-    private boolean isModifying; // POPUP pour la modification ou non
+    private final ShopListener listener;
+    private final Shop shop;
+    private final boolean isModifying; // POPUP pour la modification ou non
 
-    public ShopController(Shop shop, boolean isModifying, MapListener listener){
+    public ShopController(Shop shop, boolean isModifying, ShopListener listener){
         this.listener = listener;
         this.shop = shop;
         this.isModifying = isModifying;
     }
 
-    public Stage show(){
+    /**
+     * Lance l'affichage de la carte
+     */
+    public void show(){
         try {
             viewController = new WindowShopController();
-            Stage shopStage = popupFXML("ShowShop.fxml",viewController);
+            Stage shopStage = popupFXML(SHOW_SHOP_FXML,viewController);
             viewController.setListener(this);
             viewController.createPopup();
             if(isModifying) viewController.setNameShopTextField(shop.getName());
             setStage(shopStage);
-            return shopStage;
         } catch (IOException e) {
-            e.printStackTrace();
+            ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
         }
-
-        return null;
     }
 
+    /**
+     * Sauvegarde le magasin crée par l'utilisateur
+     * @param shopName le nom du magasin
+     * @throws SQLException erreur au niveau de la base de donnée
+     */
     @Override
     public void onSaveShopClicked(String shopName) throws SQLException {
         shop.setName(shopName);
+        shop.addAll(viewController.getTableViewShopItems());
         if(isModifying){
-            shop.addAll(viewController.getTableViewShopItems());
             Configuration.getCurrent().getShopDao().update(shop);
             listener.updateShop(shop);
         }
         else{
-            shop.addAll(viewController.getTableViewShopItems());
             Configuration.getCurrent().getShopDao().insert(shop);
             listener.addShop(shop);
         }
     }
 
+    /**
+     * remplie la Table view avec les produits du magasin
+     */
     @Override
     public void fillTableViewShop() {
         viewController.getTableViewShopItems().addAll(shop);
     }
 
+    /**
+     * Remplie la combo box avec les produits
+     * @param productComboBox le combo box à remplir
+     * @throws SQLException erreur au niveau de la base de donnée
+     */
     @Override
     public void fillComboBoxProduct(ComboBox<String> productComboBox) throws SQLException {
         ArrayList<String> allProduct;
@@ -68,15 +83,22 @@ public class ShopController extends Controller implements WindowShopController.L
         productComboBox.setItems(FXCollections.observableArrayList(allProduct));
     }
 
+    /**
+     * Ajout du produit a la table view
+     * @param nameProduct le nom du produit
+     * @param priceProduct le prix du produit
+     */
     @Override
     public void onAddProductClicked(String nameProduct, double priceProduct){
-        //TODO éviter les doublons ?
         Product product = new Product(nameProduct, priceProduct);
         viewController.getTableViewShopItems().add(product);
 
     }
 
-    public interface MapListener {
+    /**
+     * Permet l'ajout et la modification dans MapController
+     */
+    public interface ShopListener {
         void addShop(Shop shop);
         void updateShop(Shop shop);
     }
