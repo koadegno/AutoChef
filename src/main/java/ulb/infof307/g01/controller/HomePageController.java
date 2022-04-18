@@ -11,7 +11,7 @@ import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 
 /**
@@ -98,7 +98,7 @@ public class HomePageController extends Controller implements HomePageListener, 
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        UserShoppingListViewViewController windowUserShoppingListsController = new UserShoppingListViewViewController();
+        UserShoppingListViewController windowUserShoppingListsController = new UserShoppingListViewController();
         loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
         ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
 

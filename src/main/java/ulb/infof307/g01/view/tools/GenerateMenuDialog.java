@@ -6,7 +6,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Spinner;
 import javafx.scene.control.SpinnerValueFactory;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.Window;
 
 import java.net.URL;
 import java.sql.SQLException;

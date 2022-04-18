@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-public class UserShoppingListViewViewController extends ShoppingListViewController implements Initializable {
+public class UserShoppingListViewController extends ShoppingListViewController implements Initializable {
     @FXML
     Button btnConfirm, btnAddNewProduct;
 

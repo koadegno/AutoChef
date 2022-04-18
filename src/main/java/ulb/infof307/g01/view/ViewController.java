@@ -5,12 +5,14 @@ import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.control.Spinner;
 
 import java.io.File;
 import java.net.URL;
+import java.util.Optional;
 
 /**
  * Classe de base de tous les Contrôleurs de vue
@@ -93,5 +95,21 @@ abstract public class ViewController<Listener> {
         dialog.getExtensionFilters().setAll(extensionFilter);
 
         return dialog.showOpenDialog(ownerWindow);
+    }
+
+    /**
+     * Affiche une fenêtre Dialogue avec un titre et du texte
+     * Utiliser pour les erreurs ou les messages simple à l'utilisateur
+     * @param alertType le type de Dialogue
+     * @param headerText l'entête, titre
+     * @param contentText le texte a afficher
+     * @return le type de bouton cliquer par l'utilisateur
+     */
+    public static ButtonType showAlert(Alert.AlertType alertType, String headerText, String contentText){
+        Alert alert = new Alert(alertType);
+        alert.setHeaderText(headerText);
+        alert.setContentText(contentText);
+        Optional<ButtonType> alertResult = alert.showAndWait();
+        return alertResult.get();
     }
 }

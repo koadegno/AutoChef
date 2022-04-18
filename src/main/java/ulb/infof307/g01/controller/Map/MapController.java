@@ -22,7 +22,7 @@ import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.HomePageViewController;
-import ulb.infof307.g01.view.Window;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
 import java.sql.SQLException;
@@ -176,7 +176,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
 
-        ButtonType alertResult = Window.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
         if (alertResult == ButtonType.OK) {
             Graphic cerclePointOnMap = shopOverlay.getLeft();
             Graphic textPointOnMap = shopOverlay.getRight();
@@ -289,7 +289,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 }
             } catch (InterruptedException | ExecutionException exception) {
                 //TODO gerer l'erreur
-                Window.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
+                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
                 exception.printStackTrace();
                 found[0] = false;
             }

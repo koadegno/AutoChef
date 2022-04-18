@@ -8,16 +8,16 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.shop.WindowShopController;
+import ulb.infof307.g01.view.shop.ShopViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class ShopController extends Controller implements WindowShopController.Listener {
+public class ShopController extends Controller implements ShopViewController.Listener {
 
     public static final String SHOW_SHOP_FXML = "ShowShop.fxml";
-    private WindowShopController viewController;
+    private ShopViewController viewController;
     private final ShopListener listener;
     private final Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
@@ -33,7 +33,7 @@ public class ShopController extends Controller implements WindowShopController.L
      */
     public void show(){
         try {
-            viewController = new WindowShopController();
+            viewController = new ShopViewController();
             Stage shopStage = popupFXML(SHOW_SHOP_FXML,viewController);
             viewController.setListener(this);
             viewController.createPopup();

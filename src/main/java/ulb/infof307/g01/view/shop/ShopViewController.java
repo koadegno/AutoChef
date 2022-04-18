@@ -1,7 +1,6 @@
 package ulb.infof307.g01.view.shop;
 
 import javafx.collections.ObservableList;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -10,12 +9,11 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
-import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
-public class WindowShopController extends ViewController<WindowShopController.Listener> implements Initializable {
+public class ShopViewController extends ViewController<ShopViewController.Listener> implements Initializable {
 
     public TableView<Product> tableViewShop;
     public ComboBox<String> comboBoxProduct;

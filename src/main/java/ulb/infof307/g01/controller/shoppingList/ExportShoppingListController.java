@@ -7,7 +7,7 @@ import ulb.infof307.g01.model.ODTCreator;
 import ulb.infof307.g01.model.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.Window;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.ExportShoppingListViewController;
 
 import java.io.IOException;
@@ -64,7 +64,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
             odtCreator.createODT(shoppingList);
         } catch (Exception e) {
             e.printStackTrace();
-            Window.showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur c'est produit avec le fichier ODT, contacté le service d'assistance.");
+            ViewController.showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur c'est produit avec le fichier ODT, contacté le service d'assistance.");
         }
         popupExportShoppingList.close();
     }

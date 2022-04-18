@@ -14,7 +14,7 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewViewController;
+import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -25,7 +25,7 @@ import java.util.Vector;
 
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     private ShoppingListViewController shoppingListViewController;
-    private UserShoppingListViewViewController userShoppingListViewViewController;
+    private UserShoppingListViewController userShoppingListViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
@@ -37,8 +37,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         initShoppingListController(homePageController);
     }
 
-    public ShoppingListController(UserShoppingListViewViewController userShoppingListViewViewController, HomePageController homePageController){
-        this.shoppingListViewController = this.userShoppingListViewViewController = userShoppingListViewViewController;
+    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, HomePageController homePageController){
+        this.shoppingListViewController = this.userShoppingListViewController = userShoppingListViewController;
         initShoppingListController(homePageController);
     }
 
@@ -98,7 +98,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     @Override
     public void seeUserShoppingList(Object nameUserShoppingList){
         if(Objects.equals(nameUserShoppingList, null)){ //nom est null
-            userShoppingListViewViewController.isVisibleElementToModifyMyShoppingList(false);
+            userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         }
         else{
             String currentShoppingListName = (String) nameUserShoppingList;
@@ -106,9 +106,9 @@ public class ShoppingListController extends Controller implements ShoppingListVi
                 // afficher les produits de la liste de course dans la table
                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
-                userShoppingListViewViewController.addProductListToTableView(productOfShoppingList);
-                userShoppingListViewViewController.isVisibleElementToModifyMyShoppingList(true);
-                userShoppingListViewViewController.setCurrentShoppingListName(currentShoppingListName);
+                userShoppingListViewController.addProductListToTableView(productOfShoppingList);
+                userShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
+                userShoppingListViewController.setCurrentShoppingListName(currentShoppingListName);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -122,7 +122,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
-            userShoppingListViewViewController.fillShoppingListToSend();
+            userShoppingListViewController.fillShoppingListToSend();
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
             //Popup : confirmer que la liste de courses est enregistrer
@@ -149,7 +149,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
             if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewViewController.initComboBox(allProduct, allUnitName, allShoppinListName);
+            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppinListName);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -207,12 +207,12 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     //Fin Methode Listener de WindowUserShoppingListController
 
     public void initForCreateRecipe(ShoppingList shoppingList) {
-        shoppingListViewController = userShoppingListViewViewController = new UserShoppingListViewViewController();
+        shoppingListViewController = userShoppingListViewController = new UserShoppingListViewController();
 
         shoppingListToSend = new ShoppingList("temporary");
-        loadFXML(userShoppingListViewViewController, "CreateUserShoppingList.fxml");
-        userShoppingListViewViewController.setListener(this);
-        userShoppingListViewViewController.initForCreateRecipe(shoppingList);
+        loadFXML(userShoppingListViewController, "CreateUserShoppingList.fxml");
+        userShoppingListViewController.setListener(this);
+        userShoppingListViewController.initForCreateRecipe(shoppingList);
         initInformationShoppingList(false);
     }
 
