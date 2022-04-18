@@ -19,7 +19,7 @@ public class AutoCompletion {
      * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
      */
 
-    static public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, Map<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
+    public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, Map<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
         if (categoriesWanted.isEmpty()){ return menu;}
@@ -57,7 +57,7 @@ public class AutoCompletion {
      * @return  String de la key ayant la valeur la plus haute
      */
 
-    static public String findMax (Map<String, Integer> categoriesRecipesUsed) {
+    public String findMax (Map<String, Integer> categoriesRecipesUsed) {
 
         if (categoriesRecipesUsed.isEmpty()) {return null;}
 
@@ -77,7 +77,7 @@ public class AutoCompletion {
      * @param   recipesAlreadyUsed  Liste contenant les recettes déjà utilisées
      */
 
-    static public Recipe choiceRecipe(List<Recipe> recipes, List<Recipe> recipesAlreadyUsed) {
+    public Recipe choiceRecipe(List<Recipe> recipes, List<Recipe> recipesAlreadyUsed) {
 
         if (recipes.size() == 0) { return null;}
 
