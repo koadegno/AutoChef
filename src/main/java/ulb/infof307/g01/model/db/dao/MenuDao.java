@@ -10,6 +10,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les menus
+ */
 public class MenuDao extends Database implements Dao<Menu> {
 
     public static final String MENU_TABLE_NAME = "Menu";
@@ -56,7 +59,7 @@ public class MenuDao extends Database implements Dao<Menu> {
             String categoryName = querySelectMenu.getString(8);
             String typeName = querySelectMenu.getString(9);
             Recipe recipe = new Recipe(recipeID,recipeName,recipeDuration,categoryName,typeName,recipeNumberPersons,recipePreparation);
-            menu.addRecipeToIndex(menuDay,menuHour,recipe);
+            menu.addRecipeTo(menuDay,recipe);
         }
         return menu;
     }

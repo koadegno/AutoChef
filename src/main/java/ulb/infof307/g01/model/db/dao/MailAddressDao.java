@@ -8,6 +8,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les adresses email favorites
+ */
 public class MailAddressDao extends Database implements Dao<String> {
     public static final String TABLE_MAIL_ADDRESS = "AdresseMail";
 

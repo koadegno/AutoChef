@@ -67,6 +67,10 @@ public class Menu {
         menu.get(day.index).add(meal);
     }
 
+    public void addRecipeTo(int day, Recipe meal) {
+        menu.get(day).add(meal);
+    }
+
     public String getName() { return name; }
 
     /**

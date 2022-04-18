@@ -172,6 +172,13 @@ public class Database {
         return statement;
     }
 
+    /**
+     * Permet d'analyser le contenu de la requête en fonction des types
+     * des valeurs et de les placer dans le PreparedStatement
+     * @param statement le PreparedStatement à remplir
+     * @param valueOfPreparedStatement les types à déterminer
+     * @throws SQLException
+     */
     protected void fillPreparedStatementValues(PreparedStatement statement, ArrayList<String> valueOfPreparedStatement) throws SQLException {
         if (valueOfPreparedStatement ==null) return;
         for(int i = 1; i < valueOfPreparedStatement.size() +1; i++){
@@ -297,6 +304,11 @@ public class Database {
         }
     }
 
+    /**
+     * Découpe chaque contrainte d'une requête sous forme de String en un ArrayList de 3 Strings
+     * @param s
+     * @return
+     */
     protected ArrayList<String> splitOnCharacter(String s){
         ArrayList<String> parts = null;
         if(s.contains(">=")){

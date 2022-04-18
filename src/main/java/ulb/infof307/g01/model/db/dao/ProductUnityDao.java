@@ -5,6 +5,9 @@ import ulb.infof307.g01.model.db.Database;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
+/**
+ * Classe d'accès à la base de données pour les données concernant les unités
+ */
 public class ProductUnityDao extends Database implements Dao<String> {
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB

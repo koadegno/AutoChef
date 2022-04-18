@@ -5,6 +5,9 @@ import ulb.infof307.g01.model.db.dao.*;
 
 import java.sql.SQLException;
 
+/**
+ * Singleton permettant l'utilisation d'une base de données unique
+ */
 public class Configuration {
     private static Configuration current;
 
