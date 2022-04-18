@@ -37,8 +37,7 @@ public class Window  {
     public Window loadFXML(String filename) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(Window.class.getResource(filename)));
         setNewScene(loader);
-        Window controller = loader.getController();
-        return controller;
+        return loader.getController();
     }
 
 
