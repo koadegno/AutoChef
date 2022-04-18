@@ -95,7 +95,7 @@ dependencies {
     // <----------------------- ODT ----------------------->
     implementation group: 'org.odftoolkit', name: 'odfdom-java', version: '0.10.0'
 
-    // <----------------------- ArcGis (Map) ----------------------->
+    // <----------------------- ArcGis (map) ----------------------->
     //https://developers.arcgis.com/java/install-and-set-up/
     implementation "com.esri.arcgisruntime:arcgis-java:100.13.0"
     natives "com.esri.arcgisruntime:arcgis-java-jnilibs:100.13.0"

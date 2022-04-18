@@ -7,7 +7,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;

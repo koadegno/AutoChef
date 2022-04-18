@@ -1,5 +1,5 @@
 import org.junit.jupiter.api.*;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.*;
 
 import java.io.IOException;

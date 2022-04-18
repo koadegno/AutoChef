@@ -3,10 +3,10 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.model.ODTCreator;
-import ulb.infof307.g01.model.PDFCreator;
+import ulb.infof307.g01.model.export.ODTCreator;
+import ulb.infof307.g01.model.export.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.ExportShoppingListViewController;
 
