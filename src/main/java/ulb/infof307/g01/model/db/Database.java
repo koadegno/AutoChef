@@ -145,7 +145,6 @@ public class Database {
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
         ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
         fillPreparedStatementValues(statement, columnValues);
-        System.out.println(statement);
         sendQueryUpdate(statement);
     }
 

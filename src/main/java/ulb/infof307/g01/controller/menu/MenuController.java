@@ -94,7 +94,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public boolean onSaveMenu(String menuName){
         boolean isSaved = true;
-        System.out.println(menuName.isBlank() || menuName.isEmpty());
         if((menuName.isBlank() || menuName.isEmpty() ) && !isModifying ) return !isSaved;
         try{
             if(menu.size() == 0) {
@@ -138,21 +137,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
         Recipe recipeToRemove = createMenuViewController.getMenuTableView().getSelectionModel().getSelectedItem();
         menu.removeRecipeFrom(daysName.get(dayIndex), recipeToRemove);
 
-    }
-
-    public void displayCreateUserShoppingList(){
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController);
-
-        //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(true);
-        fillShoppingList(createUserShoppingListViewController);
-    }
-
-    public void fillShoppingList(CreateUserShoppingListViewController viewController){
-        ShoppingList shoppingList =  windowShowMenuViewController.fillShoppingList(viewController);
-        viewController.fillTableViewWithExistentShoppingList(shoppingList);
     }
 
 

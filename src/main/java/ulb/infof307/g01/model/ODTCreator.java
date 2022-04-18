@@ -62,30 +62,18 @@ public class ODTCreator {
                         productElements = nodeList.item(j).getNextSibling().getNodeValue();
                         createProduct = true;
                         j++; // tu passes le produit parce que c'est le next node
-//                        System.out.println(productElements);
+//
                     }
                     // corresponds a une ligne de texte avec la famille
                     else if(nodeList.item(j).getNodeName().equals("#text")){
                         familyProduct = nodeList.item(j).getNodeValue();
-//                        System.out.print(" -> " +nodeList.item(j).getNodeName());
-//                        System.out.print(" -> " +nodeList.item(j).getNodeType());
-//                        System.out.print(" -> " +nodeList.item(j).getNamespaceURI());
-//                        System.out.print(" -> " +nodeList.item(j).getLocalName());
-//                        System.out.print(" -> " +nodeList.item(j).getPrefix());
-//                        System.out.print(" -> " +nodeList.item(j).getBaseURI());
-//                        System.out.print(" -> " +nodeList.item(j).getNodeValue());
-//                        System.out.println();
-
                         if(familyProduct.contains("Liste de course")){
                             continue;
                         }
                         familyProduct = familyProduct.replace(":","").strip();
-//                        System.out.println(familyProduct);
-                    }
+                  }
                     if(createProduct){ // permet de savoir quand cree un produit
                         String[] productElementArray = productElements.split(" ");
-//                        System.out.println(familyProduct);
-//                        System.out.println(Arrays.toString(productElementArray));
                         shoppingList.add(new Product(productElementArray[0],
                                 Integer.parseInt(productElementArray[1]),
                                 productElementArray[2],

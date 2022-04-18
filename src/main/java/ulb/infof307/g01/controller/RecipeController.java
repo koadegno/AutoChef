@@ -20,9 +20,9 @@ import java.util.List;
 import java.util.Vector;
 
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
-                                                            CreateRecipeViewController.CreateRecipeListener,
-                                                            UserRecipesViewController.UserRecipesListener,
-                                                            SearchRecipeViewController.Listener {
+        CreateRecipeViewController.CreateRecipeListener,
+        UserRecipesViewController.UserRecipesListener,
+        SearchRecipeViewController.Listener {
 
     // private Controller parentController; //TODO
 
@@ -40,6 +40,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     private SearchRecipeListener listener;
 
     public void displayMain() {
+        this.currentShoppingList = null;
+        this.currentRecipe = null;
         FXMLLoader loader = loadFXML("HomeRecipe.fxml");
         HomeRecipeViewController viewController = loader.getController();
         viewController.setListener(this);
@@ -92,6 +94,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 } else
                     Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
             } catch (SQLException e) {
+                e.printStackTrace();
                 ViewController.showErrorSQL();
             }
 
@@ -180,7 +183,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             userRecipesViewController.recipeSearchTextFieldError(false);
             userRecipesViewController.setDisableRecipeButtons(false);
             userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
-                                                        currentRecipe.getPreparation());
+                    currentRecipe.getPreparation());
         }
 
     }
@@ -205,9 +208,11 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         createRecipeViewController.setListener(this);
 
         List<Product> productList = new ArrayList<>(currentRecipe);
+        this.currentShoppingList = new ShoppingList(currentRecipe.getName());
+        currentShoppingList.addAll(productList);
         createRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
-                                                 currentRecipe.getType(), currentRecipe.getType(),
-                                                 currentRecipe.getNbrPerson(), productList);
+                currentRecipe.getType(), currentRecipe.getCategory(),
+                currentRecipe.getNbrPerson(), productList);
 
         createRecipeViewController.setCancelButtonToModifyRecipe();
     }
@@ -251,7 +256,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         final String windowTitle = "Importer une Recette depuis un fichier JSON";
         String extensionDescription = "Fichier JSON";
         File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
-                                              "*.json", currentStage);
+                "*.json", currentStage);
 
         if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
             JSON json = new JSON();
