@@ -75,7 +75,8 @@ public class Mail {
 
         messageBody.addBodyPart(addText(mailTextBody));
 
-        PDFCreator.createPDF(shoppingListToSend);
+        PDFCreator pdfCreator = new PDFCreator();
+        pdfCreator.createPDF(shoppingListToSend);
 
         messageBody.addBodyPart(addAttachment(System.getProperty("user.dir") + "\\" + shoppingListToSend.getName() + ".pdf"));
 
