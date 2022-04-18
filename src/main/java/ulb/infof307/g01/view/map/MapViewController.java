@@ -141,13 +141,11 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
             // selectionner un point avec un simple clique droit
-            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
-                if (mouseEvent.getClickCount() == ONCE_CLICKED) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
 
-                    shopGraphicsCercleOverlay.clearSelection();
-                    listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
+                shopGraphicsCercleOverlay.clearSelection();
+                listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
 
-                }
             }
         });
     }

@@ -62,13 +62,11 @@ public class Database {
     }
 
     public void closeConnection() throws SQLException {
-        if(request != null && connection != null){
-            if(!request.isClosed() && !connection.isClosed() ){
-                request.close();
-                connection.close();
-                request = null;
-                connection = null;
-            }
+        if((request != null) && (connection != null) && (!request.isClosed() && !connection.isClosed())) {
+            request.close();
+            connection.close();
+            request = null;
+            connection = null;
         }
     }
 
