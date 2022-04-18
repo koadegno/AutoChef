@@ -25,7 +25,7 @@ public class PDFCreator {
             Font.BOLD);
     private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
             Font.BOLD);
-    public static void createPDF(ShoppingList shoppingList) {
+    public  void createPDF(ShoppingList shoppingList) {
         try {
             Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
             sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
