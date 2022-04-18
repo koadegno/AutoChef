@@ -9,16 +9,16 @@ Java version 17.0.2
 ## Compilation
 
 Sur Linux:
-`./gradlew assemble`
+`./gradlew shadowJar`
 
 sur Windows:
-`./gradlew.bat assemble`
+`./gradlew.bat shadowJar`
 ## Démarrage 
 Double-clic sur le fichier jar  
 OU `java -jar g01-iteration-x.jar`  
 
-OU `./gradlew run` sur Linux et MacOS  
-`./gradlew.bat run` sur Windows
+OU `./gradlew runShadow` sur Linux et MacOS  
+`./gradlew.bat runShadow` sur Windows
 # Misc
 
 ## Développement

@@ -3,7 +3,10 @@ package ulb.infof307.g01.controller;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
-import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.JSON;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.db.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
@@ -18,6 +21,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+
+/**
+ * Contrôleur responsable de tous les écrans en lien avec les recettes
+ */
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
         CreateRecipeViewController.CreateRecipeListener,
         UserRecipesViewController.UserRecipesListener,
@@ -38,6 +45,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     private ShoppingList currentShoppingList;
     private SearchRecipeListener listener;
 
+    /**
+     * Affiche l'écran d'accueil des recettes
+     */
     public void displayMain() {
         this.currentShoppingList = null;
         this.currentRecipe = null;
@@ -51,6 +61,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     }
     // <-------------------------- Écran d'accueil des Recettes --------------------------> \\
 
+    /**
+     * Affiche l'écran permettant à l'utilisateur de voir ses recettes
+     */
     @Override
     public void onUserRecipesButtonClick() {
         FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
@@ -58,6 +71,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         userRecipesViewController.setListener(this);
     }
 
+    /**
+     * Affiche l'écran permettant de créer une nouvelle recette
+     */
     @Override
     public void onNewRecipeButtonClick() {
         FXMLLoader loader = this.loadFXML("createRecipe.fxml");
@@ -65,6 +81,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         createRecipeViewController.setListener(this);
     }
 
+    /**
+     * Retourne à l'écran principal
+     */
     @Override
     public void onBackButtonClick() {
         //parentController.displayMain(); TODO
@@ -74,6 +93,14 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
 
+    /**
+     * Vérifie que la recette est correcte et l'enregistre
+     * @param diet Régime de la recette
+     * @param type Type de la recette
+     * @param nbPerson Nombre de personnes pour lesquelles la recette est faites
+     * @param preparation Instructions pour préparer la recette
+     * @param recipeName Nom de la recette
+     */
     @Override
     public void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName) {
 
@@ -102,7 +129,14 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     }
 
     /**
-     * Vérifie que les paramètres sont valides pour créer un objet {@link Recipe}
+     * Vérifie que les paramètres sont valides pour créer un objet {@link Recipe},
+     * si un des attributs de la recette est invalide, affiche une erreur sur l'élément
+     * de l'interface concernée
+     * @param diet Régime de la recette : ne doit pas être {@code null}
+     * @param type Type de la recette : ne doit pas être {@code null}
+     * @param nbPerson Nombre de personnes pour lesquelles la recette est faites : doit être supérieur à {@code 0}
+     * @param preparation Instructions pour préparer la recette : ne doit pas être vide (minimum 1 caractère visible)
+     * @param recipeName Nom de la recette : ne doit pas être vide (minimum 1 caractère visible)
      * @return {@code true} si les paramètres sont valides, {@code false} sinon
      */
     private boolean isValidRecipe(String diet, String type, int nbPerson, String preparation, String recipeName) {
@@ -137,6 +171,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         return isValid;
     }
 
+    /**
+     * Affiche l'écran permettant de modifier les produits contenus dans une recette
+     * @see ShoppingListController#initForCreateRecipe(ShoppingList)
+     */
     @Override
     public void onModifyProductsButton() {
         this.sceneModifyRecipe = currentStage.getScene();
@@ -147,6 +185,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         shoppingListController.initForCreateRecipe(currentShoppingList);
     }
 
+    /**
+     * Méthode appelée par {@link ShoppingListController} après la fin de la modification des produits d'une recette
+     * @param products La liste des {@link Product} ajoutés à la recette
+     */
     public void modifyProductsCallback(@Nullable ShoppingList products) {
         currentStage.setScene(sceneModifyRecipe);
 
@@ -157,7 +199,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         }
     }
 
-
+    /**
+     * Revient à l'écran d'accueil des recettes
+     */
     @Override
     public void onCancelButton() {
         displayMain();
@@ -165,6 +209,11 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     // <-------------------------- Écran de Liste des Recettes --------------------------> \\
 
+    /**
+     * Cherche si une recette existe dans la base de données et l'affiche si possible, sinon affiche une erreur
+     * sur le champ de recherche
+     * @param recipeName Nom de la recette à rechercher
+     */
     @Override
     public void onRecipeSearchTextFieldSubmit(String recipeName) {
         if (recipeName.isBlank())
@@ -187,6 +236,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     }
 
+    /**
+     * Convertit une Liste de {@link Product} en un {@link String} lisible par des humains
+     * @return le String construit
+     */
     private String productListToString() {
         StringBuilder res = new StringBuilder();
         for (Product p : currentRecipe) {
@@ -197,6 +250,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         return res.toString();
     }
 
+    /**
+     * Afficher l'écran permettant de modifier une recette déjà existante
+     */
     @Override
     public void onModifyRecipeButtonClick() {
         isWaitingModification = true;
@@ -216,12 +272,18 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         createRecipeViewController.setCancelButtonToModifyRecipe();
     }
 
+    /**
+     * Revient à l'écran permettant de consulter une recette
+     */
     @Override
     public void onCancelModifyButton() {
         currentStage.setScene(sceneViewRecipe);
     }
 
 
+    /**
+     * Supprime une recette de la Base de donnée
+     */
     @Override
     public void onDeleteRecipeButtonClick() {
         try {
@@ -234,6 +296,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         currentRecipe = null;
     }
 
+    /**
+     * Affiche l'écran permettant de sélectionner une recette parmis toutes celles existantes
+     */
     @Override
     public void onSeeAllRecipesButtonClick() {
         FXMLLoader loader = loadFXML("SearchRecipe.fxml");
@@ -250,6 +315,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         }
     }
 
+    /**
+     * Affiche une {@code pop-up} permettant d'importer une recette depuis un fichier {@code JSON}
+     * @see JSON
+     */
     @Override
     public void onImportRecipeFromJSONButtonClick() {
         final String windowTitle = "Importer une Recette depuis un fichier JSON";
@@ -264,6 +333,9 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     }
 
+    /**
+     * Revient à la page d'accueil des recettes
+     */
     @Override
     public void onBackToHomeRecipeButtonClick() {
         this.displayMain();
@@ -271,6 +343,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     // <-------------------------- Écran de Recherche de Recette --------------------------> \\
 
+    /**
+     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
+     * et du nombre de personnes sélectionnés
+     */
     @Override
     public void onTypeComboBoxSelected(String recipeType) {
         String recipeDiet = searchRecipeViewController.getDietComboBoxSelectedItem();
@@ -279,6 +355,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
     }
 
+    /**
+     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
+     * et du nombre de personnes sélectionnés
+     */
     @Override
     public void onDietComboBoxSelected(String recipeDiet) {
         String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
@@ -287,6 +367,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
     }
 
+    /**
+     * Active le {@link javafx.scene.control.Spinner} permettant de filtrer en fonction
+     * d'un nombre de personnes
+     */
     @Override
     public void onNbPersonCheckBoxChecked(boolean isChecked) {
         searchRecipeViewController.setDisableNbPersonSpinner(!isChecked);
@@ -294,6 +378,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         onNbPersonSpinnerClicked(searchRecipeViewController.getNbPersonSpinnerValue());
     }
 
+    /**
+     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
+     * et du nombre de personnes sélectionnés
+     */
     @Override
     public void onNbPersonSpinnerClicked(int recipeNbPerson) {
         String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
@@ -302,11 +390,22 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
     }
 
+    /**
+     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
+     * et du nombre de personnes sélectionnés
+     */
     @Override
     public void onNbPersonSpinnerKeyPressed(int recipeNbPerson) {
         onNbPersonSpinnerClicked(recipeNbPerson);
     }
 
+    /**
+     * Rafraichit la liste des recettes affichées en fonction du régime, de la catégorie du plat et du nombre
+     * de personnes sélectionnées
+     * @param recipeType le type de {@link Recipe} selon lequelle filtrer
+     * @param recipeDiet le régime de {@link Recipe} selon lequelle filtrer
+     * @param nbPerson le nombre de personnes de {@link Recipe} selon lequelle filtrer
+     */
     private void refreshRecipeList(String recipeType, String recipeDiet, int nbPerson) {
         try {
             List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(recipeDiet, recipeType, nbPerson);
@@ -316,6 +415,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         }
     }
 
+    /**
+     * Affiche une recette sélectionnée
+     * @see UserRecipesViewController
+     */
     @Override
     public void onRecipesTableViewClicked(Recipe selectedRecipe) {
         if(listener == null) onUserRecipesButtonClick();
