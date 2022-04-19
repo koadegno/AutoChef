@@ -6,10 +6,10 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.model.Menu;
-import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.view.ViewController;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.UserMenusViewController;
+import ulb.infof307.g01.view.ViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;

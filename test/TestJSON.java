@@ -8,8 +8,8 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.model.db.Configuration;
-import ulb.infof307.g01.model.JSON;
+import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.export.JSON;
 
 
 class TestJSON {

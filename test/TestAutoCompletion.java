@@ -3,7 +3,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.AutoCompletion;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.model.database.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;

@@ -2,9 +2,9 @@ package ulb.infof307.g01.controller.mail;
 
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.model.Mail;
+import ulb.infof307.g01.model.export.Mail;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.db.Configuration;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.mail.FavoriteMailViewController;
 import ulb.infof307.g01.view.mail.MailViewController;
 

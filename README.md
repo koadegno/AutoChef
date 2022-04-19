@@ -14,6 +14,8 @@ Sur Linux:
 sur Windows:
 `./gradlew.bat shadowJar`
 ## Démarrage 
+Dézipper le zip "jnLibs"
+
 Double-clic sur le fichier jar  
 OU `java -jar g01-iteration-x.jar`  
 
