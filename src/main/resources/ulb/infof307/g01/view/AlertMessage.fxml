@@ -7,18 +7,18 @@
 
 <VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="200.0" prefWidth="300.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <VBox alignment="CENTER" prefHeight="305.0" prefWidth="300.0">
+      <VBox alignment="CENTER" prefHeight="148.0" prefWidth="300.0">
          <children>
-            <Label fx:id="alertMessageLabel" alignment="CENTER" prefHeight="129.0" prefWidth="563.0" text="Message d'alerte">
+            <Label fx:id="alertMessageLabel" alignment="CENTER" prefHeight="123.0" prefWidth="300.0" text="Message d'alerte">
                <font>
                   <Font size="13.0" />
                </font>
             </Label>
          </children>
       </VBox>
-      <VBox alignment="CENTER" prefHeight="200.0" prefWidth="100.0">
+      <VBox alignment="CENTER" prefHeight="0.0" prefWidth="300.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#closePopupAlertMessage" prefHeight="47.0" prefWidth="83.0" text="OK" />
+            <Button mnemonicParsing="false" onAction="#closePopupAlertMessage" prefHeight="30.0" prefWidth="83.0" text="OK" />
          </children>
       </VBox>
    </children>
