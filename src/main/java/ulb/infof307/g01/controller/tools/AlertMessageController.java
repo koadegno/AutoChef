@@ -25,6 +25,11 @@ public class AlertMessageController extends Controller implements AlertMessageVi
     }
 
     public void createShoppingListAlertMessage(){
-        alertMessageViewController.setAlertMessageLabel("La liste de course a été crée");
+        alertMessageViewController.setAlertMessageLabel("La liste de course a été modifiée");
+    }
+
+    public void deleteShoppingListeAlertMessage(){
+        alertMessageViewController.setAlertMessageLabel("Vous avez enregistré une liste de course vide.\n" +
+                " Elle est donc supprimée. ");
     }
 }

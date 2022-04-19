@@ -127,14 +127,39 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
             //Popup : confirmer que la liste de courses est enregistrer
-            AlertMessageController alertMessageViewController = new AlertMessageController();
-            alertMessageViewController.displayAlertMessage();
-            alertMessageViewController.createShoppingListAlertMessage();
+            displayPopupMessageInformation();
 
 
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    /**
+     * Afficher une popup qui permet à l'utilisateur de savoir que sa liste de course a bien été modifiée
+     */
+    public void displayPopupMessageInformation(){
+        AlertMessageController alertMessageViewController = new AlertMessageController();
+        alertMessageViewController.displayAlertMessage();
+
+
+        //Refresh si la page liste de courses n'existe plus
+        if(shoppingListToSend.isEmpty()){
+            this.refreshModifyShoppingList(alertMessageViewController);
+        }
+        else{
+            alertMessageViewController.createShoppingListAlertMessage();
+        }
+    }
+
+    /**
+     * Permet de refresh la fenetre pour modifier une liste de courses si celle ci a été supprimée
+     * @param alertMessageViewController controleur qui gère les messages d'information
+     */
+    public void refreshModifyShoppingList(AlertMessageController alertMessageViewController){
+        userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
+        this.initInformationShoppingList(false);
+        alertMessageViewController.deleteShoppingListeAlertMessage();
     }
 
     public void addProductToShoppingListToSend(Product product){
@@ -209,7 +234,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         shoppingListViewController = userShoppingListViewController = new UserShoppingListViewController();
 
         shoppingListToSend = new ShoppingList("temporary");
-        loadFXML(userShoppingListViewController, "CreateUserShoppingList.fxml");
+        loadFXML(userShoppingListViewController, "UserShoppingList.fxml");
         userShoppingListViewController.setListener(this);
         userShoppingListViewController.initForCreateRecipe(shoppingList);
         initInformationShoppingList(false);
