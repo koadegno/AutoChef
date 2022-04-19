@@ -10,8 +10,10 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 
-public class JSON
-{
+public class JSON {
+
+    private String nameRecipe;
+
     public void jsonReader(String fileName)
     {
         //JSON parser object to parse read file
@@ -24,7 +26,7 @@ public class JSON
 
             JSONObject recipe = (JSONObject) obj;
 
-            String name = (String) recipe.get("Nom");
+            nameRecipe = (String) recipe.get("Nom");
             Long duration = (Long) recipe.get("Duree");
             Long nbrPerson = (Long) recipe.get("NbPersonnes");
             String type = (String) recipe.get("TypePlat");
@@ -32,7 +34,7 @@ public class JSON
             String preparation = (String) recipe.get("Preparation");
 
             //Envoyer recette à la base de donnee
-            Recipe recipeToSend = new Recipe(name, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
+            Recipe recipeToSend = new Recipe(nameRecipe, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
             try {
                 Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
             } catch (SQLException e) {
@@ -43,4 +45,6 @@ public class JSON
             e.printStackTrace();
         }
     }
+
+    public String getNameRecipe(){return this.nameRecipe;}
 }
