@@ -83,7 +83,10 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         boolean isValid = isValidRecipe(diet, type, nbPerson, preparation, recipeName);
 
         if (isValid) {
-            int idRecipe = currentRecipe.getId();
+            int idRecipe = 0;
+            if (isWaitingModification) {
+                idRecipe = currentRecipe.getId();
+            }
             currentRecipe = new Recipe(recipeName);
             currentRecipe.setCategory(diet);
             currentRecipe.setPreparation(preparation);
