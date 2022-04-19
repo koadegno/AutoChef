@@ -1,4 +1,4 @@
-package ulb.infof307.g01.view.tools;
+package ulb.infof307.g01.view.menu;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -12,7 +12,7 @@ import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 
-public class GenerateMenuDialog extends ViewController<GenerateMenuDialog.GenerateMenuListener> implements Initializable {
+public class GenerateMenuViewController extends ViewController<GenerateMenuViewController.GenerateMenuListener> implements Initializable {
     public static final int SPINNER_MAX = 1000;
     public static final int SPINNER_MIN = 0;
     GenerateMenuListener listener;

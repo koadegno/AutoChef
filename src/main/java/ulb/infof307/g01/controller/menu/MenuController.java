@@ -15,7 +15,7 @@ import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
-import ulb.infof307.g01.view.tools.GenerateMenuDialog;
+import ulb.infof307.g01.view.menu.GenerateMenuViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,7 +23,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuDialog.GenerateMenuListener, RecipeController.SearchRecipeListener {
+public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, RecipeController.SearchRecipeListener {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private ShowMenuViewController windowShowMenuViewController;
@@ -80,9 +80,9 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public void onGenerateMenu(){
         try {
-            GenerateMenuDialog generateMenuDialog = new GenerateMenuDialog();
-            popup = popupFXML("GenerateMenuDialog.fxml", generateMenuDialog);
-            generateMenuDialog.setListener(this);
+            GenerateMenuViewController generateMenuViewController = new GenerateMenuViewController();
+            popup = popupFXML("GenerateMenuViewController.fxml", generateMenuViewController);
+            generateMenuViewController.setListener(this);
         } catch (IOException e) {
             ViewController.showErrorSQL();
         }

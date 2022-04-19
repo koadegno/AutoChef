@@ -99,7 +99,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
      * */
     @FXML
 //    public void displayMain(){
-//        this.loadFXML("DisplayMap.fxml");
+//        this.loadFXML("ShowMap.fxml");
 //    }
 
     @Override

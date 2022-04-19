@@ -1,8 +1,8 @@
-package ulb.infof307.g01.controller.tools;
+package ulb.infof307.g01.controller.alertMessage;
 
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.view.tools.AlertMessageViewController;
+import ulb.infof307.g01.view.alertMessage.AlertMessageViewController;
 
 import java.io.IOException;
 

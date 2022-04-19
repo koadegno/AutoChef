@@ -66,7 +66,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      */
     @Override
     public void onUserRecipesButtonClick() {
-        FXMLLoader loader = this.loadFXML("viewRecipe.fxml");
+        FXMLLoader loader = this.loadFXML("VewRecipe.fxml");
         userRecipesViewController = loader.getController();
         userRecipesViewController.setListener(this);
     }
@@ -76,7 +76,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      */
     @Override
     public void onNewRecipeButtonClick() {
-        FXMLLoader loader = this.loadFXML("createRecipe.fxml");
+        FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
         createRecipeViewController = loader.getController();
         createRecipeViewController.setListener(this);
     }
@@ -263,7 +263,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         isWaitingModification = true;
 
         this.sceneViewRecipe = currentStage.getScene();
-        FXMLLoader loader = this.loadFXML("createRecipe.fxml");
+        FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
         createRecipeViewController = loader.getController();
         createRecipeViewController.setListener(this);
 

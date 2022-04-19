@@ -71,7 +71,7 @@ public class MailController extends Controller implements MailViewController.Lis
         this.favoriteMailViewController = new FavoriteMailViewController();
         favoriteMailViewController.setListener(this);
         try {
-             this.popupFavoriteMail = popupFXML("favoriteMail.fxml", favoriteMailViewController);
+             this.popupFavoriteMail = popupFXML("FavoriteMail.fxml", favoriteMailViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }

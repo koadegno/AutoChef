@@ -8,7 +8,7 @@ import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
-import ulb.infof307.g01.controller.tools.AlertMessageController;
+import ulb.infof307.g01.controller.alertMessage.AlertMessageController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;

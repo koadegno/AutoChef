@@ -5,7 +5,7 @@ ulb.infof307.g01.controller.mail
 ulb.infof307.g01.controller.map
 ulb.infof307.g01.controller.menu
 ulb.infof307.g01.controller.shoppingList
-ulb.infof307.g01.controller.tools
+ulb.infof307.g01.controller.alertMessage
 ulb.infof307.g01.model
 ulb.infof307.g01.model.db
 ulb.infof307.g01.model.db.dao
@@ -16,4 +16,4 @@ ulb.infof307.g01.view.menu
 ulb.infof307.g01.view.recipe
 ulb.infof307.g01.view.shop
 ulb.infof307.g01.view.shoppingList
-ulb.infof307.g01.view.tools
+ulb.infof307.g01.view.alertMessage

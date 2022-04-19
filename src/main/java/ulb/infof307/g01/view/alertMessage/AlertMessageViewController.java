@@ -1,4 +1,4 @@
-package ulb.infof307.g01.view.tools;
+package ulb.infof307.g01.view.alertMessage;
 
 import javafx.scene.control.Label;
 import ulb.infof307.g01.view.ViewController;

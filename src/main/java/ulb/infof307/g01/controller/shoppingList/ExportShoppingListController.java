@@ -40,7 +40,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
      */
     public void displayExportShoppingList(){
         try {
-            this.popupExportShoppingList = popupFXML("exportShoppingList.fxml", exportShoppingListViewController);
+            this.popupExportShoppingList = popupFXML("ExportShoppingList.fxml", exportShoppingListViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }
