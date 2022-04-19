@@ -100,7 +100,7 @@ public class HomePageController extends Controller implements HomePageListener, 
     @Override
     public void onMyShoppingListsButtonClick() {
         UserShoppingListViewController windowUserShoppingListsController = new UserShoppingListViewController();
-        loadFXML(windowUserShoppingListsController, "CreateUserShoppingList.fxml");
+        loadFXML(windowUserShoppingListsController, "UserShoppingList.fxml");
         ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
 
         //Initialise la page avec les informations de la bdd
@@ -116,7 +116,7 @@ public class HomePageController extends Controller implements HomePageListener, 
     @Override
     public void onCreateShoppingListsButtonClick() {
         CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "CreateUserShoppingList.fxml");
+        loadFXML(createUserShoppingListViewController, "UserShoppingList.fxml");
         ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController, this );
 
         //Initialise la page avec les informations de la bdd

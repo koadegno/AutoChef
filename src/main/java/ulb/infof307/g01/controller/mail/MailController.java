@@ -34,7 +34,7 @@ public class MailController extends Controller implements MailViewController.Lis
         this.mailViewController = new MailViewController();
         mailViewController.setListener(this);
         try {
-            this.popupStageMail = popupFXML("createMail.fxml", mailViewController);
+            this.popupStageMail = popupFXML("CreateMail.fxml", mailViewController);
         } catch (IOException e) {
             e.printStackTrace();
         }
