@@ -45,7 +45,7 @@ public class UserDao extends Database implements Dao<User>{
                 ,String.format("'%s'",user.getPassword())
                 ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
-        userID = String.valueOf(getIDFromName(USER_TABLE_NAME, user.getPseudo(), "Pseudo"));
+        userID = String.valueOf(getIDFromName(USER_TABLE_NAME,"Pseudo" ,user.getPseudo(), "UtilisateurID"));
         insertUserAddress(userID,user.getAdress());
     }
 
@@ -81,13 +81,14 @@ public class UserDao extends Database implements Dao<User>{
         ResultSet querySelectUser = sendQuery(String.format("""
                 SELECT U.UtilisateurID, U.Prenom, U.Nom, U.MotDePasse, U.estProfessionnel, UtilisateurAdresse.Pays, UtilisateurAdresse.Ville, UtilisateurAdresse.CodePostal, UtilisateurAdresse.RueNom, UtilisateurAdresse.RueNumero
                 FROM Utilisateur as U
-                INNER JOIN UtilisateurAdresse ON U.UtilisateurAdresse = UtilisateurAdresse.UtilisateurID
+                INNER JOIN UtilisateurAdresse ON U.UtilisateurID = UtilisateurAdresse.UtilisateurID
                 WHERE U.Pseudo = '%s'""", userPseudo));
 
         if(querySelectUser.next()){
             user = ExtractUserFromQuery(userPseudo, querySelectUser);
         }
         else{
+            System.out.println("je ne fonctionne pas");
             //TODO lancer une erreur
         }
         return user;

@@ -271,12 +271,7 @@ public class Database {
 
         ResultSet res = sendQuery(statement);
 
-        if(res.next()){
-            System.out.println("je suis bien");
-        }
-        else {
-            //TODO lancer une erreur
-        }
+        res.next();//TODO lancer une erreur
 
         return res.getInt(nameIDColumn);
     }

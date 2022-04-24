@@ -30,13 +30,12 @@ class TestUserDao {
     @Test
     void insert() throws SQLException {
         String userPseudo = "Caligula 1";
-        insertion(-1, userPseudo);
+        insertion(userPseudo);
         User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
 
-    private void insertion(int ID, String pseudo) throws SQLException {
-        basicUser.setID(ID);
+    private void insertion(String pseudo) throws SQLException {
         basicUser.setPseudo(pseudo);
         Configuration.getCurrent().getUserDao().insert(basicUser);
 
@@ -44,8 +43,8 @@ class TestUserDao {
 
     @Test
     void get() throws SQLException {
-        String userPseudo = "Caligul2";
-        insertion(-1, userPseudo);
+        String userPseudo = "Caligula 2";
+        insertion(userPseudo);
         User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
