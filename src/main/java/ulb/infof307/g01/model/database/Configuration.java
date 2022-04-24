@@ -59,6 +59,7 @@ public class Configuration {
         getShoppingListDao().closeConnection();
         getShopDao().closeConnection();
         getMailAddressDao().closeConnection();
+        getUserDao().closeConnection();
     }
 
     public MenuDao getMenuDao(){

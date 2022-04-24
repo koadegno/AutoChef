@@ -261,13 +261,26 @@ public class Database {
      * Methode inverse de getNameFromID
      */
     protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
+        return getIDFromName(table,"Nom",name,nameIDColumn);
+    }
+
+    protected int getIDFromName(String table, String columnName, String name, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s='%s'","Nom",name));
+        constraint.add(String.format("%s='%s'",columnName,name));
         PreparedStatement statement =  select(table,constraint,null);
+
         ResultSet res = sendQuery(statement);
-        res.next();
+
+        if(res.next()){
+            System.out.println("je suis bien");
+        }
+        else {
+            //TODO lancer une erreur
+        }
+
         return res.getInt(nameIDColumn);
     }
+
 
     /**
      *
