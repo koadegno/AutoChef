@@ -100,7 +100,7 @@ public class ProductController extends Controller implements ProductViewControll
             try {
                 json.importProduct(jsonProduct.getAbsolutePath());
             } catch (SQLException e) {
-                alertMessageController.showImportJsonError("Le contenu du JSON est incorrecte");
+                alertMessageController.showImportJsonError("Le contenu du JSON est incorrecte ou \nle produit existe deja");
             }
             String nameProduct = json.getNameProduct();
             shopViewController.setNameProduct(nameProduct);
