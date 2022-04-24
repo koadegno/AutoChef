@@ -333,8 +333,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
         if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
             JSON json = new JSON();
-            json.jsonReader(jsonFile.getAbsolutePath());
-            onRecipeSearchTextFieldSubmit(json.getNameRecipe());
+            json.importRecipe(jsonFile.getAbsolutePath());
+            onRecipeSearchTextFieldSubmit(json.getName());
 
         }
 
