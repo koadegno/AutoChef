@@ -159,8 +159,8 @@ public class MapController extends Controller implements MapViewController.Liste
 
     @Override
     public void helpMapClicked() {
-        int numberOfImageHelp = 14;
-        HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
+        int numberOfImageHelp = 7;
+        HelpController helpController = new HelpController("helpMap/", numberOfImageHelp);
         helpController.displayHelpShop();
     }
 

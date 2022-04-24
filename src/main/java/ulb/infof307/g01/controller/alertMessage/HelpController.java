@@ -56,7 +56,7 @@ public class HelpController extends Controller implements HelpViewController.Lis
      */
     @Override
     public void rightButtonClicked() {
-        if((numberImageInformation + 1) < lastNumberImageInformation){
+        if((numberImageInformation + 1) <= lastNumberImageInformation){
             numberImageInformation += 1;
             createFilePathImageInformation();
         }
