@@ -36,7 +36,7 @@ public class HelpShopViewController extends ViewController<HelpShopViewControlle
         //Setting the image view parameters
         imageView.setX(10);
         imageView.setY(10);
-        imageView.setFitWidth(450);
+        imageView.setFitWidth(500);
         imageView.setPreserveRatio(true);
 
         //Setting the Scene object

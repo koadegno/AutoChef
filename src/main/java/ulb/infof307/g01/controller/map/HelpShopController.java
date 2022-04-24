@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public class HelpShopController extends Controller implements HelpShopViewController.Listener {
     private HelpShopViewController helpShopViewController;
+    private Stage helpShopPopup;
     private final String beginFilePathNameImageInformation = "helpShop/";
     private int numberImageInformation = 1;
     private final int lastNumberImageInformation = 14;
@@ -19,7 +20,7 @@ public class HelpShopController extends Controller implements HelpShopViewContro
 
     public void displayHelpShop(){
         try {
-            Stage helpShopPopup = this.popupFXML("HelpShop.fxml", helpShopViewController);
+            helpShopPopup = this.popupFXML("HelpShop.fxml", helpShopViewController);
             helpShopPopup.setResizable(false);
             helpShopViewController.setListener(this);
             createFilePathImageInformation();
@@ -42,6 +43,9 @@ public class HelpShopController extends Controller implements HelpShopViewContro
         if((numberImageInformation + 1) < lastNumberImageInformation){
             numberImageInformation += 1;
             createFilePathImageInformation();
+        }
+        else{
+            helpShopPopup.close();
         }
     }
 
