@@ -1,4 +1,4 @@
-package ulb.infof307.g01.controller.map;
+package ulb.infof307.g01.controller.shop;
 
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
