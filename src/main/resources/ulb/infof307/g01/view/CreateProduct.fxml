@@ -24,7 +24,7 @@
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="305.0" spacing="10.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="305.0" text="Nom du produit" />
-                  <TextField />
+                  <TextField fx:id="nameProduct" />
                </children>
             </VBox>
          </children>
@@ -34,7 +34,7 @@
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="305.0" spacing="10.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="305.0" text="Nom de la famille du produit" />
-                  <ComboBox prefHeight="25.0" prefWidth="305.0" />
+                  <ComboBox fx:id="nameProductFamilyCombobox" prefHeight="25.0" prefWidth="305.0" />
                </children>
             </VBox>
          </children>
@@ -44,16 +44,16 @@
             <VBox alignment="CENTER" prefHeight="100.0" prefWidth="309.0" spacing="10.0">
                <children>
                   <Label prefHeight="17.0" prefWidth="303.0" text="Nom de l'unité du produit" />
-                  <ComboBox prefHeight="25.0" prefWidth="305.0" />
+                  <ComboBox fx:id="nameProductUnityCombobox" prefHeight="25.0" prefWidth="305.0" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" text="Confirmer" />
-            <Button mnemonicParsing="false" text="Importer un fichier JSON" />
-            <Button mnemonicParsing="false" text="Retour" />
+            <Button mnemonicParsing="false" onAction="#confirmCreateProduct" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#ImportProductJSONFile" text="Importer un fichier JSON" />
+            <Button mnemonicParsing="false" onAction="#ReturnShopPage" text="Retour" />
          </children>
       </HBox>
    </children>
