@@ -10,7 +10,6 @@ import java.io.IOException;
 public class HelpShopController extends Controller implements HelpShopViewController.Listener {
     private HelpShopViewController helpShopViewController;
     private Stage helpShopPopup;
-    private final String beginFilePathNameImageInformation = "helpShop/";
     private int numberImageInformation = 1;
     private final int lastNumberImageInformation = 14;
 
@@ -50,6 +49,7 @@ public class HelpShopController extends Controller implements HelpShopViewContro
     }
 
     public void createFilePathImageInformation(){
+        String beginFilePathNameImageInformation = "helpShop/";
         String filepath = beginFilePathNameImageInformation + numberImageInformation + ".png";
         helpShopViewController.displayImageInformation(filepath);
 
