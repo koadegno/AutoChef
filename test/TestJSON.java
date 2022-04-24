@@ -14,7 +14,8 @@ import ulb.infof307.g01.model.export.JSON;
 
 class TestJSON {
     final static private String fileNameDB   = "testJSON.sqlite";
-    final static private String fileNameJSON = "testRecette.json";
+    final static private String fileNameRecipe = "testRecette.json";
+    final static private String fileNameProduct = "testProduct.json";
 
     @BeforeAll
     static public void createDB() throws SQLException {
@@ -22,10 +23,13 @@ class TestJSON {
 
         Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
         Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
+
+        Configuration.getCurrent().getProductFamilyDao().insert("soupes");
+        Configuration.getCurrent().getProductUnityDao().insert("ml");
     }
 
     @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
-    static public void createJSON() throws IOException {
+    static public void createJSONRecipe() throws IOException {
         JSONObject recipe = new JSONObject();
         recipe.put("Nom", "testRecette");
         recipe.put("Duree", 11);
@@ -34,8 +38,20 @@ class TestJSON {
         recipe.put("Categorie", "Viande");
         recipe.put("Preparation", "mix then eat");
 
-        FileWriter fileJSON = new FileWriter(fileNameJSON);
+        FileWriter fileJSON = new FileWriter(fileNameRecipe);
         fileJSON.write(recipe.toJSONString());
+        fileJSON.flush();
+    }
+
+    @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
+    static public void createJSONProduct() throws IOException {
+        JSONObject product = new JSONObject();
+        product.put("Nom", "testProduit");
+        product.put("FamilleAliment", "soupes");
+        product.put("Unite", "ml");
+
+        FileWriter fileJSON = new FileWriter(fileNameProduct);
+        fileJSON.write(product.toJSONString());
         fileJSON.flush();
     }
 
@@ -46,12 +62,17 @@ class TestJSON {
     }
 
     @Test
-    public void testJsonReader(){
+    public void testJsonRecipe(){
         JSON json = new JSON();
-        json.jsonReader(fileNameJSON);
+        json.importRecipe(fileNameRecipe);
         //get recipe from database to check if it's created
     }
 
-
+    @Test
+    public void testJsonProduct(){
+        JSON json = new JSON();
+        json.importProduct(fileNameProduct);
+        //get recipe from database to check if it's created
+    }
 
 }
