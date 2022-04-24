@@ -16,7 +16,7 @@ public class JSON {
     private String nameRecipeToAdd;
     private String nameProductToAdd;
 
-    public void importProduct(String fileName){
+    public void importProduct(String fileName) throws SQLException {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
@@ -33,11 +33,8 @@ public class JSON {
 
             //Envoyer recette à la base de donnee
             Product productToSend = new Product(nameProductToAdd, unite, familleAliment);
-            try {
-                Configuration.getCurrent().getProductDao().insert(productToSend);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            Configuration.getCurrent().getProductDao().insert(productToSend);
+
 
         } catch (IOException | ParseException e) {
             e.printStackTrace();

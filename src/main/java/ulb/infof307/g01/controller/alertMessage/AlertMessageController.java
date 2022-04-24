@@ -33,7 +33,7 @@ public class AlertMessageController extends Controller implements AlertMessageVi
                 " Elle est donc supprimée. ");
     }
 
-    public void importNotWorkAlertMessage(){
-        alertMessageViewController.setAlertMessageLabel("Vous n'avez pas importer un fichier JSON.");
+    public void showImportJsonError(String alertMessage){
+        alertMessageViewController.setAlertMessageLabel(alertMessage);
     }
 }

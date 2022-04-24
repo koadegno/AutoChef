@@ -63,8 +63,12 @@ public class ProductController extends Controller implements ProductViewControll
         if(isNameProduct){
             if(isNameProductFamily){
                 if(isNameProductUnity){
-                    userProduct = new Product(nameProduct, nameProductFamily, nameProductUnity);
-                    //Configuration.getCurrent().getProductDao().insert(userProduct);
+                    userProduct = new Product(nameProduct, nameProductUnity ,nameProductFamily);
+                    try {
+                        Configuration.getCurrent().getProductDao().insert(userProduct);
+                    } catch (SQLException e) {
+                        e.printStackTrace();
+                    }
                     shopViewController.setNameProduct(nameProduct);
                     createProductStage.close();
                 }
@@ -85,18 +89,25 @@ public class ProductController extends Controller implements ProductViewControll
     @Override
     public void importProductJsonFile() {
         final String windowTitle = "Importer un PRODUIT depuis un fichier JSON";
+
+        AlertMessageController alertMessageController = new AlertMessageController();
+        alertMessageController.displayAlertMessage();
+
         File jsonProduct = importJSON(windowTitle);
 
         if(jsonProduct != null){
             JSON json = new JSON();
-            json.importProduct(jsonProduct.getAbsolutePath());
+            try {
+                json.importProduct(jsonProduct.getAbsolutePath());
+            } catch (SQLException e) {
+                alertMessageController.showImportJsonError("Le contenu du JSON est incorrecte");
+            }
             String nameProduct = json.getNameProduct();
             shopViewController.setNameProduct(nameProduct);
             createProductStage.close();
         }
         else{
-            AlertMessageController alertMessageController = new AlertMessageController();
-            alertMessageController.importNotWorkAlertMessage();
+            alertMessageController.showImportJsonError("Vous n'avez pas importer un fichier JSON");
         }
     }
 
