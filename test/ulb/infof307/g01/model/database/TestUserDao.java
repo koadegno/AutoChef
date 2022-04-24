@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestUserDao {
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
-    private static final User basicUser = new User(21,"Caius","Augustus","Caligula2","mot de passe",userAddress,false);;
+    private static final User basicUser = new User(-1,"Caius","Augustus","Caligula2","mot de passe",userAddress,false);;
     private static final String DATABASE_NAME = "test.sqlite";
 
     @BeforeAll
@@ -30,7 +30,7 @@ class TestUserDao {
     @Test
     void insert() throws SQLException {
         String userPseudo = "Caligula 1";
-        insertion(23, userPseudo);
+        insertion(-1, userPseudo);
         User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
@@ -44,8 +44,8 @@ class TestUserDao {
 
     @Test
     void get() throws SQLException {
-        String userPseudo = "Caligula 2";
-        insertion(22, userPseudo);
+        String userPseudo = "Caligul2";
+        insertion(-1, userPseudo);
         User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
