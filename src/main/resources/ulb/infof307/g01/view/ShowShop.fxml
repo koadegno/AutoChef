@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="400.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
@@ -25,12 +25,13 @@
       </HBox>
       <TableView fx:id="tableViewShop" prefHeight="249.0" prefWidth="750.0">
         <columns>
-          <TableColumn fx:id="columnProduct" prefWidth="280.6666616201401" text="Produit" />
-            <TableColumn fx:id="columnPrice" prefWidth="118.0" text="Prix" />
+          <TableColumn fx:id="columnProduct" prefWidth="484.66669714450836" text="Produit" />
+            <TableColumn fx:id="columnPrice" prefWidth="127.99996948242188" text="Prix" />
         </columns>
       </TableView>
       <HBox alignment="CENTER" prefHeight="102.0" prefWidth="750.0" spacing="10.0">
          <children>
+            <Button mnemonicParsing="false" onAction="#createNewProduct" text="Créer un produit" />
             <ComboBox fx:id="comboBoxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
             <Spinner fx:id="spinnerPrice" amountToStepBy=".1" initialValue="3.2" max="10000.0" min="0.1" prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
             <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addProductToTableView" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />

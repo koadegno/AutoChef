@@ -8,6 +8,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
+import ulb.infof307.g01.view.shop.ProductViewController;
 import ulb.infof307.g01.view.shop.ShopViewController;
 
 import java.io.IOException;
@@ -93,6 +94,12 @@ public class ShopController extends Controller implements ShopViewController.Lis
         Product product = new Product(nameProduct, priceProduct);
         viewController.getTableViewShopItems().add(product);
 
+    }
+
+    @Override
+    public void createNewProductClicked() {
+        ProductController productController = new ProductController();
+        productController.displayCreateNewProduct();
     }
 
     /**

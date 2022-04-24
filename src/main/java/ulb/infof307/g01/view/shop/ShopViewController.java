@@ -59,6 +59,10 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
+    public void createNewProduct(){
+        listener.createNewProductClicked();
+    }
+
     public void addProductToTableView(){
         setNodeColor(comboBoxProduct, false);
         String nameProduct  = comboBoxProduct.getSelectionModel().getSelectedItem();
@@ -101,5 +105,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void fillComboBoxProduct(ComboBox<String> productComboBox) throws SQLException;
 
         void onAddProductClicked(String nameProduct, double priceProduct);
+
+        void createNewProductClicked();
     }
 }
