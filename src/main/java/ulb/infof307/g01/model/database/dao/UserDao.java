@@ -11,6 +11,8 @@ import java.util.List;
 
 public class UserDao extends Database implements Dao<User>{
 
+    public static final int TRUE = 1;
+    public static final int FALSE = 0;
     private static String USER_TABLE_NAME = "Utilisateur";
     private static String ADDRESS_TABLE_NAME = "UtilisateurAdresse";
     private static String[] COLUMN_NAME = {"Nom"}; //TODO rajouter le nom des colonnes si on veut modifier
@@ -37,21 +39,22 @@ public class UserDao extends Database implements Dao<User>{
     public void insert(User user) throws SQLException {
         String userID  = (user.getID() == -1) ? "null": String.valueOf(user.getID());
         String[] values = {userID
-                ,String.format("%s",user.getFamilyName())
-                ,String.format("%s",user.getPseudo())
-                ,String.format("%s",user.getPassword())
-                ,String.format("%s",user.isProfessional())};
+                ,String.format("'%s'",user.getName())
+                ,String.format("'%s'",user.getFamilyName())
+                ,String.format("'%s'",user.getPseudo())
+                ,String.format("'%s'",user.getPassword())
+                ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
         userID = String.valueOf(getIDFromName(USER_TABLE_NAME, user.getPseudo(), "Pseudo"));
         insertUserAddress(userID,user.getAdress());
     }
 
     private void insertUserAddress(String userID, Address address) throws SQLException {
-        String[] values = {String.format("%d",userID)
-                ,String.format("%s", address.getCountry())
-                ,String.format("%s", address.getCity())
+        String[] values = {String.format("%s",userID)
+                ,String.format("'%s'", address.getCountry())
+                ,String.format("'%s'", address.getCity())
                 ,String.format("%d", address.getPostalCode())
-                ,String.format("%s", address.getStreetName())
+                ,String.format("'%s'", address.getStreetName())
                 ,String.format("%d", address.getHouseNumber())};
         insert(ADDRESS_TABLE_NAME,values);
 
@@ -73,19 +76,45 @@ public class UserDao extends Database implements Dao<User>{
     }
 
     @Override
-    public User get(String UserID) throws SQLException {
-        //TODO est ce que le get et le update son necessaire ?
+    public User get(String userPseudo) throws SQLException {
+        User user = new User();
         ResultSet querySelectUser = sendQuery(String.format("""
-                SELECT U.Prenom, 
+                SELECT U.UtilisateurID, U.Prenom, U.Nom, U.MotDePasse, U.estProfessionnel, UtilisateurAdresse.Pays, UtilisateurAdresse.Ville, UtilisateurAdresse.CodePostal, UtilisateurAdresse.RueNom, UtilisateurAdresse.RueNumero
                 FROM Utilisateur as U
                 INNER JOIN UtilisateurAdresse ON U.UtilisateurAdresse = UtilisateurAdresse.UtilisateurID
-                WHERE U.UtilisateurAdresse = %s""", UserID));
+                WHERE U.Pseudo = '%s'""", userPseudo));
 
         if(querySelectUser.next()){
-            //TODO remplir
+            user = ExtractUserFromQuery(userPseudo, querySelectUser);
         }
+        else{
+            //TODO lancer une erreur
+        }
+        return user;
+    }
 
-        return null;
+    /**
+     * Remplie un Objet User à partir d'un ResultSet concernant un utilisateur
+     * @param userPseudo le pseudo de l'utilisateur
+     * @param querySelectUser la requete contenant les infos de l'utilisateur
+     * @return User l'objet représentant utilisateur
+     * @throws SQLException erreur avec le ResultSet
+     */
+    private User ExtractUserFromQuery(String userPseudo, ResultSet querySelectUser) throws SQLException {
+        User user;
+        int userID = querySelectUser.getInt(1);
+        String userFirstname = querySelectUser.getString(2);
+        String userLastname = querySelectUser.getString(3);
+        String userPassword = querySelectUser.getString(4);
+        Boolean userIsProfessional = querySelectUser.getBoolean(5);
+        String userCountry = querySelectUser.getString(6);
+        String userCity = querySelectUser.getString(7);
+        int userPostalCode = querySelectUser.getInt(8);
+        String userStreetName = querySelectUser.getString(9);
+        int userHouseNumber = querySelectUser.getInt(10);
+        Address userAddress = new Address(userCountry,userCity,userPostalCode,userStreetName,userHouseNumber);
+        user = new User(userID,userLastname,userFirstname, userPseudo,userPassword,userAddress,userIsProfessional);
+        return user;
     }
 
 

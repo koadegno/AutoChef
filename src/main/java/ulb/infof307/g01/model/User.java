@@ -68,4 +68,21 @@ public class User {
     public String getFamilyName() {
         return familyName;
     }
+
+    /**
+     * Compare 2 objets
+     */
+    @Override
+    public boolean equals(Object other) {
+
+        if (this == other)
+            return true;
+
+        if (other == null || this.getClass() != other.getClass())
+            return false;
+
+        User user = (User)other;
+
+        return this.getPseudo().equals(user.getPseudo()) && this.getPassword().equals(user.getPassword());
+    }
 }
