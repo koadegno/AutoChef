@@ -14,9 +14,4 @@ class UserTest { //TODO: Il y a rien a tester pour l instant
         String password = "fei";
         userTest = new User(pseudo, password);
     }
-    @Test
-    void isPasswordCorrect() {
-        String falsePasword= "password";
-        assertTrue(!userTest.isPasswordCorrect(falsePasword));
-    }
 }
