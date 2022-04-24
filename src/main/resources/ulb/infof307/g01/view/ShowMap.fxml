@@ -22,7 +22,12 @@
         </Menu>
       <Menu mnemonicParsing="false">
          <graphic>
-            <Button mnemonicParsing="false" onAction="#returnMainMenu" text="Retour" />
+            <Button mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="63.0" text="Retour" />
+         </graphic>
+      </Menu>
+      <Menu mnemonicParsing="false">
+         <graphic>
+            <Button mnemonicParsing="false" onAction="#helpMap" prefHeight="25.0" prefWidth="56.0" text="Aide" />
          </graphic>
       </Menu>
     </MenuBar>

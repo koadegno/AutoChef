@@ -1,4 +1,4 @@
-package ulb.infof307.g01.view.shop;
+package ulb.infof307.g01.view.alertMessage;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -11,9 +11,13 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.util.Objects;
 
-public class HelpShopViewController extends ViewController<HelpShopViewController.Listener> {
-    public VBox imageInformationShopVBox;
+public class HelpViewController extends ViewController<HelpViewController.Listener> {
+    public VBox imageInformationVBox;
 
+    /**
+     * Permet d'afficher une image dans la popup
+     * @param filename string contenant le nom de l'image à afficher
+     */
     public void displayImageInformation(String filename){
 
         String filePath = Objects.requireNonNull(ViewController.class.getResource(filename)).getPath();
@@ -27,21 +31,19 @@ public class HelpShopViewController extends ViewController<HelpShopViewControlle
 
         Image image = new Image(stream);
 
-        //Creating the image view
+        //Crée l'image
         ImageView imageView = new ImageView();
 
-        //Setting image to the image view
+        //Les param de l'image
         imageView.setImage(image);
-
-        //Setting the image view parameters
         imageView.setX(10);
         imageView.setY(10);
         imageView.setFitWidth(500);
         imageView.setPreserveRatio(true);
 
-        //Setting the Scene object
-        imageInformationShopVBox.getChildren().clear();
-        imageInformationShopVBox.getChildren().add(imageView);
+        //Rajoute l'image dans le VBOX pour qu'elle puisse s'afficher
+        imageInformationVBox.getChildren().clear(); //efface la VBOX au cas où il y avait une ancienne image
+        imageInformationVBox.getChildren().add(imageView);
     }
 
     public void leftButton(){

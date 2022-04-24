@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.alertMessage.HelpController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.HomePageViewController;
@@ -154,6 +155,13 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.setListener(homePageController);
         homePageController.displayMain();
 
+    }
+
+    @Override
+    public void helpMapClicked() {
+        int numberOfImageHelp = 14;
+        HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
     /**
