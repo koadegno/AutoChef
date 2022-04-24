@@ -21,6 +21,7 @@ public class Configuration {
     private Dao<ShoppingList> shoppingListDao;
     private Dao<Shop> shopDao;
     private Dao<String> mailAddressDao;
+    private Dao<User> userDao;
 
 
     private Configuration(){}
@@ -33,6 +34,7 @@ public class Configuration {
     }
 
     public void setDatabase(String dbPath){
+        //TODO ils ont pas tous besoin de dbPath changer ca
         this.menuDao = new MenuDao(dbPath);
         this.productDao = new ProductDao(dbPath);
         this.productFamilyDao = new ProductFamilyDao(dbPath);
@@ -43,6 +45,7 @@ public class Configuration {
         this.shoppingListDao = new ShoppingListDao(dbPath);
         shopDao = new ShopDao(dbPath);
         mailAddressDao = new MailAddressDao(dbPath);
+        userDao = new UserDao(dbPath);
     }
 
     public void closeConnection() throws SQLException {
@@ -81,4 +84,8 @@ public class Configuration {
     public ShoppingListDao getShoppingListDao() { return (ShoppingListDao) shoppingListDao; }
 
     public ShopDao getShopDao() { return (ShopDao) shopDao; }
+
+    public UserDao getUserDao() {
+        return (UserDao) userDao;
+    }
 }

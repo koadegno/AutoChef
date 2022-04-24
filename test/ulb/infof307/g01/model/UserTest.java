@@ -12,6 +12,6 @@ class UserTest { //TODO: Il y a rien a tester pour l instant
     void init(){
         String pseudo = "Zanilia";
         String password = "fei";
-        userTest = new User(pseudo, password);
+        userTest = new User(pseudo, password,false);
     }
 }
