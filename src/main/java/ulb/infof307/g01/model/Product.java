@@ -56,6 +56,12 @@ public class Product {
         this.famillyProduct = famillyProduct;
     }
 
+    public Product(String productName,  String nameUnity,String famillyProduct) {
+        name = productName;
+        this.nameUnity = nameUnity;
+        this.famillyProduct = famillyProduct;
+    }
+
     public Product(Product other) {
         this.name = other.name;
         this.quantity = other.quantity;
