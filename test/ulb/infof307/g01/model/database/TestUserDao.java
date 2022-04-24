@@ -8,10 +8,12 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import static org.junit.jupiter.api.Assertions.*;
+
 
 class TestUserDao {
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
-    private static final User BASIC_USER = new User(21,"Caius","Augustus","Caligula2","mot de passe",userAddress,false);;
+    private static final User basicUser = new User(21,"Caius","Augustus","Caligula2","mot de passe",userAddress,false);;
     private static final String DATABASE_NAME = "test.sqlite";
 
     @BeforeAll
@@ -27,21 +29,25 @@ class TestUserDao {
 
     @Test
     void insert() throws SQLException {
-        Configuration.getCurrent().getUserDao().insert(BASIC_USER);
+        String userPseudo = "Caligula 1";
+        insertion(23, userPseudo);
+        User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
+        assertEquals(basicUser,userInserted);
     }
 
-    @Test
-    void update() throws SQLException {
-        BASIC_USER.setID(22);
-        Configuration.getCurrent().getUserDao().insert(BASIC_USER);
-        BASIC_USER.setPseudo("Xenon");
-        Configuration.getCurrent().getUserDao().update(BASIC_USER);
+    private void insertion(int ID, String pseudo) throws SQLException {
+        basicUser.setID(ID);
+        basicUser.setPseudo(pseudo);
+        Configuration.getCurrent().getUserDao().insert(basicUser);
+
     }
 
     @Test
     void get() throws SQLException {
-        Configuration.getCurrent().getUserDao().insert(BASIC_USER);
-        User userAdded = Configuration.getCurrent().getUserDao().get(String.valueOf(BASIC_USER.getID()));
-
+        String userPseudo = "Caligula 2";
+        insertion(22, userPseudo);
+        User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
+        assertEquals(basicUser,userInserted);
     }
+
 }
