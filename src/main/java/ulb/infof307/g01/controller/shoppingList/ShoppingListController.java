@@ -260,9 +260,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             directory = "helpCreateShoppingList/";
         }
         else{
-            //TODO: changer ça avec le USER
-            numberOfImageHelp = 8;
-            directory = "helpCreateShoppingList/";
+            numberOfImageHelp = 12;
+            directory = "helpUserShoppingList/";
         }
         HelpController helpController = new HelpController(directory, numberOfImageHelp);
         helpController.displayHelpShop();
