@@ -5,6 +5,7 @@ import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.alertMessage.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
@@ -248,5 +249,22 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     @Override
     public void returnAddedProducts() {
         recipeController.modifyProductsCallback(shoppingListToSend);
+    }
+
+    @Override
+    public void helpShoppingList(boolean isCreateShoppingList) {
+        int numberOfImageHelp;
+        String directory;
+        if(isCreateShoppingList){
+            numberOfImageHelp = 8;
+            directory = "helpCreateShoppingList/";
+        }
+        else{
+            //TODO: changer ça avec le USER
+            numberOfImageHelp = 8;
+            directory = "helpCreateShoppingList/";
+        }
+        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 }
