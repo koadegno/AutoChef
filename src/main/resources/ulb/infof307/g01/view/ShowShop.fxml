@@ -13,14 +13,23 @@
 
 <VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <Label prefHeight="17.0" prefWidth="113.0" text="Nom du magasin : ">
-               <font>
-                  <Font size="13.0" />
-               </font>
-            </Label>
-            <TextField fx:id="nameShopTextField" promptText="nom du magasin" />
+            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="482.0">
+               <children>
+                  <Label prefHeight="17.0" prefWidth="113.0" text="Nom du magasin : ">
+                     <font>
+                        <Font size="13.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="nameShopTextField" promptText="nom du magasin" />
+               </children>
+            </HBox>
+            <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="115.0">
+               <children>
+                  <Button onAction="#helpShop" mnemonicParsing="false" text="Aide" />
+               </children>
+            </HBox>
          </children>
       </HBox>
       <TableView fx:id="tableViewShop" prefHeight="249.0" prefWidth="750.0">

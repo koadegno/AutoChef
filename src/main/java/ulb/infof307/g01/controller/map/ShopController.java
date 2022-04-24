@@ -102,6 +102,12 @@ public class ShopController extends Controller implements ShopViewController.Lis
         productController.displayCreateNewProduct();
     }
 
+    @Override
+    public void displayHelpShop() {
+        HelpShopController helpShopController = new HelpShopController();
+        helpShopController.displayHelpShop();
+    }
+
     /**
      * Permet l'ajout et la modification dans MapController
      */

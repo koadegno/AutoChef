@@ -102,6 +102,10 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         comboBoxProduct.setValue(nameProduct);
     }
 
+    public void helpShop(){
+        listener.displayHelpShop();
+    }
+
 
     public interface Listener{
         void onSaveShopClicked(String shopName) throws SQLException;
@@ -113,5 +117,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void onAddProductClicked(String nameProduct, double priceProduct);
 
         void createNewProductClicked();
+
+        void displayHelpShop();
     }
 }
