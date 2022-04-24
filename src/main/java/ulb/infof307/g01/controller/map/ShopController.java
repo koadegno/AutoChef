@@ -98,7 +98,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     @Override
     public void createNewProductClicked() {
-        ProductController productController = new ProductController();
+        ProductController productController = new ProductController(viewController);
         productController.displayCreateNewProduct();
     }
 

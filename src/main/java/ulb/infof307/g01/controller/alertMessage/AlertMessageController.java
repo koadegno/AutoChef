@@ -32,4 +32,8 @@ public class AlertMessageController extends Controller implements AlertMessageVi
         alertMessageViewController.setAlertMessageLabel("Vous avez enregistré une liste de course vide.\n" +
                 " Elle est donc supprimée. ");
     }
+
+    public void importNotWorkAlertMessage(){
+        alertMessageViewController.setAlertMessageLabel("Vous n'avez pas importer un fichier JSON.");
+    }
 }

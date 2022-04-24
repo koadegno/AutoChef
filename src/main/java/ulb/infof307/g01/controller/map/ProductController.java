@@ -2,25 +2,31 @@ package ulb.infof307.g01.controller.map;
 
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.alertMessage.AlertMessageController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ProductViewController;
+import ulb.infof307.g01.view.shop.ShopViewController;
 
+import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
 public class ProductController extends Controller implements ProductViewController.Listener {
-    private final ProductViewController productViewController;
+    private ProductViewController productViewController;
+    private ShopViewController shopViewController;
     private Stage createProductStage;
 
-    public ProductController(){
-        productViewController = new ProductViewController();
+    public ProductController(ShopViewController shopViewController){
+        this.shopViewController = shopViewController;
     }
 
     public void displayCreateNewProduct(){
+        productViewController = new ProductViewController();
         String nameCreateProductFXML = "createProduct.fxml";
         try {
             createProductStage = popupFXML(nameCreateProductFXML, productViewController);
@@ -58,8 +64,8 @@ public class ProductController extends Controller implements ProductViewControll
             if(isNameProductFamily){
                 if(isNameProductUnity){
                     userProduct = new Product(nameProduct, nameProductFamily, nameProductUnity);
-                    //TODO: envoyer ça a la bdd
-                    //TODO: afficher dans le menu d'avant
+                    //Configuration.getCurrent().getProductDao().insert(userProduct);
+                    shopViewController.setNameProduct(nameProduct);
                     createProductStage.close();
                 }
                 else{
@@ -78,7 +84,20 @@ public class ProductController extends Controller implements ProductViewControll
 
     @Override
     public void importProductJsonFile() {
+        final String windowTitle = "Importer un PRODUIT depuis un fichier JSON";
+        File jsonProduct = importJSON(windowTitle);
 
+        if(jsonProduct != null){
+            JSON json = new JSON();
+            json.importProduct(jsonProduct.getAbsolutePath());
+            String nameProduct = json.getNameProduct();
+            shopViewController.setNameProduct(nameProduct);
+            createProductStage.close();
+        }
+        else{
+            AlertMessageController alertMessageController = new AlertMessageController();
+            alertMessageController.importNotWorkAlertMessage();
+        }
     }
 
     @Override

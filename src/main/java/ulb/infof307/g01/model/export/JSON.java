@@ -13,7 +13,8 @@ import java.sql.SQLException;
 
 public class JSON {
 
-    private String nameElementToAdd;
+    private String nameRecipeToAdd;
+    private String nameProductToAdd;
 
     public void importProduct(String fileName){
         //JSON parser object to parse read file
@@ -26,12 +27,12 @@ public class JSON {
 
             JSONObject product = (JSONObject) obj;
 
-            nameElementToAdd = (String) product.get("Nom");
+            nameProductToAdd = (String) product.get("Nom");
             String familleAliment = (String) product.get("FamilleAliment");
             String unite = (String) product.get("Unite");
 
             //Envoyer recette à la base de donnee
-            Product productToSend = new Product(nameElementToAdd, unite, familleAliment);
+            Product productToSend = new Product(nameProductToAdd, unite, familleAliment);
             try {
                 Configuration.getCurrent().getProductDao().insert(productToSend);
             } catch (SQLException e) {
@@ -54,7 +55,7 @@ public class JSON {
 
             JSONObject recipe = (JSONObject) obj;
 
-            nameElementToAdd = (String) recipe.get("Nom");
+            nameRecipeToAdd = (String) recipe.get("Nom");
             Long duration = (Long) recipe.get("Duree");
             Long nbrPerson = (Long) recipe.get("NbPersonnes");
             String type = (String) recipe.get("TypePlat");
@@ -62,7 +63,7 @@ public class JSON {
             String preparation = (String) recipe.get("Preparation");
 
             //Envoyer recette à la base de donnee
-            Recipe recipeToSend = new Recipe(nameElementToAdd, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
+            Recipe recipeToSend = new Recipe(nameRecipeToAdd, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
             try {
                 Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
             } catch (SQLException e) {
@@ -73,5 +74,6 @@ public class JSON {
             e.printStackTrace();
         }
     }
-    public String getName(){return this.nameElementToAdd;}
+    public String getNameRecipe(){return this.nameRecipeToAdd;}
+    public String getNameProduct(){return this.nameProductToAdd;}
 }

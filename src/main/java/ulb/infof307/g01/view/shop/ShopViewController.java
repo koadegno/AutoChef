@@ -97,6 +97,12 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     }
 
 
+    public void setNameProduct(String nameProduct){
+        comboBoxProduct.getItems().add(nameProduct);
+        comboBoxProduct.setValue(nameProduct);
+    }
+
+
     public interface Listener{
         void onSaveShopClicked(String shopName) throws SQLException;
 
