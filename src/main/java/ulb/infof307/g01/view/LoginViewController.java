@@ -18,7 +18,7 @@ public class LoginViewController extends ViewController<LoginViewController.Logi
     void login(ActionEvent event) {listener.onLoginButtonClick(pseudo.getText(),password.getText());}
 
     @FXML
-    void register(ActionEvent event) {listener.onRegisterButtonClick();}
+    void signUp(ActionEvent event) {listener.onSignUpButtonClick();}
 
     public void showPseudoError(boolean isError) {setNodeColor(pseudo,isError);}
 
@@ -26,7 +26,7 @@ public class LoginViewController extends ViewController<LoginViewController.Logi
 
     public interface LoginListener {
         void onLoginButtonClick(String pseudo,String password);
-        void onRegisterButtonClick();
+        void onSignUpButtonClick();
         void onQuitButtonClick();
     }
 }

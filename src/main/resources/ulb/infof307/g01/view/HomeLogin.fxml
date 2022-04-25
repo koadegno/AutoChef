@@ -24,7 +24,7 @@
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="80.0">
          <children>
             <Button mnemonicParsing="false" onAction="#login" prefHeight="50.0" prefWidth="200.0" text="Se connecter" />
-            <Button mnemonicParsing="false" onAction="#register" prefHeight="50.0" prefWidth="200.0" text="S'enregistrer" />
+            <Button mnemonicParsing="false" onAction="#signUp" prefHeight="50.0" prefWidth="200.0" text="S'enregistrer" />
          </children>
       </HBox>
       <Button mnemonicParsing="false" onAction="#closeApplication" prefHeight="50.0" prefWidth="480.0" text="Quitter" />

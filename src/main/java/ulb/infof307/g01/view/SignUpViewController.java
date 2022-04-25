@@ -1,12 +1,8 @@
-package ulb.infof307.g01.view.user;
+package ulb.infof307.g01.view;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
-import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -68,7 +64,7 @@ public class SignUpViewController extends ViewController<SignUpViewController.Si
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.onlyIntValue(houseNumberTextField);
+        //this.onlyIntValue(houseNumberTextField);
     }
 
     public void onCancelButton() {

@@ -5,13 +5,15 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.LoginViewController;
+import ulb.infof307.g01.view.SignUpViewController;
 
 import java.sql.SQLException;
 import java.util.Objects;
 
-public class LoginController extends Controller implements LoginViewController.LoginListener{
+public class LoginController extends Controller implements LoginViewController.LoginListener, SignUpViewController.SignUpListener {
 
     private LoginViewController loginViewController;
+    private SignUpViewController signUpViewController;
     public LoginController(Stage primaryStage){
         setStage(primaryStage);
     }
@@ -20,10 +22,16 @@ public class LoginController extends Controller implements LoginViewController.L
     * Affiche la page du login
      * @see ulb.infof307.g01.Main
      */
-    public void display(){
+    public void displayHomeLogin(){
         FXMLLoader loader = loadFXML("HomeLogin.fxml");
         loginViewController = loader.getController();
         loginViewController.setListener(this);
+    }
+
+    public void displaySignUp(){
+        FXMLLoader loader = loadFXML("SignUp.fxml");
+        signUpViewController = loader.getController();
+        signUpViewController.setListener(this);
     }
 
     /**
@@ -55,12 +63,22 @@ public class LoginController extends Controller implements LoginViewController.L
     }
 
     @Override
-    public void onRegisterButtonClick() {
-        //TODO connecter interface register
-
+    public void onSignUpButtonClick() {
+        displaySignUp();
     }
 
     @Override
     public void onQuitButtonClick() { currentStage.close(); }
 
+    // SIGN UP
+
+    @Override
+    public void onSubmitButton(String pseudo, String lastName, String firstName, String password, String confirmPassword, String country, String city, String streetName, String houseNumber) {
+
+    }
+
+    @Override
+    public void onCancelButton() {
+        displayHomeLogin();
+    }
 }
