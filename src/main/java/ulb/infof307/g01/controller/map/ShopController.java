@@ -1,5 +1,6 @@
 package ulb.infof307.g01.controller.map;
 
+import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
@@ -13,6 +14,8 @@ import ulb.infof307.g01.view.shop.ShopViewController;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+
+import static ulb.infof307.g01.controller.map.MapController.COLOR_RED;
 
 public class ShopController extends Controller implements ShopViewController.Listener {
 
@@ -59,7 +62,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
         }
         else{
             Configuration.getCurrent().getShopDao().insert(shop);
-            listener.addShop(shop);
+            listener.addCircle(COLOR_RED, shop.getName(), shop.getCoordinate());
         }
     }
 
@@ -99,7 +102,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      * Permet l'ajout et la modification dans MapController
      */
     public interface ShopListener {
-        void addShop(Shop shop);
+        void addCircle(int color, String textCircle, Point coordinate);
         void updateShop(Shop shop);
     }
 }

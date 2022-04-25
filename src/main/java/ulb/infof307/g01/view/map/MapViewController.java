@@ -31,7 +31,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
     private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
-
+    private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
+    private boolean ifSearchDeparture = false;
     private static final int ONCE_CLICKED = 1;
 
     private final GraphicsOverlay shopGraphicsCercleOverlay = new GraphicsOverlay();
@@ -90,7 +91,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
         String address = searchBox.getText();
         boolean found = listener.onSearchAddress(address);
         setNodeColor(searchBox, found);
-
     }
 
     /**
@@ -140,21 +140,22 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private void initializeMapEvent() {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
+
             // selectionner un point avec un simple clique droit
             if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
-
                 shopGraphicsCercleOverlay.clearSelection();
                 listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
-
             }
         });
     }
+
 
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
      */
     private void initializeContextMenu(){
-        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem);
+
+        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem, itineraryShopMenuItem);
         mapView.setContextMenu(contextMenu);
 
         // context menu pour l'ajout
@@ -169,14 +170,18 @@ public class MapViewController extends ViewController<MapViewController.Listener
             }
         });
 
-        //contexte menu pour la modification
+        // contexte menu pour la modification
         modifyShopMenuItem.setOnAction(event -> {
             try {
                 listener.onUpdateShopClicked();
             } catch (SQLException e) {
                 showErrorSQL();
             }
+        });
 
+        // contexte menu pour le calcul d'itinéraire
+        itineraryShopMenuItem.setOnAction(event -> {
+            listener.onItineraryClicked();
         });
     }
 
@@ -185,9 +190,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
         listener.onBackButtonClicked();
     }
 
-    public MenuItem getAddShopMenuItem() {
-        return addShopMenuItem;
-    }
+    public MenuItem getAddShopMenuItem() { return addShopMenuItem;}
+
+    public MenuItem getItineraryShopMenuItem() { return itineraryShopMenuItem; }
+
+    public boolean getIfSearchDeparture() { return ifSearchDeparture; }
+
+    public void setIfSearchDeparture() {
+        ifSearchDeparture = !ifSearchDeparture; }
 
     public GraphicsOverlay getAddressGraphicsOverlay() {
         return addressGraphicsOverlay;
@@ -206,6 +216,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void highlightGraphicPoint(double mouseX, double mouseY);
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
+        void onItineraryClicked();
     }
 }
 

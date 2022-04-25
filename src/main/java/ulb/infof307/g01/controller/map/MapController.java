@@ -2,10 +2,7 @@ package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.mapping.view.Graphic;
-import com.esri.arcgisruntime.mapping.view.GraphicsOverlay;
-import com.esri.arcgisruntime.mapping.view.IdentifyGraphicsOverlayResult;
-import com.esri.arcgisruntime.mapping.view.MapView;
+import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
@@ -34,6 +31,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int COLOR_BLACK = 0xFF000000;
+    public static final int COLOR_BLUE   = 0xFF008DFF;
     public static final int ADDRESS_SIZE = 18;
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
     public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
@@ -58,27 +56,38 @@ public class MapController extends Controller implements MapViewController.Liste
     /**
      * Ajout d'un point avec son texte sur la map
      *
-     * @param shopToAdd le nouveau magasin a ajouter
+     * @param color        Couleur du cercle
+     * @param textCircle   Texte écrit à côté du cercle
+     * @param coordinate   Coordonnée du cercle
      */
-    public void addShop(Shop shopToAdd) {
-        //crée un cercle rouge
-        SimpleMarkerSymbol redCircleSymbol = new SimpleMarkerSymbol(
+    public void addCircle(int color, String textCircle, Point coordinate) {
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //////// - Attention bug quand lorsqu'on clique sur supprimer le cercle  /////////
+        //////// - Peut créer plusieurs point de départ et d'arrivée             /////////
+        //////// - Rendre transparent les boutons bloqués                       //////////
+        //////////////////////////////////////////////////////////////////////////////////
+
+        //crée un cercle
+        SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
                 SimpleMarkerSymbol.Style.CIRCLE,
-                COLOR_RED,
+                color,
                 SIZE);
+
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        SIZE, shopToAdd.getName(), COLOR_BLACK,
+                        SIZE, textCircle, COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
 
-        Graphic circlePoint = new Graphic(shopToAdd.getCoordinate(), redCircleSymbol);
-        Graphic textPoint = new Graphic(shopToAdd.getCoordinate(), pierTextSymbol);
+        Graphic circlePoint = new Graphic(coordinate, circleSymbol);
+        Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
 
         // ajoute des graphiques à l'overlay
         viewController.getShopGraphicsCercleList().getGraphics().add(circlePoint);
         viewController.getShopGraphicsTextList().getGraphics().add(textPoint);
     }
+
 
     /**
      * Initialise les magasins sur la carte
@@ -88,7 +97,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onInitializeMapShop() throws SQLException {
         List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
         for(Shop shop: allShopList){
-            addShop(shop);
+            addCircle(COLOR_RED, shop.getName(), shop.getCoordinate());
         }
     }
 
@@ -97,6 +106,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onAddShopClicked() {
+
+        if (viewController.getIfSearchDeparture()) {return;}
+
         MapView mapView = viewController.getMapView();
         MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
@@ -129,6 +141,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onUpdateShopClicked() throws SQLException {
+
+        if (viewController.getIfSearchDeparture()) {return;}
+
         Pair<Graphic, Graphic> shopOverlays = getSelectedShop();
         if(shopOverlays == null) return;
         Graphic cercleGraphic = shopOverlays.getLeft();
@@ -157,12 +172,41 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
+     * Récupère la position départ ou d'arrivée de l'itinéraire et y dessine un cercle bleu
+     */
+    @Override
+    public void onItineraryClicked() {
+
+        MapView mapView = viewController.getMapView();
+        MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
+        mapView.setCursor(Cursor.DEFAULT);
+
+        String text;
+        if (viewController.getIfSearchDeparture()) {text = "Départ";}
+        else {text = "Arrivée";}
+
+        // Switch la variable ifSearchDeparture
+        viewController.setIfSearchDeparture();
+
+        // Il y a une correction de la position
+        Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
+        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
+        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
+
+        // Dessine le cercle sur la carte
+        addCircle(COLOR_BLUE, text, mapPoint);
+    }
+
+
+    /**
      * Recherche avec une l'adresse d'un magasin
      * @param address l'adresse du magasin (Ville, rue, commune, numéro)
      * @return l'adresse a été trouver ou non
      */
     @Override
     public boolean onSearchAddress(String address) {
+        if (viewController.getIfSearchDeparture()) {return false;}
         return !address.isBlank() && performGeocode(address);
     }
 
@@ -171,6 +215,9 @@ public class MapController extends Controller implements MapViewController.Liste
      *
      */
     public void onDeleteShopClicked() throws SQLException {
+
+        if (viewController.getIfSearchDeparture()) {return;}
+
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
@@ -218,6 +265,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onSearchShop(String shopName) {
+
+        if (viewController.getIfSearchDeparture()) {return;}
+
         GraphicsOverlay mapTextOverlay = viewController.getShopGraphicsTextList();
         List<Graphic> mapTextGraphics = mapTextOverlay.getGraphics();
 
