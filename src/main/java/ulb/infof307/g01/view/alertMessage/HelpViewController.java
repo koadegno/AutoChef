@@ -20,15 +20,7 @@ public class HelpViewController extends ViewController<HelpViewController.Listen
      */
     public void displayImageInformation(String filename){
 
-        String filePath = Objects.requireNonNull(ViewController.class.getResource(filename)).getPath();
-        InputStream stream = null;
-
-        try {
-            stream = new FileInputStream(filePath);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-
+        InputStream stream = (ViewController.class.getResourceAsStream(filename));
         Image image = new Image(stream);
 
         //Crée l'image
