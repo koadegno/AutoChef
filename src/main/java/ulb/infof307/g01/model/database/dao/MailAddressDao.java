@@ -39,15 +39,7 @@ public class MailAddressDao extends Database implements Dao<String> {
      */
     @Override
     public void insert(String mailAddressName) throws SQLException {
-        List<String> mailsInserted = getAllName();
-        if(!mailsInserted.contains(mailAddressName)){
-            insert(TABLE_MAIL_ADDRESS, new String[]{"null",String.format("'%s'",mailAddressName)});
-        }
-        else{
-            //TODO renvoyer une erreur
-            System.out.println("Le mail existe deja bg");
-        }
-
+        insert(TABLE_MAIL_ADDRESS, new String[]{"null",String.format("'%s'",mailAddressName)});
     }
 
     /**
@@ -57,16 +49,20 @@ public class MailAddressDao extends Database implements Dao<String> {
      * @throws SQLException exception lié à la base de donnée
      */
     public void insert(String mailAddressName,int userID) throws SQLException {
-        List<String> mailsInserted = getAllName(userID);
-        if(!mailsInserted.contains(mailAddressName)){
-            insert(TABLE_MAIL_ADDRESS, new String[]{"null",String.format("'%s'",mailAddressName)});
-            int mailID = getGeneratedID();
+
+        int mailID;
+        try{
+            insert(mailAddressName); // faire un try catch pour recup l'erreur
+            mailID = getGeneratedID();
             insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
+
+        } catch (SQLException e) {
+            mailID = Integer.parseInt(get(mailAddressName));
+            if(mailID == 0) throw new SQLException(e); // mailID == null
+            insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
+
         }
-        else{
-            //TODO renvoyer une erreur
-            System.out.println("Le mail existe deja bg");
-        }
+
     }
 
     /**
@@ -95,16 +91,46 @@ public class MailAddressDao extends Database implements Dao<String> {
         throw new IllegalCallerException("Cette methode n'est pas implementé");
     }
 
+    /**
+     * Get fait sur base de l'adresse mail
+     * @param mailAddressName l'adresse mail
+     * @return l'id de l'adresse mail, null sinon
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public String get(String mailAddressName) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = '%s'","Nom",mailAddressName));
-        PreparedStatement statement = select(TABLE_MAIL_ADDRESS,constraint,null);
-        ResultSet querySelectProduct = sendQuery(statement);
-        if(!querySelectProduct.next()) return null;
-        return querySelectProduct.getString("Nom");
+        return get(String.format("%s = '%s'", "Nom", mailAddressName), "AdresseMailID");
 
     }
+
+    /**
+     * Get fait sur base de l'id du mail
+     * @param mailID id du mail
+     * @return l'adresse mail qui corresponds a l'id ou null sinon
+     * @throws SQLException erreur liée à la base de donnée
+     */
+    public String get(int mailID) throws SQLException {
+        return get(String.format("%s = %d", "AdresseMailID", mailID), "Nom");
+
+    }
+
+    /**
+     * Generique get qui permet de recupere une infotmation en fonction d'une contrainte et
+     * d'une column specifique
+     * @param constraint la containte sur laquelle on va chercher
+     * @param tableName la colonne sur la quelle on va recupere l'information
+     * @return l'information voulue ou null si elle n'existe pas
+     * @throws SQLException erreur liée à la requête
+     */
+    private String get(String constraint, String tableName) throws SQLException {
+        ArrayList<String> constraints = new ArrayList<>();
+        constraints.add(constraint);
+        PreparedStatement statement = select(TABLE_MAIL_ADDRESS,constraints,null);
+        ResultSet querySelectProduct = sendQuery(statement);
+        if(!querySelectProduct.next()) return null;
+        return querySelectProduct.getString(tableName);
+    }
+
 
     public void delete(String mailAddressName) throws SQLException {
         String[] constraint = {String.format("Nom = '%s'",mailAddressName)};

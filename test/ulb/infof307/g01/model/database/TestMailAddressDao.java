@@ -15,15 +15,17 @@ import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
 class TestMailAddressDao {
     static private final String mail1 = "mail1@mail.be";
+    static private final String mail1ID = "1";
     static private final String mail2 = "mail2@ulb.ac.be";
     static private final String mail3 = "mail3@google.be";
     static private final String FAVORIS_MAIL = "xenon@google.be";
     static private final String FAVORIS_MAIL2 = "xenon2@google.be";
     static private final String databaseName = "test.sqlite";
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
-    public static final int USER_ID = 22;
+    private static final int USER_ID = 22;
     private static final User basicUser = new User(USER_ID,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
-    public static final int NUMBER_FAVORIS_MAIL = 1;
+    private static final int NUMBER_FAVORIS_MAIL = 1;
+
 
     @BeforeAll
     static public void setUp() throws SQLException {
@@ -64,16 +66,22 @@ class TestMailAddressDao {
     }
 
     @Test
+    void insertForUserDuplicateAddress(){
+
+    }
+
+    @Test
     void insert() throws SQLException {
         Configuration.getCurrent().getMailAddressDao().insert(mail3);
-        String mailInserted = Configuration.getCurrent().getMailAddressDao().get(mail3);
+        int mailInsertedID = Integer.parseInt(Configuration.getCurrent().getMailAddressDao().get(mail3));
+        String mailInserted = Configuration.getCurrent().getMailAddressDao().get(mailInsertedID);
         assertEquals(mail3,mailInserted);
     }
-    
+
     @Test
     void get() throws SQLException {
-        String mailGot = Configuration.getCurrent().getMailAddressDao().get(mail1);
-        assertEquals(mail1,mailGot);
+        String mailID = Configuration.getCurrent().getMailAddressDao().get(mail1);
+        assertEquals(mail1ID,mailID);
     }
 
     @Test
