@@ -59,6 +59,10 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
+    public void createNewProduct(){
+        listener.createNewProductClicked();
+    }
+
     public void addProductToTableView(){
         setNodeColor(comboBoxProduct, false);
         String nameProduct  = comboBoxProduct.getSelectionModel().getSelectedItem();
@@ -93,6 +97,16 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     }
 
 
+    public void setNameProduct(String nameProduct){
+        comboBoxProduct.getItems().add(nameProduct);
+        comboBoxProduct.setValue(nameProduct);
+    }
+
+    public void helpShop(){
+        listener.displayHelpShop();
+    }
+
+
     public interface Listener{
         void onSaveShopClicked(String shopName) throws SQLException;
 
@@ -101,5 +115,9 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void fillComboBoxProduct(ComboBox<String> productComboBox) throws SQLException;
 
         void onAddProductClicked(String nameProduct, double priceProduct);
+
+        void createNewProductClicked();
+
+        void displayHelpShop();
     }
 }

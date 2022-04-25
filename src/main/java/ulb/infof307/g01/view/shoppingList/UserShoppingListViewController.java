@@ -111,5 +111,9 @@ public class UserShoppingListViewController extends ShoppingListViewController i
         btnSendMail.setVisible(false);
     }
 
+    public void helpShoppingList(){
+        listener.helpShoppingList(false);
+    }
+
 
 }

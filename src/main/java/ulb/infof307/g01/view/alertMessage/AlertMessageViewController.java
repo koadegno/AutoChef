@@ -12,10 +12,12 @@ public class AlertMessageViewController extends ViewController<AlertMessageViewC
     }
 
     public void setAlertMessageLabel(String messageLabel){
+        listener.showAlertMessagePopup();
         alertMessageLabel.setText(messageLabel);
     }
 
     public interface Listener{
         void closePopupAlertMessage();
+        void showAlertMessagePopup();
     }
 }

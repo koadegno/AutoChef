@@ -69,7 +69,7 @@ class TestJSON {
     }
 
     @Test
-    public void testJsonProduct(){
+    public void testJsonProduct() throws SQLException {
         JSON json = new JSON();
         json.importProduct(fileNameProduct);
         //get recipe from database to check if it's created

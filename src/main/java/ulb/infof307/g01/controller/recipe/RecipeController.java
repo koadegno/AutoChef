@@ -327,15 +327,12 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onImportRecipeFromJSONButtonClick() {
         final String windowTitle = "Importer une Recette depuis un fichier JSON";
-        String extensionDescription = "Fichier JSON";
-        File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
-                "*.json", currentStage);
+        File jsonRecipe = importJSON(windowTitle);
 
-        if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
+        if(jsonRecipe != null){
             JSON json = new JSON();
-            json.importRecipe(jsonFile.getAbsolutePath());
-            onRecipeSearchTextFieldSubmit(json.getName());
-
+            json.importRecipe(jsonRecipe.getAbsolutePath());
+            onRecipeSearchTextFieldSubmit(json.getNameRecipe());
         }
 
     }
