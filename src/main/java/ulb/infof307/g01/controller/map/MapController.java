@@ -62,12 +62,6 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     public void addCircle(int color, String textCircle, Point coordinate) {
 
-        //////////////////////////////////////////////////////////////////////////////////
-        //////// - Attention bug quand lorsqu'on clique sur supprimer le cercle  /////////
-        //////// - Peut créer plusieurs point de départ et d'arrivée             /////////
-        //////// - Rendre transparent les boutons bloqués                       //////////
-        //////////////////////////////////////////////////////////////////////////////////
-
         //crée un cercle
         SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
                 SimpleMarkerSymbol.Style.CIRCLE,
@@ -176,6 +170,12 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onItineraryClicked() {
+
+        //////////////////////////////////////////////////////////////////////////////////
+        //////// - Attention bug quand lorsqu'on clique sur supprimer le cercle  /////////
+        //////// - Peut créer plusieurs point de départ et d'arrivée             /////////
+        //////// - Rendre transparent les boutons bloqués                       //////////
+        //////////////////////////////////////////////////////////////////////////////////
 
         MapView mapView = viewController.getMapView();
         MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
