@@ -84,9 +84,14 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
 
     }
 
+    public void helpUserMenus() {
+        listener.onHelpUserMenusClicked();
+    }
+
     public interface Listener {
         boolean onShowMenuClicked(String menuName);
         boolean onKeyTapped(String menuName);
         void onBackButtonClicked();
+        void onHelpUserMenusClicked();
     }
 }
