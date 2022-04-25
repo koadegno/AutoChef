@@ -5,6 +5,7 @@ import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.alertMessage.HelpController;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
@@ -61,6 +62,13 @@ public class UserMenusController extends Controller implements UserMenusViewCont
         FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
         HomeMenuViewController viewController = loader.getController();
         viewController.setListener(new HomePageController(currentStage));
+    }
+
+    @Override
+    public void onHelpUserMenusClicked() {
+        int numberOfImageHelp = 6;
+        HelpController helpController = new HelpController("helpUserMenu/", numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
     /**

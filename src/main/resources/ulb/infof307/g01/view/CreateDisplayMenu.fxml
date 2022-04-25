@@ -15,6 +15,7 @@
          <children>
             <Label fx:id="menuNameLabel" alignment="CENTER" prefHeight="45.0" prefWidth="137.0" text="Nom du menu : " />
             <TextField fx:id="menuNameTextField" />
+            <Button onAction="#helpCreateMenu" mnemonicParsing="false" text="Aide" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="355.0" prefWidth="694.0" spacing="50.0">
