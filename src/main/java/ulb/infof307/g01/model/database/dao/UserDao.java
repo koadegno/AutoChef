@@ -88,7 +88,7 @@ public class UserDao extends Database implements Dao<User>{
         }
         else{
             System.out.println("je ne fonctionne pas");
-            //TODO lancer une erreur
+            return null;
         }
         return user;
     }
