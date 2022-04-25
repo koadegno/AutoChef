@@ -24,7 +24,7 @@ class TestMailAddressDao {
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
     private static final int USER_ID = 22;
     private static final User basicUser = new User(USER_ID,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
-    private static final int NUMBER_FAVORIS_MAIL = 1;
+    private static int numberFavoriteMail = 1;
 
 
     @BeforeAll
@@ -52,7 +52,7 @@ class TestMailAddressDao {
     @Test
     void getAllNameForUser() throws SQLException {
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
-        assertEquals(NUMBER_FAVORIS_MAIL,favorisMail.size());
+        assertEquals(numberFavoriteMail,favorisMail.size());
         assertEquals(FAVORIS_MAIL,favorisMail.get(0));
     }
 
@@ -60,14 +60,18 @@ class TestMailAddressDao {
     void insertForUser() throws SQLException {
         Configuration.getCurrent().getMailAddressDao().insert(FAVORIS_MAIL2,USER_ID);
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
-        assertEquals(NUMBER_FAVORIS_MAIL+1,favorisMail.size());
+        assertEquals(++numberFavoriteMail ,favorisMail.size());
         assertEquals(FAVORIS_MAIL,favorisMail.get(0));
         assertEquals(FAVORIS_MAIL2,favorisMail.get(1));
     }
 
     @Test
-    void insertForUserDuplicateAddress(){
-
+    void insertForUserDuplicateAddress() throws SQLException {
+        Configuration.getCurrent().getMailAddressDao().insert(mail1,USER_ID);
+        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
+        System.out.println(favorisMail);
+        assertEquals(++numberFavoriteMail,favorisMail.size());
+        assertEquals(mail1,favorisMail.get(0));
     }
 
     @Test
