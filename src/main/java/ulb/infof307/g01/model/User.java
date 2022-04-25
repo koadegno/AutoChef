@@ -83,6 +83,6 @@ public class User {
 
         User user = (User)other;
 
-        return this.getPseudo().equals(user.getPseudo()) && this.getPassword().equals(user.getPassword());
+        return this.getPseudo().equals(user.getPseudo()) && this.getPassword().equals(user.getPassword()) && isProfessional.equals(user.isProfessional);
     }
 }

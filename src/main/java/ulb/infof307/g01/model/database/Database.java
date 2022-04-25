@@ -39,7 +39,7 @@ public class Database {
                 createDB();
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace(); //TODO lancer une erreur
         }
     }
 
@@ -57,7 +57,7 @@ public class Database {
             scanner.close();
         }
         catch(IOException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace(); //TODO lancer une erreur
         }
     }
 
@@ -78,7 +78,8 @@ public class Database {
         try {
             request.execute(query);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            //TODO lancer une erreur
+            e.printStackTrace();
         }
     }
 
@@ -92,7 +93,8 @@ public class Database {
         try {
             res =  statement.executeQuery();
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace(); //TODO lancer une erreur;
+
         }
         return res;
     }
@@ -102,7 +104,7 @@ public class Database {
         try {
             res =  request.executeQuery(query);
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            e.printStackTrace(); //TODO lancer une erreur
         }
         return res;
     }
@@ -124,7 +126,7 @@ public class Database {
             getID.next();
             return getID.getInt(1);
         }catch (SQLException e){
-            e.printStackTrace();
+            e.printStackTrace(); //TODO lancer une erreur;
         }
         return null;
     }
@@ -140,13 +142,12 @@ public class Database {
         for (int i = 0; i < values.length ; i++) {
             query.append("?").append(",");
         }
-        query.deleteCharAt(query.length()-1);
-        query.append(");");
+        query.deleteCharAt(query.length()-1).append(");");
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
         ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
         fillPreparedStatementValues(statement, columnValues);
-        System.out.println(statement);
         sendQueryUpdate(statement);
+        statement.close();
     }
 
     /**
@@ -213,7 +214,7 @@ public class Database {
         sendQueryUpdate(statement);
     }
 
-    /**µµ
+    /**
      * Remplissage automatique d'une requête avec des contraintes
      * @param query requete à contraindre
      * @param constraintToAppend contraintes à ajouter à requête
@@ -261,12 +262,9 @@ public class Database {
      * Methode inverse de getNameFromID
      */
     protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
-        return getIDFromName(table,"Nom",name,nameIDColumn);
-    }
 
-    protected int getIDFromName(String table, String columnName, String name, String nameIDColumn) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s='%s'",columnName,name));
+        constraint.add(String.format("%s='%s'","Nom",name));
         PreparedStatement statement =  select(table,constraint,null);
 
         ResultSet res = sendQuery(statement);
@@ -275,7 +273,6 @@ public class Database {
 
         return res.getInt(nameIDColumn);
     }
-
 
     /**
      *

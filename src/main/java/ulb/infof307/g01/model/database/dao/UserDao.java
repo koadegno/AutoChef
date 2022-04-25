@@ -13,9 +13,9 @@ public class UserDao extends Database implements Dao<User>{
 
     public static final int TRUE = 1;
     public static final int FALSE = 0;
-    private static String USER_TABLE_NAME = "Utilisateur";
-    private static String ADDRESS_TABLE_NAME = "UtilisateurAdresse";
-    private static String[] COLUMN_NAME = {"Nom"}; //TODO rajouter le nom des colonnes si on veut modifier
+    private static final String USER_TABLE_NAME = "Utilisateur";
+    private static final String ADDRESS_TABLE_NAME = "UtilisateurAdresse";
+    private static final String[] COLUMN_NAME = {"Nom"}; //TODO rajouter le nom des colonnes si on veut modifier
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -45,7 +45,7 @@ public class UserDao extends Database implements Dao<User>{
                 ,String.format("'%s'",user.getPassword())
                 ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
-        userID = String.valueOf(getIDFromName(USER_TABLE_NAME,"Pseudo" ,user.getPseudo(), "UtilisateurID"));
+        userID = String.valueOf(getGeneratedID());
         insertUserAddress(userID,user.getAdress());
     }
 
@@ -57,7 +57,6 @@ public class UserDao extends Database implements Dao<User>{
                 ,String.format("'%s'", address.getStreetName())
                 ,String.format("%d", address.getHouseNumber())};
         insert(ADDRESS_TABLE_NAME,values);
-
     }
 
     @Override

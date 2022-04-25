@@ -19,4 +19,3 @@ CREATE TABLE IF NOT EXISTS UtilisateurMagasin(UtilisateurID INTEGER CONSTRAINT f
 CREATE TABLE IF NOT EXISTS UtilisateurMenu(UtilisateurID INTEGER CONSTRAINT fkUtilisateur REFERENCES Utilisateur(UtilisateurID),MenuID fkMenu REFERENCES Menu(MenuID),PRIMARY KEY (UtilisateurID, MenuID))
 CREATE TABLE IF NOT EXISTS UtilisateurListeCourse(UtilisateurID INTEGER CONSTRAINT fkUtilisateur REFERENCES Utilisateur(UtilisateurID),ListeCourseID fkListeCourse REFERENCES ListeCourse(ListeCourseID),PRIMARY KEY (UtilisateurID, ListeCourseID))
 CREATE TABLE IF NOT EXISTS UtilisateurRecette(UtilisateurID INTEGER CONSTRAINT fkUtilisateur REFERENCES Utilisateur(UtilisateurID),RecetteID fkRecette REFERENCES Recette(RecetteID),PRIMARY KEY (UtilisateurID, RecetteID))
-

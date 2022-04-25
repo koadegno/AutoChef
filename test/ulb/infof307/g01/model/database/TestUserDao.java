@@ -13,7 +13,7 @@ import static org.junit.jupiter.api.Assertions.*;
 
 class TestUserDao {
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
-    private static final User basicUser = new User(-1,"Caius","Augustus","Caligula2","mot de passe",userAddress,false);;
+    private static final User basicUser = new User(-1,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
     private static final String DATABASE_NAME = "test.sqlite";
 
     @BeforeAll
