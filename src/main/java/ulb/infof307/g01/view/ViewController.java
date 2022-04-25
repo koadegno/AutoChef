@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.control.Spinner;
@@ -79,6 +80,16 @@ abstract public class ViewController<Listener> {
         numberOfPersonSpinner.getEditor().textProperty().addListener((observable, oldValue, newValue) -> {
             if (!newValue.matches("\\d*")) {
                 numberOfPersonSpinner.getEditor().setText(newValue.replaceAll("[^\\d*]", ""));
+            }
+        });
+    }
+
+    @FXML
+    protected void onlyIntValue(TextField textField){
+        //Seulement écrire des nombres
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d*]", ""));
             }
         });
     }
