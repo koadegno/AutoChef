@@ -17,7 +17,8 @@ class TestMailAddressDao {
     static private final String mail1 = "mail1@mail.be";
     static private final String mail2 = "mail2@ulb.ac.be";
     static private final String mail3 = "mail3@google.be";
-    static private final String FAVORIS_MAIL = "caligula@google.be";
+    static private final String FAVORIS_MAIL = "xenon@google.be";
+    static private final String FAVORIS_MAIL2 = "xenon2@google.be";
     static private final String databaseName = "test.sqlite";
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
     public static final int USER_ID = 22;
@@ -51,6 +52,15 @@ class TestMailAddressDao {
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
         assertEquals(NUMBER_FAVORIS_MAIL,favorisMail.size());
         assertEquals(FAVORIS_MAIL,favorisMail.get(0));
+    }
+
+    @Test
+    void insertForUser() throws SQLException {
+        Configuration.getCurrent().getMailAddressDao().insert(FAVORIS_MAIL2,USER_ID);
+        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
+        assertEquals(NUMBER_FAVORIS_MAIL+1,favorisMail.size());
+        assertEquals(FAVORIS_MAIL,favorisMail.get(0));
+        assertEquals(FAVORIS_MAIL2,favorisMail.get(1));
     }
 
     @Test
