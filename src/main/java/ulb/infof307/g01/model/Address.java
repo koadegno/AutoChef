@@ -1,14 +1,14 @@
 package ulb.infof307.g01.model;
 
-public class Adress {
+public class Address {
     String country;
     String city;
     int postalCode;
     String streetName;
     int houseNumber;
 
-    public Adress() {}
-    public Adress(String country, String city, int postalCode, String streetName, int houseNumber) {
+    public Address() {}
+    public Address(String country, String city, int postalCode, String streetName, int houseNumber) {
         this.country = country;
         this.city = city;
         this.postalCode = postalCode;

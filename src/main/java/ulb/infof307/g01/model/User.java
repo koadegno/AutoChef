@@ -1,41 +1,42 @@
 package ulb.infof307.g01.model;
 
-import java.util.ArrayList;
-
-//TODO: crée une class juste pour l'adress
+//TODO: crée une class juste pour l'address
 public class User {
-    private Adress adress;
-    private int ID;
+    private Address address;
+    private int ID = -1;
     private String name;
     private String familyName;
-    private String pseudo;
-    private String password;
-    private Boolean pro = false; // Est ce un paticulier ou un professionel?
 
+    private String pseudo;
+
+    private String password;
+    private Boolean isProfessional = false; // Est ce un paticulier ou un professionel?
 
 
     //constructors
-    public User(int ID, String familyName, String name, String pseudo, String password,Adress adress, Boolean pro) {
-        this(pseudo, password);
+
+    public User(int ID, String familyName, String name, String pseudo, String password, Address address, Boolean pro) {
+        this(pseudo, password,pro);
         this.ID = ID;
         this.familyName = familyName;
         this.name = name;
-        this.adress = adress;
-        this.pro = pro;
+        this.address = address;
     }
-
-    public User(String pseudo, String password){
+    public User(String pseudo, String password, Boolean isProfessional){
         this.pseudo = pseudo;
         this.password = password;
+        this.isProfessional = isProfessional;
     }
+
     public User() {}
 
 
 
-
     //setter and getter TODO: supprimer celles qui ne sont pas utilisées
-    public Boolean isProfessional(){return pro;}
-    public void setProUser(Boolean isPro){pro=isPro;}
+
+    public Boolean isProfessional(){return isProfessional;}
+    public void setProUser(Boolean isPro){
+        isProfessional =isPro;}
     public String getName() {
         return name;
     }
@@ -58,10 +59,30 @@ public class User {
     public int getID() {
         return this.ID;
     }
-    public void setAdress(Adress adress) {
-        this.adress = adress;
+    public void setAdress(Address address) {
+        this.address = address;
     }
-    public Adress getAdress() {
-        return adress;
+    public Address getAdress() {
+        return address;
+    }
+    public String getFamilyName() {
+        return familyName;
+    }
+
+    /**
+     * Compare 2 objets
+     */
+    @Override
+    public boolean equals(Object other) {
+
+        if (this == other)
+            return true;
+
+        if (other == null || this.getClass() != other.getClass())
+            return false;
+
+        User user = (User)other;
+
+        return this.getPseudo().equals(user.getPseudo()) && this.getPassword().equals(user.getPassword()) && isProfessional.equals(user.isProfessional);
     }
 }
