@@ -18,6 +18,7 @@
                   <Font size="40.0" />
                </font>
             </Label>
+            <Button onAction="#helpUserMenus" mnemonicParsing="false" text="Aide" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
