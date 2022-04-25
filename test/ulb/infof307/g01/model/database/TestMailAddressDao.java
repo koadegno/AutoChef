@@ -1,6 +1,8 @@
 package ulb.infof307.g01.model.database;
 
 import org.junit.jupiter.api.*;
+import ulb.infof307.g01.model.Address;
+import ulb.infof307.g01.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -15,19 +17,24 @@ class TestMailAddressDao {
     static private final String mail1 = "mail1@mail.be";
     static private final String mail2 = "mail2@ulb.ac.be";
     static private final String mail3 = "mail3@google.be";
+    static private final String FAVORIS_MAIL = "caligula@google.be";
     static private final String databaseName = "test.sqlite";
-
+    private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
+    public static final int USER_ID = 22;
+    private static final User basicUser = new User(USER_ID,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
+    public static final int NUMBER_FAVORIS_MAIL = 1;
 
     @BeforeAll
     static public void setUp() throws SQLException {
         Configuration.getCurrent().setDatabase(databaseName);
+        Configuration.getCurrent().getUserDao().insert(basicUser);
         Configuration.getCurrent().getMailAddressDao().insert(mail1);
         Configuration.getCurrent().getMailAddressDao().insert(mail2);
-        
+        Configuration.getCurrent().getMailAddressDao().insert(FAVORIS_MAIL,USER_ID);
     }
 
     @AfterAll
-    static public void tearDown() throws SQLException, IOException {
+    static public void closeDatabase() throws SQLException, IOException {
         Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of(databaseName));
     }
@@ -37,6 +44,13 @@ class TestMailAddressDao {
         List<String> mailList = Configuration.getCurrent().getMailAddressDao().getAllName();
         assertEquals(mail1,mailList.get(0));
         assertEquals(mail2,mailList.get(1));
+    }
+
+    @Test
+    void getAllNameForUser() throws SQLException {
+        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName(USER_ID);
+        assertEquals(NUMBER_FAVORIS_MAIL,favorisMail.size());
+        assertEquals(FAVORIS_MAIL,favorisMail.get(0));
     }
 
     @Test
