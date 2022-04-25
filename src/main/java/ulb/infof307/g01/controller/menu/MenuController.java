@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.alertMessage.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
@@ -81,7 +82,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     public void onGenerateMenu(){
         try {
             GenerateMenuViewController generateMenuViewController = new GenerateMenuViewController();
-            popup = popupFXML("GenerateMenuViewController.fxml", generateMenuViewController);
+            popup = popupFXML("GenerateMenu.fxml", generateMenuViewController);
             generateMenuViewController.setListener(this);
         } catch (IOException e) {
             ViewController.showErrorSQL();
@@ -134,6 +135,13 @@ public class MenuController extends Controller implements CreateMenuViewControll
         Recipe recipeToRemove = createMenuViewController.getMenuTableView().getSelectionModel().getSelectedItem();
         menu.removeRecipeFrom(daysName.get(dayIndex), recipeToRemove);
 
+    }
+
+    @Override
+    public void onHelpCreateMenuClicked() {
+        int numberOfImageHelp = 8;
+        HelpController helpController = new HelpController("helpCreateMenu/", numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
 
