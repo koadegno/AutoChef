@@ -3,9 +3,11 @@ package ulb.infof307.g01.controller.map;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.*;
+import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
+import com.esri.arcgisruntime.tasks.networkanalysis.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -26,6 +28,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.stream.Collectors;
 
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener {
 
@@ -168,6 +171,9 @@ public class MapController extends Controller implements MapViewController.Liste
 
     }
 
+    /**
+     * Supprime l'itinéraire
+     */
     @Override
     public void onDeleteItineraryClicked() {
 
@@ -176,16 +182,21 @@ public class MapController extends Controller implements MapViewController.Liste
 
         if (itineraryGraphicsCercleList.getGraphics().size() == 0) {return;}
 
-        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer cet itinéraire");
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer l'itinéraire actuel ? ");
         if (alertResult == ButtonType.OK) {
 
-            if (itineraryGraphicsCercleList.getGraphics().size() > 1) {
+            System.out.println(itineraryGraphicsCercleList.getGraphics().size());
+
+            if (itineraryGraphicsCercleList.getGraphics().size() == 3) {
+                itineraryGraphicsCercleList.getGraphics().remove(2);
+            }
+
+            if (itineraryGraphicsCercleList.getGraphics().size() == 2) {
                 itineraryGraphicsCercleList.getGraphics().remove(1);
                 itineraryGraphicsTextList.getGraphics().remove(1);
             }
 
-            else { switchVisibilityContextMenu();
-            }
+            else { switchVisibilityContextMenu();}
 
             itineraryGraphicsCercleList.getGraphics().remove(0);
             itineraryGraphicsTextList.getGraphics().remove(0);
@@ -202,10 +213,7 @@ public class MapController extends Controller implements MapViewController.Liste
         MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
 
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > 1) {
-            ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer l'itinéraire", "supprimer l'itinéraire actuel");
-            return;
-        }
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > 1) { onDeleteItineraryClicked();}
 
         String text;
         if (viewController.getIfSearchDeparture()) {text = "Départ";}
@@ -221,8 +229,60 @@ public class MapController extends Controller implements MapViewController.Liste
 
         // Dessine le cercle sur la carte
         addCircle(COLOR_BLUE, text, mapPoint, false);
+
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == 2) { calculRoute();}
     }
 
+    /**
+     * Affiche l'itinéraire
+     */
+
+    private void calculRoute() {
+
+        Graphic routeGraphic = new Graphic();
+        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, 0xFF0596FF, 4));
+
+        viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
+        RouteTask routeTask = new RouteTask("https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
+        ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
+
+        List<Stop> stops = viewController.getItineraryGraphicsCircleList().getGraphics()
+                .stream()
+                .filter(graphic -> graphic.getGeometry() != null)
+                .map(graphic -> new Stop((Point) graphic.getGeometry()))
+                .collect(Collectors.toList());
+
+        routeParametersFuture.addDoneListener(() -> {
+            try {
+                RouteParameters routeParameters = routeParametersFuture.get();
+                routeParameters.setStops(stops);
+
+                routeParameters.setReturnDirections(true);
+                routeParameters.setDirectionsLanguage("fr");
+
+                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(4));
+
+                ListenableFuture<RouteResult> routeResultFuture = routeTask.solveRouteAsync(routeParameters);
+
+                routeResultFuture.addDoneListener(() -> {
+                    try {
+                        RouteResult routeResult = routeResultFuture.get();
+                        Route route = routeResult.getRoutes().get(0);
+                        routeGraphic.setGeometry(route.getRouteGeometry());
+
+                        System.out.println(route.getTotalTime());
+                        System.out.println(route.getTotalLength());
+
+                        route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
+                    } catch (Exception e) { e.printStackTrace(); }
+                });
+            } catch (Exception e) { e.printStackTrace(); }
+        });
+    }
+
+    /**
+     * Rend inaccessible certains items du contexte menu
+     */
     private void switchVisibilityContextMenu() {
 
         // Rend invisible les boutons non nécessaires
