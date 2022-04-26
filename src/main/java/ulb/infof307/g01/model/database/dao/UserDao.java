@@ -82,7 +82,7 @@ public class UserDao extends Database implements Dao<User>{
         ResultSet querySelectUser = sendQuery(String.format("""
                 SELECT U.UtilisateurID, U.Prenom, U.Nom, U.MotDePasse, U.estProfessionnel, UtilisateurAdresse.Pays, UtilisateurAdresse.Ville, UtilisateurAdresse.CodePostal, UtilisateurAdresse.RueNom, UtilisateurAdresse.RueNumero
                 FROM Utilisateur as U
-                INNER JOIN UtilisateurAdresse ON U.UtilisateurID = UtilisateurAdresse.UtilisateurID
+                LEFT JOIN UtilisateurAdresse ON U.UtilisateurID = UtilisateurAdresse.UtilisateurID
                 WHERE U.Pseudo = '%s'""", userPseudo));
 
         if(querySelectUser.next()){
