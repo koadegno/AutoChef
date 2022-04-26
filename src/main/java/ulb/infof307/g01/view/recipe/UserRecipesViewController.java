@@ -1,6 +1,5 @@
 package ulb.infof307.g01.view.recipe;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
@@ -16,9 +15,10 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     @FXML
     private TextArea recipeTextArea;
     @FXML
-    private Button deleteRecipeButton;
-    @FXML
-    private Button modifyRecipeButton;
+    private Button deleteRecipeButton, modifyRecipeButton, cancelButton,seeAllRecipesButton,importJSONButton;
+
+
+    Boolean readOnly = false;
 
     public void onRecipeSearchTextFieldSubmit(KeyEvent keyEvent) {
         if(keyEvent.getCode() == KeyCode.ENTER)
@@ -56,6 +56,19 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     public void logout() {
         listener.logout();
     }
+    
+
+    public void initReadOnlyMode() {
+        readOnly = true;
+        recipeSearchTextField.setVisible(false);
+        seeAllRecipesButton.setVisible(false);
+        importJSONButton.setVisible(false);
+        modifyRecipeButton.setVisible(false);
+        deleteRecipeButton.setVisible(false);
+        cancelButton.setOnAction(event -> {
+            listener.onEndViewFavoriteRecipeButton();
+        });
+    }
 
 
     public interface UserRecipesListener {
@@ -67,5 +80,7 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
         void onBackToHomeRecipeButtonClick();
 
         void logout();
+
+        void onEndViewFavoriteRecipeButton();
     }
 }

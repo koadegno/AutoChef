@@ -12,11 +12,18 @@ public class HomeRecipeViewController extends ViewController<HomeRecipeViewContr
     public void logout() {
         listener.logout();
     }
+
+    public void onFavoriteRecipe() {
+        listener.onFavoriteRecipe();
+    }
+
     public interface HomeRecipeListener {
         void onUserRecipesButtonClick();
         void onNewRecipeButtonClick();
         void onBackButtonClick();
 
         void logout();
+
+        void onFavoriteRecipe();
     }
 }
