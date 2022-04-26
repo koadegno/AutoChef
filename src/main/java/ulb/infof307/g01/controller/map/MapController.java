@@ -59,8 +59,9 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param color        Couleur du cercle
      * @param textCircle   Texte écrit à côté du cercle
      * @param coordinate   Coordonnée du cercle
+     * @param shop         Si l'élément à ajouter est un magasin
      */
-    public void addCircle(int color, String textCircle, Point coordinate) {
+    public void addCircle(int color, String textCircle, Point coordinate, Boolean shop) {
 
         //crée un cercle
         SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
@@ -77,9 +78,15 @@ public class MapController extends Controller implements MapViewController.Liste
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
 
-        // ajoute des graphiques à l'overlay
-        viewController.getShopGraphicsCercleList().getGraphics().add(circlePoint);
-        viewController.getShopGraphicsTextList().getGraphics().add(textPoint);
+        if (shop) {
+            viewController.getShopGraphicsCercleList().getGraphics().add(circlePoint);
+            viewController.getShopGraphicsTextList().getGraphics().add(textPoint);
+        }
+
+        else {
+            viewController.getItineraryGraphicsCircleList().getGraphics().add(circlePoint);
+            viewController.getItineraryGraphicsTextList().getGraphics().add(textPoint);
+        }
     }
 
 
@@ -91,7 +98,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onInitializeMapShop() throws SQLException {
         List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
         for(Shop shop: allShopList){
-            addCircle(COLOR_RED, shop.getName(), shop.getCoordinate());
+            addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }
     }
 
@@ -100,8 +107,6 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onAddShopClicked() {
-
-        if (viewController.getIfSearchDeparture()) {return;}
 
         MapView mapView = viewController.getMapView();
         MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
@@ -136,8 +141,6 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void onUpdateShopClicked() throws SQLException {
 
-        if (viewController.getIfSearchDeparture()) {return;}
-
         Pair<Graphic, Graphic> shopOverlays = getSelectedShop();
         if(shopOverlays == null) return;
         Graphic cercleGraphic = shopOverlays.getLeft();
@@ -165,28 +168,50 @@ public class MapController extends Controller implements MapViewController.Liste
 
     }
 
+    @Override
+    public void onDeleteItineraryClicked() {
+
+        GraphicsOverlay itineraryGraphicsCercleList = viewController.getItineraryGraphicsCircleList();
+        GraphicsOverlay itineraryGraphicsTextList   = viewController.getItineraryGraphicsTextList();
+
+        if (itineraryGraphicsCercleList.getGraphics().size() == 0) {return;}
+
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer cet itinéraire");
+        if (alertResult == ButtonType.OK) {
+
+            if (itineraryGraphicsCercleList.getGraphics().size() > 1) {
+                itineraryGraphicsCercleList.getGraphics().remove(1);
+                itineraryGraphicsTextList.getGraphics().remove(1);
+            }
+
+            else { switchVisibilityContextMenu();
+            }
+
+            itineraryGraphicsCercleList.getGraphics().remove(0);
+            itineraryGraphicsTextList.getGraphics().remove(0);
+        }
+    }
+
     /**
      * Récupère la position départ ou d'arrivée de l'itinéraire et y dessine un cercle bleu
      */
     @Override
     public void onItineraryClicked() {
 
-        //////////////////////////////////////////////////////////////////////////////////
-        //////// - Attention bug quand lorsqu'on clique sur supprimer le cercle  /////////
-        //////// - Peut créer plusieurs point de départ et d'arrivée             /////////
-        //////// - Rendre transparent les boutons bloqués                       //////////
-        //////////////////////////////////////////////////////////////////////////////////
-
         MapView mapView = viewController.getMapView();
         MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
+
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > 1) {
+            ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer l'itinéraire", "supprimer l'itinéraire actuel");
+            return;
+        }
 
         String text;
         if (viewController.getIfSearchDeparture()) {text = "Départ";}
         else {text = "Arrivée";}
 
-        // Switch la variable ifSearchDeparture
-        viewController.setIfSearchDeparture();
+        switchVisibilityContextMenu();
 
         // Il y a une correction de la position
         Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
@@ -195,7 +220,22 @@ public class MapController extends Controller implements MapViewController.Liste
         Point mapPoint = mapView.screenToLocation(cursorCoordinate);
 
         // Dessine le cercle sur la carte
-        addCircle(COLOR_BLUE, text, mapPoint);
+        addCircle(COLOR_BLUE, text, mapPoint, false);
+    }
+
+    private void switchVisibilityContextMenu() {
+
+        // Rend invisible les boutons non nécessaires
+        viewController.modifyVisibilityAddShopMenuItem();
+        viewController.modifyVisibilityDeleteShopMenuItem();
+        viewController.modifyVisibilityModifyShopMenuItem();
+        viewController.modifyVisibilityDeleteItinerary();
+
+        // Switch la variable ifSearchDeparture
+        viewController.setIfSearchDeparture();
+
+        // Modifie le texte du bouton itinéraire
+        viewController.modifyItineraryShopMenuItemText();
     }
 
 
@@ -206,7 +246,6 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public boolean onSearchAddress(String address) {
-        if (viewController.getIfSearchDeparture()) {return false;}
         return !address.isBlank() && performGeocode(address);
     }
 
@@ -215,8 +254,6 @@ public class MapController extends Controller implements MapViewController.Liste
      *
      */
     public void onDeleteShopClicked() throws SQLException {
-
-        if (viewController.getIfSearchDeparture()) {return;}
 
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
@@ -265,8 +302,6 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onSearchShop(String shopName) {
-
-        if (viewController.getIfSearchDeparture()) {return;}
 
         GraphicsOverlay mapTextOverlay = viewController.getShopGraphicsTextList();
         List<Graphic> mapTextGraphics = mapTextOverlay.getGraphics();

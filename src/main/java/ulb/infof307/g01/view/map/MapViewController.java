@@ -30,13 +30,16 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
+    private final MenuItem deleteItineraryItem = new MenuItem("Supprimer itinéraire");
     private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
     private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
     private boolean ifSearchDeparture = false;
     private static final int ONCE_CLICKED = 1;
-
-    private final GraphicsOverlay shopGraphicsCercleOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
+    private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
+
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
@@ -52,11 +55,19 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private TextField searchBox;
 
     public GraphicsOverlay getShopGraphicsCercleList() {
-        return shopGraphicsCercleOverlay;
+        return shopGraphicsCircleOverlay;
     }
 
     public GraphicsOverlay getShopGraphicsTextList() {
         return shopGraphicsTextOverlay;
+    }
+
+    public GraphicsOverlay getItineraryGraphicsTextList() {
+        return itineraryGraphicsTextOverlay;
+    }
+
+    public GraphicsOverlay getItineraryGraphicsCircleList() {
+        return itineraryGraphicsCircleOverlay;
     }
 
     public MapView getMapView() {
@@ -71,9 +82,11 @@ public class MapViewController extends ViewController<MapViewController.Listener
         ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
         mapView.setMap(map);
         mapView.setViewpoint(new Viewpoint(LATITUDE_BRUSSELS, LONGITUDE_BRUSSELS, MAP_SCALE));
-        mapView.getGraphicsOverlays().add(shopGraphicsCercleOverlay);
+        mapView.getGraphicsOverlays().add(shopGraphicsCircleOverlay);
         mapView.getGraphicsOverlays().add(shopGraphicsTextOverlay);
         mapView.getGraphicsOverlays().add(addressGraphicsOverlay);
+        mapView.getGraphicsOverlays().add(itineraryGraphicsCircleOverlay);
+        mapView.getGraphicsOverlays().add(itineraryGraphicsTextOverlay);
     }
 
     @FXML
@@ -143,7 +156,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
             // selectionner un point avec un simple clique droit
             if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
-                shopGraphicsCercleOverlay.clearSelection();
+                shopGraphicsCircleOverlay.clearSelection();
                 listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
             }
         });
@@ -155,8 +168,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
      */
     private void initializeContextMenu(){
 
-        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem, itineraryShopMenuItem);
+        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem, itineraryShopMenuItem, deleteItineraryItem);
         mapView.setContextMenu(contextMenu);
+        deleteItineraryItem.setVisible(false);
 
         // context menu pour l'ajout
         addShopMenuItem.setOnAction(event -> listener.onAddShopClicked());
@@ -183,29 +197,45 @@ public class MapViewController extends ViewController<MapViewController.Listener
         itineraryShopMenuItem.setOnAction(event -> {
             listener.onItineraryClicked();
         });
+
+        // Supprime l'itinéraire
+        deleteItineraryItem.setOnAction(event -> {
+            listener.onDeleteItineraryClicked();
+        });
     }
 
     @FXML
-    public void returnMainMenu() {
-        listener.onBackButtonClicked();
+    public void returnMainMenu() {listener.onBackButtonClicked();}
+
+    public MenuItem getAddShopMenuItem() {return addShopMenuItem;}
+
+    public MenuItem getDeleteShopMenuItem() { return deleteShopMenuItem;}
+
+    public MenuItem getModifyShopMenuItem() {return modifyShopMenuItem;}
+
+    public MenuItem getItineraryShopMenuItem() { return itineraryShopMenuItem;}
+
+    public boolean getIfSearchDeparture() {return ifSearchDeparture;}
+
+    public void setIfSearchDeparture() {ifSearchDeparture = !ifSearchDeparture;}
+
+    public GraphicsOverlay getAddressGraphicsOverlay() {return addressGraphicsOverlay;}
+
+    public ListenableFuture<List<GeocodeResult>> getGeocodeAsync() {return locatorTask.geocodeAsync(searchBox.getText(), geocodeParameters);}
+
+    public void modifyVisibilityAddShopMenuItem() {getAddShopMenuItem().setVisible(getIfSearchDeparture());}
+
+    public void modifyVisibilityDeleteShopMenuItem() {getDeleteShopMenuItem().setVisible(getIfSearchDeparture());}
+
+    public void modifyVisibilityModifyShopMenuItem() {getModifyShopMenuItem().setVisible(getIfSearchDeparture());}
+
+    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(true);}
+
+    public void modifyItineraryShopMenuItemText() {
+        if (getIfSearchDeparture()) {getItineraryShopMenuItem().setText("Point de départ");}
+        else {getItineraryShopMenuItem().setText("Itinéraire");}
     }
 
-    public MenuItem getAddShopMenuItem() { return addShopMenuItem;}
-
-    public MenuItem getItineraryShopMenuItem() { return itineraryShopMenuItem; }
-
-    public boolean getIfSearchDeparture() { return ifSearchDeparture; }
-
-    public void setIfSearchDeparture() {
-        ifSearchDeparture = !ifSearchDeparture; }
-
-    public GraphicsOverlay getAddressGraphicsOverlay() {
-        return addressGraphicsOverlay;
-    }
-
-    public ListenableFuture<List<GeocodeResult>> getGeocodeAsync(){
-        return locatorTask.geocodeAsync(searchBox.getText(), geocodeParameters);
-    }
 
     public interface Listener {
         void onInitializeMapShop() throws SQLException;
@@ -217,6 +247,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
         void onItineraryClicked();
+        void onDeleteItineraryClicked();
     }
 }
 

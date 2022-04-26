@@ -62,7 +62,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
         }
         else{
             Configuration.getCurrent().getShopDao().insert(shop);
-            listener.addCircle(COLOR_RED, shop.getName(), shop.getCoordinate());
+            listener.addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }
     }
 
@@ -102,7 +102,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      * Permet l'ajout et la modification dans MapController
      */
     public interface ShopListener {
-        void addCircle(int color, String textCircle, Point coordinate);
+        void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
         void updateShop(Shop shop);
     }
 }
