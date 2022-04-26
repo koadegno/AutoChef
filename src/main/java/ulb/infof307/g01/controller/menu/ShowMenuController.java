@@ -91,4 +91,9 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
         userMenusController.showAllMenus();
     }
 
+    @Override
+    public void logout() {
+        userLogout();
+    }
+
 }

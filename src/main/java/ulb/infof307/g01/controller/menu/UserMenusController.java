@@ -71,6 +71,9 @@ public class UserMenusController extends Controller implements UserMenusViewCont
         helpController.displayHelpShop();
     }
 
+    @Override
+    public void logout() {userLogout();}
+
     /**
      * Affiche la page qui montre le menu selectionné. Il passe à la classe
      * l'objet Menu, et la database.

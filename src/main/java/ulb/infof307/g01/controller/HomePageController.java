@@ -86,10 +86,11 @@ public class HomePageController extends Controller implements HomePageListener, 
      * Ferme la fenêtre et termine le programme.
      */
     @Override
-    public void onQuitButtonClick() {
-        LoginController loginController = new LoginController(currentStage);
-        loginController.displayHomeLogin();
+    public void logout() {
+        userLogout();
     }
+
+
 
     // Méthodes de la page principale de ShoppingList
 

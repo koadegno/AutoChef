@@ -33,9 +33,13 @@ public class HomeShoppingListViewController extends ViewController<HomeShoppingL
         listener.onBackButtonClick();
     }
 
+    @FXML
+    public void logout(){listener.logout();}
+
     public interface Listener{
         void onMyShoppingListsButtonClick();
         void onCreateShoppingListsButtonClick();
         void onBackButtonClick();
+        void logout();
     }
 }

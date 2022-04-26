@@ -266,4 +266,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         HelpController helpController = new HelpController(directory, numberOfImageHelp);
         helpController.displayHelpShop();
     }
+
+    @Override
+    public void logout(){userLogout();}
 }

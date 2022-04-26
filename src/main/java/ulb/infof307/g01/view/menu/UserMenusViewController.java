@@ -2,6 +2,7 @@ package ulb.infof307.g01.view.menu;
 
 import java.net.URL;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TextField;
@@ -88,10 +89,16 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
         listener.onHelpUserMenusClicked();
     }
 
+    public void logout() {
+        listener.logout();
+    }
+
     public interface Listener {
         boolean onShowMenuClicked(String menuName);
         boolean onKeyTapped(String menuName);
         void onBackButtonClicked();
         void onHelpUserMenusClicked();
+
+        void logout();
     }
 }

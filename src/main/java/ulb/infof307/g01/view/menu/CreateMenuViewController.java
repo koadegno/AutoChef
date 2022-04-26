@@ -119,6 +119,11 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         listener.onHelpCreateMenuClicked();
     }
 
+   
+    public void logout() {
+        listener.logout();
+    }
+
 
     public interface Listener{
         void onGenerateMenu();
@@ -128,5 +133,7 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         void onReturnClicked();
         void onRemoveRecipeClicked(int dayIndex);
         void onHelpCreateMenuClicked();
+
+        void logout();
     }
 }

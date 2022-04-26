@@ -2,6 +2,7 @@ package ulb.infof307.g01.view.recipe;
 
 
 import javafx.collections.FXCollections;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -129,10 +130,16 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         cancelButton.setOnAction(event -> listener.onCancelModifyButton());
     }
 
+    public void logout() {
+        listener.logout();
+    }
+
     public interface CreateRecipeListener {
         void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName);
         void onModifyProductsButton();
         void onCancelButton();
         void onCancelModifyButton();
+
+        void logout();
     }
 }
