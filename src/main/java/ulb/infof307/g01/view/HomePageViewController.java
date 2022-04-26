@@ -35,7 +35,11 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
 
     @FXML
     public void closeApplication(){
-        listener.onQuitButtonClick();
+        listener.logout();
+    }
+
+    public void logout() {
+        listener.logout();
     }
 
     /**
@@ -47,6 +51,6 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
         void onMenuButtonClick();
         void onMapButtonClick();
         void onRecipeButtonClick();
-        void onQuitButtonClick();
+        void logout();
     }
 }

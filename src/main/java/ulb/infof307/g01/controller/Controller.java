@@ -92,4 +92,10 @@ public abstract class Controller {
         return null;
     }
 
+    protected void userLogout() {
+        Configuration.getCurrent().setCurrentUser(null);
+        LoginController loginController = new LoginController(currentStage);
+        loginController.displayHomeLogin();
+    }
+
 }

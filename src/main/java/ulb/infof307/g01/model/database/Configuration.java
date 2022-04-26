@@ -10,6 +10,7 @@ import java.sql.SQLException;
  */
 public class Configuration {
     private static Configuration current;
+    private static User currentUser;
 
     private Dao<Menu> menuDao;
     private Dao<Product> productDao;
@@ -23,7 +24,6 @@ public class Configuration {
     private Dao<String> mailAddressDao;
     private Dao<User> userDao;
 
-    private User currentUser;
 
 
     private Configuration(){}
