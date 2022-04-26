@@ -23,6 +23,8 @@ public class Configuration {
     private Dao<String> mailAddressDao;
     private Dao<User> userDao;
 
+    private User currentUser;
+
 
     private Configuration(){}
 
@@ -35,6 +37,7 @@ public class Configuration {
 
     public void setDatabase(String dbPath){
         //TODO ils ont pas tous besoin de dbPath changer ca
+        // possibilité de creer le currentUser générique ici
         this.menuDao = new MenuDao(dbPath);
         this.productDao = new ProductDao(dbPath);
         this.productFamilyDao = new ProductFamilyDao(dbPath);
@@ -61,6 +64,10 @@ public class Configuration {
         getMailAddressDao().closeConnection();
         getUserDao().closeConnection();
     }
+
+
+    public void setCurrentUser(User user){currentUser = user;}
+
 
     public MenuDao getMenuDao(){
         return (MenuDao) menuDao;

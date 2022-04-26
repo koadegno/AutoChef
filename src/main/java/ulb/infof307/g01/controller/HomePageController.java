@@ -30,7 +30,7 @@ public class HomePageController extends Controller implements HomePageListener, 
 
     /**
      * Affiche la page principale de l'application.
-     * @see ulb.infof307.g01.Main
+     * @see ulb.infof307.g01.controller.LoginController
      * */
     public void displayMain() {
         FXMLLoader loader = loadFXML("HomePage.fxml");
@@ -87,7 +87,8 @@ public class HomePageController extends Controller implements HomePageListener, 
      */
     @Override
     public void onQuitButtonClick() {
-        currentStage.close();
+        LoginController loginController = new LoginController(currentStage);
+        loginController.displayHomeLogin();
     }
 
     // Méthodes de la page principale de ShoppingList

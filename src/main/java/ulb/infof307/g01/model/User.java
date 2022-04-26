@@ -15,11 +15,11 @@ public class User {
 
     //constructors
 
-    public User(int ID, String familyName, String name, String pseudo, String password, Address address, Boolean pro) {
+    public User(int ID, String lastName, String firstName, String pseudo, String password, Address address, Boolean pro) {
         this(pseudo, password,pro);
         this.ID = ID;
-        this.familyName = familyName;
-        this.name = name;
+        this.familyName = lastName;
+        this.name = firstName;
         this.address = address;
     }
     public User(String pseudo, String password, Boolean isProfessional){
