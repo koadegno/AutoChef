@@ -13,6 +13,11 @@ import java.util.Objects;
 
 public class HelpViewController extends ViewController<HelpViewController.Listener> {
     public VBox imageInformationVBox;
+    private double x = 10;
+    private double y = 10;
+    private double width = 600;
+    private double height = 390;
+
 
     /**
      * Permet d'afficher une image dans la popup
@@ -28,9 +33,10 @@ public class HelpViewController extends ViewController<HelpViewController.Listen
 
         //Les param de l'image
         imageView.setImage(image);
-        imageView.setX(10);
-        imageView.setY(10);
-        imageView.setFitWidth(500);
+        imageView.setX(x);
+        imageView.setY(y);
+        imageView.setFitWidth(width);
+        imageView.setFitHeight(height);
         imageView.setPreserveRatio(true);
 
         //Rajoute l'image dans le VBOX pour qu'elle puisse s'afficher
