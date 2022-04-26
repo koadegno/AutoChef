@@ -8,14 +8,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
 
-
+/**
+ * Classe d'accès a la base de donnée permettant l'accès aux informations des utilisateurs
+ */
 public class UserDao extends Database implements Dao<User>{
 
     public static final int TRUE = 1;
     public static final int FALSE = 0;
     private static final String USER_TABLE_NAME = "Utilisateur";
     private static final String ADDRESS_TABLE_NAME = "UtilisateurAdresse";
-    private static final String[] COLUMN_NAME = {"Nom"}; //TODO rajouter le nom des colonnes si on veut modifier
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -31,9 +32,10 @@ public class UserDao extends Database implements Dao<User>{
     @Override
     @Deprecated
     public List<String> getAllName() throws SQLException {
-        System.out.println("NE PAS UTILISER");
+        System.out.println("NE PAS UTILISER"); //TODO ne pas utiliser
         return null;
     }
+
 
     @Override
     public void insert(User user) throws SQLException {
