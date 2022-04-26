@@ -2,7 +2,6 @@ package ulb.infof307.g01;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.LoginController;
 
 /**
@@ -18,8 +17,7 @@ public class Autochef extends Application {
 
         try{
             LoginController loginController = new LoginController(primaryStage);
-            loginController.display();
-
+            loginController.displayHomeLogin();
         }catch (Exception e ){
             e.printStackTrace();
         }

@@ -2,6 +2,7 @@ package ulb.infof307.g01.view;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
@@ -10,9 +11,16 @@ import java.util.ResourceBundle;
 public class SignUpViewController extends ViewController<SignUpViewController.SignUpListener> implements Initializable {
 
     @FXML
-    private TextField pseudoTextField, lastNameTextField, firstNameTextField, passwordTextField, confirmPasswordTextField, countryTextField, cityTextField, streetNameTextField, houseNumberTextField;
+    private TextField pseudoTextField,
+            lastNameTextField, firstNameTextField,
+            passwordTextField, confirmPasswordTextField,
+            countryTextField, cityTextField,
+            streetNameTextField, houseNumberTextField;
 
-    public void verifyTextFieldsInformations() {
+    @FXML
+    private CheckBox isProfessionalCheckBox;
+
+    public void onSubmitButton() {
         String pseudo = pseudoTextField.getText();
         String lastName = lastNameTextField.getText();
         String firstName = firstNameTextField.getText();
@@ -22,49 +30,46 @@ public class SignUpViewController extends ViewController<SignUpViewController.Si
         String city =  cityTextField.getText();
         String streetName = streetNameTextField.getText();
         String houseNumber =  houseNumberTextField.getText();
+        boolean isProfessional = isProfessionalCheckBox.isSelected();
 
-        listener.onSubmitButton(pseudo, lastName, firstName, password, confirmPassword, country, city, streetName, houseNumber);
+        listener.onSubmitButton(pseudo, lastName, firstName, password, confirmPassword, country, city, streetName, houseNumber, isProfessional);
     }
 
-    public void pseudoTextFieldError() {
-        setNodeColor(pseudoTextField, true);
+    public void pseudoTextFieldError(boolean isError) { setNodeColor(pseudoTextField, isError); }
+
+    public void lastNameTextFieldError(boolean isError) {
+        setNodeColor(lastNameTextField, isError);
     }
 
-    public void lastNameTextFieldError() {
-        setNodeColor(lastNameTextField, true);
+    public void firstNameTextFieldError(boolean isError) { setNodeColor(firstNameTextField, isError); }
+
+    public void passwordTextFieldError(boolean isError) {
+        setNodeColor(passwordTextField, isError);
     }
 
-    public void firstNameTextFieldError() {
-        setNodeColor(firstNameTextField, true);
+    public void confirmPseudoTextFieldError(boolean isError) {
+        setNodeColor(confirmPasswordTextField, isError);
     }
 
-    public void passwordTextFieldError() {
-        setNodeColor(passwordTextField, true);
+    public void countryTextFieldError(boolean isError) {
+        setNodeColor(countryTextField, isError);
     }
 
-    public void confirmPseudoTextFieldError() {
-        setNodeColor(confirmPasswordTextField, true);
+    public void cityTextFieldError(boolean isError) {
+        setNodeColor(cityTextField, isError);
     }
 
-    public void countryTextFieldError() {
-        setNodeColor(countryTextField, true);
+    public void streetNameTextFieldError(boolean isError) {
+        setNodeColor(streetNameTextField, isError);
     }
 
-    public void cityTextFieldError() {
-        setNodeColor(cityTextField, true);
-    }
-
-    public void streetNameTextFieldError() {
-        setNodeColor(streetNameTextField, true);
-    }
-
-    public void houseNumberTextFieldError() {
-        setNodeColor(houseNumberTextField, true);
+    public void houseNumberTextFieldError(boolean isError) {
+        setNodeColor(houseNumberTextField, isError);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        //this.onlyIntValue(houseNumberTextField);
+        this.onlyIntValue(houseNumberTextField);
     }
 
     public void onCancelButton() {
@@ -72,7 +77,7 @@ public class SignUpViewController extends ViewController<SignUpViewController.Si
     }
 
     public interface SignUpListener {
-        void onSubmitButton(String pseudo, String lastName, String firstName, String password, String confirmPassword, String country, String city, String streetName, String houseNumber);
+        void onSubmitButton(String pseudo, String lastName, String firstName, String password, String confirmPassword, String country, String city, String streetName, String houseNumber, boolean isProfessional);
         void onCancelButton();
     }
 
