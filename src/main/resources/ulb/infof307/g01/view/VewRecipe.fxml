@@ -39,15 +39,15 @@
                   <TextField fx:id="recipeSearchTextField" onKeyPressed="#onRecipeSearchTextFieldSubmit" />
                   <Button fx:id="modifyRecipeButton" disable="true" mnemonicParsing="false" onAction="#onModifyRecipeButtonClick" prefHeight="30.0" prefWidth="220.0" text="Modifier" />
                   <Button fx:id="deleteRecipeButton" disable="true" mnemonicParsing="false" onAction="#onDeleteRecipeButtonClick" prefHeight="30.0" prefWidth="220.0" text="Supprimer" />
-                  <Button mnemonicParsing="false" onAction="#onSeeAllRecipesButtonClick" prefHeight="30.0" prefWidth="220.0" text="Voir toutes les recettes" />
-                  <Button mnemonicParsing="false" onAction="#onImportRecipeFromJSONButtonClick" prefHeight="30.0" prefWidth="220.0" text="Importer une recette JSON" />
+                  <Button fx:id="seeAllRecipesButton" mnemonicParsing="false" onAction="#onSeeAllRecipesButtonClick" prefHeight="30.0" prefWidth="220.0" text="Voir toutes les recettes" />
+                  <Button fx:id="importJSONButton" mnemonicParsing="false" onAction="#onImportRecipeFromJSONButtonClick" prefHeight="30.0" prefWidth="220.0" text="Importer une recette JSON" />
                </children>
             </VBox>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="400.0">
          <children>
-            <Button cancelButton="true" lineSpacing="200.0" mnemonicParsing="false" onAction="#onBackToHomeRecipeButtonClick" prefHeight="30.0" prefWidth="456.0" text="Retour" />
+            <Button fx:id="cancelButton" cancelButton="true" lineSpacing="200.0" mnemonicParsing="false" onAction="#onBackToHomeRecipeButtonClick" prefHeight="30.0" prefWidth="456.0" text="Retour" />
          </children>
       </HBox>
    </children>

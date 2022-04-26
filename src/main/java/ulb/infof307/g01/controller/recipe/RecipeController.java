@@ -9,10 +9,7 @@ import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
-import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
-import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
-import ulb.infof307.g01.view.recipe.UserRecipesViewController;
+import ulb.infof307.g01.view.recipe.*;
 
 import javax.annotation.Nullable;
 import java.io.File;
@@ -28,18 +25,20 @@ import java.util.Vector;
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
         CreateRecipeViewController.CreateRecipeListener,
         UserRecipesViewController.UserRecipesListener,
-        SearchRecipeViewController.Listener {
+        SearchRecipeViewController.Listener, FavoriteRecipeViewController.FavoriteRecipesListener {
 
     // private Controller parentController; //TODO
 
     Scene sceneViewRecipe = null;
     Scene sceneModifyRecipe = null;
+    Scene sceneFavoriteRecipe = null;
 
     boolean isWaitingModification = false;
 
     private CreateRecipeViewController createRecipeViewController;
     private UserRecipesViewController userRecipesViewController;
     private SearchRecipeViewController searchRecipeViewController;
+    private FavoriteRecipeViewController favoriteRecipeViewController;
 
     private Recipe currentRecipe;
     private ShoppingList currentShoppingList;
@@ -94,6 +93,21 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void logout() {
         userLogout();
+    }
+
+
+
+    @Override
+    public void onFavoriteRecipe() {
+        FXMLLoader loader = this.loadFXML("FavoriteRecipe.fxml");
+        favoriteRecipeViewController = loader.getController();
+        favoriteRecipeViewController.setListener(this);
+        try { //TODO: les recettes favoris de l utilisateur au lieu de  toute les recette
+            ArrayList<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, -1);
+            favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
@@ -216,6 +230,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     public void onCancelButton() {
         displayMain();
     }
+
+
 
     // <-------------------------- Écran de Liste des Recettes --------------------------> \\
 
@@ -455,5 +471,22 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     public interface SearchRecipeListener{
         void onRecipeSelected(Recipe selectedRecipe);
         void onCancelButtonClicked();
+    }
+
+
+    /***************************FAVORITERECIPE*******************************/
+    @Override
+    public void onFavoriteRecipesTableViewClicked(Recipe recipe) {
+        currentRecipe = recipe;
+        sceneFavoriteRecipe = currentStage.getScene();
+        onUserRecipesButtonClick();
+        userRecipesViewController.initReadOnlyMode();
+        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
+                currentRecipe.getPreparation());
+    }
+
+    @Override
+    public void onEndViewFavoriteRecipeButton() {
+        currentStage.setScene(sceneFavoriteRecipe);
     }
 }

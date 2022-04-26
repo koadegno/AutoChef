@@ -32,6 +32,7 @@
             <children>
                 <Button mnemonicParsing="false" onAction="#onUserRecipesButtonClick" prefHeight="50.0" prefWidth="170.0" text="Mes recettes" />
                 <Button mnemonicParsing="false" onAction="#onCreateRecipeButtonClick" prefHeight="50.0" prefWidth="170.0" text="Nouvelle recette" />
+            <Button mnemonicParsing="false" onAction="#onFavoriteRecipe" prefHeight="50.0" prefWidth="170.0" text="Favoris" />
             </children>
         </HBox>
         <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
