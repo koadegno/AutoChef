@@ -47,8 +47,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
             Recipe recipe = fillRecipe(result);
             recipes.add(recipe);
         }
-        for(Recipe rec: recipes){
-            fillRecipeWithProducts(rec);
+        for(Recipe products: recipes){
+            fillRecipeWithProducts(products);
         }
         return recipes;
     }
