@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.database.dao;
 
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
@@ -60,16 +61,20 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      * @param nbPerson contrainte pour le nombre de personne
      */
     public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
-        ArrayList<String> valuesOfPreparedStatement = null;
+        ArrayList<String> valuesOfPreparedStatement;
         ArrayList<String> constraint = new ArrayList<>();
+        constraint.add(String.format("UtilisateurRecette.UtilisateurID = %d",
+                Configuration.getCurrent().getCurrentUser().getID()));
         String stringQuery;
         StringBuilder query = new StringBuilder("""
                 SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
                 FROM Recette as R
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
+                INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
                 """);
 
+        
         if (nameCategory != null){
             int categoryID = getIDFromName("Categorie",nameCategory,"CategorieID");
             constraint.add(String.format("R.CategorieID = %d", categoryID));
@@ -81,10 +86,10 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         if (nbPerson > 0){
             constraint.add(String.format("R.NbPersonnes = %d", nbPerson));
         }
-        if (constraint.size() > 0){
-            query.append(" Where ");
-            valuesOfPreparedStatement = appendValuesToWhere(query,constraint);
-        }
+
+        query.append(" Where ");
+        valuesOfPreparedStatement = appendValuesToWhere(query,constraint);
+
         stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
@@ -92,11 +97,34 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         return fillRecipes(result);
     }
 
+    /**
+     * Récupère tous les noms de recette
+     * @return liste contenante tous les noms de recette, peut etre vide
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("Recette","ORDER BY Nom ASC");
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT R.Nom
+                FROM Recette as R
+                INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
+                WHERE UtilisateurRecette.UtilisateurID = %d
+                ORDER BY Nom ASC
+                """, Configuration.getCurrent().getCurrentUser().getID());
+        ResultSet queryAllName = sendQuery(query);
+        List<String> nameList = new ArrayList<>();
+        while(queryAllName.next()){
+            nameList.add(queryAllName.getString(1));
+        }
+
+        return nameList;
     }
 
+    /**
+     * insert la recette dans la basse de donnée
+     * @param recipe la recette a insérer
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public void insert(Recipe recipe) throws SQLException {
         String name = String.format("'%s'", recipe.getName());
@@ -110,28 +138,45 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         insert("Recette", values);
         String recipeID = String.format("%d", getGeneratedID());
 
-        for (Product p: recipe) {
+        for (Product p: recipe) { // ajout des produits lié a la recette
             String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
             String quantity =  String.format("%d", p.getQuantity());
             String[] productValues = {recipeID, productID, quantity};
             insert("RecetteIngredient", productValues);
         }
+        // ajout dans la table des recettes correspondant a l'utilisateur
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String[] userRecipeValues = {userID, recipeID};
+        insert("UtilisateurRecette",userRecipeValues);
+
     }
 
+    /**
+     * supprime et ajoute la recette une nouvelle fois dans la base de donnée
+     * @param recipe la recette a mettre a jour
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public void update(Recipe recipe) throws SQLException {
         delete(recipe);
         insert(recipe);
     }
 
+    /**
+     * Recupère les informations d'une recette
+     * @param name le nom de la  recette
+     * @return un objet Recette
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public Recipe get(String name) throws SQLException {
-        String query = """
+        String query = String.format("""
                 SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
                 FROM Recette as R
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
-                WHERE R.Nom = ?""";
+                INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
+                WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", Configuration.getCurrent().getCurrentUser().getID());
 
         ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
         name = "'" + name + "'"; // quotes to recognize it as string and request need it
@@ -148,8 +193,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
 
     public void delete(Recipe displayedRecipe) throws SQLException {
         String[] constraint = {"RecetteID = "+ displayedRecipe.getId()};
+        delete("UtilisateurRecette", List.of(constraint));
         delete("RecetteIngredient", List.of(constraint));
-        delete("Recette",List.of(constraint));
         delete("MenuRecette",List.of(constraint));
+        delete("Recette",List.of(constraint));
     }
 }

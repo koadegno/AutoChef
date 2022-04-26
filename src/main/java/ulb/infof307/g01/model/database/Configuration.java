@@ -68,6 +68,7 @@ public class Configuration {
 
     public void setCurrentUser(User user){currentUser = user;}
 
+    public User getCurrentUser(){return currentUser;}
 
     public MenuDao getMenuDao(){
         return (MenuDao) menuDao;

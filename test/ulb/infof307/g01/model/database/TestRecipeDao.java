@@ -5,12 +5,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -36,6 +38,9 @@ class TestRecipeDao {
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert(fish);
         Configuration.getCurrent().getRecipeCategoryDao().insert(meat);
@@ -109,7 +114,7 @@ class TestRecipeDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> recipes = Configuration.getCurrent().getRecipeDao().getAllName();
+        List<String> recipes = Configuration.getCurrent().getRecipeDao().getAllName();
         assertEquals(bolo.getName(), recipes.get(0));
     }
 

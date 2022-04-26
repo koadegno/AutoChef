@@ -101,7 +101,6 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private List<Shop> getAllShops() throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
         PreparedStatement statement =  select(MAGASIN_TABLE_NAME, new ArrayList<>(),null);
         ResultSet  shopResultSet = sendQuery(statement);
         ArrayList<Shop> shopsList = new ArrayList<>();

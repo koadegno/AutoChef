@@ -174,6 +174,8 @@ public class Database {
         return statement;
     }
 
+
+
     /**
      * Permet d'analyser le contenu de la requête en fonction des types
      * des valeurs et de les placer dans le PreparedStatement
@@ -279,6 +281,21 @@ public class Database {
      * @param orderBy si non nul, ajoute la contrainte de triée par
      */
     protected ArrayList<String> getAllNameFromTable(String table, String orderBy) throws SQLException {
+        ArrayList<String> constraint = new ArrayList<>();
+        PreparedStatement statement =  select(table, constraint,orderBy);
+        ResultSet queryAllTableName = sendQuery(statement);
+        ArrayList<String> allProductName = new ArrayList<>();
+        while(queryAllTableName.next()){
+            allProductName.add(queryAllTableName.getString("Nom"));
+        }
+        return allProductName;
+    }
+
+    /**
+     *
+     * @param orderBy si non nul, ajoute la contrainte de triée par
+     */
+    protected ArrayList<String> getAllNameFromTable(String table,String joinTable, String orderBy) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
         PreparedStatement statement =  select(table, constraint,orderBy);
         ResultSet queryAllTableName = sendQuery(statement);
