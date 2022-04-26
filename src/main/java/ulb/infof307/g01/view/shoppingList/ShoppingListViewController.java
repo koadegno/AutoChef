@@ -155,6 +155,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public void sendShoppingListByMail() {
         listener.sendShoppingListByMail(currentShoppingListName);
     }
+    public void logout(){listener.logout();}
 
 
     public interface Listener{
@@ -173,5 +174,6 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void returnAddedProducts();
 
         void helpShoppingList(boolean isCreateShoppingList);
+        void logout();
     }
 }

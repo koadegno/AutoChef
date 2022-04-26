@@ -144,6 +144,11 @@ public class MenuController extends Controller implements CreateMenuViewControll
         helpController.displayHelpShop();
     }
 
+    @Override
+    public void logout() {
+        userLogout();
+    }
+
 
     @Override
     public void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) throws SQLException {

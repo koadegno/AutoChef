@@ -91,6 +91,11 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         homePageController.displayMain();
     }
 
+    @Override
+    public void logout() {
+        userLogout();
+    }
+
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
 
     /**

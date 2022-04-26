@@ -33,11 +33,6 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
     @FXML
     public void redirectToRecipe(){listener.onRecipeButtonClick();}
 
-    @FXML
-    public void closeApplication(){
-        listener.logout();
-    }
-
     public void logout() {
         listener.logout();
     }
