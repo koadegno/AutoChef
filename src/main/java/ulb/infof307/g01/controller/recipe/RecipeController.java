@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.alertMessage.HelpController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
@@ -11,7 +12,7 @@ import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.*;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -88,6 +89,13 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         //parentController.displayMain(); TODO
         HomePageController homePageController = new HomePageController(currentStage);
         homePageController.displayMain();
+    }
+
+    @Override
+    public void onHelpCreateRecipeClicked(){
+        int numberOfImageHelp = 10;
+        HelpController helpController = new HelpController("helpCreateRecipe/", numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
     @Override
