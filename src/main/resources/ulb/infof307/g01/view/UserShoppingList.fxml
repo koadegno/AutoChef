@@ -20,9 +20,13 @@
             <Menu mnemonicParsing="false" text="Profile">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
-                   <MenuItem mnemonicParsing="false" onAction="#helpShoppingList" text="Aide" />
                </items>
             </Menu>
+             <Menu mnemonicParsing="false" text="Aide">
+                 <items>
+                     <MenuItem mnemonicParsing="false" onAction="#helpShoppingList" text="Tutoriel" />
+                 </items>
+             </Menu>
          </menus>
       </MenuBar>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="573.0" spacing="20.0">
