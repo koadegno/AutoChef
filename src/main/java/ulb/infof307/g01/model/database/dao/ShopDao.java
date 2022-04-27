@@ -50,10 +50,12 @@ public class ShopDao extends Database implements Dao<Shop> {
                 WHERE UtilisateurMagasin.UtilisateurID = %d
                 ORDER BY Nom ASC
                 """, Configuration.getCurrent().getCurrentUser().getID());
-        ResultSet queryAllName = sendQuery(query);
-        List<String> nameList = new ArrayList<>();
-        while(queryAllName.next()){
-            nameList.add(queryAllName.getString(1));
+        List<String> nameList;
+        try (ResultSet queryAllName = sendQuery(query)) {
+            nameList = new ArrayList<>();
+            while (queryAllName.next()) {
+                nameList.add(queryAllName.getString(1));
+            }
         }
 
         return nameList;
@@ -128,11 +130,12 @@ public class ShopDao extends Database implements Dao<Shop> {
                 shop.getID(),
                 Configuration.getCurrent().getCurrentUser().getID());
 
-        ResultSet querySelectProductList = sendQuery(query);
-        while(querySelectProductList != null &&querySelectProductList.next()){
-            String productName = querySelectProductList.getString("Nom");
-            double productPrice = querySelectProductList.getDouble("prix");
-            shop.add(new Product(productName,productPrice));
+        try (ResultSet querySelectProductList = sendQuery(query)) {
+            while (querySelectProductList != null && querySelectProductList.next()) {
+                String productName = querySelectProductList.getString("Nom");
+                double productPrice = querySelectProductList.getDouble("prix");
+                shop.add(new Product(productName, productPrice));
+            }
         }
     }
 
@@ -142,21 +145,23 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private List<Shop> getAllShops() throws SQLException {
-        ResultSet querySelectShop = sendQuery(String.format("""
-            SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
-            FROM Magasin as M
-            INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
-            WHERE UtilisateurMagasin.UtilisateurID = %d""",
-            Configuration.getCurrent().getCurrentUser().getID()));
+        ArrayList<Shop> shopsList;
+        try (ResultSet querySelectShop = sendQuery(String.format("""
+                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                        FROM Magasin as M
+                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+                        WHERE UtilisateurMagasin.UtilisateurID = %d""",
+                Configuration.getCurrent().getCurrentUser().getID()))) {
 
-        ArrayList<Shop> shopsList = new ArrayList<>();
-        while (querySelectShop.next()){
-            int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-            String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
-            double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
-            double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
-            Point shopPoint = new Point(shopX,shopY);
-            shopsList.add(new Shop(shopID,shopName, shopPoint));
+            shopsList = new ArrayList<>();
+            while (querySelectShop.next()) {
+                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
+                String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
+                double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
+                double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
+                Point shopPoint = new Point(shopX, shopY);
+                shopsList.add(new Shop(shopID, shopName, shopPoint));
+            }
         }
         return shopsList;
     }
@@ -175,18 +180,19 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     public Shop get(String name, Point coordinates) throws SQLException {
 
-        ResultSet querySelectShop = sendQuery(String.format("""
-                SELECT M.MagasinID
-                FROM Magasin as M
-                INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
-                WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
-                name,String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()),Configuration.getCurrent().getCurrentUser().getID()));
+        try (ResultSet querySelectShop = sendQuery(String.format("""
+                        SELECT M.MagasinID
+                        FROM Magasin as M
+                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+                        WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
+                name, String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()), Configuration.getCurrent().getCurrentUser().getID()))) {
 
-        if(querySelectShop.next()){
-            int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-            Shop shop = new Shop(shopID,name, coordinates);
-            fillShopWithProducts(shop);
-            return shop;
+            if (querySelectShop.next()) {
+                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
+                Shop shop = new Shop(shopID, name, coordinates);
+                fillShopWithProducts(shop);
+                return shop;
+            }
         }
 
         return null;
