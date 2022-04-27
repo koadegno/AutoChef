@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class RecipeDao extends Database implements Dao<Recipe> {
 
+    public static final String IS_NOT_FAVORITE = "0";
+
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -148,7 +150,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
         // ajout dans la table des recettes correspondant a l'utilisateur
         String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
-        String[] userRecipeValues = {userID, recipeID};
+        String[] userRecipeValues = {userID, recipeID, IS_NOT_FAVORITE};
         insert("UtilisateurRecette",userRecipeValues);
 
     }

@@ -68,6 +68,10 @@ class TestMenu {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
 
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
+
         Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
         Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
         Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
