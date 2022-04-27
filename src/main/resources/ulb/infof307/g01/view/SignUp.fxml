@@ -31,8 +31,8 @@
             </HBox>
             <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
                <children>
-                  <TextField fx:id="passwordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Mot de passe" />
-                  <TextField fx:id="confirmPasswordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Confirmer mot de passe" />
+                  <PasswordField fx:id="passwordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Mot de passe" />
+                  <PasswordField fx:id="confirmPasswordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Confirmer mot de passe" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="170.0" prefWidth="750.0" spacing="20.0">
