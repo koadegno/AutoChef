@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.database.dao;
 
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
@@ -16,6 +17,7 @@ import java.util.List;
 public class MenuDao extends Database implements Dao<Menu> {
 
     public static final String MENU_TABLE_NAME = "Menu";
+    public static int UserID = 0;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -38,6 +40,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         }
     }
 
+
     private Menu fillMenuWithRecipes(String nameMenu) throws SQLException {
         int nameID = getIDFromName(MENU_TABLE_NAME,nameMenu,"MenuID");
         ResultSet querySelectMenu = sendQuery(String.format("""
@@ -46,7 +49,9 @@ public class MenuDao extends Database implements Dao<Menu> {
                 INNER JOIN Recette as R ON M.RecetteID = R.RecetteID\s
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
-                WHERE M.MenuID = %d order by M.Heure""", nameID));
+                INNER JOIN UtilisateurMenu ON M.MenuID = UtilisateurMenu.MenuID
+                WHERE M.MenuID = %d AND UtilisateurMenu.UtilisateurID = %d
+                 order by M.Heure""", nameID, Configuration.getCurrent().getCurrentUser().getID()));
         Menu menu = new Menu(nameMenu);
         while(querySelectMenu.next()){
             int menuDay = querySelectMenu.getInt(1);
@@ -65,8 +70,19 @@ public class MenuDao extends Database implements Dao<Menu> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable(MENU_TABLE_NAME,"ORDER BY Nom ASC");
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT R.Nom
+                FROM Menu as R
+                INNER JOIN UtilisateurMenu ON R.MenuID = UtilisateurMenu.MenuID
+                WHERE UtilisateurMenu.UtilisateurID = %d
+                ORDER BY Nom ASC
+                """, Configuration.getCurrent().getCurrentUser().getID());
+        ResultSet queryAllName = sendQuery(query);
+        List<String> nameList = new ArrayList<>();
+        while(queryAllName.next()){
+            nameList.add(queryAllName.getString(1));}
+        return nameList;
     }
 
     @Override
@@ -75,6 +91,10 @@ public class MenuDao extends Database implements Dao<Menu> {
         insert(MENU_TABLE_NAME,values);
         int id = getGeneratedID();
         insertRecipesInMenu(menu, id);
+        String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getID()), String.valueOf(id)};
+        insert("UtilisateurMenu", userValues);
+
+
     }
 
     /**
@@ -86,12 +106,15 @@ public class MenuDao extends Database implements Dao<Menu> {
         int menuID = getIDFromName(MENU_TABLE_NAME,menu.getName(),"MenuID");
         constraint.add(String.format("%s = %d","MenuID",menuID));
         delete("MenuRecette",constraint);
+        delete("UtilisateurMenu",constraint);
         updateName(MENU_TABLE_NAME, menu.getName(),constraint);
         if(menu.size() == 0){
             delete(MENU_TABLE_NAME,constraint);
         }
         else {
             insertRecipesInMenu(menu, menuID);
+            String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getID()), String.valueOf(menuID)};
+            insert("UtilisateurMenu", userValues);
         }
     }
 
