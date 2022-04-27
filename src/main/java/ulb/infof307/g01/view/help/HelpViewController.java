@@ -1,4 +1,4 @@
-package ulb.infof307.g01.view.alertMessage;
+package ulb.infof307.g01.view.help;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -6,10 +6,7 @@ import javafx.scene.layout.VBox;
 import ulb.infof307.g01.view.ViewController;
 
 
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
 import java.io.InputStream;
-import java.util.Objects;
 
 public class HelpViewController extends ViewController<HelpViewController.Listener> {
     public VBox imageInformationVBox;

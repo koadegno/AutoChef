@@ -130,6 +130,10 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         cancelButton.setOnAction(event -> listener.onCancelModifyButton());
     }
 
+    public void helpCreateRecipe(){
+        listener.onHelpCreateRecipeClicked();
+    }
+
     public void logout() {
         listener.logout();
     }
@@ -139,6 +143,8 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         void onModifyProductsButton();
         void onCancelButton();
         void onCancelModifyButton();
+
+        void onHelpCreateRecipeClicked();
 
         void logout();
     }

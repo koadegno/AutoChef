@@ -19,7 +19,11 @@
             <Menu mnemonicParsing="false" text="Profile">
                <items>
                   <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
-                  <MenuItem mnemonicParsing="false" onAction="#helpCreateMenu" text="Aide" />
+               </items>
+            </Menu>
+            <Menu mnemonicParsing="false" text="Aide">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#helpCreateMenu" text="Tutoriel" />
                </items>
             </Menu>
          </menus>
