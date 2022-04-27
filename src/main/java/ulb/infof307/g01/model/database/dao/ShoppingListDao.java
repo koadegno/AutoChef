@@ -37,8 +37,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
         String query = String.format("""
                 SELECT R.Nom
                 FROM ListeCourse as R
-                INNER JOIN UtilisateurRecette ON R.ListeCourseID = UtilisateurRecette.ListeCourseID
-                WHERE UtilisateurRecette.UtilisateurID = %d
+                INNER JOIN UtilisateurListeCourse ON R.ListeCourseID = UtilisateurListeCourse.ListeCourseID
+                WHERE UtilisateurListeCourse.UtilisateurID = %d
                 ORDER BY Nom ASC
                 """, Configuration.getCurrent().getCurrentUser().getID());
         ResultSet queryAllName = sendQuery(query);
@@ -59,13 +59,13 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     public void insert(ShoppingList shoppingList) throws SQLException {
         String[] values = {"null",String.format("'%s'",shoppingList.getName())};
         insert(LISTE_COURSE_TABLE_NAME,values);
-        int id = getGeneratedID();
+        int shoppingListID = getGeneratedID();
         for(Product product : shoppingList){
             int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
-            insertIngredientInShoppingList(id,productID, product.getQuantity());
+            insertIngredientInShoppingList(shoppingListID,productID, product.getQuantity());
         }
         String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
-        String[] userShoppingListValues = {userID, String.valueOf(id)};
+        String[] userShoppingListValues = {userID, String.valueOf(shoppingListID)};
         insert("UtilisateurListeCourse",userShoppingListValues);
     }
 
@@ -102,7 +102,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
                 INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID\s
                 INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID
                 INNER JOIN UtilisateurListeCourse ON UtilisateurListeCourse.ListeCourseID = S.ListeCourseID
-                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse = %s""", nameID,userID));
+                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse.ListeCourseID = %s""", nameID,userID));
         ShoppingList shoppingList = new ShoppingList(name,nameID);
         while(querySelectShoppingList.next()){
             int productQuantity = querySelectShoppingList.getInt(1);

@@ -3,6 +3,7 @@ package ulb.infof307.g01.model.database;
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -29,6 +30,10 @@ class TestShoppingListDao {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
 
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
+
         Configuration.getCurrent().getProductUnityDao().insert(gram);
         Configuration.getCurrent().getProductFamilyDao().insert(fruit);
 
@@ -49,12 +54,12 @@ class TestShoppingListDao {
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
         Configuration.getCurrent().closeConnection();
-        Files.deleteIfExists(Path.of("test.sqlite"));
+        //Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> shoppingList = Configuration.getCurrent().getShoppingListDao().getAllName();
+        List<String> shoppingList = Configuration.getCurrent().getShoppingListDao().getAllName();
         assertEquals(halloween.getName(), shoppingList.get(0));
     }
 
