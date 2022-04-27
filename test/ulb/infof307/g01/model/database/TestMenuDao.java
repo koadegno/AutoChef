@@ -3,10 +3,7 @@ package ulb.infof307.g01.model.database;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.model.Day;
-import ulb.infof307.g01.model.Menu;
-import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.*;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -37,6 +34,10 @@ class TestMenuDao {
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
+
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert(fish);
         Configuration.getCurrent().getRecipeCategoryDao().insert(meat);
@@ -69,7 +70,7 @@ class TestMenuDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> menus = Configuration.getCurrent().getMenuDao().getAllName();
+        List<String> menus = Configuration.getCurrent().getMenuDao().getAllName();
         assertEquals("Menu Test2", menus.get(0));
     }
 

@@ -19,7 +19,7 @@ import java.util.Objects;
 
 public class UserMenusController extends Controller implements UserMenusViewController.Listener {
     private final ArrayList<Menu> menus ;
-    private ArrayList<String> allMenusNames;
+    private List<String> allMenusNames;
     private UserMenusViewController viewController;
 
 

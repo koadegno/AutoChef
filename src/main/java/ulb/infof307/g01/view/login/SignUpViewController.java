@@ -1,9 +1,10 @@
-package ulb.infof307.g01.view;
+package ulb.infof307.g01.view.login;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
+import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
 import java.util.ResourceBundle;

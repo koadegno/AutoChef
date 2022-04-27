@@ -173,10 +173,10 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
             String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
             allUnitName.removeAll(List.of(unitToRemove));
-            ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
+            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
             if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppinListName);
+            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
 
         } catch (SQLException e) {
             e.printStackTrace();

@@ -47,7 +47,7 @@ public class Shop extends HashSet<Product> {
     }
 
     public String toString(){
-        StringBuilder toPrint = new StringBuilder(coordinate + String.format("name : %s\n", name));
+        StringBuilder toPrint = new StringBuilder(coordinate + String.format("name : %s (id : %d)\n", name,id));
         for(Product product:this){
             toPrint.append(product);
         }

@@ -5,6 +5,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+
 group 'ulb.infof307.g01'
 version '2'
 

@@ -16,6 +16,8 @@ import java.util.List;
  */
 public class RecipeDao extends Database implements Dao<Recipe> {
 
+    public static final String IS_NOT_FAVORITE = "0";
+
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -34,7 +36,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String type = result.getString(5);
         String category = result.getString(6);
         String method = result.getString(7);
-        return new Recipe(recipeID, name, duration, category, type, nbPersons, method);
+        Boolean isFavorite = result.getBoolean(8);
+        return new Recipe(recipeID, name, duration, category, type, nbPersons, method,isFavorite);
     }
 
     /**
@@ -67,7 +70,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 Configuration.getCurrent().getCurrentUser().getID()));
         String stringQuery;
         StringBuilder query = new StringBuilder("""
-                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
+                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation,UtilisateurRecette.estFavoris
                 FROM Recette as R
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
@@ -133,6 +136,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
         String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
         String preparation = String.format("'%s'", recipe.getPreparation());
+        String isFavorite = String.format("'%s'", recipe.getFavorite());
 
         String[] values = {"null", name, duration, nbPerson, type, category, preparation};
         insert("Recette", values);
@@ -146,7 +150,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
         // ajout dans la table des recettes correspondant a l'utilisateur
         String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
-        String[] userRecipeValues = {userID, recipeID};
+        String[] userRecipeValues = {userID, recipeID, IS_NOT_FAVORITE};
         insert("UtilisateurRecette",userRecipeValues);
 
     }
@@ -171,7 +175,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     @Override
     public Recipe get(String name) throws SQLException {
         String query = String.format("""
-                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
+                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation,UtilisateurRecette.estFavoris
                 FROM Recette as R
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID

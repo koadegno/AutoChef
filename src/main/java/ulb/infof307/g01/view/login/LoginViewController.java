@@ -1,10 +1,11 @@
-package ulb.infof307.g01.view;
+package ulb.infof307.g01.view.login;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
+import ulb.infof307.g01.view.ViewController;
 
-public class LoginViewController extends ViewController<LoginViewController.LoginListener>{
+public class LoginViewController extends ViewController<LoginViewController.LoginListener> {
     @FXML
     private TextField password;
 
