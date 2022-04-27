@@ -102,12 +102,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         FXMLLoader loader = this.loadFXML("FavoriteRecipe.fxml");
         favoriteRecipeViewController = loader.getController();
         favoriteRecipeViewController.setListener(this);
-        try { //TODO: les recettes favoris de l utilisateur au lieu de  toute les recette
-            ArrayList<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
-            favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
+        favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
@@ -258,6 +254,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             userRecipesViewController.setDisableRecipeButtons(false);
             userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
                     currentRecipe.getPreparation());
+            userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }
 
     }
@@ -454,6 +451,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 userRecipesViewController.recipeSearchTextFieldError(false);
                 userRecipesViewController.setDisableRecipeButtons(false);
                 userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getPreparation());
+                userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
 
             }else {
                 listener.onRecipeSelected(selectedRecipe);
@@ -488,5 +486,15 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onEndViewFavoriteRecipeButton() {
         currentStage.setScene(sceneFavoriteRecipe);
+    }
+
+    @Override
+    public void onFavoriteRecipeCheck(Boolean isChecked) {
+        currentRecipe.setFavorite(isChecked);
+        try {
+            Configuration.getCurrent().getRecipeDao().update(currentRecipe);
+        } catch (SQLException e) {
+            UserRecipesViewController.showErrorSQL();
+        }
     }
 }

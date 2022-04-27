@@ -136,7 +136,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
         String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
         String preparation = String.format("'%s'", recipe.getPreparation());
-        String isFavorite = String.format("'%s'", recipe.getFavorite());
+        String isFavorite = String.format("%d", recipe.isFavorite() ? 1: 0);
 
         String[] values = {"null", name, duration, nbPerson, type, category, preparation};
         insert("Recette", values);
@@ -150,7 +150,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
         // ajout dans la table des recettes correspondant a l'utilisateur
         String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
-        String[] userRecipeValues = {userID, recipeID, IS_NOT_FAVORITE};
+        String[] userRecipeValues = {userID, recipeID, isFavorite};
         insert("UtilisateurRecette",userRecipeValues);
 
     }
@@ -201,5 +201,20 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         delete("RecetteIngredient", List.of(constraint));
         delete("MenuRecette",List.of(constraint));
         delete("Recette",List.of(constraint));
+    }
+
+    public List<Recipe> getFavoriteRecipes() {
+        ArrayList<Recipe>   recipes;
+        ArrayList<Recipe>   favoriteRecipes = new ArrayList<>();
+        try {
+            recipes = getRecipeWhere(null, null, 0);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
+        for (Recipe recipe: recipes) {
+            if(recipe.isFavorite()) favoriteRecipes.add(recipe);
+        }
+
+        return favoriteRecipes;
     }
 }

@@ -1,17 +1,15 @@
 package ulb.infof307.g01.view.recipe;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 
 public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeViewController.FavoriteRecipesListener> implements Initializable {
@@ -30,7 +28,7 @@ public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeV
         listener.onFavoriteRecipesTableViewClicked(recipe);
     }
 
-    public void displayFavoriteRecipe(ArrayList<Recipe> userFavoriteRecipe) {
+    public void displayFavoriteRecipe(List<Recipe> userFavoriteRecipe) {
         favoriteRecipeTableView.getItems().addAll(userFavoriteRecipe);
     }
     public void onReturnButton() {
