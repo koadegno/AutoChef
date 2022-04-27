@@ -20,8 +20,10 @@ public class ShopDao extends Database implements Dao<Shop> {
     public static final int SHOP_ID_INDEX = 1;
     public static final int SHOP_NAME_INDEX = 2;
     public static final int SHOP_LONGITUDE_INDEX = 4;
-    public static final int SHOP_LATITUDE_INDEX = 5;
+    public static final int SHOP_LATITUDE_INDEX = 3;
     public static final String MAGASIN_TABLE_NAME = "Magasin";
+    public static final String TABLE_SHOP_PRODUCT = "MagasinIngredient";
+    public static final String TABLE_USER_MAGASIN = "UtilisateurMagasin";
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -33,9 +35,28 @@ public class ShopDao extends Database implements Dao<Shop> {
         super(nameDB);
     }
 
+    /**
+     * retourne tous les noms de magasins que l'utilisateur a enregistré
+     * @return une liste avec tous les noms de magasin
+     * @throws SQLException erreur liée a la base de donnée
+     */
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable(MAGASIN_TABLE_NAME,"ORDER BY Nom ASC");
+    public List<String> getAllName() throws SQLException {
+
+        String query = String.format("""
+                SELECT R.Nom
+                FROM Magasin as R
+                INNER JOIN UtilisateurMagasin ON R.MagasinID = UtilisateurMagasin.MagasinID
+                WHERE UtilisateurMagasin.UtilisateurID = %d
+                ORDER BY Nom ASC
+                """, Configuration.getCurrent().getCurrentUser().getID());
+        ResultSet queryAllName = sendQuery(query);
+        List<String> nameList = new ArrayList<>();
+        while(queryAllName.next()){
+            nameList.add(queryAllName.getString(1));
+        }
+
+        return nameList;
     }
 
     /**
@@ -58,8 +79,9 @@ public class ShopDao extends Database implements Dao<Shop> {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
             String price =  String.valueOf(product.getPrice());
             String[] productValues = {shopID,productID,price};
-            insert("MagasinIngredient", productValues);
+            insert(TABLE_SHOP_PRODUCT, productValues);
         }
+        // ajout dans la table utilisateur
         String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
         String[] userShopValues = {userID,shopID};
         insert("UtilisateurMagasin", userShopValues);
@@ -68,12 +90,11 @@ public class ShopDao extends Database implements Dao<Shop> {
     /**
      * Methode rustique de mise a jour supprimer l'ancienne valeur et
      * ajout la nouvelle modifié
-     * @param shop le magasin a mettre a jour
-     * @throws SQLException erreur lié a la base de donnée
+     * @param shop le magasin à mettre a jour
+     * @throws SQLException erreur liée à la base de donnée
      */
     @Override
     public void update(Shop shop) throws SQLException {
-        // TODO MODIFIER CA
         delete(shop);
         insert(shop);
     }
@@ -84,7 +105,6 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur avec la requête SQL
      */
     public List<Shop> getShops() throws SQLException {
-        //TODO MODIFIER CA
         List<Shop> shops = getAllShops();
         for(Shop shop: shops){
             fillShopWithProducts(shop);
@@ -122,15 +142,19 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private List<Shop> getAllShops() throws SQLException {
-        //TODO MODIFIER CA
-        PreparedStatement statement =  select(MAGASIN_TABLE_NAME, new ArrayList<>(),null);
-        ResultSet  shopResultSet = sendQuery(statement);
+        ResultSet querySelectShop = sendQuery(String.format("""
+            SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+            FROM Magasin as M
+            INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+            WHERE UtilisateurMagasin.UtilisateurID = %d""",
+            Configuration.getCurrent().getCurrentUser().getID()));
+
         ArrayList<Shop> shopsList = new ArrayList<>();
-        while (shopResultSet.next()){
-            int shopID = shopResultSet.getInt("MagasinID");
-            String shopName = shopResultSet.getString("Nom");
-            double shopX = shopResultSet.getDouble("latitude");
-            double shopY = shopResultSet.getDouble("longitude");
+        while (querySelectShop.next()){
+            int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
+            String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
+            double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
+            double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
             Point shopPoint = new Point(shopX,shopY);
             shopsList.add(new Shop(shopID,shopName, shopPoint));
         }
@@ -138,8 +162,8 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     @Override
-    public Shop get(String name) throws SQLException , IllegalCallerException{
-        throw new IllegalCallerException("Cette methode n'est pas implementé"); // TODO implémenter
+    public Shop get(String name)throws IllegalCallerException{
+        throw new IllegalCallerException("Cette methode n'est pas implementé");
     }
 
     /**
@@ -150,26 +174,17 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur avec la requête SQL
      */
     public Shop get(String name, Point coordinates) throws SQLException {
-        // construction des contraintes
-        StringBuilder stringBuilder = new StringBuilder();
-        String nameConstraint = String.format("Nom = '%s' ", name);
-        String latitudeConstraint = stringBuilder.append("latitude = ").append(coordinates.getX()).toString();
-        stringBuilder = new StringBuilder();
-        String longitudeConstraint = stringBuilder.append(" longitude = ").append(coordinates.getY()).toString();
-        ArrayList<String> constraints = new ArrayList<>();
-        // ajout des contraintes
-        constraints.add(nameConstraint); constraints.add(latitudeConstraint); constraints.add(longitudeConstraint);
 
-        PreparedStatement statement = select(MAGASIN_TABLE_NAME, constraints,null);
-        ResultSet shopResultSet = sendQuery(statement);
-        if(shopResultSet.next()){
-            int shopID = shopResultSet.getInt(SHOP_ID_INDEX);
-            String shopName = shopResultSet.getString(SHOP_NAME_INDEX);
-            // TODO L'adresse plus tard
-            double shopY = shopResultSet.getDouble(SHOP_LONGITUDE_INDEX);
-            double shopX = shopResultSet.getDouble(SHOP_LATITUDE_INDEX);
-            Point shopPoint = new Point(shopX,shopY);
-            Shop shop = new Shop(shopID,shopName, shopPoint);
+        ResultSet querySelectShop = sendQuery(String.format("""
+                SELECT M.MagasinID
+                FROM Magasin as M
+                INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+                WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
+                name,String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()),Configuration.getCurrent().getCurrentUser().getID()));
+
+        if(querySelectShop.next()){
+            int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
+            Shop shop = new Shop(shopID,name, coordinates);
             fillShopWithProducts(shop);
             return shop;
         }
@@ -177,9 +192,15 @@ public class ShopDao extends Database implements Dao<Shop> {
         return null;
     }
 
+    /**
+     * Supprime un magasin de la base de donnée
+     * @param shop le magasin a supprimé
+     * @throws SQLException erreur liée à la base de donnée
+     */
     public void delete(Shop shop) throws SQLException {
         String[] constraint = {"MagasinID = "+ shop.getID()};
-        delete("MagasinIngredient", List.of(constraint));
+        delete(TABLE_SHOP_PRODUCT, List.of(constraint));
+        delete(TABLE_USER_MAGASIN, List.of(constraint));
         delete(MAGASIN_TABLE_NAME,List.of(constraint));
 
     }

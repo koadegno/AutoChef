@@ -6,6 +6,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
+import ulb.infof307.g01.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -32,6 +33,11 @@ class TestShopDao {
     @BeforeAll
     static public void initConfig() throws SQLException {
         Configuration.getCurrent().setDatabase(databaseName);
+
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
+
         Configuration.getCurrent().getProductUnityDao().insert(gram);
         Configuration.getCurrent().getProductFamilyDao().insert(fruit);
         Configuration.getCurrent().getProductDao().insert(peach);
