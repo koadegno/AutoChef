@@ -24,7 +24,7 @@
          <children>
             <TableView fx:id="favoriteRecipeTableView" onMouseClicked="#OnRecipeTableView" prefHeight="491.0" prefWidth="750.0">
               <columns>
-                <TableColumn fx:id="favoriteRecipeColumn" prefWidth="749.0" text="Recette Favoris" />
+                <TableColumn fx:id="favoriteRecipeColumn" prefWidth="749.0" text="Recettes Favoris" />
               </columns>
             </TableView>
          </children>
