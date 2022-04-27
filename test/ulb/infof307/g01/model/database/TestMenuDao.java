@@ -70,7 +70,7 @@ class TestMenuDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> menus = Configuration.getCurrent().getMenuDao().getAllName();
+        List<String> menus = Configuration.getCurrent().getMenuDao().getAllName();
         assertEquals("Menu Test2", menus.get(0));
     }
 
