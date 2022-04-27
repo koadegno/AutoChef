@@ -34,6 +34,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String type = result.getString(5);
         String category = result.getString(6);
         String method = result.getString(7);
+        Boolean isFavorite = result.getBoolean(8);
         return new Recipe(recipeID, name, duration, category, type, nbPersons, method);
     }
 
@@ -171,7 +172,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     @Override
     public Recipe get(String name) throws SQLException {
         String query = String.format("""
-                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation
+                SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation,UtilisateurRecette.estFavoris
                 FROM Recette as R
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
