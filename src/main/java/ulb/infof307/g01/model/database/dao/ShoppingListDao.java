@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.database.dao;
 
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
@@ -7,6 +8,7 @@ import ulb.infof307.g01.model.ShoppingList;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accès à la base de données pour les données concernant les listes de courses
@@ -31,10 +33,28 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable(LISTE_COURSE_TABLE_NAME,"ORDER BY Nom ASC");
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT R.Nom
+                FROM ListeCourse as R
+                INNER JOIN UtilisateurRecette ON R.ListeCourseID = UtilisateurRecette.ListeCourseID
+                WHERE UtilisateurRecette.UtilisateurID = %d
+                ORDER BY Nom ASC
+                """, Configuration.getCurrent().getCurrentUser().getID());
+        ResultSet queryAllName = sendQuery(query);
+        List<String> nameList = new ArrayList<>();
+        while(queryAllName.next()){
+            nameList.add(queryAllName.getString(1));
+        }
+
+        return nameList;
     }
 
+    /**
+     * insert une liste de course dans la base de donnée
+     * @param shoppingList liste de course à insérer
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public void insert(ShoppingList shoppingList) throws SQLException {
         String[] values = {"null",String.format("'%s'",shoppingList.getName())};
@@ -44,6 +64,9 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
             int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
             insertIngredientInShoppingList(id,productID, product.getQuantity());
         }
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String[] userShoppingListValues = {userID, String.valueOf(id)};
+        insert("UtilisateurListeCourse",userShoppingListValues);
     }
 
     /**
@@ -58,6 +81,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
         updateName(LISTE_COURSE_TABLE_NAME, shoppingList.getName(),constraint );
         if(shoppingList.size() == 0){
             delete(LISTE_COURSE_TABLE_NAME,constraint);
+            // TODO est ce que ca delete en cascade ?
         }
         else{
             for (Product product : shoppingList) {
@@ -69,6 +93,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     @Override
     public ShoppingList get(String name) throws SQLException {
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
         int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
         ResultSet querySelectShoppingList = sendQuery(String.format("""
                 SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom
@@ -76,7 +101,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
                 INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID
                 INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID\s
                 INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID
-                WHERE S.ListeCourseID = %d""", nameID));
+                INNER JOIN UtilisateurListeCourse ON UtilisateurListeCourse.ListeCourseID = S.ListeCourseID
+                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse = %s""", nameID,userID));
         ShoppingList shoppingList = new ShoppingList(name,nameID);
         while(querySelectShoppingList.next()){
             int productQuantity = querySelectShoppingList.getInt(1);
