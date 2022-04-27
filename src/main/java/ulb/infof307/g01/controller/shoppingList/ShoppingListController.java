@@ -2,14 +2,14 @@ package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
-import ulb.infof307.g01.controller.alertMessage.HelpController;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
-import ulb.infof307.g01.controller.alertMessage.AlertMessageController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -140,27 +140,34 @@ public class ShoppingListController extends Controller implements ShoppingListVi
      * Afficher une popup qui permet à l'utilisateur de savoir que sa liste de course a bien été modifiée
      */
     public void displayPopupMessageInformation(){
-        AlertMessageController alertMessageViewController = new AlertMessageController();
-        alertMessageViewController.displayAlertMessage();
-
-
         //Refresh si la page liste de courses n'existe plus
         if(shoppingListToSend.isEmpty()){
-            this.refreshModifyShoppingList(alertMessageViewController);
+            this.refreshModifyShoppingList();
+            this.showErrorDeleteShoppingList();
         }
         else{
-            alertMessageViewController.createShoppingListAlertMessage();
+            this.showMessageCreateShoppingList();
         }
+    }
+
+    private void showMessageCreateShoppingList(){
+        String message = "La liste de course a été enregistrée";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Message", message);
     }
 
     /**
      * Permet de refresh la fenetre pour modifier une liste de courses si celle ci a été supprimée
-     * @param alertMessageViewController controleur qui gère les messages d'information
      */
-    public void refreshModifyShoppingList(AlertMessageController alertMessageViewController){
+    public void refreshModifyShoppingList(){
         userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         this.initInformationShoppingList(false);
-        alertMessageViewController.deleteShoppingListeAlertMessage();
+    }
+
+    public void showErrorDeleteShoppingList(){
+        String messageError = "Vous avez enregistré une liste de course vide.\n" +
+                " Elle est donc supprimée. ";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
+
     }
 
     public void addProductToShoppingListToSend(Product product){

@@ -1,6 +1,7 @@
 package ulb.infof307.g01.view.shop;
 
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextField;
 import ulb.infof307.g01.view.ViewController;

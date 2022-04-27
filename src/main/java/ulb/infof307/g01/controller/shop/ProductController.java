@@ -1,8 +1,8 @@
 package ulb.infof307.g01.controller.shop;
 
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.alertMessage.AlertMessageController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
@@ -90,9 +90,6 @@ public class ProductController extends Controller implements ProductViewControll
     public void importProductJsonFile() {
         final String windowTitle = "Importer un PRODUIT depuis un fichier JSON";
 
-        AlertMessageController alertMessageController = new AlertMessageController();
-        alertMessageController.displayAlertMessage();
-
         File jsonProduct = importJSON(windowTitle);
 
         if(jsonProduct != null){
@@ -100,14 +97,16 @@ public class ProductController extends Controller implements ProductViewControll
             try {
                 json.importProduct(jsonProduct.getAbsolutePath());
             } catch (SQLException e) {
-                alertMessageController.showImportJsonError("Le contenu du JSON est incorrecte ou \nle produit existe deja");
-            }
+                String messageError = "Le contenu du JSON est incorrecte ou \nle produit existe deja";
+                ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
+               }
             String nameProduct = json.getNameProduct();
             shopViewController.setNameProduct(nameProduct);
             createProductStage.close();
         }
         else{
-            alertMessageController.showImportJsonError("Vous n'avez pas importer un fichier JSON");
+            String messageError = "Vous n'avez pas importer un fichier JSON";
+            ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
         }
     }
 

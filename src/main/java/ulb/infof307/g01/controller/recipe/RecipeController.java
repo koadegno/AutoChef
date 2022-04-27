@@ -4,7 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
-import ulb.infof307.g01.controller.alertMessage.HelpController;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
