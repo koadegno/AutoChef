@@ -68,8 +68,18 @@ public class MailViewController extends ViewController<MailViewController.Listen
         mailReceiver.getItems().add(newMail);
         mailReceiver.setValue(newMail);}
 
+    public void logout() {
+        listener.logout();
+    }
+
+    public void helpCreateMail(){
+        listener.helpCreateMailClicked();
+    }
+
     public interface Listener {
         void sendMail(String recipientAddress, String subject, String mailTextBody);
         void createFavoriteMail();
+        void logout();
+        void helpCreateMailClicked();
     }
 }
