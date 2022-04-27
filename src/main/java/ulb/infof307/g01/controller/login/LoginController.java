@@ -1,12 +1,14 @@
-package ulb.infof307.g01.controller;
+package ulb.infof307.g01.controller.login;
 
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.model.Address;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.LoginViewController;
-import ulb.infof307.g01.view.SignUpViewController;
+import ulb.infof307.g01.view.login.LoginViewController;
+import ulb.infof307.g01.view.login.SignUpViewController;
 
 import java.sql.SQLException;
 import java.util.Objects;

@@ -2,7 +2,7 @@ package ulb.infof307.g01;
 
 import javafx.application.Application;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.LoginController;
+import ulb.infof307.g01.controller.login.LoginController;
 
 /**
  * Vrai classe {@code Main}, point d'entrée du programme
