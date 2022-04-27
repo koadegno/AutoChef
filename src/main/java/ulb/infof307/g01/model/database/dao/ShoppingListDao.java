@@ -93,7 +93,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     @Override
     public ShoppingList get(String name) throws SQLException {
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        int userID = Configuration.getCurrent().getCurrentUser().getID();
         int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
         ResultSet querySelectShoppingList = sendQuery(String.format("""
                 SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom
@@ -102,7 +102,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
                 INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID\s
                 INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID
                 INNER JOIN UtilisateurListeCourse ON UtilisateurListeCourse.ListeCourseID = S.ListeCourseID
-                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse.ListeCourseID = %s""", nameID,userID));
+                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse.UtilisateurID = %d""", nameID,userID));
         ShoppingList shoppingList = new ShoppingList(name,nameID);
         while(querySelectShoppingList.next()){
             int productQuantity = querySelectShoppingList.getInt(1);

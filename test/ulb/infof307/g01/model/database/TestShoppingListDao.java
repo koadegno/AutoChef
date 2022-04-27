@@ -54,7 +54,7 @@ class TestShoppingListDao {
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
         Configuration.getCurrent().closeConnection();
-        //Files.deleteIfExists(Path.of("test.sqlite"));
+        Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @Test

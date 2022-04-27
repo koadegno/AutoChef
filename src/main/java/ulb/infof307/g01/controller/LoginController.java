@@ -62,7 +62,6 @@ public class LoginController extends Controller implements LoginViewController.L
             loginViewController.showPasswordError(true);
         }
         else{ //bon mdp et bon pseudo
-            System.out.println(user.getID());
             Configuration.getCurrent().setCurrentUser(user);
             displayHome();
         }

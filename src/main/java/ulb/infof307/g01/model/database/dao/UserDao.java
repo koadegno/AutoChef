@@ -78,7 +78,7 @@ public class UserDao extends Database implements Dao<User>{
 
     @Override
     public User get(String userPseudo) throws SQLException {
-        User user = new User();
+        User user = null;
         ResultSet querySelectUser = sendQuery(String.format("""
                 SELECT U.UtilisateurID, U.Prenom, U.Nom, U.MotDePasse, U.estProfessionnel, UtilisateurAdresse.Pays, UtilisateurAdresse.Ville, UtilisateurAdresse.CodePostal, UtilisateurAdresse.RueNom, UtilisateurAdresse.RueNumero
                 FROM Utilisateur as U
@@ -90,7 +90,7 @@ public class UserDao extends Database implements Dao<User>{
         }
         else{
             System.out.println("je ne fonctionne pas");
-            return null;
+            //TODO lancer une errreur
         }
         return user;
     }
