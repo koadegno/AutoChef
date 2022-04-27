@@ -56,11 +56,11 @@ public class ShopController extends Controller implements ShopViewController.Lis
     public void onSaveShopClicked(String shopName) throws SQLException {
         shop.setName(shopName);
         shop.addAll(viewController.getTableViewShopItems());
-        if(isModifying){
+        if (isModifying) {
             Configuration.getCurrent().getShopDao().update(shop);
             listener.updateShop(shop);
         }
-        else{
+        else {
             Configuration.getCurrent().getShopDao().insert(shop);
             listener.addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }

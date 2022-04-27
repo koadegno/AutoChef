@@ -40,7 +40,6 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
     public static final int CORRECTION_POSITION_Y = 5;
     private MapViewController viewController;
-
     public MapController(Stage primaryStage){
         setStage(primaryStage);
     }
@@ -49,11 +48,11 @@ public class MapController extends Controller implements MapViewController.Liste
      * Lance l'affichage de la carte
      */
     public void show(){
+
         FXMLLoader loader = this.loadFXML("ShowMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
-
     }
 
     /**
@@ -80,6 +79,8 @@ public class MapController extends Controller implements MapViewController.Liste
 
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
+
+        // rajoute les cercles créés au bon overlay
 
         if (shop) {
             viewController.getShopGraphicsCercleList().getGraphics().add(circlePoint);
@@ -162,13 +163,13 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onBackButtonClicked() {
+
         HomePageController homePageController = new HomePageController(currentStage);
         FXMLLoader loader = this.loadFXML("HomePage.fxml");
         HomePageViewController viewController = loader.getController();
 
         viewController.setListener(homePageController);
         homePageController.displayMain();
-
     }
 
     /**
@@ -180,26 +181,29 @@ public class MapController extends Controller implements MapViewController.Liste
         GraphicsOverlay itineraryGraphicsCercleList = viewController.getItineraryGraphicsCircleList();
         GraphicsOverlay itineraryGraphicsTextList   = viewController.getItineraryGraphicsTextList();
 
-        if (itineraryGraphicsCercleList.getGraphics().size() == 0) {return;}
+        int vide = 0;
+        int itineraryIndex = 2;
+        int departureIndex = 1;
+        int arrival = 0;
+
+        if (itineraryGraphicsCercleList.getGraphics().size() == vide) {return;}
 
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer l'itinéraire actuel ? ");
         if (alertResult == ButtonType.OK) {
 
-            System.out.println(itineraryGraphicsCercleList.getGraphics().size());
-
-            if (itineraryGraphicsCercleList.getGraphics().size() == 3) {
-                itineraryGraphicsCercleList.getGraphics().remove(2);
+            if (itineraryGraphicsCercleList.getGraphics().size() > itineraryIndex) {
+                itineraryGraphicsCercleList.getGraphics().remove(itineraryIndex);
             }
 
-            if (itineraryGraphicsCercleList.getGraphics().size() == 2) {
-                itineraryGraphicsCercleList.getGraphics().remove(1);
-                itineraryGraphicsTextList.getGraphics().remove(1);
+            if (itineraryGraphicsCercleList.getGraphics().size() > departureIndex) {
+                itineraryGraphicsCercleList.getGraphics().remove(departureIndex);
+                itineraryGraphicsTextList.getGraphics().remove(departureIndex);
             }
 
             else { switchVisibilityContextMenu();}
 
-            itineraryGraphicsCercleList.getGraphics().remove(0);
-            itineraryGraphicsTextList.getGraphics().remove(0);
+            itineraryGraphicsCercleList.getGraphics().remove(arrival);
+            itineraryGraphicsTextList.getGraphics().remove(arrival);
         }
     }
 
@@ -213,8 +217,11 @@ public class MapController extends Controller implements MapViewController.Liste
         MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
 
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > 1) { onDeleteItineraryClicked();}
+        // Si un itinéraire est déjà calculé, demande à supprimé le précédent
+        int itineraryAlreadyExist = 1;
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > itineraryAlreadyExist) { onDeleteItineraryClicked();}
 
+        // Affiche le texte en fonction de ce qui est recherché
         String text;
         if (viewController.getIfSearchDeparture()) {text = "Départ";}
         else {text = "Arrivée";}
@@ -230,22 +237,24 @@ public class MapController extends Controller implements MapViewController.Liste
         // Dessine le cercle sur la carte
         addCircle(COLOR_BLUE, text, mapPoint, false);
 
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == 2) { calculRoute();}
+        int readyToCalculRoute = 2;
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == readyToCalculRoute) { calculRoute();}
     }
 
     /**
-     * Affiche l'itinéraire
+     * Calcule et affiche l'itinéraire
      */
-
     private void calculRoute() {
 
         Graphic routeGraphic = new Graphic();
-        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, 0xFF0596FF, 4));
+        int width = 4;
+        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, COLOR_BLUE, width));
 
         viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
         RouteTask routeTask = new RouteTask("https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
         ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
 
+        // Récupère les positions de départ et d'arrivée
         List<Stop> stops = viewController.getItineraryGraphicsCircleList().getGraphics()
                 .stream()
                 .filter(graphic -> graphic.getGeometry() != null)
@@ -260,14 +269,19 @@ public class MapController extends Controller implements MapViewController.Liste
                 routeParameters.setReturnDirections(true);
                 routeParameters.setDirectionsLanguage("fr");
 
-                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(4));
+                // choisis le mode de voyage
+                int walking = 4;
+                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(walking));
 
+                // calcul l'itinéraire
                 ListenableFuture<RouteResult> routeResultFuture = routeTask.solveRouteAsync(routeParameters);
 
+                // dessine l'itinéraire
                 routeResultFuture.addDoneListener(() -> {
                     try {
                         RouteResult routeResult = routeResultFuture.get();
-                        Route route = routeResult.getRoutes().get(0);
+                        int firstRoute= 0;
+                        Route route = routeResult.getRoutes().get(firstRoute);
                         routeGraphic.setGeometry(route.getRouteGeometry());
 
                         System.out.println(route.getTotalTime());
@@ -279,6 +293,7 @@ public class MapController extends Controller implements MapViewController.Liste
             } catch (Exception e) { e.printStackTrace(); }
         });
     }
+
 
     /**
      * Rend inaccessible certains items du contexte menu
