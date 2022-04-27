@@ -111,7 +111,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         favoriteRecipeViewController = loader.getController();
         favoriteRecipeViewController.setListener(this);
         try { //TODO: les recettes favoris de l utilisateur au lieu de  toute les recette
-            ArrayList<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, -1);
+            ArrayList<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
             favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
         } catch (SQLException e) {
             throw new RuntimeException(e);
