@@ -1,6 +1,7 @@
 package ulb.infof307.g01.model.database.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
@@ -37,6 +38,11 @@ public class ShopDao extends Database implements Dao<Shop> {
         return getAllNameFromTable(MAGASIN_TABLE_NAME,"ORDER BY Nom ASC");
     }
 
+    /**
+     * ajout un magasin a la base de donnée
+     * @param shop l'objet magasin a ajouté
+     * @throws SQLException erreur liée à la base de donnée
+     */
     @Override
     public void insert(Shop shop) throws SQLException {
         String name = String.format("'%s'", shop.getName());
@@ -46,7 +52,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         String[] values = {"null", name,"null", longitude,latitude};
         insert(MAGASIN_TABLE_NAME, values);
 
-        String shopID = String.format("%d", getGeneratedID());
+        String shopID = String.valueOf(getGeneratedID());
 
         for (Product product: shop) {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
@@ -54,10 +60,20 @@ public class ShopDao extends Database implements Dao<Shop> {
             String[] productValues = {shopID,productID,price};
             insert("MagasinIngredient", productValues);
         }
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String[] userShopValues = {userID,shopID};
+        insert("UtilisateurMagasin", userShopValues);
     }
 
+    /**
+     * Methode rustique de mise a jour supprimer l'ancienne valeur et
+     * ajout la nouvelle modifié
+     * @param shop le magasin a mettre a jour
+     * @throws SQLException erreur lié a la base de donnée
+     */
     @Override
     public void update(Shop shop) throws SQLException {
+        // TODO MODIFIER CA
         delete(shop);
         insert(shop);
     }
@@ -68,6 +84,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur avec la requête SQL
      */
     public List<Shop> getShops() throws SQLException {
+        //TODO MODIFIER CA
         List<Shop> shops = getAllShops();
         for(Shop shop: shops){
             fillShopWithProducts(shop);
@@ -86,7 +103,11 @@ public class ShopDao extends Database implements Dao<Shop> {
                 FROM MagasinIngredient as MI
                 INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID
                 INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID
-                WHERE MI.MagasinID = %d""",shop.getID());
+                INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = MI.MagasinID
+                WHERE MI.MagasinID = %d AND UtilisateurMagasin.UtilisateurID = %d""",
+                shop.getID(),
+                Configuration.getCurrent().getCurrentUser().getID());
+
         ResultSet querySelectProductList = sendQuery(query);
         while(querySelectProductList != null &&querySelectProductList.next()){
             String productName = querySelectProductList.getString("Nom");
@@ -101,6 +122,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private List<Shop> getAllShops() throws SQLException {
+        //TODO MODIFIER CA
         PreparedStatement statement =  select(MAGASIN_TABLE_NAME, new ArrayList<>(),null);
         ResultSet  shopResultSet = sendQuery(statement);
         ArrayList<Shop> shopsList = new ArrayList<>();
