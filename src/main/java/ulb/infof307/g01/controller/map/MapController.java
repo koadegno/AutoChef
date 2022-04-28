@@ -284,14 +284,35 @@ public class MapController extends Controller implements MapViewController.Liste
                         Route route = routeResult.getRoutes().get(firstRoute);
                         routeGraphic.setGeometry(route.getRouteGeometry());
 
-                        System.out.println(route.getTotalTime());
-                        System.out.println(route.getTotalLength());
+                        // Affiche la durée et la distance de l'itinéraire calculé
+                        itineraryInformationDisplay(route.getTotalTime(), route.getTotalLength());
 
                         route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
                     } catch (Exception e) { e.printStackTrace(); }
                 });
             } catch (Exception e) { e.printStackTrace(); }
         });
+    }
+
+    private void itineraryInformationDisplay(double time, double length) {
+
+        String information = Math.ceil(time) + " min " + Math.ceil(length) + " m ";
+
+        TextSymbol pierTextSymbol =
+                new TextSymbol(
+                        SIZE*2, information, COLOR_BLACK,
+                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+
+        MapView mapView = viewController.getMapView();
+        MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
+
+        Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
+        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
+        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
+
+        Graphic textPoint   = new Graphic(mapPoint, pierTextSymbol);
+        viewController.getItineraryGraphicsTextList().getGraphics().add(textPoint);
     }
 
 

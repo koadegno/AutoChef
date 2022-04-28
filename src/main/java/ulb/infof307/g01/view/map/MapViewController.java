@@ -39,7 +39,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
-
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
     private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
@@ -58,17 +57,13 @@ public class MapViewController extends ViewController<MapViewController.Listener
         return shopGraphicsCircleOverlay;
     }
 
-    public GraphicsOverlay getShopGraphicsTextList() {
-        return shopGraphicsTextOverlay;
-    }
+    public GraphicsOverlay getShopGraphicsTextList() { return shopGraphicsTextOverlay;}
 
     public GraphicsOverlay getItineraryGraphicsTextList() {
         return itineraryGraphicsTextOverlay;
     }
 
-    public GraphicsOverlay getItineraryGraphicsCircleList() {
-        return itineraryGraphicsCircleOverlay;
-    }
+    public GraphicsOverlay getItineraryGraphicsCircleList() { return itineraryGraphicsCircleOverlay;}
 
     public MapView getMapView() {
         return mapView;
