@@ -88,7 +88,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     public void onBackButtonClick() {
         //parentController.displayMain(); TODO
         HomePageController homePageController = new HomePageController(currentStage);
-        homePageController.displayMain();
+        homePageController.displayHome();
     }
 
     @Override

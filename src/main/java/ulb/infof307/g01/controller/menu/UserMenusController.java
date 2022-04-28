@@ -4,11 +4,10 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.menu.HomeMenuViewController;
 import ulb.infof307.g01.view.menu.UserMenusViewController;
 import ulb.infof307.g01.view.ViewController;
 
@@ -17,19 +16,22 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class UserMenusController extends Controller implements UserMenusViewController.Listener {
-    private final ArrayList<Menu> menus ;
+public class UserMenusController extends Controller implements UserMenusViewController.Listener,ListenerBackPreviousWindow {
+    private ArrayList<Menu> menus ;
     private List<String> allMenusNames;
     private UserMenusViewController viewController;
 
 
-    public UserMenusController(Stage primaryStage) {
+    public UserMenusController(Stage primaryStage) { this(primaryStage,null); }
+
+    public UserMenusController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         setStage(primaryStage);
         this.menus = new ArrayList<>();
         this.allMenusNames = new ArrayList<>();
     }
 
-    public void showAllMenus(){
+    public void displayAllMenus(){
         FXMLLoader loader = this.loadFXML("UserMenus.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
@@ -42,6 +44,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
      * @see Configuration
      * */
     private void start(){
+        this.menus = new ArrayList<>();
         try {
             allMenusNames = Configuration.getCurrent().getMenuDao().getAllName();
             for (String name : allMenusNames){
@@ -59,9 +62,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
      * Affiche la page principale des menus*/
     @Override
     public void onBackButtonClicked() {
-        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        HomeMenuViewController viewController = loader.getController();
-        viewController.setListener(new HomePageController(currentStage));
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override
@@ -86,8 +87,8 @@ public class UserMenusController extends Controller implements UserMenusViewCont
         if (!isNameBlank) {
             try {
                 Menu menu = Configuration.getCurrent().getMenuDao().get(menuName);
-                ShowMenuController showMenuController = new ShowMenuController(currentStage,menu);
-                showMenuController.showMenu();
+                ShowMenuController showMenuController = new ShowMenuController(currentStage,menu.getName(),this);
+                showMenuController.displayMenu();
 
             } catch (SQLException e) {
                 ViewController.showErrorSQL();
@@ -132,4 +133,6 @@ public class UserMenusController extends Controller implements UserMenusViewCont
     }
 
 
+    @Override
+    public void onReturn() { displayAllMenus(); }
 }

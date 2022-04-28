@@ -1,4 +1,4 @@
-package ulb.infof307.g01.view.login;
+package ulb.infof307.g01.view.connexion;
 
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;

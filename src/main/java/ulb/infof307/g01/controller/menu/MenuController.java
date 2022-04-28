@@ -6,6 +6,7 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.model.Day;
@@ -35,12 +36,11 @@ public class MenuController extends Controller implements CreateMenuViewControll
     private Scene currentScene;
     private boolean isModifying;
 
-    public MenuController(ShowMenuViewController showMenuViewController){
-        //TODO: changer ça avec le MVC of course
-        this.windowShowMenuViewController = showMenuViewController;
-    }
 
-    public MenuController(Stage primaryStage){
+    public MenuController(Stage primaryStage){ this(primaryStage,null); }
+
+    public MenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         setStage(primaryStage);
         menu = new Menu();
         daysName = new ArrayList<>();
@@ -106,8 +106,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
                 FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
                 HomeMenuViewController viewController = loader.getController();
-                HomePageController homePageController = new HomePageController(currentStage);
-                viewController.setListener(homePageController);
+                HomePageMenuController homePageMenuController = new HomePageMenuController(currentStage);
+                viewController.setListener(homePageMenuController);
                 return isSaved;
             }
         } catch(SQLException e) {
@@ -126,8 +126,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onReturnClicked(){
-        HomePageController homePageController = new HomePageController(currentStage);
-        homePageController.onMenuButtonClick();
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override

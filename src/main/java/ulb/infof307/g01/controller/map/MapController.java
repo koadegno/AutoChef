@@ -47,15 +47,20 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
     private MapViewController viewController;
+
     public MapController(Stage primaryStage){
+        this(primaryStage,null);
+    }
+
+    public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         setStage(primaryStage);
     }
 
     /**
      * Lance l'affichage de la carte
      */
-    public void show(){
-
+    public void displayMap(){
         FXMLLoader loader = this.loadFXML("ShowMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
@@ -169,13 +174,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onBackButtonClicked() {
-
-        HomePageController homePageController = new HomePageController(currentStage);
-        FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageViewController viewController = loader.getController();
-
-        viewController.setListener(homePageController);
-        homePageController.displayMain();
+        listenerBackPreviousWindow.onReturn();
     }
 
     /**
