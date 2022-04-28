@@ -170,10 +170,10 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.setContextMenu(contextMenu);
         deleteItineraryItem.setVisible(false);
 
-        // context menu pour l'ajout
+        // contexte menu pour l'ajout
         addShopMenuItem.setOnAction(event -> listener.onAddShopClicked());
 
-        // context menu pour la suppression
+        // contexte menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
             try {
                 listener.onDeleteShopClicked(); //

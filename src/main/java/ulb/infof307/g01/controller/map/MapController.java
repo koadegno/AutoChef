@@ -222,6 +222,9 @@ public class MapController extends Controller implements MapViewController.Liste
         MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
 
+        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
+        if(shopOverlay == null && viewController.getItineraryGraphicsCircleList().getGraphics().size() == 0) return;
+
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
         int itineraryAlreadyExist = 1;
         boolean isDelete = true;
@@ -346,7 +349,6 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * Supprime les points selectioner de l'overlay
-     *
      */
     public void onDeleteShopClicked() throws SQLException {
 
