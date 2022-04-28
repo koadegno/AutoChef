@@ -17,7 +17,7 @@ public class Recipe extends ProductHashSet {
     private int nbrPerson;
     private String preparation;
 
-    private  Boolean isFavorite;
+    private  Boolean isFavorite = false;
 
     public Recipe (String name){
         this.name = name;

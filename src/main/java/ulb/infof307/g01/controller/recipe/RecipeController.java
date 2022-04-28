@@ -139,7 +139,6 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             currentRecipe.setPreparation(preparation);
             currentRecipe.setType(type);
             currentRecipe.setNbrPerson(nbPerson);
-            currentRecipe.setFavorite(false);
             currentRecipe.addAll(currentShoppingList);
             try {
                 if (isWaitingModification) {
