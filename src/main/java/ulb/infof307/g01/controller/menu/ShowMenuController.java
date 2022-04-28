@@ -6,30 +6,36 @@ import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 
+import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class ShowMenuController extends Controller implements ShowMenuViewController.Listener {
+public class ShowMenuController extends Controller implements ShowMenuViewController.Listener,ListenerBackPreviousWindow {
 
-    private final Menu menu;
+    private Menu menu;
     private ShowMenuViewController viewController;
 
 
-    public ShowMenuController(Stage primaryStage, Menu menu) {
+    public ShowMenuController(Stage primaryStage, String menuName) { this(primaryStage, menuName,null); }
+
+    public ShowMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         setStage(primaryStage);
-        this.menu = menu;
+        this.menu = new Menu(menuName);
     }
 
-    public void showMenu(){
+    public void displayMenu(){
         FXMLLoader loader = this.loadFXML("ShowMenu.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
@@ -38,6 +44,12 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     }
 
     private void startMenu() {
+
+        try {
+            this.menu = Configuration.getCurrent().getMenuDao().get(menu.getName());
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
         ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, menu.getNbOfdays()));
         displayMenuInfo();
         displayMenuTable(days);
@@ -68,7 +80,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
 
     @Override
     public void onModifyMenuClicked(){
-        MenuController menuController = new MenuController(currentStage);
+        MenuController menuController = new MenuController(currentStage,this);
         menuController.showModifyMenu(menu);
     }
 
@@ -87,8 +99,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
 
     @Override
     public void onBackClicked(){
-        UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.showAllMenus();
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override
@@ -96,4 +107,6 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
         userLogout();
     }
 
+    @Override
+    public void onReturn() { displayMenu(); }
 }

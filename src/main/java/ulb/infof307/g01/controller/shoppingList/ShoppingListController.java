@@ -245,7 +245,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     public void returnToUserMenu(){
         UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.showAllMenus();
+        userMenusController.displayAllMenus();
     }
 
     public void exportShoppingList(String currentShoppingListName){

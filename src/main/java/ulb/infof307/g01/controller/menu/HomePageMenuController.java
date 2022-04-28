@@ -3,7 +3,6 @@ package ulb.infof307.g01.controller.menu;
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
@@ -39,8 +38,8 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
      */
     @Override
     public void onUserMenusButtonClick() {
-        UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.showAllMenus();
+        UserMenusController userMenusController = new UserMenusController(currentStage,this);
+        userMenusController.displayAllMenus();
     }
 
     /**
@@ -50,7 +49,7 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
      */
     @Override
     public void onUserCreateMenuButtonClick() {
-        MenuController menuController = new MenuController(currentStage);
+        MenuController menuController = new MenuController(currentStage,this);
         menuController.showCreateMenu();
     }
 
