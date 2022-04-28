@@ -8,7 +8,7 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Address;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.login.SignUpViewController;
+import ulb.infof307.g01.view.connexion.SignUpViewController;
 
 import java.sql.SQLException;
 

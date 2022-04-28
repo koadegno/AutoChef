@@ -7,7 +7,7 @@ import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.login.LoginViewController;
+import ulb.infof307.g01.view.connexion.LoginViewController;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -22,7 +22,7 @@ public class LoginController extends Controller implements LoginViewController.L
     }
 
     /**
-    * Affiche la page du login
+    * Affiche la page du connexion
      * @see ulb.infof307.g01.Main
      */
     public void displayHomeLogin(){
@@ -38,7 +38,7 @@ public class LoginController extends Controller implements LoginViewController.L
     }
 
     /**
-     * Verifie si le login peut avoir lieu, si oui redirection vers la homePage.
+     * Verifie si le connexion peut avoir lieu, si oui redirection vers la homePage.
      */
     @Override
     public void onLoginButtonClick(String pseudo,String password) {
