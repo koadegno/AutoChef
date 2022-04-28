@@ -9,14 +9,16 @@ import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Super Classe contenant les méthodes doublons qu'utilise la fenêtre creation/modif liste de courses
  */
 
 public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
-    protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
+
+    private final int maxQuantity = 10000;
+    protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxQuantity);
     @FXML
     protected HBox hBoxToCreateProduct;
     @FXML
@@ -66,7 +68,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
      */
     public void fillShoppingListToSend() {
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
-            Product product = (Product) tableViewDisplayProductList.getItems().get(i);
+            Product product = tableViewDisplayProductList.getItems().get(i);
             listener.addProductToShoppingListToSend(product);
         }
     }
@@ -106,16 +108,16 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         spinnerValueFactory.setValue(0);
     }
 
-    public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName) {
+    public void initComboBox(List<String> allProduct, List<String> allUnitName) {
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
     }
 
-    public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView tableViewDisplayProductList ){
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = new Callback<>() {
+    public Callback<TableColumn<Product, Void>, TableCell<Product, Void>> createColWithButton(TableView<Product> tableViewDisplayProductList ){
+        return new Callback<>() {
             @Override
             public TableCell<Product, Void> call(TableColumn<Product, Void> param) {
-                final TableCell<Product, Void> cell = new TableCell<>() {
+                return new TableCell<>() {
 
                     //Creer un bouton supprimer
                     private final Button btnDelete = new Button("Supprimer");
@@ -138,10 +140,8 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
                         }
                     }
                 };
-                return cell;
             }
         };
-        return cellFactory;
     }
 
     public void addProductToTableView(Product product){
@@ -155,6 +155,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public void sendShoppingListByMail() {
         listener.sendShoppingListByMail(currentShoppingListName);
     }
+    public void logout(){listener.logout();}
 
 
     public interface Listener{
@@ -168,11 +169,11 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void seeUserShoppingList(Object nameUserShoppingList);
         void confirmUserModifyShoppingList(String currentShoppingListName);
         void addProductToShoppingListToSend(Product product);
-
         void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
-
         void cancelRecipeCreation();
-
         void returnAddedProducts();
+
+        void helpShoppingList(boolean isCreateShoppingList);
+        void logout();
     }
 }

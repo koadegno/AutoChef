@@ -1,5 +1,6 @@
 package ulb.infof307.g01.view.menu;
 
+import javafx.event.ActionEvent;
 import ulb.infof307.g01.view.ViewController;
 
 /**
@@ -15,9 +16,16 @@ public class HomeMenuViewController extends ViewController<HomeMenuViewControlle
 
     public void onBackButtonClick() { listener.onBackButtonClick(); }
 
+
+    public void logout() {
+        listener.logout();
+    }
+
     public interface HomeMenuListener {
         void onBackButtonClick();
         void onUserMenusButtonClick();
         void onUserCreateMenuButtonClick();
+
+        void logout();
     }
 }

@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.mail;
 
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.export.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -75,6 +76,20 @@ public class MailController extends Controller implements MailViewController.Lis
         } catch (IOException e) {
             e.printStackTrace();
         }
+    }
+
+    @Override
+    public void logout() {
+        userLogout();
+        popupStageMail.close();
+    }
+
+    @Override
+    public void helpCreateMailClicked() {
+        int numberOfImageHelp = 7;
+        String directory = "helpMail/";
+        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
     public void initComboboxFavoriteMail(){

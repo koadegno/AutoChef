@@ -4,6 +4,7 @@ import javafx.fxml.FXML;
 import javafx.scene.Node;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
+import javafx.scene.control.TextField;
 import javafx.stage.FileChooser;
 import javafx.stage.Window;
 import javafx.scene.control.Spinner;
@@ -83,6 +84,16 @@ abstract public class ViewController<Listener> {
         });
     }
 
+    @FXML
+    protected void onlyIntValue(TextField textField){
+        //Seulement écrire des nombres
+        textField.textProperty().addListener((observable, oldValue, newValue) -> {
+            if (!newValue.matches("\\d*")) {
+                textField.setText(newValue.replaceAll("[^\\d*]", ""));
+            }
+        });
+    }
+
     public static File showFileChooser(String windowTitle, String extensionDescription,
                                        String extension, Window ownerWindow) {
 
@@ -112,4 +123,6 @@ abstract public class ViewController<Listener> {
         if(alertResult.isEmpty()) return null;
         return alertResult.get();
     }
+
+
 }

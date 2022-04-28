@@ -5,9 +5,11 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.login.LoginController;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
+import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
@@ -77,6 +79,24 @@ public abstract class Controller {
 
     public void setNewScene(FXMLLoader loader) {
         setNewScene(loader, "");
+    }
+
+    public File importJSON(String windowTitle){
+        String extensionDescription = "Fichier JSON";
+        File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
+                "*.json", currentStage);
+
+        if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
+            return jsonFile;
+
+        }
+        return null;
+    }
+
+    protected void userLogout() {
+        Configuration.getCurrent().setCurrentUser(null);
+        LoginController loginController = new LoginController(currentStage);
+        loginController.displayHomeLogin();
     }
 
 }

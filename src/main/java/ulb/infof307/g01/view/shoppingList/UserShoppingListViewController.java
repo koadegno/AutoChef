@@ -13,6 +13,7 @@ import ulb.infof307.g01.model.ShoppingList;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
@@ -87,7 +88,7 @@ public class UserShoppingListViewController extends ShoppingListViewController i
         btnSeeShoppingList.setOnAction(e-> seeMyShoppingListTableView());
     }
 
-    public void initComboBox(ArrayList<String> allProduct, ArrayList<String> allUnitName, ArrayList<String> allShoppinListName ){
+    public void initComboBox(List<String> allProduct, List<String> allUnitName, List<String> allShoppinListName ){
         super.initComboBox(allProduct, allUnitName);
         comboBoxShoppingNameList.setItems(FXCollections.observableArrayList(allShoppinListName));
     }
@@ -109,6 +110,10 @@ public class UserShoppingListViewController extends ShoppingListViewController i
 
         btnExportShoppingList.setVisible(false);
         btnSendMail.setVisible(false);
+    }
+
+    public void helpShoppingList(){
+        listener.helpShoppingList(false);
     }
 
 

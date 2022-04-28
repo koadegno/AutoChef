@@ -5,6 +5,7 @@ plugins {
     id "com.github.johnrengelman.shadow" version "7.1.2"
 }
 
+
 group 'ulb.infof307.g01'
 version '2'
 
@@ -98,6 +99,8 @@ dependencies {
     // <----------------------- ArcGis (map) ----------------------->
     //https://developers.arcgis.com/java/install-and-set-up/
     implementation "com.esri.arcgisruntime:arcgis-java:100.13.0"
+    implementation 'org.jetbrains:annotations:20.1.0'
+    implementation 'org.jetbrains:annotations:20.1.0'
     natives "com.esri.arcgisruntime:arcgis-java-jnilibs:100.13.0"
     natives "com.esri.arcgisruntime:arcgis-java-resources:100.13.0"
     runtimeOnly "org.slf4j:slf4j-nop:1.7.32"

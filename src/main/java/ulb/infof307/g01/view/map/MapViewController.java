@@ -9,6 +9,7 @@ import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -247,6 +248,10 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
 
+    public void helpMap() {
+        listener.helpMapClicked();
+    }
+
     public interface Listener {
         void onInitializeMapShop() throws SQLException;
         void onAddShopClicked();
@@ -258,6 +263,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void onBackButtonClicked();
         void onItineraryClicked();
         boolean onDeleteItineraryClicked();
+        void helpMapClicked();
     }
 }
 

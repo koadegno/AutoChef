@@ -3,6 +3,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.AutoCompletion;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 
 import java.io.IOException;
@@ -27,6 +28,10 @@ class TestAutoCompletion {
     static public void createDB() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
+
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
         Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");

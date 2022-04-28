@@ -1,5 +1,6 @@
 package ulb.infof307.g01.view.menu;
 
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -114,6 +115,15 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         menuNameLabel.setVisible(false);
     }
 
+    public void helpCreateMenu() {
+        listener.onHelpCreateMenuClicked();
+    }
+
+   
+    public void logout() {
+        listener.logout();
+    }
+
 
     public interface Listener{
         void onGenerateMenu();
@@ -122,5 +132,8 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         void onAddRecipeClicked();
         void onReturnClicked();
         void onRemoveRecipeClicked(int dayIndex);
+        void onHelpCreateMenuClicked();
+
+        void logout();
     }
 }

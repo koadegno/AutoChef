@@ -111,4 +111,8 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     public void showIsEmptyTableViewError(){
         this.setNodeColor(tableViewDisplayProductList,true);
     }
+
+    public void helpShoppingList(){
+        listener.helpShoppingList(true);
+    }
 }

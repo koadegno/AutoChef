@@ -2,13 +2,14 @@ package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Alert;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
-import ulb.infof307.g01.controller.alertMessage.AlertMessageController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -29,6 +30,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
+    private final int maxQuantityToNotProfessional = 100;
 
     RecipeController recipeController = null;
 
@@ -139,27 +141,40 @@ public class ShoppingListController extends Controller implements ShoppingListVi
      * Afficher une popup qui permet à l'utilisateur de savoir que sa liste de course a bien été modifiée
      */
     public void displayPopupMessageInformation(){
-        AlertMessageController alertMessageViewController = new AlertMessageController();
-        alertMessageViewController.displayAlertMessage();
-
-
         //Refresh si la page liste de courses n'existe plus
         if(shoppingListToSend.isEmpty()){
-            this.refreshModifyShoppingList(alertMessageViewController);
+            this.refreshModifyShoppingList();
+            this.showErrorDeleteShoppingList();
         }
         else{
-            alertMessageViewController.createShoppingListAlertMessage();
+            this.showMessageCreateShoppingList();
         }
+    }
+
+    private void showMessageCreateShoppingList(){
+        String message = "La liste de course a été enregistrée";
+        ShoppingListViewController.showAlert(Alert.AlertType.INFORMATION, "Message", message);
+    }
+
+    private void showErrorQuantityProduct(){
+        String message = "Il ne vous ait pas possible de rajouter plus de " + maxQuantityToNotProfessional + " quantité \n " +
+                "si vous n'êtes pas un professionnel.";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", message);
     }
 
     /**
      * Permet de refresh la fenetre pour modifier une liste de courses si celle ci a été supprimée
-     * @param alertMessageViewController controleur qui gère les messages d'information
      */
-    public void refreshModifyShoppingList(AlertMessageController alertMessageViewController){
+    public void refreshModifyShoppingList(){
         userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         this.initInformationShoppingList(false);
-        alertMessageViewController.deleteShoppingListeAlertMessage();
+    }
+
+    public void showErrorDeleteShoppingList(){
+        String messageError = "Vous avez enregistré une liste de course vide.\n" +
+                " Elle est donc supprimée. ";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
+
     }
 
     public void addProductToShoppingListToSend(Product product){
@@ -172,10 +187,10 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
             String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
             allUnitName.removeAll(List.of(unitToRemove));
-            ArrayList<String> allShoppinListName = Configuration.getCurrent().getShoppingListDao().getAllName();
+            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
             if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppinListName);
+            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
 
         } catch (SQLException e) {
             e.printStackTrace();
@@ -190,17 +205,37 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
 
-        Product userProduct;
+        if(canAddQuantityOrNumberProduct(quantityOrNumberChoose)){
+            Product userProduct;
 
-        if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
-            //Cree le produit pour le mettre dans le tableView
-            userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
+            if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
+                //Cree le produit pour le mettre dans le tableView
+                userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
 
-            shoppingListViewController.addProductToTableView(userProduct);
-            shoppingListViewController.clearElementAddProduct();
-        } else {
-            shoppingListViewController.showAddProductError(true);
+                shoppingListViewController.addProductToTableView(userProduct);
+                shoppingListViewController.clearElementAddProduct();
+            } else {
+                shoppingListViewController.showAddProductError(true);
+            }
         }
+
+    }
+
+    /**
+     * Permet de savoir si l'utilisateur peut rajouter un grand nombre de quantité d'un produit
+     * @param quantityOrNumberChoose la quantité du produit
+     * @return un boolean à Vrai si l'utilisateur peut rajouter le produit avec la quantité choisi
+     */
+    private boolean canAddQuantityOrNumberProduct(int quantityOrNumberChoose){
+        boolean isProfessional = Configuration.getCurrent().getCurrentUser().isProfessional();
+        boolean canAddProduct = true;
+        if(!isProfessional){
+            if(quantityOrNumberChoose > maxQuantityToNotProfessional){
+                canAddProduct = false;
+                showErrorQuantityProduct();
+            }
+        }
+        return canAddProduct;
     }
 
     @Override
@@ -249,4 +284,23 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     public void returnAddedProducts() {
         recipeController.modifyProductsCallback(shoppingListToSend);
     }
+
+    @Override
+    public void helpShoppingList(boolean isCreateShoppingList) {
+        int numberOfImageHelp;
+        String directory;
+        if(isCreateShoppingList){
+            numberOfImageHelp = 8;
+            directory = "helpCreateShoppingList/";
+        }
+        else{
+            numberOfImageHelp = 12;
+            directory = "helpUserShoppingList/";
+        }
+        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
+    }
+
+    @Override
+    public void logout(){userLogout();}
 }

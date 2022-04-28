@@ -8,6 +8,7 @@ public class Recipe extends ProductHashSet {
 
     public void setId(int id) {this.id = id;}
 
+
     private int id;
     private String name;
     private int duration;
@@ -15,6 +16,8 @@ public class Recipe extends ProductHashSet {
     private String type;
     private int nbrPerson;
     private String preparation;
+
+    private  Boolean isFavorite = false;
 
     public Recipe (String name){
         this.name = name;
@@ -25,12 +28,17 @@ public class Recipe extends ProductHashSet {
         this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
 
+    public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation,Boolean isFavorite) {
+        this(id,name,duration,category,type,nbrPerson,preparation);
+        this.isFavorite = isFavorite;
+    }
+
     public Recipe (String name, int duration, String category, String type, int nbrPerson, String preparation) {
         this.name = name; this.duration = duration; this.category = category; this.type = type;
         this.nbrPerson = nbrPerson;     this.preparation = preparation;
     }
-
     public int getId() { return id;}
+    public Boolean isFavorite() {return isFavorite;}
     public String getName() {
         return name;
     }
@@ -66,5 +74,9 @@ public class Recipe extends ProductHashSet {
             return false;
 
         return this.getName().equals(((Recipe) other).getName());
+    }
+
+    public void setFavorite(Boolean isChecked) {
+        isFavorite = isChecked;
     }
 }

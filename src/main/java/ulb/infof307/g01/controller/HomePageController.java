@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
+import ulb.infof307.g01.controller.login.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
@@ -30,7 +31,7 @@ public class HomePageController extends Controller implements HomePageListener, 
 
     /**
      * Affiche la page principale de l'application.
-     * @see ulb.infof307.g01.Main
+     * @see LoginController
      * */
     public void displayMain() {
         FXMLLoader loader = loadFXML("HomePage.fxml");
@@ -86,9 +87,11 @@ public class HomePageController extends Controller implements HomePageListener, 
      * Ferme la fenêtre et termine le programme.
      */
     @Override
-    public void onQuitButtonClick() {
-        currentStage.close();
+    public void logout() {
+        userLogout();
     }
+
+
 
     // Méthodes de la page principale de ShoppingList
 

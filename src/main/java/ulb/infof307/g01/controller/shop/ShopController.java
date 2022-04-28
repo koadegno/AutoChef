@@ -1,10 +1,11 @@
-package ulb.infof307.g01.controller.map;
+package ulb.infof307.g01.controller.shop;
 
 import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
@@ -96,6 +97,19 @@ public class ShopController extends Controller implements ShopViewController.Lis
         Product product = new Product(nameProduct, priceProduct);
         viewController.getTableViewShopItems().add(product);
 
+    }
+
+    @Override
+    public void createNewProductClicked() {
+        ProductController productController = new ProductController(viewController);
+        productController.displayCreateNewProduct();
+    }
+
+    @Override
+    public void displayHelpShop() {
+        int numberOfImageHelp = 14;
+        HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
     /**

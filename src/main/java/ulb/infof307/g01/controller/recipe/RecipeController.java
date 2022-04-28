@@ -4,17 +4,15 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
-import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
-import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
-import ulb.infof307.g01.view.recipe.UserRecipesViewController;
+import ulb.infof307.g01.view.recipe.*;
 
-import javax.annotation.Nullable;
+import org.jetbrains.annotations.Nullable;
 import java.io.File;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -28,18 +26,20 @@ import java.util.Vector;
 public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
         CreateRecipeViewController.CreateRecipeListener,
         UserRecipesViewController.UserRecipesListener,
-        SearchRecipeViewController.Listener {
+        SearchRecipeViewController.Listener, FavoriteRecipeViewController.FavoriteRecipesListener {
 
     // private Controller parentController; //TODO
 
     Scene sceneViewRecipe = null;
     Scene sceneModifyRecipe = null;
+    Scene sceneFavoriteRecipe = null;
 
     boolean isWaitingModification = false;
 
     private CreateRecipeViewController createRecipeViewController;
     private UserRecipesViewController userRecipesViewController;
     private SearchRecipeViewController searchRecipeViewController;
+    private FavoriteRecipeViewController favoriteRecipeViewController;
 
     private Recipe currentRecipe;
     private ShoppingList currentShoppingList;
@@ -89,6 +89,29 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         //parentController.displayMain(); TODO
         HomePageController homePageController = new HomePageController(currentStage);
         homePageController.displayMain();
+    }
+
+    @Override
+    public void onHelpCreateRecipeClicked(){
+        int numberOfImageHelp = 10;
+        HelpController helpController = new HelpController("helpCreateRecipe/", numberOfImageHelp);
+        helpController.displayHelpShop();
+    }
+
+    @Override
+    public void logout() {
+        userLogout();
+    }
+
+
+
+    @Override
+    public void onFavoriteRecipe() {
+        FXMLLoader loader = this.loadFXML("FavoriteRecipe.fxml");
+        favoriteRecipeViewController = loader.getController();
+        favoriteRecipeViewController.setListener(this);
+        List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
+        favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
     }
 
     // <-------------------------- Écran de Création des Recettes --------------------------> \\
@@ -212,6 +235,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         displayMain();
     }
 
+
+
     // <-------------------------- Écran de Liste des Recettes --------------------------> \\
 
     /**
@@ -237,6 +262,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             userRecipesViewController.setDisableRecipeButtons(false);
             userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
                     currentRecipe.getPreparation());
+            userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }
 
     }
@@ -327,15 +353,12 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     @Override
     public void onImportRecipeFromJSONButtonClick() {
         final String windowTitle = "Importer une Recette depuis un fichier JSON";
-        String extensionDescription = "Fichier JSON";
-        File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
-                "*.json", currentStage);
+        File jsonRecipe = importJSON(windowTitle);
 
-        if (jsonFile != null && jsonFile.getName().endsWith(".json")) {
+        if(jsonRecipe != null){
             JSON json = new JSON();
-            json.importRecipe(jsonFile.getAbsolutePath());
-            onRecipeSearchTextFieldSubmit(json.getName());
-
+            json.importRecipe(jsonRecipe.getAbsolutePath());
+            onRecipeSearchTextFieldSubmit(json.getNameRecipe());
         }
 
     }
@@ -436,6 +459,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
                 userRecipesViewController.recipeSearchTextFieldError(false);
                 userRecipesViewController.setDisableRecipeButtons(false);
                 userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getPreparation());
+                userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
 
             }else {
                 listener.onRecipeSelected(selectedRecipe);
@@ -453,5 +477,32 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
     public interface SearchRecipeListener{
         void onRecipeSelected(Recipe selectedRecipe);
         void onCancelButtonClicked();
+    }
+
+
+    /***************************FAVORITERECIPE*******************************/
+    @Override
+    public void onFavoriteRecipesTableViewClicked(Recipe recipe) {
+        currentRecipe = recipe;
+        sceneFavoriteRecipe = currentStage.getScene();
+        onUserRecipesButtonClick();
+        userRecipesViewController.initReadOnlyMode();
+        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
+                currentRecipe.getPreparation());
+    }
+
+    @Override
+    public void onEndViewFavoriteRecipeButton() {
+        currentStage.setScene(sceneFavoriteRecipe);
+    }
+
+    @Override
+    public void onFavoriteRecipeCheck(Boolean isChecked) {
+        currentRecipe.setFavorite(isChecked);
+        try {
+            Configuration.getCurrent().getRecipeDao().update(currentRecipe);
+        } catch (SQLException e) {
+            UserRecipesViewController.showErrorSQL();
+        }
     }
 }

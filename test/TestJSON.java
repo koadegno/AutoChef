@@ -8,6 +8,7 @@ import org.json.simple.JSONObject;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 
@@ -20,6 +21,10 @@ class TestJSON {
     @BeforeAll
     static public void createDB() throws SQLException {
         Configuration.getCurrent().setDatabase(fileNameDB);
+
+        User testUser = new User("admin","admin",true);
+        testUser.setID(1);
+        Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
         Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
@@ -69,7 +74,7 @@ class TestJSON {
     }
 
     @Test
-    public void testJsonProduct(){
+    public void testJsonProduct() throws SQLException {
         JSON json = new JSON();
         json.importProduct(fileNameProduct);
         //get recipe from database to check if it's created

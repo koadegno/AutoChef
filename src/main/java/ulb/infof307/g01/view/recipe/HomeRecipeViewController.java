@@ -1,5 +1,6 @@
 package ulb.infof307.g01.view.recipe;
 
+import javafx.event.ActionEvent;
 import ulb.infof307.g01.view.ViewController;
 
 public class HomeRecipeViewController extends ViewController<HomeRecipeViewController.HomeRecipeListener> {
@@ -8,9 +9,21 @@ public class HomeRecipeViewController extends ViewController<HomeRecipeViewContr
     public void onCreateRecipeButtonClick() {listener.onNewRecipeButtonClick();}
     public void onBackButtonClick() {listener.onBackButtonClick();}
 
+    public void logout() {
+        listener.logout();
+    }
+
+    public void onFavoriteRecipe() {
+        listener.onFavoriteRecipe();
+    }
+
     public interface HomeRecipeListener {
         void onUserRecipesButtonClick();
         void onNewRecipeButtonClick();
         void onBackButtonClick();
+
+        void logout();
+
+        void onFavoriteRecipe();
     }
 }
