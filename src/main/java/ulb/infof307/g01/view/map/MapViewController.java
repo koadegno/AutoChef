@@ -78,7 +78,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         //TODO trouver un meilleur moyen de mettre la clé
         String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
         ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
-        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
+        ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_STREETS);
         mapView.setMap(map);
         mapView.setViewpoint(new Viewpoint(LATITUDE_BRUSSELS, LONGITUDE_BRUSSELS, MAP_SCALE));
         mapView.getGraphicsOverlays().add(shopGraphicsCircleOverlay);
@@ -193,14 +193,10 @@ public class MapViewController extends ViewController<MapViewController.Listener
         });
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> {
-            listener.onItineraryClicked();
-        });
+        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked());
 
         // Supprime l'itinéraire
-        deleteItineraryItem.setOnAction(event -> {
-            listener.onDeleteItineraryClicked();
-        });
+        deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked());
     }
 
     public void itineraryInformation(double timeFeet, double timeBike, double length){

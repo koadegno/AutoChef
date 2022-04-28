@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
@@ -78,7 +79,6 @@ public class MapController extends Controller implements MapViewController.Liste
                 new TextSymbol(
                         SIZE, textCircle, COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
 
@@ -235,25 +235,22 @@ public class MapController extends Controller implements MapViewController.Liste
         // Affiche le texte en fonction de ce qui est recherché
         if(isDelete){
             String text;
-
+            Point mapPoint;
             if (viewController.getIfSearchDeparture()) {
                 text = "Départ";
                 // Il y a une correction de la position
                 Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
                         itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
                 Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-                Point mapPoint = mapView.screenToLocation(cursorCoordinate);
-                // Dessine le cercle sur la carte
-                addCircle(COLOR_BLUE, text, mapPoint, false);
+                mapPoint = mapView.screenToLocation(cursorCoordinate);
             }
-
             else {
-                text = "Arrivée";
+                text = "";
                 Graphic shop = shopOverlay.getLeft();
-                Point mapPoint = (Point) shop.getGeometry();
-                // Dessine le cercle sur la carte
-                addCircle(COLOR_BLUE, text, mapPoint, false);
+                mapPoint = (Point) shop.getGeometry();
+
             }
+            addCircle(COLOR_BLUE, text, mapPoint, false);
 
             switchVisibilityContextMenu();
 
@@ -298,7 +295,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 routeParameters.setDirectionsLanguage("fr");
 
                 // choisis le mode de voyage
-                int walking = 4;
+                int walking = 5;
                 routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(walking));
 
                 // calcul l'itinéraire
@@ -458,6 +455,7 @@ public class MapController extends Controller implements MapViewController.Liste
                     identifiedGraphics.get(0).setSelected(true);
                 }
             } catch (InterruptedException | ExecutionException ex) {
+                System.out.println("il y eu une erreur");
                 ex.printStackTrace();
                 //TODO gerer l'erreur
             }

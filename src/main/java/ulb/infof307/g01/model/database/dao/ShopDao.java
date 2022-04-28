@@ -1,6 +1,7 @@
 package ulb.infof307.g01.model.database.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
@@ -159,7 +160,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
                 double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
-                Point shopPoint = new Point(shopX, shopY);
+                Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
                 shopsList.add(new Shop(shopID, shopName, shopPoint));
             }
         }
