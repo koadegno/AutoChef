@@ -235,24 +235,31 @@ public class MapController extends Controller implements MapViewController.Liste
         // Affiche le texte en fonction de ce qui est recherché
         if(isDelete){
             String text;
-            if (viewController.getIfSearchDeparture()) {text = "Départ";}
-            else {text = "Arrivée";}
+
+            if (viewController.getIfSearchDeparture()) {
+                text = "Départ";
+                // Il y a une correction de la position
+                Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                        itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
+                Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
+                Point mapPoint = mapView.screenToLocation(cursorCoordinate);
+                // Dessine le cercle sur la carte
+                addCircle(COLOR_BLUE, text, mapPoint, false);
+            }
+
+            else {
+                text = "Arrivée";
+                Graphic shop = shopOverlay.getLeft();
+                Point mapPoint = (Point) shop.getGeometry();
+                // Dessine le cercle sur la carte
+                addCircle(COLOR_BLUE, text, mapPoint, false);
+            }
 
             switchVisibilityContextMenu();
-
-            // Il y a une correction de la position
-            Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                    itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
-            Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-            Point mapPoint = mapView.screenToLocation(cursorCoordinate);
-
-            // Dessine le cercle sur la carte
-            addCircle(COLOR_BLUE, text, mapPoint, false);
 
             int readyToCalculRoute = 2;
             if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == readyToCalculRoute) { calculRoute();}
         }
-
     }
 
     @Override
