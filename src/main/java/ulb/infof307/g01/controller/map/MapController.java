@@ -17,18 +17,16 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
@@ -48,9 +46,6 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int AVERAGE_TIME_BIKE = 15;
     private MapViewController viewController;
 
-    public MapController(Stage primaryStage){
-        this(primaryStage,null);
-    }
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
@@ -390,7 +385,7 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Cherche le magasin selectionner par l'utilisateur et
+     * Cherche le magasin sélectionné par l'utilisateur et
      * renvoie la paire d'objet graphique associé aux coordonnées cliquer
      * @return paire d'objet graphique
      */
@@ -476,7 +471,7 @@ public class MapController extends Controller implements MapViewController.Liste
                     displayResult(result);
                     found.set(true);
                 } else {
-                    // pas d'adresse trouvé
+                    // pas d'adresse trouvée
                     found.set(false);
                 }
             } catch (InterruptedException | ExecutionException exception) {
@@ -490,7 +485,7 @@ public class MapController extends Controller implements MapViewController.Liste
     /**
      * Crée et afficher l'objet graphique associé à une recherche d'adresse sur la map
      *
-     * @param geocodeResult le resultat d'une recherche
+     * @param geocodeResult le résultat d'une recherche
      */
     void displayResult(GeocodeResult geocodeResult) {
         GraphicsOverlay addressGraphicsOverlay = viewController.getAddressGraphicsOverlay();
