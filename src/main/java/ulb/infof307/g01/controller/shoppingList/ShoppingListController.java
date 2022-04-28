@@ -30,7 +30,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
-    private int maxQuantityToNotProfessional = 100;
+    private final int maxQuantityToNotProfessional = 100;
 
     RecipeController recipeController = null;
 
