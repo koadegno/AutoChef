@@ -5,7 +5,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.login.LoginController;
+import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
@@ -21,9 +21,13 @@ public abstract class Controller {
 
     protected static final String dataBaseName = "autochef.sqlite";
 
+    protected ListenerBackPreviousWindow listenerBackPreviousWindow;
 
-    protected Controller(){
+    protected Controller(){ this(null); }
+
+    protected Controller(ListenerBackPreviousWindow listenerBackPreviousWindow){
         Configuration.getCurrent().setDatabase(dataBaseName);
+        this.listenerBackPreviousWindow = listenerBackPreviousWindow;
     }
 
     //public abstract void displayMain(); // TODO

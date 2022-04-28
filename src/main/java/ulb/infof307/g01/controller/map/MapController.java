@@ -18,12 +18,11 @@ import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
@@ -43,13 +42,17 @@ public class MapController extends Controller implements MapViewController.Liste
     private MapViewController viewController;
 
     public MapController(Stage primaryStage){
-        setStage(primaryStage);
+        this(primaryStage,null);
     }
 
+    public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
+        setStage(primaryStage);
+    }
     /**
      * Lance l'affichage de la carte
      */
-    public void show(){
+    public void displayMap(){
         FXMLLoader loader = this.loadFXML("ShowMap.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
@@ -149,13 +152,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onBackButtonClicked() {
-        HomePageController homePageController = new HomePageController(currentStage);
-        FXMLLoader loader = this.loadFXML("HomePage.fxml");
-        HomePageViewController viewController = loader.getController();
-
-        viewController.setListener(homePageController);
-        homePageController.displayMain();
-
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override

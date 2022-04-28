@@ -5,6 +5,7 @@ import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.database.Configuration;
@@ -23,7 +24,10 @@ public class UserMenusController extends Controller implements UserMenusViewCont
     private UserMenusViewController viewController;
 
 
-    public UserMenusController(Stage primaryStage) {
+    public UserMenusController(Stage primaryStage) { this(primaryStage,null); }
+
+    public UserMenusController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         setStage(primaryStage);
         this.menus = new ArrayList<>();
         this.allMenusNames = new ArrayList<>();
@@ -59,9 +63,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
      * Affiche la page principale des menus*/
     @Override
     public void onBackButtonClicked() {
-        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        HomeMenuViewController viewController = loader.getController();
-        viewController.setListener(new HomePageController(currentStage));
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override

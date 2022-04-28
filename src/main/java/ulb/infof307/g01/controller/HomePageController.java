@@ -2,7 +2,7 @@ package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
-import ulb.infof307.g01.controller.login.LoginController;
+import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
@@ -20,7 +20,7 @@ import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuViewController.HomeMenuListener {
+public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuViewController.HomeMenuListener,ListenerBackPreviousWindow {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -33,7 +33,7 @@ public class HomePageController extends Controller implements HomePageListener, 
      * Affiche la page principale de l'application.
      * @see LoginController
      * */
-    public void displayMain() {
+    public void displayHome() {
         FXMLLoader loader = loadFXML("HomePage.fxml");
         ulb.infof307.g01.view.HomePageViewController viewController = loader.getController();
         viewController.setListener(this);
@@ -69,8 +69,8 @@ public class HomePageController extends Controller implements HomePageListener, 
      */
     @Override
     public void onMapButtonClick() {
-        MapController mapController = new MapController(currentStage);
-        mapController.show();
+        MapController mapController = new MapController(currentStage,this);
+        mapController.displayMap();
     }
 
     /**
@@ -160,5 +160,10 @@ public class HomePageController extends Controller implements HomePageListener, 
     public void onUserCreateMenuButtonClick() {
         MenuController menuController = new MenuController(currentStage);
         menuController.showCreateMenu();
+    }
+
+    @Override
+    public void onReturn() {
+        displayHome();
     }
 }
