@@ -33,6 +33,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final MenuItem deleteItineraryItem = new MenuItem("Supprimer itinéraire");
     private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
     private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
+    public Label timeFeetLabel;
+    public Label timeBikeLabel;
+    public Label lengthLabel;
     private boolean ifSearchDeparture = false;
     private static final int ONCE_CLICKED = 1;
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
@@ -199,6 +202,18 @@ public class MapViewController extends ViewController<MapViewController.Listener
         });
     }
 
+    public void itineraryInformation(double timeFeet, double timeBike, double length){
+        timeFeetLabel.setText(timeFeet +  " min");
+        timeBikeLabel.setText(timeBike + " min");
+        lengthLabel.setText(length + " Km");
+    }
+
+    public void deleteItineraryInformation(){
+        timeBikeLabel.setText("");
+        timeFeetLabel.setText("");
+        lengthLabel.setText("");
+    }
+
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
 
@@ -242,7 +257,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
         void onItineraryClicked();
-        void onDeleteItineraryClicked();
+        boolean onDeleteItineraryClicked();
     }
 }
 

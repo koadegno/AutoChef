@@ -176,7 +176,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * Supprime l'itinéraire
      */
     @Override
-    public void onDeleteItineraryClicked() {
+    public boolean onDeleteItineraryClicked() {
 
         GraphicsOverlay itineraryGraphicsCercleList = viewController.getItineraryGraphicsCircleList();
         GraphicsOverlay itineraryGraphicsTextList   = viewController.getItineraryGraphicsTextList();
@@ -186,7 +186,7 @@ public class MapController extends Controller implements MapViewController.Liste
         int departureIndex = 1;
         int arrival = 0;
 
-        if (itineraryGraphicsCercleList.getGraphics().size() == vide) {return;}
+        if (itineraryGraphicsCercleList.getGraphics().size() == vide) {return true;}
 
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer l'itinéraire actuel ? ");
         if (alertResult == ButtonType.OK) {
@@ -204,7 +204,12 @@ public class MapController extends Controller implements MapViewController.Liste
 
             itineraryGraphicsCercleList.getGraphics().remove(arrival);
             itineraryGraphicsTextList.getGraphics().remove(arrival);
+
+            viewController.deleteItineraryInformation();
+            return true;
         }
+
+        return false;
     }
 
     /**
@@ -219,26 +224,30 @@ public class MapController extends Controller implements MapViewController.Liste
 
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
         int itineraryAlreadyExist = 1;
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > itineraryAlreadyExist) { onDeleteItineraryClicked();}
+        boolean isDelete = true;
+        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > itineraryAlreadyExist) { isDelete = onDeleteItineraryClicked();}
 
         // Affiche le texte en fonction de ce qui est recherché
-        String text;
-        if (viewController.getIfSearchDeparture()) {text = "Départ";}
-        else {text = "Arrivée";}
+        if(isDelete){
+            String text;
+            if (viewController.getIfSearchDeparture()) {text = "Départ";}
+            else {text = "Arrivée";}
 
-        switchVisibilityContextMenu();
+            switchVisibilityContextMenu();
 
-        // Il y a une correction de la position
-        Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
-        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
+            // Il y a une correction de la position
+            Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                    itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
+            Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
+            Point mapPoint = mapView.screenToLocation(cursorCoordinate);
 
-        // Dessine le cercle sur la carte
-        addCircle(COLOR_BLUE, text, mapPoint, false);
+            // Dessine le cercle sur la carte
+            addCircle(COLOR_BLUE, text, mapPoint, false);
 
-        int readyToCalculRoute = 2;
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == readyToCalculRoute) { calculRoute();}
+            int readyToCalculRoute = 2;
+            if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == readyToCalculRoute) { calculRoute();}
+        }
+
     }
 
     /**
@@ -285,36 +294,26 @@ public class MapController extends Controller implements MapViewController.Liste
                         routeGraphic.setGeometry(route.getRouteGeometry());
 
                         // Affiche la durée et la distance de l'itinéraire calculé
-                        itineraryInformationDisplay(route.getTotalTime(), route.getTotalLength());
+                        int timeBike = getTimeBike();
+                        double totalTimeBike = route.getTotalTime() / timeBike; // calcul du temps en vélo
+                        viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
 
                         route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
-                    } catch (Exception e) { e.printStackTrace(); }
+                    } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");}
                 });
             } catch (Exception e) { e.printStackTrace(); }
         });
     }
 
-    private void itineraryInformationDisplay(double time, double length) {
-
-        String information = Math.ceil(time) + " min " + Math.ceil(length) + " m ";
-
-        TextSymbol pierTextSymbol =
-                new TextSymbol(
-                        SIZE*2, information, COLOR_BLACK,
-                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-
-        MapView mapView = viewController.getMapView();
-        MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
-
-        Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
-        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
-
-        Graphic textPoint   = new Graphic(mapPoint, pierTextSymbol);
-        viewController.getItineraryGraphicsTextList().getGraphics().add(textPoint);
+    /**
+     * Vitesse moyenne de vélo calculer à partir de donnée d'internet
+     * @return la vitesse moyenne de vélo
+     */
+    private int getTimeBike() {
+        int averageTimePedestrian = 5;
+        int averageTimeBike = 15;
+        return averageTimeBike / averageTimePedestrian;
     }
-
 
     /**
      * Rend inaccessible certains items du contexte menu
