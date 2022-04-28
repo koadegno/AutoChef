@@ -9,7 +9,6 @@ import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -17,7 +16,9 @@ import java.util.List;
  */
 
 public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
-    protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, 100);
+
+    private final int maxQuantity = 10000;
+    protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxQuantity);
     @FXML
     protected HBox hBoxToCreateProduct;
     @FXML

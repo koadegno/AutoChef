@@ -30,6 +30,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
+    private int maxQuantityToNotProfessional = 100;
 
     RecipeController recipeController = null;
 
@@ -152,7 +153,13 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     private void showMessageCreateShoppingList(){
         String message = "La liste de course a été enregistrée";
-        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Message", message);
+        ShoppingListViewController.showAlert(Alert.AlertType.INFORMATION, "Message", message);
+    }
+
+    private void showErrorQuantityProduct(){
+        String message = "Il ne vous ait pas possible de rajouter plus de " + maxQuantityToNotProfessional + " quantité \n " +
+                "si vous n'êtes pas un professionnel.";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", message);
     }
 
     /**
@@ -198,17 +205,37 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
 
-        Product userProduct;
+        if(canAddQuantityOrNumberProduct(quantityOrNumberChoose)){
+            Product userProduct;
 
-        if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
-            //Cree le produit pour le mettre dans le tableView
-            userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
+            if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
+                //Cree le produit pour le mettre dans le tableView
+                userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
 
-            shoppingListViewController.addProductToTableView(userProduct);
-            shoppingListViewController.clearElementAddProduct();
-        } else {
-            shoppingListViewController.showAddProductError(true);
+                shoppingListViewController.addProductToTableView(userProduct);
+                shoppingListViewController.clearElementAddProduct();
+            } else {
+                shoppingListViewController.showAddProductError(true);
+            }
         }
+
+    }
+
+    /**
+     * Permet de savoir si l'utilisateur peut rajouter un grand nombre de quantité d'un produit
+     * @param quantityOrNumberChoose la quantité du produit
+     * @return un boolean à Vrai si l'utilisateur peut rajouter le produit avec la quantité choisi
+     */
+    private boolean canAddQuantityOrNumberProduct(int quantityOrNumberChoose){
+        boolean isProfessional = Configuration.getCurrent().getCurrentUser().isProfessional();
+        boolean canAddProduct = true;
+        if(!isProfessional){
+            if(quantityOrNumberChoose > maxQuantityToNotProfessional){
+                canAddProduct = false;
+                showErrorQuantityProduct();
+            }
+        }
+        return canAddProduct;
     }
 
     @Override
