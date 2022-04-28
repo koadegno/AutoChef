@@ -2,7 +2,6 @@ package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
@@ -31,6 +30,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener {
@@ -42,6 +42,10 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
     public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
     public static final int CORRECTION_POSITION_Y = 5;
+    public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 7;
+    public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
+    public static final int AVERAGE_TIME_PEDESTRIAN = 5;
+    public static final int AVERAGE_TIME_BIKE = 15;
     private MapViewController viewController;
     public MapController(Stage primaryStage){
         setStage(primaryStage);
@@ -221,11 +225,10 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onItineraryClicked() {
 
         MapView mapView = viewController.getMapView();
-        MenuItem itineraryMenuItem = viewController.getItineraryShopMenuItem();
         mapView.setCursor(Cursor.DEFAULT);
 
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
-        if(shopOverlay == null && viewController.getItineraryGraphicsCircleList().getGraphics().size() == 0) return;
+        if(shopOverlay == null && viewController.getItineraryGraphicsCircleList().getGraphics().isEmpty()) return;
 
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
         int itineraryAlreadyExist = 1;
@@ -239,8 +242,9 @@ public class MapController extends Controller implements MapViewController.Liste
             if (viewController.getIfSearchDeparture()) {
                 text = "Départ";
                 // Il y a une correction de la position
-                Point2D cursorPoint2D = new Point2D(itineraryMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                        itineraryMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
+                MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
+                Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
+                        addShopMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
                 Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
                 mapPoint = mapView.screenToLocation(cursorCoordinate);
             }
@@ -259,10 +263,12 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
+    /**
+     * Lance la page d'aide
+     */
     @Override
     public void helpMapClicked() {
-        int numberOfImageHelp = 7;
-        HelpController helpController = new HelpController("helpMap/", numberOfImageHelp);
+        HelpController helpController = new HelpController("helpMap/", LAST_NUMBER_IMAGE_HELP_PAGE);
         helpController.displayHelpShop();
     }
 
@@ -276,7 +282,7 @@ public class MapController extends Controller implements MapViewController.Liste
         routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, COLOR_BLUE, width));
 
         viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
-        RouteTask routeTask = new RouteTask("https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World");
+        RouteTask routeTask = new RouteTask(ROUTE_TASK_URL);
         ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
 
         // Récupère les positions de départ et d'arrivée
@@ -291,11 +297,11 @@ public class MapController extends Controller implements MapViewController.Liste
                 RouteParameters routeParameters = routeParametersFuture.get();
                 routeParameters.setStops(stops);
 
-                routeParameters.setReturnDirections(true);
+                //routeParameters.setReturnDirections(true);
                 routeParameters.setDirectionsLanguage("fr");
 
                 // choisis le mode de voyage
-                int walking = 5;
+                int walking = 4;
                 routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(walking));
 
                 // calcul l'itinéraire
@@ -314,10 +320,10 @@ public class MapController extends Controller implements MapViewController.Liste
                         double totalTimeBike = route.getTotalTime() / timeBike; // calcul du temps en vélo
                         viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
 
-                        route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
+//                        route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
                     } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");}
                 });
-            } catch (Exception e) { e.printStackTrace(); }
+            } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }
         });
     }
 
@@ -326,9 +332,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * @return la vitesse moyenne de vélo
      */
     private int getTimeBike() {
-        int averageTimePedestrian = 5;
-        int averageTimeBike = 15;
-        return averageTimeBike / averageTimePedestrian;
+        return AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
     }
 
     /**
@@ -351,9 +355,9 @@ public class MapController extends Controller implements MapViewController.Liste
 
 
     /**
-     * Recherche avec une l'adresse d'un magasin
+     * Recherche avec l'adresse d'un magasin
      * @param address l'adresse du magasin (Ville, rue, commune, numéro)
-     * @return l'adresse a été trouver ou non
+     * @return boolean est ce que l'adresse a été trouvé ou non
      */
     @Override
     public boolean onSearchAddress(String address) {
@@ -361,7 +365,7 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Supprime les points selectioner de l'overlay
+     * Supprime le point sélectionné de l'overlay
      */
     public void onDeleteShopClicked() throws SQLException {
 
@@ -419,19 +423,15 @@ public class MapController extends Controller implements MapViewController.Liste
         GraphicsOverlay mapCercleOverlay = viewController.getShopGraphicsCercleList();
         List<Graphic> mapCercleGraphics = mapCercleOverlay.getGraphics();
 
+        boolean isVisible;
         for(int index = 0; index < mapTextGraphics.size(); index++){
             Graphic textGraphic = mapTextGraphics.get(index);
             Graphic cercleGraphic = mapCercleGraphics.get(index);
-
             TextSymbol textSymbol = (TextSymbol) textGraphic.getSymbol();
-            if(textSymbol.getText().contains(shopName) || Objects.equals(shopName, "")){
-                textGraphic.setVisible(true);
-                cercleGraphic.setVisible(true);
-            }
-            else{
-                textGraphic.setVisible(false);
-                cercleGraphic.setVisible(false);
-            }
+
+            isVisible = textSymbol.getText().contains(shopName) ;
+            textGraphic.setVisible(isVisible);
+            cercleGraphic.setVisible(isVisible);
         }
     }
 
@@ -443,54 +443,49 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     public void highlightGraphicPoint(double mouseX, double mouseY) {
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);
-        ListenableFuture<IdentifyGraphicsOverlayResult> identifyFuture = viewController.getMapView().identifyGraphicsOverlayAsync(
+        ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = viewController.getMapView().identifyGraphicsOverlayAsync(
                 viewController.getShopGraphicsCercleList(),
                 mapViewPoint, SIZE, false, 1);
 
-        identifyFuture.addDoneListener(() -> {
+        graphicsOverlayAsyncIdentified.addDoneListener(() -> {
             try {
-                // recup la liste retourner par identify
-                List<Graphic> identifiedGraphics = identifyFuture.get().getGraphics();
-                if (identifiedGraphics.size() == 1) {
+                // récupère la liste d'objet graphic retournée par graphicsOverlayAsyncIdentified
+                List<Graphic> identifiedGraphics = graphicsOverlayAsyncIdentified.get().getGraphics();
+                if (!identifiedGraphics.isEmpty()) {
                     identifiedGraphics.get(0).setSelected(true);
                 }
             } catch (InterruptedException | ExecutionException ex) {
-                System.out.println("il y eu une erreur");
-                ex.printStackTrace();
-                //TODO gerer l'erreur
+                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
             }
         });
     }
 
     /**
      * Recherche les coordonnées et les infos complètes qui correspond le mieux à l'adresse
-     * et affiche le resultat sur la map
+     * et affiche le résultat sur la map
      *
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
     private boolean performGeocode(String address) {
-        final boolean[] found = {false};
+        AtomicBoolean found= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
         ListenableFuture<List<GeocodeResult>> geocodeResults = viewController.getGeocodeAsync();
-        geocodeResults.addDoneListener(() -> {  // rècuperer le résultat
+        geocodeResults.addDoneListener(() -> {  // récupérer le résultat
             try {
                 List<GeocodeResult> geocodes = geocodeResults.get();
                 if (geocodes.size() > 0) {
                     GeocodeResult result = geocodes.get(0);
                     displayResult(result);
-                    found[0] = true;
+                    found.set(true);
                 } else {
                     // pas d'adresse trouvé
-                    //TODO gerer l'erreur
-                    found[0] = false;
+                    found.set(false);
                 }
             } catch (InterruptedException | ExecutionException exception) {
-                //TODO gerer l'erreur
-                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la recupération du resultat\nContactez un responsable");
-                exception.printStackTrace();
-                found[0] = false;
+                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du résultat\nContactez un responsable");
+                found.set(false);
             }
         });
-        return found[0];
+        return found.get();
     }
 
     /**
