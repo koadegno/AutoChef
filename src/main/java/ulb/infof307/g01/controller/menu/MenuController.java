@@ -106,8 +106,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
                 FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
                 HomeMenuViewController viewController = loader.getController();
-                HomePageController homePageController = new HomePageController(currentStage);
-                viewController.setListener(homePageController);
+                HomePageMenuController homePageMenuController = new HomePageMenuController(currentStage);
+                viewController.setListener(homePageMenuController);
                 return isSaved;
             }
         } catch(SQLException e) {

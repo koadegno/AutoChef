@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
+import ulb.infof307.g01.controller.menu.HomePageMenuController;
 import ulb.infof307.g01.controller.menu.MenuController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
@@ -20,7 +21,7 @@ import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
  * Contrôleur principal de l'application.
  * Créé au démarrage de l'application.
  */
-public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener, HomeMenuViewController.HomeMenuListener,ListenerBackPreviousWindow {
+public class HomePageController extends Controller implements HomePageListener, HomeShoppingListViewController.Listener,ListenerBackPreviousWindow {
 
     // Méthodes de la fenêtre d'accueil
 
@@ -58,9 +59,8 @@ public class HomePageController extends Controller implements HomePageListener, 
      * */
     @Override
     public void onMenuButtonClick() {
-        FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-        HomeMenuViewController viewController = loader.getController();
-        viewController.setListener(this);
+        HomePageMenuController homePageMenuController = new HomePageMenuController(currentStage,this);
+        homePageMenuController.displayHomeMenu();
     }
 
     /**
@@ -138,29 +138,6 @@ public class HomePageController extends Controller implements HomePageListener, 
         viewController.setListener(this);
     }
 
-    // Méthodes de la fenêtre principale des Menus
-
-    /**
-     * Affiche la page permettant à l'utilisateur de consulter sa liste de Menus
-     * @see ulb.infof307.g01.model.Menu
-     * //TODO: @see ControllerMenu + ViewController Liste Menu
-     */
-    @Override
-    public void onUserMenusButtonClick() {
-        UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.showAllMenus();
-    }
-
-    /**
-     * Affiche la page permettant à l'utilisateur de créer un nouveau Menu
-     * @see ulb.infof307.g01.model.Menu
-     * //TODO: @see ControllerMenu + ViewController CreateMenu
-     */
-    @Override
-    public void onUserCreateMenuButtonClick() {
-        MenuController menuController = new MenuController(currentStage);
-        menuController.showCreateMenu();
-    }
 
     @Override
     public void onReturn() {
