@@ -6,6 +6,7 @@ import javafx.scene.control.Alert;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
+import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
@@ -28,31 +29,29 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private ShoppingListViewController shoppingListViewController;
     private UserShoppingListViewController userShoppingListViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
-    private HomePageController homePageController;
     private ShoppingList shoppingListToSend;
     private final int maxQuantityToNotProfessional = 100;
 
     RecipeController recipeController = null;
 
-    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, HomePageController homePageController){
+    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
-        initShoppingListController(homePageController);
+        this.shoppingListViewController.setListener(this);
+
     }
 
-    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, HomePageController homePageController){
+    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
         this.shoppingListViewController = this.userShoppingListViewController = userShoppingListViewController;
-        initShoppingListController(homePageController);
+        this.shoppingListViewController.setListener(this);
+
     }
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController){
-        this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
-        this.shoppingListViewController.setListener(this);
+        this(createUserShoppingListViewController,null);
     }
 
-    private void initShoppingListController(HomePageController homePageController) {
-        this.homePageController = homePageController;
-        this.shoppingListViewController.setListener(this);
-    }
 
     public ShoppingListController(RecipeController recipeController) {
         this.recipeController = recipeController;
@@ -240,7 +239,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     @Override
     public void returnHomeShoppingList() {
-        homePageController.onShoppingListButtonClick();
+        listenerBackPreviousWindow.onReturn();
     }
 
     public void returnToUserMenu(){
