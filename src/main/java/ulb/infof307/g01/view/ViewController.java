@@ -108,6 +108,8 @@ abstract public class ViewController<Listener> {
         alert.setHeaderText(headerText);
         alert.setContentText(contentText);
         Optional<ButtonType> alertResult = alert.showAndWait();
+
+        if(alertResult.isEmpty()) return null;
         return alertResult.get();
     }
 }
