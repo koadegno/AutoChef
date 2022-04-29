@@ -11,8 +11,7 @@ public class Shop extends HashSet<Product> {
     private int id = -1;
 
     public Shop(int id,String name, Point coordinate){
-        this.name = name;
-        this.coordinate = coordinate;
+        this(name,coordinate);
         this.id = id;
     }
     public Shop(String name, Point coordinate){
@@ -52,6 +51,19 @@ public class Shop extends HashSet<Product> {
             toPrint.append(product);
         }
         return toPrint.toString();
+    }
+
+    public boolean equals(Object other) {
+
+        if (this == other)
+            return true;
+
+        if (other == null || this.getClass() != other.getClass())
+            return false;
+
+        Shop otherShop = (Shop)other;
+
+        return this.name.equals(otherShop.name) && (this.coordinate.getX() == otherShop.coordinate.getX()) && this.coordinate.getY() == otherShop.coordinate.getY();
     }
 
 }

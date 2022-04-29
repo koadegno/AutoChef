@@ -19,15 +19,15 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.*;
 
 class TestShopDao {
-    private static final SpatialReference spatialReference = SpatialReferences.getWebMercator();
+
     static private final String FRUIT = "Fruit";
     static private final String GRAM = "g";
     static private final Product PEACH = new Product("peche", 1, GRAM, FRUIT);
     static private final Product STRAWBERRY = new Product( "fraise", 1, GRAM, FRUIT);
-    static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0,spatialReference));
-    static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1,spatialReference));
-    static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve",new Point(0,2,spatialReference));
-    static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers", new Point(50,30,spatialReference));
+    static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0));
+    static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1));
+    static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve",new Point(0,2));
+    static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers", new Point(50,30));
 
     static private final String DATABASE_NAME = "test.sqlite";
     public static final int RANDOM_X = 50;
@@ -70,33 +70,29 @@ class TestShopDao {
 
         Configuration.getCurrent().getShopDao().delete(CARREFOUR_ANVERS);
         List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
-        assertNotEquals(shopList.get(shopList.size()-1).getName(), CARREFOUR_ANVERS.getName());
-        assertNotEquals(shopList.get(shopList.size()-1).getCoordinate(), new Point(RANDOM_X, RANDOM_Y,spatialReference));
+        assertNotEquals(shopList.get(shopList.size()-1), CARREFOUR_ANVERS);
     }
 
     @Test
     void testInsert() throws SQLException {
-        Point point = new Point(LIDL_SHOP.getCoordinateX(), LIDL_SHOP.getCoordinateY(),spatialReference);
+        Point point = new Point(LIDL_SHOP.getCoordinateX(), LIDL_SHOP.getCoordinateY());
         Configuration.getCurrent().getShopDao().insert(LIDL_SHOP);
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(LIDL_SHOP.getName(), point);
 
         assertNotNull(shopInserted);
-        assertEquals(LIDL_SHOP.getName(),shopInserted.getName());
-        assertEquals(LIDL_SHOP.getCoordinate(),shopInserted.getCoordinate());
-
+        assertEquals(LIDL_SHOP,shopInserted);
     }
 
     @Test
     void testUpdate() throws SQLException {
-        Point coordinate = new Point(1,1,spatialReference);
+        Point coordinate = new Point(1,1);
         Shop aldiBruxellesShop = new Shop(2,"aldi Bruxelles",coordinate);
         Configuration.getCurrent().getShopDao().insert(aldiBruxellesShop);
         aldiBruxellesShop = new Shop(2,"aldi Zaventem",coordinate);
         Configuration.getCurrent().getShopDao().update(aldiBruxellesShop);
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
 
-        assertEquals(aldiBruxellesShop.getName(),shopInserted.getName());
-        assertEquals(aldiBruxellesShop.getCoordinate(),shopInserted.getCoordinate());
+        assertEquals(aldiBruxellesShop,shopInserted);
 
     }
 
@@ -104,10 +100,8 @@ class TestShopDao {
     void testGetShops() throws SQLException {
 
         List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
-        assertEquals(shopList.get(0).getName(), ALDI_SHOP.getName());
-        assertEquals(shopList.get(0).getCoordinate(), ALDI_SHOP.getCoordinate());
-        assertEquals(shopList.get(1).getName(), ALDI_RUE_NEUVE.getName());
-        assertEquals(shopList.get(1).getCoordinate(), ALDI_RUE_NEUVE.getCoordinate());
+        assertEquals(shopList.get(0), ALDI_SHOP);
+        assertEquals(shopList.get(1), ALDI_RUE_NEUVE);
 
     }
 
@@ -115,8 +109,7 @@ class TestShopDao {
     void testGet() throws SQLException {
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(ALDI_SHOP.getName(), ALDI_SHOP.getCoordinate());
 
-        assertEquals(ALDI_SHOP.getName(),shopInserted.getName());
-        assertEquals(ALDI_SHOP.getCoordinate(),shopInserted.getCoordinate());
+        assertEquals(ALDI_SHOP,shopInserted);
 
     }
 
