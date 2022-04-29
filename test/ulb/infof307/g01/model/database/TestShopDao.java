@@ -1,8 +1,6 @@
 package ulb.infof307.g01.model.database;
 
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReference;
-import com.esri.arcgisruntime.geometry.SpatialReferences;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -30,8 +28,6 @@ class TestShopDao {
     static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers", new Point(50,30));
 
     static private final String DATABASE_NAME = "test.sqlite";
-    public static final int RANDOM_X = 50;
-    public static final int RANDOM_Y = 30;
 
 
     @BeforeAll
