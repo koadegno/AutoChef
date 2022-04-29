@@ -70,7 +70,6 @@ class TestShopDao {
 
         Configuration.getCurrent().getShopDao().delete(CARREFOUR_ANVERS);
         List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
-        System.out.println(shopList);
         assertNotEquals(shopList.get(shopList.size()-1).getName(), CARREFOUR_ANVERS.getName());
         assertNotEquals(shopList.get(shopList.size()-1).getCoordinate(), new Point(RANDOM_X, RANDOM_Y,spatialReference));
     }
