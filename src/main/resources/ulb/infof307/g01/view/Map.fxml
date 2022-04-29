@@ -33,7 +33,7 @@
          </graphic>
       </Menu>
     </MenuBar>
-   <VBox layoutY="33.0" prefHeight="567.0" prefWidth="744.0">
+   <VBox layoutY="33.0" prefHeight="567.0" prefWidth="744.0" AnchorPane.bottomAnchor="-0.33333333333337123" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="33.0">
       <children>
           <StackPane fx:id="mapViewStackPane" prefHeight="498.0" prefWidth="744.0" />
          <VBox prefHeight="69.0" prefWidth="744.0" spacing="2.0">

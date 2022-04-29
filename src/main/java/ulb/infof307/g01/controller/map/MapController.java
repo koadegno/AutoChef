@@ -56,7 +56,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * Lance l'affichage de la carte
      */
     public void displayMap(){
-        FXMLLoader loader = this.loadFXML("ShowMap.fxml");
+        FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();

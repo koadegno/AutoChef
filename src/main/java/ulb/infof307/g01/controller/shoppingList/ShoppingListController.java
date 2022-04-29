@@ -268,7 +268,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         shoppingListViewController = userShoppingListViewController = new UserShoppingListViewController();
 
         shoppingListToSend = new ShoppingList("temporary");
-        loadFXML(userShoppingListViewController, "UserShoppingList.fxml");
+        loadFXML(userShoppingListViewController, "ShoppingList.fxml");
         userShoppingListViewController.setListener(this);
         userShoppingListViewController.initForCreateRecipe(shoppingList);
         initInformationShoppingList(false);

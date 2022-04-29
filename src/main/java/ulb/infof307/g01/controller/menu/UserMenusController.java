@@ -32,7 +32,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
     }
 
     public void displayAllMenus(){
-        FXMLLoader loader = this.loadFXML("UserMenus.fxml");
+        FXMLLoader loader = this.loadFXML("Menus.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         start();

@@ -66,7 +66,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      */
     @Override
     public void onUserRecipesButtonClick() {
-        FXMLLoader loader = this.loadFXML("VewRecipe.fxml");
+        FXMLLoader loader = this.loadFXML("Recipe.fxml");
         userRecipesViewController = loader.getController();
         userRecipesViewController.setListener(this);
     }

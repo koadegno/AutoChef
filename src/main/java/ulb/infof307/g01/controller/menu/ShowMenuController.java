@@ -36,7 +36,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     }
 
     public void displayMenu(){
-        FXMLLoader loader = this.loadFXML("ShowMenu.fxml");
+        FXMLLoader loader = this.loadFXML("Menu.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         startMenu();
@@ -88,7 +88,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
         CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "UserShoppingList.fxml");
+        loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
         ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController);
 
         //Initialise la page avec les informations de la bdd
