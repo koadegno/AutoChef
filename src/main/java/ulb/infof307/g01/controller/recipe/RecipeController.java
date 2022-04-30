@@ -170,6 +170,8 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      */
     private boolean isValidRecipe(String diet, String type, int nbPerson, String preparation, String recipeName) {
         boolean isValid = true;
+        createRecipeViewController.clearErrors();
+
         // Vérifie qu'un Régime a été sélectionné
         if (diet == null) {
             createRecipeViewController.dietComboBoxError();
@@ -180,9 +182,13 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             createRecipeViewController.typeComboBoxError();
             isValid = false;
         }
-        // TODO Vérifier que la liste d'ingrédients n'est pas vide
-        // TODO: Reset erreur quand condition OK
-        // Vérifie que la préparation n'est pas vide
+
+        // Vérifie qu'il y a au moins un ingrédient
+        if(createRecipeViewController.getSizeTableViewIngredient() <= 0){
+            createRecipeViewController.listIngredientIsSizeZeroError();
+            isValid = false;
+        }
+
         if (preparation.isBlank()) {
             createRecipeViewController.preparationTextAreaError();
             isValid = false;
@@ -284,7 +290,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      */
     @Override
     public void onModifyRecipeButtonClick() {
-        isWaitingModification = true;
+        isWaitingModification = false;
 
         this.sceneViewRecipe = currentStage.getScene();
         FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");

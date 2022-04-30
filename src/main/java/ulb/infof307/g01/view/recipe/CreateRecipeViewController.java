@@ -100,6 +100,13 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     /**
+     * Appelé lorsque la {@link TableView} {@code liste d'ingrédient} à une valeur invalide
+     */
+    public void listIngredientIsSizeZeroError(){
+        setNodeColor(ingredientTableView, true);
+    }
+
+    /**
      * Appelé lorsque la {@link TextField} {@code recipeName} à une valeur invalide
      */
     public void recipeNameTextFieldError() {
@@ -108,6 +115,15 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
 
     public void nbPersonSpinnerError() {
         setNodeColor(nbPersonSpinner, true);
+    }
+
+    public void clearErrors(){
+        setNodeColor(dietComboBox, false);
+        setNodeColor(typeComboBox, false);
+        setNodeColor(ingredientTableView, false);
+        setNodeColor(preparationTextArea, false);
+        setNodeColor(recipeNameTextField, false);
+        setNodeColor(nbPersonSpinner, false);
     }
 
     public void fillProductsTable(List<Product> productsList) {
@@ -136,6 +152,12 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
 
     public void logout() {
         listener.logout();
+    }
+
+    public int getSizeTableViewIngredient(){
+        int size = 0;
+        if(ingredientTableView != null) size = ingredientTableView.getItems().size();
+        return size;
     }
 
     public interface CreateRecipeListener {
