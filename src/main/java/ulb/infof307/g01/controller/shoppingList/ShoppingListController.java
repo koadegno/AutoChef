@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     protected UserShoppingListViewController userShoppingListViewController;
     protected CreateUserShoppingListViewController createUserShoppingListViewController;
