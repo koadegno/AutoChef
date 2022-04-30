@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.controller.recipe.CreateRecipeController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
@@ -32,7 +33,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     private ShoppingList shoppingListToSend;
     private final int maxQuantityToNotProfessional = 100;
 
-    RecipeController recipeController = null;
+    CreateRecipeController recipeController = null;
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
@@ -53,7 +54,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     }
 
 
-    public ShoppingListController(RecipeController recipeController) {
+    public ShoppingListController(CreateRecipeController recipeController) {
         this.recipeController = recipeController;
     }
 
