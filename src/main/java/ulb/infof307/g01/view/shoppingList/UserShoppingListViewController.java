@@ -12,12 +12,11 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.Vector;
 
-public class UserShoppingListViewController extends ShoppingListViewController implements Initializable {
+public class UserShoppingListViewController extends ShoppingListViewController {
     @FXML
     Button btnConfirm, btnAddNewProduct;
 
@@ -58,33 +57,10 @@ public class UserShoppingListViewController extends ShoppingListViewController i
         btnSendMail.setVisible(isVisible);
     }
 
-    /**
-     * Inialise les elements du fichier FXML
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        // TODO DUPLICATE
-        activeElementVisibility(true);
-
-        this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
-        spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
-
-        //Inialise les colonne avec la classe de Product
-        columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<Product, String>("quantity"));
-        columnUnity.setCellValueFactory(new PropertyValueFactory<Product, String>("nameUnity"));
-
-        //Cree les boutons delete dans chaque ligne de la tableView
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
-        columnDelete.setCellFactory(cellFactory);
-
-        returnToMenu.setOnAction((event) -> returnShoppingList());
-    }
-
-    private void activeElementVisibility(boolean isVisible) {
-        comboBoxShoppingNameList.setVisible(isVisible);
+    protected void activeElementVisibility() {
+        comboBoxShoppingNameList.setVisible(true);
         btnConfirm.setText("Enregistrer");
-        btnSeeShoppingList.setVisible(isVisible);
+        btnSeeShoppingList.setVisible(true);
         btnSeeShoppingList.setOnAction(e-> seeMyShoppingListTableView());
     }
 

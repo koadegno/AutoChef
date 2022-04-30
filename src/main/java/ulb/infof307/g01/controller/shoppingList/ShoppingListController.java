@@ -32,16 +32,24 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     RecipeController recipeController = null;
 
-    public ShoppingListController(ShoppingListViewController shoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.createUserShoppingListViewController = (CreateUserShoppingListViewController) shoppingListViewController;
+        this.createUserShoppingListViewController = createUserShoppingListViewController;
         this.createUserShoppingListViewController.setListener(this);
+
+    }
+
+    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+        super(listenerBackPreviousWindow);
+        this.userShoppingListViewController = userShoppingListViewController;
+        this.userShoppingListViewController.setListener(this);
 
     }
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController){
         this(createUserShoppingListViewController,null);
     }
+
 
     public ShoppingListController(RecipeController recipeController) {
         this.recipeController = recipeController;
