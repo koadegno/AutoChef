@@ -7,6 +7,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.shoppingList.CreateShoppingListController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
@@ -89,12 +90,12 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
         ShoppingList shoppingList = menu.generateShoppingList();
         CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
         loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController);
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createUserShoppingListViewController);
 
         //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(true);
-        shoppingListController.setStage(currentStage);
-        shoppingListController.fillProductTable(shoppingList);
+        createShoppingListController.initInformationShoppingList(true);
+        createShoppingListController.setStage(currentStage);
+        createShoppingListController.fillProductTable(shoppingList);
     }
 
     @Override

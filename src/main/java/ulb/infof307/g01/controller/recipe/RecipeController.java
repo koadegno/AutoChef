@@ -5,6 +5,7 @@ import javafx.scene.Scene;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.controller.shoppingList.RecipeShoppingListController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
@@ -201,16 +202,14 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     /**
      * Affiche l'écran permettant de modifier les produits contenus dans une recette
-     * @see ShoppingListController#initForCreateRecipe(ShoppingList)
      */
     @Override
     public void onModifyProductsButton() {
         this.sceneModifyRecipe = currentStage.getScene();
 
         if (currentShoppingList == null) currentShoppingList = new ShoppingList("temporary");
-        ShoppingListController shoppingListController = new ShoppingListController(this);
-
-        shoppingListController.initForCreateRecipe(currentShoppingList);
+        RecipeShoppingListController recipeShoppingListController = new RecipeShoppingListController(this);
+        recipeShoppingListController.initForCreateRecipe(currentShoppingList);
     }
 
     /**

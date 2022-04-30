@@ -33,12 +33,11 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        UserShoppingListViewController windowUserShoppingListsController = new UserShoppingListViewController();
-        loadFXML(windowUserShoppingListsController, "ShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
-
+        UserShoppingListViewController windowUserShoppingListController = new UserShoppingListViewController();
+        loadFXML(windowUserShoppingListController, "ShoppingList.fxml");
+        ModifyShoppingListController modifyShoppingListController = new ModifyShoppingListController(windowUserShoppingListController, this);
         //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(false);
+        modifyShoppingListController.initInformationShoppingList(false);
     }
 
     /**
@@ -50,10 +49,10 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
     public void onCreateShoppingListsButtonClick() {
         CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
         loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController, this );
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createUserShoppingListViewController, this);
 
         //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(true);
+        createShoppingListController.initInformationShoppingList(true);
     }
 
     /**
