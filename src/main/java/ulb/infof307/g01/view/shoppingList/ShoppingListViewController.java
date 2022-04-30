@@ -94,7 +94,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
 
-        listener.addElementOfList(nameProductChoose, quantityOrNumberChoose, nameUnityChoose);
+        listener.addElementOfList(this, nameProductChoose, quantityOrNumberChoose, nameUnityChoose);
     }
 
     public void showAddProductError(boolean isError){
@@ -161,7 +161,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public interface Listener{
         void returnHomeShoppingList();
         void returnToUserMenu();
-        void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
+        void addElementOfList(ShoppingListViewController shoppingListViewController, Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
         void initInformationShoppingList(boolean isCreateUserShoppingListController);
         void exportShoppingList(String currentShoppingListName);
         void sendShoppingListByMail(String currentShoppingListName);

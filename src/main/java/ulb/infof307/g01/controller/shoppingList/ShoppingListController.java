@@ -5,7 +5,6 @@ import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
@@ -26,7 +25,6 @@ import java.util.Vector;
 
 
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
-    private ShoppingListViewController shoppingListViewController;
     private UserShoppingListViewController userShoppingListViewController;
     private CreateUserShoppingListViewController createUserShoppingListViewController;
     private ShoppingList shoppingListToSend;
@@ -36,15 +34,15 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
-        this.shoppingListViewController.setListener(this);
+        this.createUserShoppingListViewController = createUserShoppingListViewController;
+        this.createUserShoppingListViewController.setListener(this);
 
     }
 
     public ShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.shoppingListViewController = this.userShoppingListViewController = userShoppingListViewController;
-        this.shoppingListViewController.setListener(this);
+        this.userShoppingListViewController = userShoppingListViewController;
+        this.userShoppingListViewController.setListener(this);
 
     }
 
@@ -200,7 +198,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     //Methode Listener de WindowShoppingListControllerTools
 
-    public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
+    public void addElementOfList(ShoppingListViewController shoppingListViewController, Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
         shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
 
@@ -265,7 +263,7 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     //Fin Methode Listener de WindowUserShoppingListController
 
     public void initForCreateRecipe(ShoppingList shoppingList) {
-        shoppingListViewController = userShoppingListViewController = new UserShoppingListViewController();
+       userShoppingListViewController = new UserShoppingListViewController();
 
         shoppingListToSend = new ShoppingList("temporary");
         loadFXML(userShoppingListViewController, "ShoppingList.fxml");
