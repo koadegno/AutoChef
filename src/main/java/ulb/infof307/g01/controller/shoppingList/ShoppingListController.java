@@ -7,9 +7,9 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,22 +17,22 @@ import java.util.List;
 import java.util.Objects;
 
 public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
-    protected UserShoppingListViewController userShoppingListViewController;
-    protected CreateUserShoppingListViewController createUserShoppingListViewController;
+    protected ModifyShoppingListViewController modifyShoppingListViewController;
+    protected CreateShoppingListViewController createShoppingListViewController;
     protected ShoppingList shoppingListToSend;
 
     //-------------------------CONSTRUCTEUR
 
-    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShoppingListController(CreateShoppingListViewController createShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.createUserShoppingListViewController = createUserShoppingListViewController;
-        this.createUserShoppingListViewController.setListener(this);
+        this.createShoppingListViewController = createShoppingListViewController;
+        this.createShoppingListViewController.setListener(this);
     }
 
-    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShoppingListController(ModifyShoppingListViewController modifyShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.userShoppingListViewController = userShoppingListViewController;
-        this.userShoppingListViewController.setListener(this);
+        this.modifyShoppingListViewController = modifyShoppingListViewController;
+        this.modifyShoppingListViewController.setListener(this);
     }
 
     //Methode Listener de ShoppingListController
@@ -104,8 +104,8 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             allUnitName.removeAll(List.of(unitToRemove));
             List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
 
-            if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
+            if(isCreateUserShoppingListController) createShoppingListViewController.initComboBox(allProduct, allUnitName);
+            else modifyShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
 
         } catch (SQLException e) {
             e.printStackTrace();

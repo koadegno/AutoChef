@@ -7,8 +7,8 @@ import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -16,8 +16,8 @@ import java.util.Vector;
 
 public class ModifyShoppingListController extends ShoppingListController {
 
-    public ModifyShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
-        super(userShoppingListViewController, listenerBackPreviousWindow);
+    public ModifyShoppingListController(ModifyShoppingListViewController modifyShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
+        super(modifyShoppingListViewController, listenerBackPreviousWindow);
     }
 
     /**
@@ -27,7 +27,7 @@ public class ModifyShoppingListController extends ShoppingListController {
     @Override
     public void seeUserShoppingList(Object nameUserShoppingList){
         if(Objects.equals(nameUserShoppingList, null)){ //nom est null
-            userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
+            modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         }
         else{
             String currentShoppingListName = (String) nameUserShoppingList;
@@ -35,9 +35,9 @@ public class ModifyShoppingListController extends ShoppingListController {
                 // afficher les produits de la liste de course dans la table
                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
-                userShoppingListViewController.addProductListToTableView(productOfShoppingList);
-                userShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
-                userShoppingListViewController.setCurrentShoppingListName(currentShoppingListName);
+                modifyShoppingListViewController.addProductListToTableView(productOfShoppingList);
+                modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
+                modifyShoppingListViewController.setCurrentShoppingListName(currentShoppingListName);
             } catch (SQLException e) {
                 e.printStackTrace();
             }
@@ -55,7 +55,7 @@ public class ModifyShoppingListController extends ShoppingListController {
             this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
-            userShoppingListViewController.fillShoppingListToSend();
+            modifyShoppingListViewController.fillShoppingListToSend();
             Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
 
             //Popup : confirmer que la liste de courses est enregistrée
@@ -98,7 +98,7 @@ public class ModifyShoppingListController extends ShoppingListController {
      * Permet de refresh la fenêtre pour modifier une liste de courses si celle ci a été supprimée
      */
     public void refreshModifyShoppingList(){
-        userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
+        modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         this.initInformationShoppingList(false);
     }
 

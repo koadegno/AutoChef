@@ -1,13 +1,12 @@
 package ulb.infof307.g01.controller.shoppingList;
 
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
 public class HomePageShoppingList extends Controller implements HomeShoppingListViewController.Listener, ListenerBackPreviousWindow {
 
@@ -33,7 +32,7 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        UserShoppingListViewController windowUserShoppingListController = new UserShoppingListViewController();
+        ModifyShoppingListViewController windowUserShoppingListController = new ModifyShoppingListViewController();
         loadFXML(windowUserShoppingListController, "ShoppingList.fxml");
         ModifyShoppingListController modifyShoppingListController = new ModifyShoppingListController(windowUserShoppingListController, this);
         //Initialise la page avec les informations de la bdd
@@ -47,9 +46,9 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onCreateShoppingListsButtonClick() {
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createUserShoppingListViewController, this);
+        CreateShoppingListViewController createShoppingListViewController = new CreateShoppingListViewController();
+        loadFXML(createShoppingListViewController, "ShoppingList.fxml");
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createShoppingListViewController, this);
 
         //Initialise la page avec les informations de la bdd
         createShoppingListController.initInformationShoppingList(true);

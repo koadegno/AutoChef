@@ -2,13 +2,13 @@ package ulb.infof307.g01.controller.shoppingList;
 
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
 public class RecipeShoppingListController extends ShoppingListController {
     private final RecipeController recipeController;
 
     public RecipeShoppingListController(RecipeController recipeController) {
-        super(new UserShoppingListViewController(), null);
+        super(new ModifyShoppingListViewController(), null);
         this.recipeController = recipeController;
     }
 
@@ -18,9 +18,9 @@ public class RecipeShoppingListController extends ShoppingListController {
      */
     public void initForCreateRecipe(ShoppingList shoppingList) {
         shoppingListToSend = new ShoppingList("temporary");
-        loadFXML(userShoppingListViewController, "ShoppingList.fxml");
-        userShoppingListViewController.setListener(this);
-        userShoppingListViewController.initForCreateRecipe(shoppingList);
+        loadFXML(modifyShoppingListViewController, "ShoppingList.fxml");
+        modifyShoppingListViewController.setListener(this);
+        modifyShoppingListViewController.initForCreateRecipe(shoppingList);
         initInformationShoppingList(false);
     }
 

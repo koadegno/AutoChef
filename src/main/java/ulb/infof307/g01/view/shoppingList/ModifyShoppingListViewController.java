@@ -2,21 +2,14 @@ package ulb.infof307.g01.view.shoppingList;
 
 import javafx.collections.FXCollections;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
-import javafx.scene.control.TableCell;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
-import java.net.URL;
 import java.util.List;
-import java.util.ResourceBundle;
 import java.util.Vector;
 
-public class UserShoppingListViewController extends ShoppingListViewController {
+public class ModifyShoppingListViewController extends ShoppingListViewController {
     @FXML
     Button btnConfirm, btnAddNewProduct;
 

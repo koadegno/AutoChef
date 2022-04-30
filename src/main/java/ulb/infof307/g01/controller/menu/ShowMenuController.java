@@ -8,14 +8,13 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.shoppingList.CreateShoppingListController;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -88,9 +87,9 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     @Override
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createUserShoppingListViewController);
+        CreateShoppingListViewController createShoppingListViewController = new CreateShoppingListViewController();
+        loadFXML(createShoppingListViewController, "ShoppingList.fxml");
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createShoppingListViewController);
 
         //Initialise la page avec les informations de la bdd
         createShoppingListController.initInformationShoppingList(true);

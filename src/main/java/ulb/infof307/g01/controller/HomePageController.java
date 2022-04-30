@@ -5,17 +5,10 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.HomePageMenuController;
-import ulb.infof307.g01.controller.menu.MenuController;
-import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.controller.shoppingList.HomePageShoppingList;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
-import ulb.infof307.g01.view.*;
 import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 
 /**

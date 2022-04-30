@@ -7,7 +7,7 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.Objects;
@@ -16,12 +16,12 @@ import java.util.Vector;
 public class CreateShoppingListController extends ShoppingListController {
 
 
-    public CreateShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
-        super(createUserShoppingListViewController, listenerBackPreviousWindow);
+    public CreateShoppingListController(CreateShoppingListViewController createShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
+        super(createShoppingListViewController, listenerBackPreviousWindow);
     }
 
-    public CreateShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController) {
-        super(createUserShoppingListViewController, null);
+    public CreateShoppingListController(CreateShoppingListViewController createShoppingListViewController) {
+        super(createShoppingListViewController, null);
     }
 
     /**
@@ -30,41 +30,41 @@ public class CreateShoppingListController extends ShoppingListController {
      * @param sizeTableViewDisplayProductList la taille du tableView qui contient les informations des produits
      */
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
-        createUserShoppingListViewController.removeBorderColor();
+        createShoppingListViewController.removeBorderColor();
 
         if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
-            createUserShoppingListViewController.showNameUserCreateShoppingListError();
+            createShoppingListViewController.showNameUserCreateShoppingListError();
         }
         else if(sizeTableViewDisplayProductList == 0){ // table view est vide
-            createUserShoppingListViewController.showIsEmptyTableViewError();
+            createShoppingListViewController.showIsEmptyTableViewError();
         }
         else {
             this.shoppingListToSend = new ShoppingList(shoppingListName);
-            createUserShoppingListViewController.fillShoppingListToSend();
+            createShoppingListViewController.fillShoppingListToSend();
             try {
                 Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
-                createUserShoppingListViewController.showNameUserCreateShoppingListError();
+                createShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
                 e.printStackTrace();
             }
             // else tout ce passe bien
-            createUserShoppingListViewController.returnToMenu.fire();
+            createShoppingListViewController.returnToMenu.fire();
         }
     }
 
     /**
      * Remplis le tableView d'une liste de course existant
-     * @param shoppingList liste de courses 
+     * @param shoppingList liste de courses
      */
     public void fillProductTable(ShoppingList shoppingList){
-        createUserShoppingListViewController.clearProductTableView();
+        createShoppingListViewController.clearProductTableView();
         Vector<Product> temp = new Vector<>(shoppingList);
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);
-        createUserShoppingListViewController.setProductTableView(data);
+        createShoppingListViewController.setProductTableView(data);
         //Retour menu precedent : MainShoppingList
-        createUserShoppingListViewController.setReturnButtonAction();
+        createShoppingListViewController.setReturnButtonAction();
 
     }
 
