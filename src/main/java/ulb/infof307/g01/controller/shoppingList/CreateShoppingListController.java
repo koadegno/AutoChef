@@ -15,14 +15,24 @@ import java.util.Vector;
 
 public class CreateShoppingListController extends ShoppingListController {
 
-
-    public CreateShoppingListController(CreateShoppingListViewController createShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
-        super(createShoppingListViewController, listenerBackPreviousWindow);
+    public CreateShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
+        super(listenerBackPreviousWindow);
+        displayCreateShoppingList();
     }
 
-    public CreateShoppingListController(CreateShoppingListViewController createShoppingListViewController) {
-        super(createShoppingListViewController, null);
+    public CreateShoppingListController(ShoppingList shoppingList) {
+        super(null);
+        displayCreateShoppingList();
+        fillProductTable(shoppingList);
     }
+
+    private void displayCreateShoppingList(){
+        createShoppingListViewController = new CreateShoppingListViewController();
+        loadFXML(createShoppingListViewController, "ShoppingList.fxml");
+        createShoppingListViewController.setListener(this);
+        initInformationShoppingList(true);
+    }
+
 
     /**
      * Crée une nouvelle liste de courses
@@ -58,7 +68,7 @@ public class CreateShoppingListController extends ShoppingListController {
      * Remplis le tableView d'une liste de course existant
      * @param shoppingList liste de courses
      */
-    public void fillProductTable(ShoppingList shoppingList){
+    private void fillProductTable(ShoppingList shoppingList){
         createShoppingListViewController.clearProductTableView();
         Vector<Product> temp = new Vector<>(shoppingList);
         final ObservableList<Product> data = FXCollections.observableArrayList(temp);

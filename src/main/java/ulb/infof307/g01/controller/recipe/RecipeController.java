@@ -208,8 +208,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         this.sceneModifyRecipe = currentStage.getScene();
 
         if (currentShoppingList == null) currentShoppingList = new ShoppingList("temporary");
-        RecipeShoppingListController recipeShoppingListController = new RecipeShoppingListController(this);
-        recipeShoppingListController.initForCreateRecipe(currentShoppingList);
+        new RecipeShoppingListController(currentShoppingList, this);
     }
 
     /**

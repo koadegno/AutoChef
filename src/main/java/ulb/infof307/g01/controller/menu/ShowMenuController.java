@@ -87,14 +87,8 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     @Override
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
-        CreateShoppingListViewController createShoppingListViewController = new CreateShoppingListViewController();
-        loadFXML(createShoppingListViewController, "ShoppingList.fxml");
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createShoppingListViewController);
-
-        //Initialise la page avec les informations de la bdd
-        createShoppingListController.initInformationShoppingList(true);
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(shoppingList);
         createShoppingListController.setStage(currentStage);
-        createShoppingListController.fillProductTable(shoppingList);
     }
 
     @Override

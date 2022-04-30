@@ -7,9 +7,12 @@ import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 public class RecipeShoppingListController extends ShoppingListController {
     private final RecipeController recipeController;
 
-    public RecipeShoppingListController(RecipeController recipeController) {
-        super(new ModifyShoppingListViewController(), null);
+    public RecipeShoppingListController(ShoppingList shoppingList, RecipeController recipeController) {
+        super(null);
+        modifyShoppingListViewController = new ModifyShoppingListViewController();
+        modifyShoppingListViewController.setListener(this);
         this.recipeController = recipeController;
+        initForCreateRecipe(shoppingList);
     }
 
     /**

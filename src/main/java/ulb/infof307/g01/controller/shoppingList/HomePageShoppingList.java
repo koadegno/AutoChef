@@ -4,7 +4,6 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
-import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
@@ -32,11 +31,7 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        ModifyShoppingListViewController windowUserShoppingListController = new ModifyShoppingListViewController();
-        loadFXML(windowUserShoppingListController, "ShoppingList.fxml");
-        ModifyShoppingListController modifyShoppingListController = new ModifyShoppingListController(windowUserShoppingListController, this);
-        //Initialise la page avec les informations de la bdd
-        modifyShoppingListController.initInformationShoppingList(false);
+        new ModifyShoppingListController(this);
     }
 
     /**
@@ -46,12 +41,7 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onCreateShoppingListsButtonClick() {
-        CreateShoppingListViewController createShoppingListViewController = new CreateShoppingListViewController();
-        loadFXML(createShoppingListViewController, "ShoppingList.fxml");
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(createShoppingListViewController, this);
-
-        //Initialise la page avec les informations de la bdd
-        createShoppingListController.initInformationShoppingList(true);
+        new CreateShoppingListController(this);
     }
 
     /**

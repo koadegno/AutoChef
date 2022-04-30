@@ -16,8 +16,17 @@ import java.util.Vector;
 
 public class ModifyShoppingListController extends ShoppingListController {
 
-    public ModifyShoppingListController(ModifyShoppingListViewController modifyShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow) {
-        super(modifyShoppingListViewController, listenerBackPreviousWindow);
+    public ModifyShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
+        super(listenerBackPreviousWindow);
+        displayModifyShoppingList();
+    }
+
+    public void displayModifyShoppingList(){
+        modifyShoppingListViewController = new ModifyShoppingListViewController();
+        modifyShoppingListViewController.setListener(this);
+        loadFXML(modifyShoppingListViewController, "ShoppingList.fxml");
+        initInformationShoppingList(false);
+
     }
 
     /**
@@ -100,11 +109,6 @@ public class ModifyShoppingListController extends ShoppingListController {
     public void refreshModifyShoppingList(){
         modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
         this.initInformationShoppingList(false);
-    }
-
-    public void returnToUserMenu(){
-        UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.displayAllMenus();
     }
 
     public void exportShoppingList(String currentShoppingListName){

@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -16,23 +17,15 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
+public abstract class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     protected ModifyShoppingListViewController modifyShoppingListViewController;
     protected CreateShoppingListViewController createShoppingListViewController;
     protected ShoppingList shoppingListToSend;
 
     //-------------------------CONSTRUCTEUR
 
-    public ShoppingListController(CreateShoppingListViewController createShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.createShoppingListViewController = createShoppingListViewController;
-        this.createShoppingListViewController.setListener(this);
-    }
-
-    public ShoppingListController(ModifyShoppingListViewController modifyShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
-        super(listenerBackPreviousWindow);
-        this.modifyShoppingListViewController = modifyShoppingListViewController;
-        this.modifyShoppingListViewController.setListener(this);
     }
 
     //Methode Listener de ShoppingListController
@@ -132,6 +125,11 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         helpController.displayHelpShop();
     }
 
+    public void returnToUserMenu(){
+        UserMenusController userMenusController = new UserMenusController(currentStage);
+        userMenusController.displayAllMenus();
+    }
+
     @Override
     public void returnHomeShoppingList() {
         listenerBackPreviousWindow.onReturn();
@@ -166,9 +164,6 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     @Override
     public void confirmUserModifyShoppingList(String currentShoppingListName) {}
-
-    @Override
-    public void returnToUserMenu() {}
 
     //Fin Listener de ModifyShoppingListViewController
 
