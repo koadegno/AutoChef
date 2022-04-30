@@ -1,5 +1,6 @@
 package ulb.infof307.g01.controller.shoppingList;
 
+import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
@@ -36,6 +37,13 @@ public class ShoppingListController extends Controller implements ShoppingListVi
 
     //Methode Listener de ShoppingListController
 
+    /**
+     * Permet de rajouter les informations d'un produit dans le TableView
+     * @param shoppingListViewController instance de la classe ShoppingListViewController
+     * @param nameProductChoose nom du produit
+     * @param quantityOrNumberChoose la quantité du produit
+     * @param nameUnityChoose l'unité du produit
+     */
     public void addElementOfList(ShoppingListViewController shoppingListViewController, Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
         shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
@@ -68,12 +76,46 @@ public class ShoppingListController extends Controller implements ShoppingListVi
             int maxQuantityToNotProfessional = 100;
             if(quantityOrNumberChoose > maxQuantityToNotProfessional){
                 canAddProduct = false;
-                ErrorShoppingList.showErrorQuantityProduct(maxQuantityToNotProfessional);
+                this.showErrorQuantityProduct(maxQuantityToNotProfessional);
             }
         }
         return canAddProduct;
     }
 
+    /**
+     * Affiche une erreur quand la quantité choisie par l'utilisateur non professionnel n'est pas permise
+     * @param maxQuantityToNotProfessional le nombre max de quantité possible
+     */
+    public void showErrorQuantityProduct(int maxQuantityToNotProfessional){
+        String message = "Il ne vous ait pas possible de rajouter plus de " + maxQuantityToNotProfessional + " quantité \n " +
+                "si vous n'êtes pas un professionnel.";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", message);
+    }
+
+    /**
+     * Met les informations (noms des produits, noms des unités) pour pouvoir créer/modifier une liste de courses
+     * @param isCreateUserShoppingListController VRAI si c'est une instance de la classe CreateShoppingListController sinon c'est ModifyShoppingListController
+     */
+    public void initInformationShoppingList(boolean isCreateUserShoppingListController){
+        try {
+            ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
+            ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
+            String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"}; //supprime les unités pour une recette
+            allUnitName.removeAll(List.of(unitToRemove));
+            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
+
+            if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
+            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    /**
+     * Affiche la popup d'aide pour la création ou la modification d'une liste de courses
+     * @param isCreateShoppingList VRAI si c'est l'aide de la création qu'on veut sinon c'est la modification
+     */
     @Override
     public void helpShoppingList(boolean isCreateShoppingList) {
         int numberOfImageHelp;
@@ -105,29 +147,13 @@ public class ShoppingListController extends Controller implements ShoppingListVi
     //Fin Methode Listener de ShoppingListViewController
 
 
-    //------------------------Methode Listener de CreateUserShoppingListViewController : implementer dans CreateShoppingListController
+    //------------------------Methode Listener de CreateShoppingListViewController : implementer dans CreateShoppingListController
 
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){}
 
-    // Fin Methode Listener de CreateUserShoppingListViewController
+    // Fin Methode Listener de CreateShoppingListViewController
 
     //Methode Listener de ModifyShoppingListViewController : implementer dans ModifyShoppingListController
-
-    public void initInformationShoppingList(boolean isCreateUserShoppingListController){
-        try {
-            ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
-            ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
-            String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
-            allUnitName.removeAll(List.of(unitToRemove));
-            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
-
-            if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
 
     @Override
     public void exportShoppingList(String currentShoppingListName) {}

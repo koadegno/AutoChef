@@ -24,6 +24,11 @@ public class CreateShoppingListController extends ShoppingListController {
         super(createUserShoppingListViewController, null);
     }
 
+    /**
+     * Crée une nouvelle liste de courses
+     * @param shoppingListName le nom de la liste de course crée
+     * @param sizeTableViewDisplayProductList la taille du tableView qui contient les informations des produits
+     */
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
         createUserShoppingListViewController.removeBorderColor();
 
@@ -49,6 +54,10 @@ public class CreateShoppingListController extends ShoppingListController {
         }
     }
 
+    /**
+     * Remplis le tableView d'une liste de course existant
+     * @param shoppingList liste de courses 
+     */
     public void fillProductTable(ShoppingList shoppingList){
         createUserShoppingListViewController.clearProductTableView();
         Vector<Product> temp = new Vector<>(shoppingList);

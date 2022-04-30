@@ -12,6 +12,10 @@ public class RecipeShoppingListController extends ShoppingListController {
         this.recipeController = recipeController;
     }
 
+    /**
+     * Remplis la tableView des ingrédients d'une recette
+     * @param shoppingList liste de produits
+     */
     public void initForCreateRecipe(ShoppingList shoppingList) {
         shoppingListToSend = new ShoppingList("temporary");
         loadFXML(userShoppingListViewController, "ShoppingList.fxml");
