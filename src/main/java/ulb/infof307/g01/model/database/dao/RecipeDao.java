@@ -67,7 +67,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         ArrayList<String> valuesOfPreparedStatement;
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("UtilisateurRecette.UtilisateurID = %d",
-                Configuration.getCurrent().getCurrentUser().getID()));
+                Configuration.getCurrent().getCurrentUser().getId()));
         String stringQuery;
         StringBuilder query = new StringBuilder("""
                 SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation,UtilisateurRecette.estFavoris
@@ -113,7 +113,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
                 WHERE UtilisateurRecette.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getID());
+                """, Configuration.getCurrent().getCurrentUser().getId());
         ResultSet queryAllName = sendQuery(query);
         List<String> nameList = new ArrayList<>();
         while(queryAllName.next()){
@@ -149,7 +149,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
             insert("RecetteIngredient", productValues);
         }
         // ajout dans la table des recettes correspondant a l'utilisateur
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
         String[] userRecipeValues = {userID, recipeID, isFavorite};
         insert("UtilisateurRecette",userRecipeValues);
 
@@ -180,7 +180,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
-                WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", Configuration.getCurrent().getCurrentUser().getID());
+                WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", Configuration.getCurrent().getCurrentUser().getId());
 
         ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
         name = "'" + name + "'"; // quotes to recognize it as string and request need it

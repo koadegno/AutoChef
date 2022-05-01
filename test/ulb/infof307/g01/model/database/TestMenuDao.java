@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
@@ -36,7 +35,7 @@ class TestMenuDao {
         Configuration.getCurrent().setDatabase(databaseName);
 
         User testUser = new User("admin","admin",true);
-        testUser.setID(1);
+        testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert(fish);

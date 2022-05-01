@@ -3,7 +3,7 @@ package ulb.infof307.g01.model;
 //TODO: crée une class juste pour l'address
 public class User {
     private Address address;
-    private int ID = -1;
+    private int id = -1;
     private String name;
     private String familyName;
 
@@ -15,9 +15,9 @@ public class User {
 
     //constructors
 
-    public User(int ID, String lastName, String firstName, String pseudo, String password, Address address, Boolean pro) {
+    public User(int id, String lastName, String firstName, String pseudo, String password, Address address, Boolean pro) {
         this(pseudo, password,pro);
-        this.ID = ID;
+        this.id = id;
         this.familyName = lastName;
         this.name = firstName;
         this.address = address;
@@ -53,11 +53,11 @@ public class User {
         this.pseudo = pseudo;
     }
     public String getPseudo(){return pseudo;}
-    public void setID(int ID) {
-        this.ID = ID;
+    public void setId(int id) {
+        this.id = id;
     }
-    public int getID() {
-        return this.ID;
+    public int getId() {
+        return this.id;
     }
     public void setAdress(Address address) {
         this.address = address;

@@ -51,7 +51,7 @@ public class MenuDao extends Database implements Dao<Menu> {
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
                 INNER JOIN UtilisateurMenu ON M.MenuID = UtilisateurMenu.MenuID
                 WHERE M.MenuID = %d AND UtilisateurMenu.UtilisateurID = %d
-                 order by M.Heure""", nameID, Configuration.getCurrent().getCurrentUser().getID()));
+                 order by M.Heure""", nameID, Configuration.getCurrent().getCurrentUser().getId()));
         Menu menu = new Menu(nameMenu);
         while(querySelectMenu.next()){
             int menuDay = querySelectMenu.getInt(1);
@@ -77,7 +77,7 @@ public class MenuDao extends Database implements Dao<Menu> {
                 INNER JOIN UtilisateurMenu ON R.MenuID = UtilisateurMenu.MenuID
                 WHERE UtilisateurMenu.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getID());
+                """, Configuration.getCurrent().getCurrentUser().getId());
         ResultSet queryAllName = sendQuery(query);
         List<String> nameList = new ArrayList<>();
         while(queryAllName.next()){
@@ -91,7 +91,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         insert(MENU_TABLE_NAME,values);
         int id = getGeneratedID();
         insertRecipesInMenu(menu, id);
-        String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getID()), String.valueOf(id)};
+        String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getId()), String.valueOf(id)};
         insert("UtilisateurMenu", userValues);
 
 
@@ -113,7 +113,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         }
         else {
             insertRecipesInMenu(menu, menuID);
-            String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getID()), String.valueOf(menuID)};
+            String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getId()), String.valueOf(menuID)};
             insert("UtilisateurMenu", userValues);
         }
     }

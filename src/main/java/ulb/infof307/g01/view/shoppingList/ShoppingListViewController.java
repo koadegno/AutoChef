@@ -21,7 +21,7 @@ import java.util.ResourceBundle;
 
 public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> implements Initializable {
 
-    private final int maxQuantity = 10000;
+    private static final int maxQuantity = 10000;
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxQuantity);
     @FXML
     protected HBox hBoxToCreateProduct;

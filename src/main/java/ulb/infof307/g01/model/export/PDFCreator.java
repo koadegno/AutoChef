@@ -19,7 +19,7 @@ import ulb.infof307.g01.model.ShoppingList;
  * Classe qui permet d'exporter une liste de course en pdf
  */
 public class PDFCreator {
-    private static String FILE = null;
+    private static String nameFile = null;
 
     private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
             Font.BOLD);
@@ -30,9 +30,9 @@ public class PDFCreator {
             Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
             sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
 
-            FILE = shoppingList.getName();
+            nameFile = shoppingList.getName();
             Document document = new Document();
-            PdfWriter.getInstance(document, new FileOutputStream(FILE+".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(nameFile +".pdf"));
             document.open();
             addContent(document, sortedShoppingList);
             document.close();
@@ -41,12 +41,9 @@ public class PDFCreator {
         }}
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
-        if (productList.isEmpty()){
-            System.err.println("Warning: ShoppingList is empty!");
-        }
         String nameFamilyProduct = productList.get(0).getFamillyProduct();
 
-        Anchor anchor = new Anchor("Liste de courses : " + FILE , catFont); //catFont
+        Anchor anchor = new Anchor("Liste de courses : " + nameFile, catFont); //catFont
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
         Paragraph subPara = new Paragraph(nameFamilyProduct, subFont); //subFont
         Section subCatPart = catPart.addSection(subPara);

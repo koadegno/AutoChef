@@ -72,7 +72,7 @@ public class JSON {
             Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
 
         }
-        catch (Throwable e){
+        catch (Exception e){
             throw new ParseException(0, e);
         }
 
