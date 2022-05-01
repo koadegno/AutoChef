@@ -146,11 +146,11 @@ public class MapController extends Controller implements MapViewController.Liste
         Graphic textPointOnMap = shopOverlay.getRight();
         TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
         shopName.setText(shop.getName());
-        }
+    }
 
     /**
      * Cherche le magasin correspondant à la position et lance le popup
-      * @throws SQLException erreur au niveau de la base de donnée
+     * @throws SQLException erreur au niveau de la base de donnée
      */
     @Override
     public void onUpdateShopClicked() throws SQLException {
@@ -281,7 +281,6 @@ public class MapController extends Controller implements MapViewController.Liste
 
         viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
         RouteTask routeTask = new RouteTask(ROUTE_TASK_URL);
-        routeTask.loadAsync();
         ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
 
         // Récupère les positions de départ et d'arrivée
@@ -319,13 +318,11 @@ public class MapController extends Controller implements MapViewController.Liste
                         viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
 
                     } catch (Exception e) {
-                        ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Itinéraire impossible");
+                        ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
                         onDeleteItineraryClicked();
                     }
                 });
-            } catch (Exception e) {
-                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Problème avec l'itinéraire");
-            }
+            } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }
         });
     }
 
