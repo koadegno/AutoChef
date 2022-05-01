@@ -1,6 +1,5 @@
 package ulb.infof307.g01.view.recipe;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -84,6 +83,10 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
         listener.onFavoriteRecipeCheck(isChecked);
     }
 
+    public void helpRecipe() {
+        listener.helpModifyRecipeClick();
+    }
+
 
     public interface UserRecipesListener {
         void onRecipeSearchTextFieldSubmit(String recipeName);
@@ -95,5 +98,6 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
         void logout();
         void onEndViewFavoriteRecipeButton();
         void onFavoriteRecipeCheck(Boolean isChecked);
+        void helpModifyRecipeClick();
     }
 }

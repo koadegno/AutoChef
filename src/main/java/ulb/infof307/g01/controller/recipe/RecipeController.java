@@ -509,4 +509,12 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             UserRecipesViewController.showErrorSQL();
         }
     }
+
+    @Override
+    public void helpModifyRecipeClick() {
+        int numberOfImageHelp = 9;
+        String directory = "helpModifyRecipe/";
+        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
+    }
 }
