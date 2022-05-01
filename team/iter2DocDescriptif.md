@@ -1,4 +1,4 @@
-uivi de planification du projet :
+Suivi de planification du projet :
 
 Toutes les fonctionnalités des histoires 2, 4 et 5 ont été implémentées.
 
