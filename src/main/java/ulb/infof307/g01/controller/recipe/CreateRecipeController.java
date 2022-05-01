@@ -116,6 +116,8 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
      */
     private boolean isValidRecipe(String diet, String type, int nbPerson, String preparation, String recipeName) {
         boolean isValid = true;
+        createRecipeViewController.clearErrors();
+
         // Vérifie qu'un Régime a été sélectionné
         if (diet == null) {
             createRecipeViewController.dietComboBoxError();
@@ -126,8 +128,13 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
             createRecipeViewController.typeComboBoxError();
             isValid = false;
         }
-        // TODO Vérifier que la liste d'ingrédients n'est pas vide
-        // TODO: Reset erreur quand condition OK
+
+        // Vérifie qu'il y a au moins un ingrédient
+        if(createRecipeViewController.getSizeTableViewIngredient() <= 0){
+            createRecipeViewController.listIngredientIsSizeZeroError();
+            isValid = false;
+        }
+
         // Vérifie que la préparation n'est pas vide
         if (preparation.isBlank()) {
             createRecipeViewController.preparationTextAreaError();
