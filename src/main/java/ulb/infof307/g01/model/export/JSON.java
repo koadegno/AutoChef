@@ -7,6 +7,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
 
+import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -41,17 +42,24 @@ public class JSON {
         }
 
     }
-    public void importRecipe(String fileName){
+    public void importRecipe(String fileName) throws SQLException, ParseException, IOException {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
-        try (FileReader reader = new FileReader(fileName))
-        {
+        FileReader reader = null;
+        JSONObject recipe = null;
+        try {
+            reader = new FileReader(fileName);
+
             //Read JSON file
             Object obj = jsonParser.parse(reader);
+            recipe = (JSONObject) obj;
 
-            JSONObject recipe = (JSONObject) obj;
+        } catch (IOException e) {
+            throw new IOException(e);
+        }
 
+        try{
             nameRecipeToAdd = (String) recipe.get("Nom");
             Long duration = (Long) recipe.get("Duree");
             Long nbrPerson = (Long) recipe.get("NbPersonnes");
@@ -61,15 +69,17 @@ public class JSON {
 
             //Envoyer recette à la base de donnee
             Recipe recipeToSend = new Recipe(nameRecipeToAdd, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
-            try {
-                Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
+            Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
 
-        } catch (IOException | ParseException e) {
-            e.printStackTrace();
         }
+        catch (Throwable e){
+            throw new ParseException(0, e);
+        }
+
+
+
+
+
     }
     public String getNameRecipe(){return this.nameRecipeToAdd;}
     public String getNameProduct(){return this.nameProductToAdd;}

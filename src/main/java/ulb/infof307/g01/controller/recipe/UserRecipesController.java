@@ -2,7 +2,9 @@ package ulb.infof307.g01.controller.recipe;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.json.simple.parser.ParseException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
@@ -13,8 +15,10 @@ import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
+import ulb.infof307.g01.view.shop.ProductViewController;
 
 import java.io.File;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
@@ -126,7 +130,15 @@ public class UserRecipesController extends Controller implements UserRecipesView
 
         if(jsonRecipe != null){
             JSON json = new JSON();
-            json.importRecipe(jsonRecipe.getAbsolutePath());
+            try {
+                json.importRecipe(jsonRecipe.getAbsolutePath());
+            } catch (SQLException | ParseException e ) {
+                String messageError = "Le contenu du JSON est incorrecte";
+                UserRecipesViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
+            } catch (IOException e) {
+                String messageError = "Le fichier n'a pas pu être ouvert";
+                UserRecipesViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
+            }
             onRecipeSearchTextFieldSubmit(json.getNameRecipe());
         }
 

@@ -5,6 +5,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 
 import org.json.simple.JSONObject;
+import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
@@ -67,7 +68,7 @@ class TestJSON {
     }
 
     @Test
-    public void testJsonRecipe(){
+    public void testJsonRecipe() throws SQLException, IOException, ParseException {
         JSON json = new JSON();
         json.importRecipe(fileNameRecipe);
         //get recipe from database to check if it's created
