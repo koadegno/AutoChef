@@ -14,8 +14,6 @@ import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
-import ulb.infof307.g01.view.menu.HomeMenuViewController;
-import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.menu.GenerateMenuViewController;
 
 import java.io.IOException;
@@ -27,7 +25,6 @@ import java.util.List;
 public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
-    private ShowMenuViewController windowShowMenuViewController;
     private CreateMenuViewController createMenuViewController;
     private Menu menu;
     protected ArrayList<Day> daysName;
@@ -62,7 +59,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
         }
     }
 
-    public void showCreateMenu(){
+    public void displayCreateMenu(){
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
         createMenuViewController.setListener(this);
@@ -72,7 +69,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     public void showModifyMenu(Menu menu) {
         this.menu = menu;
-        showCreateMenu();
+        displayCreateMenu();
         createMenuViewController.setModifyMode();
         isModifying = true;
     }
@@ -89,12 +86,18 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
     @Override
-    public boolean onSaveMenu(String menuName){
+    public void onSaveMenu(String menuName){
         boolean isSaved = true;
-        if((menuName.isBlank() || menuName.isEmpty() ) && !isModifying ) return !isSaved;
+        if((menuName.isBlank() || menuName.isEmpty() ) && !isModifying )
+        {   createMenuViewController.showTableViewMenuError(!isSaved);
+            createMenuViewController.showNameMenuError(!isSaved);
+            return;
+        }
         try{
             if(menu.size() == 0) {
-                return !isSaved;
+                createMenuViewController.showTableViewMenuError(!isSaved);
+                createMenuViewController.showNameMenuError(!isSaved);
+                return;
             } else {
                 if(!isModifying){
                     menu.setName(menuName);
@@ -102,17 +105,17 @@ public class MenuController extends Controller implements CreateMenuViewControll
                 }
                 else Configuration.getCurrent().getMenuDao().update(menu);
 
+                createMenuViewController.showTableViewMenuError(isSaved);
+                createMenuViewController.showNameMenuError(isSaved);
 
-                FXMLLoader loader = this.loadFXML("HomeMenu.fxml");
-                HomeMenuViewController viewController = loader.getController();
-                HomePageMenuController homePageMenuController = new HomePageMenuController(currentStage);
-                viewController.setListener(homePageMenuController);
-                return isSaved;
+                listenerBackPreviousWindow.onReturn();
+
             }
         } catch(SQLException e) {
             ViewController.showErrorSQL();
         }
-        return isSaved;
+        createMenuViewController.showTableViewMenuError(isSaved);
+        createMenuViewController.showNameMenuError(isSaved);
     }
 
     @Override
@@ -178,5 +181,5 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
     @Override
-    public void onReturn() { currentStage.setScene(currentScene);}
+    public void onReturn() { displayCreateMenu();}
 }

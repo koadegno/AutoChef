@@ -9,8 +9,6 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
 
 public class HomePageMenuController extends Controller implements HomeMenuViewController.HomeMenuListener, ListenerBackPreviousWindow {
 
-    public HomePageMenuController(Stage primaryStage){this(primaryStage,null);}
-
     public HomePageMenuController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
@@ -50,7 +48,7 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
     @Override
     public void onUserCreateMenuButtonClick() {
         MenuController menuController = new MenuController(currentStage,this);
-        menuController.showCreateMenu();
+        menuController.displayCreateMenu();
     }
 
     @Override
