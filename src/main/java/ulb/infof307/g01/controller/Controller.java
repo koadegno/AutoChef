@@ -14,9 +14,12 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.Objects;
 
+/**
+ * Classe générique de contrôleur contient
+ * les méthodes de base pour tout contrôleur
+ */
 public abstract class Controller {
 
-    protected static Configuration applicationConfiguration;
     protected static Stage currentStage;
 
     protected static final String dataBaseName = "autochef.sqlite";
@@ -30,7 +33,11 @@ public abstract class Controller {
         this.listenerBackPreviousWindow = listenerBackPreviousWindow;
     }
 
-    //public abstract void displayMain(); // TODO
+    /**
+     * Lance le fichier FXML
+     * @param filename le fichier FXML à lancer
+     * @return un FXMLLoader
+     */
     public FXMLLoader loadFXML(String filename) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         setNewScene(loader);
@@ -38,6 +45,12 @@ public abstract class Controller {
     }
 
 
+    /**
+     * Lance le fichier FXML et lui attribue un contrôleur
+     * @param controller le contrôleur à associer au fichier FXML
+     * @param filename le nom du fichier FXML
+     * @return un FXMLLoader
+     */
     public FXMLLoader loadFXML(ViewController controller, String filename) {
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         loader.setController(controller);
@@ -46,6 +59,13 @@ public abstract class Controller {
         return loader;
     }
 
+    /**
+     * Lance le fxml d'une pop up
+     * @param filename le nom du fichier fxml
+     * @param controller le contrôleur associé à la pop up
+     * @return javafx stage
+     * @throws IOException
+     */
     protected Stage popupFXML(String filename, ViewController controller) throws IOException {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
@@ -85,6 +105,11 @@ public abstract class Controller {
         setNewScene(loader, "");
     }
 
+    /**
+     *
+     * @param windowTitle
+     * @return
+     */
     public File importJSON(String windowTitle){
         String extensionDescription = "Fichier JSON";
         File jsonFile = ViewController.showFileChooser(windowTitle, extensionDescription,
@@ -97,6 +122,9 @@ public abstract class Controller {
         return null;
     }
 
+    /**
+     * Déconnecte l'utilisateur
+     */
     protected void userLogout() {
         Configuration.getCurrent().setCurrentUser(null);
         LoginController loginController = new LoginController(currentStage);
