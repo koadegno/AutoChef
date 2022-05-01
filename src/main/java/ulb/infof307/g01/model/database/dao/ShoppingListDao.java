@@ -40,7 +40,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
                 INNER JOIN UtilisateurListeCourse ON R.ListeCourseID = UtilisateurListeCourse.ListeCourseID
                 WHERE UtilisateurListeCourse.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getID());
+                """, Configuration.getCurrent().getCurrentUser().getId());
         ResultSet queryAllName = sendQuery(query);
         List<String> nameList = new ArrayList<>();
         while(queryAllName.next()){
@@ -64,7 +64,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
             int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
             insertIngredientInShoppingList(shoppingListID,productID, product.getQuantity());
         }
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
         String[] userShoppingListValues = {userID, String.valueOf(shoppingListID)};
         insert("UtilisateurListeCourse",userShoppingListValues);
     }
@@ -93,7 +93,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     @Override
     public ShoppingList get(String name) throws SQLException {
-        int userID = Configuration.getCurrent().getCurrentUser().getID();
+        int userID = Configuration.getCurrent().getCurrentUser().getId();
         int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
         ResultSet querySelectShoppingList = sendQuery(String.format("""
                 SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom

@@ -44,6 +44,8 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
+    public static final int WIDTH = 4;
+    public static final int WALKING = 4;
     private MapViewController viewController;
     private boolean onItineraryMode;
 
@@ -275,8 +277,7 @@ public class MapController extends Controller implements MapViewController.Liste
     private void calculRoute() {
 
         Graphic routeGraphic = new Graphic();
-        int width = 4;
-        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, COLOR_BLUE, width));
+        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, COLOR_BLUE, WIDTH));
 
         viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
         RouteTask routeTask = new RouteTask(ROUTE_TASK_URL);
@@ -298,8 +299,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 routeParameters.setDirectionsLanguage("fr");
 
                 // choisis le mode de voyage
-                int walking = 4;
-                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(walking));
+                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(WALKING));
 
                 // calcul l'itinéraire
                 ListenableFuture<RouteResult> routeResultFuture = routeTask.solveRouteAsync(routeParameters);
@@ -317,7 +317,10 @@ public class MapController extends Controller implements MapViewController.Liste
                         double totalTimeBike = route.getTotalTime() / timeBike; // calcul du temps en vélo
                         viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
 
-                    } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");}
+                    } catch (Exception e) {
+                        ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
+                        onDeleteItineraryClicked();
+                    }
                 });
             } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }
         });

@@ -32,14 +32,13 @@ public class UserDao extends Database implements Dao<User>{
     @Override
     @Deprecated
     public List<String> getAllName() throws SQLException {
-        System.out.println("NE PAS UTILISER"); //TODO ne pas utiliser
         return null;
     }
 
 
     @Override
     public void insert(User user) throws SQLException {
-        String userID  = (user.getID() == -1) ? "null": String.valueOf(user.getID());
+        String userID  = (user.getId() == -1) ? "null": String.valueOf(user.getId());
         String[] values = {userID
                 ,String.format("'%s'",user.getName())
                 ,String.format("'%s'",user.getFamilyName())
@@ -87,10 +86,6 @@ public class UserDao extends Database implements Dao<User>{
 
         if(querySelectUser.next()){
             user = ExtractUserFromQuery(userPseudo, querySelectUser);
-        }
-        else{
-            System.out.println("je ne fonctionne pas");
-            //TODO lancer une errreur
         }
         return user;
     }

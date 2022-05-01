@@ -16,6 +16,8 @@ import java.util.Vector;
 
 public class CreateShoppingListController extends ShoppingListController {
 
+    public static final int NUMBER_OF_IMAGE_HELP = 8;
+
     public CreateShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
         super(listenerBackPreviousWindow);
         displayCreateShoppingList();
@@ -58,7 +60,7 @@ public class CreateShoppingListController extends ShoppingListController {
             catch (SQLiteException e) { //Erreur de doublon
                 createShoppingListViewController.showNameUserCreateShoppingListError();
             } catch (SQLException e) {
-                e.printStackTrace();
+                CreateShoppingListViewController.showErrorSQL();
             }
             // else tout ce passe bien
             createShoppingListViewController.returnToMenu.fire();
@@ -80,10 +82,8 @@ public class CreateShoppingListController extends ShoppingListController {
     }
 
     public void helpCreateShoppingList(){
-        int numberOfImageHelp = 8;
         String directory = "helpCreateShoppingList/";
-
-        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        HelpController helpController = new HelpController(directory, NUMBER_OF_IMAGE_HELP);
         helpController.displayHelpShop();
     }
 

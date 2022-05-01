@@ -7,7 +7,6 @@ import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,7 +49,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 INNER JOIN UtilisateurMagasin ON R.MagasinID = UtilisateurMagasin.MagasinID
                 WHERE UtilisateurMagasin.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getID());
+                """, Configuration.getCurrent().getCurrentUser().getId());
         List<String> nameList;
         try (ResultSet queryAllName = sendQuery(query)) {
             nameList = new ArrayList<>();
@@ -85,7 +84,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             insert(TABLE_SHOP_PRODUCT, productValues);
         }
         // ajout dans la table utilisateur
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getID());
+        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
         String[] userShopValues = {userID,shopID};
         insert("UtilisateurMagasin", userShopValues);
     }
@@ -129,7 +128,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = MI.MagasinID
                 WHERE MI.MagasinID = %d AND UtilisateurMagasin.UtilisateurID = %d""",
                 shop.getID(),
-                Configuration.getCurrent().getCurrentUser().getID());
+                Configuration.getCurrent().getCurrentUser().getId());
 
         try (ResultSet querySelectProductList = sendQuery(query)) {
             while (querySelectProductList != null && querySelectProductList.next()) {
@@ -152,7 +151,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE UtilisateurMagasin.UtilisateurID = %d""",
-                Configuration.getCurrent().getCurrentUser().getID()))) {
+                Configuration.getCurrent().getCurrentUser().getId()))) {
 
             shopsList = new ArrayList<>();
             while (querySelectShop.next()) {
@@ -186,7 +185,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
-                name, String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()), Configuration.getCurrent().getCurrentUser().getID()))) {
+                name, String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()), Configuration.getCurrent().getCurrentUser().getId()))) {
 
             if (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);

@@ -3,6 +3,7 @@ package ulb.infof307.g01.controller.recipe;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import ulb.infof307.g01.controller.Controller;
@@ -99,14 +100,18 @@ public class UserRecipesController extends Controller implements UserRecipesView
      */
     @Override
     public void onDeleteRecipeButtonClick() {
-        try {
-            Configuration.getCurrent().getRecipeDao().delete(currentRecipe);
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer la recette ?", "Etes vous sur de vouloir supprimer la recette ? ");
+        if(alertResult == ButtonType.OK){
+            try {
+                Configuration.getCurrent().getRecipeDao().delete(currentRecipe);
+            } catch (SQLException e) {
+                ViewController.showErrorSQL();
+            }
+            userRecipesViewController.setDisableRecipeButtons(true);
+            userRecipesViewController.resetRecipeTextArea();
+            currentRecipe = null;
         }
-        userRecipesViewController.setDisableRecipeButtons(true);
-        userRecipesViewController.resetRecipeTextArea();
-        currentRecipe = null;
+
     }
 
     /**

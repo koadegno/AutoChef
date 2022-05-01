@@ -94,7 +94,6 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
                 } else
                     Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
             } catch (SQLException e) {
-                e.printStackTrace();
                 ViewController.showErrorSQL();
             }
 

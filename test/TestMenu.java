@@ -69,7 +69,7 @@ class TestMenu {
         Configuration.getCurrent().setDatabase(databaseName);
 
         User testUser = new User("admin","admin",true);
-        testUser.setID(1);
+        testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
         Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
