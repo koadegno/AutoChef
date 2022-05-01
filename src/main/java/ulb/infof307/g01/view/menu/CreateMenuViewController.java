@@ -113,10 +113,10 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         this.listener = listener;
     }
 
-    public void setModifyMode() {
+    public void setModifyMode(String menuName) {
         generateMenuButton.setVisible(false);
-        menuNameTextField.setVisible(false);
-        menuNameLabel.setVisible(false);
+        menuNameTextField.setText(menuName);
+        menuNameTextField.setDisable(true);
     }
 
     public void helpCreateMenu() {

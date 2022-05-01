@@ -70,7 +70,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     public void showModifyMenu(Menu menu) {
         this.menu = menu;
         displayCreateMenu();
-        createMenuViewController.setModifyMode();
+        createMenuViewController.setModifyMode(menu.getName());
         isModifying = true;
     }
 
