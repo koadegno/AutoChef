@@ -45,11 +45,13 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
     private MapViewController viewController;
+    private boolean onItineraryMode;
 
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
+        onItineraryMode = false;
     }
 
     /**
@@ -205,6 +207,7 @@ public class MapController extends Controller implements MapViewController.Liste
             itineraryGraphicsCercleList.getGraphics().remove(arrival);
             itineraryGraphicsTextList.getGraphics().remove(arrival);
 
+            onItineraryMode = false;
             viewController.deleteItineraryInformation();
             return true;
         }
@@ -217,7 +220,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onItineraryClicked() {
-
+        onItineraryMode = true;
         MapView mapView = viewController.getMapView();
         mapView.setCursor(Cursor.DEFAULT);
 
@@ -361,25 +364,30 @@ public class MapController extends Controller implements MapViewController.Liste
      * Supprime le point sélectionné de l'overlay
      */
     public void onDeleteShopClicked() throws SQLException {
-
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
+        if(!onItineraryMode){
 
-        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
-        if (alertResult == ButtonType.OK) {
-            Graphic cerclePointOnMap = shopOverlay.getLeft();
-            Graphic textPointOnMap = shopOverlay.getRight();
+            ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
+            if (alertResult == ButtonType.OK ) {
+                Graphic cerclePointOnMap = shopOverlay.getLeft();
+                Graphic textPointOnMap = shopOverlay.getRight();
 
-            TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
-            Point shopPoint = (Point) textPointOnMap.getGeometry();
+                TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
+                Point shopPoint = (Point) textPointOnMap.getGeometry();
 
-            Shop shopToDelete = Configuration.getCurrent().getShopDao().get(shopName.getText(), shopPoint);
-            Configuration.getCurrent().getShopDao().delete(shopToDelete);
+                Shop shopToDelete = Configuration.getCurrent().getShopDao().get(shopName.getText(), shopPoint);
+                Configuration.getCurrent().getShopDao().delete(shopToDelete);
 
-            shopGraphicsCercleList.getGraphics().remove(cerclePointOnMap);
-            shopGraphicsTextList.getGraphics().remove(textPointOnMap);
+                shopGraphicsCercleList.getGraphics().remove(cerclePointOnMap);
+                shopGraphicsTextList.getGraphics().remove(textPointOnMap);
+            }
+        }
+        else{
+            ViewController.showAlert(Alert.AlertType.INFORMATION, "Tu ne peux pas supprimer un magasin.\nSupprime d'abord l'itinéraire", "");
+
         }
     }
 
