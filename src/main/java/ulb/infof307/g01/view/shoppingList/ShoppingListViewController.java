@@ -44,6 +44,8 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     public Button returnToMenu, btnSendMail;
     protected String currentShoppingListName;
+    @FXML
+    protected Menu helpMenuShoppingList;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {

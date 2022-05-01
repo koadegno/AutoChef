@@ -77,8 +77,10 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
             listener.returnAddedProducts();
         });
 
+
         btnExportShoppingList.setVisible(false);
         btnSendMail.setVisible(false);
+        helpMenuShoppingList.setVisible(false);
     }
 
     public void helpShoppingList(){

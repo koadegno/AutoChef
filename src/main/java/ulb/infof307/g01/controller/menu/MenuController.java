@@ -87,16 +87,14 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onSaveMenu(String menuName){
-        boolean isSaved = true;
+        boolean isError = false;
         if((menuName.isBlank() || menuName.isEmpty() ) && !isModifying )
-        {   createMenuViewController.showTableViewMenuError(!isSaved);
-            createMenuViewController.showNameMenuError(!isSaved);
+        {   createMenuViewController.showNameMenuError(!isError);
             return;
         }
         try{
             if(menu.size() == 0) {
-                createMenuViewController.showTableViewMenuError(!isSaved);
-                createMenuViewController.showNameMenuError(!isSaved);
+                createMenuViewController.showTableViewMenuError(!isError);
                 return;
             } else {
                 if(!isModifying){
@@ -105,8 +103,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
                 }
                 else Configuration.getCurrent().getMenuDao().update(menu);
 
-                createMenuViewController.showTableViewMenuError(isSaved);
-                createMenuViewController.showNameMenuError(isSaved);
+                createMenuViewController.showTableViewMenuError(isError);
+                createMenuViewController.showNameMenuError(isError);
 
                 listenerBackPreviousWindow.onReturn();
 
@@ -114,8 +112,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
         } catch(SQLException e) {
             ViewController.showErrorSQL();
         }
-        createMenuViewController.showTableViewMenuError(isSaved);
-        createMenuViewController.showNameMenuError(isSaved);
+        createMenuViewController.showTableViewMenuError(isError);
+        createMenuViewController.showNameMenuError(isError);
     }
 
     @Override
