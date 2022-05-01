@@ -1,6 +1,5 @@
 package ulb.infof307.g01.view.menu;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
@@ -10,7 +9,6 @@ import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ResourceBundle;
 
 public class CreateMenuViewController extends ViewController<CreateMenuViewController.Listener> implements Initializable{
@@ -100,19 +98,25 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
      */
     @FXML
     public void saveMenu(){
-        boolean isSaved = listener.onSaveMenu(menuNameTextField.getText());
-        setNodeColor(menuNameTextField,!isSaved);
-        setNodeColor(menuTableView,!isSaved);
+        listener.onSaveMenu(menuNameTextField.getText());
+    }
+
+    public void showNameMenuError(boolean isError){
+        setNodeColor(menuNameTextField, isError);
+    }
+
+    public void showTableViewMenuError(boolean isError){
+        setNodeColor(menuTableView,isError);
     }
 
     public void setListener(Listener listener) {
         this.listener = listener;
     }
 
-    public void setModifyMode() {
+    public void setModifyMode(String menuName) {
         generateMenuButton.setVisible(false);
-        menuNameTextField.setVisible(false);
-        menuNameLabel.setVisible(false);
+        menuNameTextField.setText(menuName);
+        menuNameTextField.setDisable(true);
     }
 
     public void helpCreateMenu() {
@@ -127,7 +131,7 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
 
     public interface Listener{
         void onGenerateMenu();
-        boolean onSaveMenu(String menuName);
+        void onSaveMenu(String menuName);
         void onDaysComboBoxClicked(int dayIndex);
         void onAddRecipeClicked();
         void onReturnClicked();
