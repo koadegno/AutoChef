@@ -21,6 +21,11 @@
                   <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
                </items>
             </Menu>
+            <Menu mnemonicParsing="false" text="Aide">
+               <items>
+                  <MenuItem mnemonicParsing="false" onAction="#helpRecipe" text="Tutoriel" />
+               </items>
+            </Menu>
          </menus>
       </MenuBar>
       <HBox prefHeight="87.0" prefWidth="1024.0">
