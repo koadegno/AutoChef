@@ -58,7 +58,6 @@ public class MailAddressDao extends Database implements Dao<String> {
 
         } catch (SQLException e) {// cas ou adresse mail multiple dans la db
             mailID = Integer.parseInt(get(mailAddressName));
-            System.out.println("mail ID = "+mailID);
             if(mailID == 0) throw new SQLException(e); // mailID == null TODO comment faire quand c'est null
             insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
 

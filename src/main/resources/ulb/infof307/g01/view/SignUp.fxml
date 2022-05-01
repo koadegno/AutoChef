@@ -8,7 +8,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="65.0" prefWidth="409.0" text="Sign up" textAlignment="CENTER">
+            <Label alignment="CENTER" prefHeight="65.0" prefWidth="409.0" text="S'enregistrer" textAlignment="CENTER">
                <font>
                   <Font size="33.0" />
                </font>

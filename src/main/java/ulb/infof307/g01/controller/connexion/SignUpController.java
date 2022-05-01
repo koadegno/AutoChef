@@ -47,6 +47,7 @@ public class SignUpController extends Controller implements SignUpViewController
                 Address newUserAdress = new Address(country, city, postalCode, streetName, houseNumber);
                 User newUser = new User(noID, lastName, firstName, pseudo, password, newUserAdress, isPro);
                 Configuration.getCurrent().getUserDao().insert(newUser);
+                newUser = Configuration.getCurrent().getUserDao().get(newUser.getPseudo());
                 Configuration.getCurrent().setCurrentUser(newUser);
                 displayHome();
             }

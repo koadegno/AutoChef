@@ -79,4 +79,6 @@ public class Recipe extends ProductHashSet {
     public void setFavorite(Boolean isChecked) {
         isFavorite = isChecked;
     }
+
+    public boolean getFavorite(){return isFavorite;}
 }
