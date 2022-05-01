@@ -12,9 +12,6 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
-import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
-import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
 import java.io.File;
@@ -180,6 +177,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
         if (currentRecipe != null) {
             userRecipesViewController.recipeSearchTextFieldError(false);
             userRecipesViewController.setDisableRecipeButtons(false);
+            userRecipesViewController.setVisibleHelpRecipe(false);
             userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe), currentRecipe.getPreparation());
             userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }

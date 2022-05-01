@@ -74,8 +74,10 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
 
         if (isValid) {
             int idRecipe = 0;
+            boolean favoris = false;
             if (isWaitingModification) {
                 idRecipe = currentRecipe.getId();
+                favoris = currentRecipe.getFavorite();
             }
             currentRecipe = new Recipe(recipeName);
             currentRecipe.setCategory(diet);
@@ -86,6 +88,7 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
             try {
                 if (isWaitingModification) {
                     currentRecipe.setId(idRecipe);
+                    currentRecipe.setFavorite(favoris);
                     Configuration.getCurrent().getRecipeDao().update(currentRecipe);
                     isWaitingModification = false;
                 } else

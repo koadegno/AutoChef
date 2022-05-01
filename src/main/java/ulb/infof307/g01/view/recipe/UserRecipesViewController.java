@@ -1,16 +1,15 @@
 package ulb.infof307.g01.view.recipe;
 
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ulb.infof307.g01.view.ViewController;
 
 public class UserRecipesViewController extends ViewController<UserRecipesViewController.UserRecipesListener> {
 
+    @FXML
+    private Menu helpRecipeMenu;
     @FXML
     private TextField recipeSearchTextField;
     @FXML
@@ -85,6 +84,10 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
 
     public void helpRecipe() {
         listener.helpModifyRecipeClick();
+    }
+
+    public void setVisibleHelpRecipe(boolean isVisible) {
+        helpRecipeMenu.setVisible(isVisible);
     }
 
 
