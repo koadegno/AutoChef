@@ -4,6 +4,7 @@ import javafx.fxml.FXMLLoader;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.view.recipe.*;
 
@@ -81,4 +82,6 @@ public class HomePageRecipeController extends Controller implements HomeRecipeVi
 
     @Override
     public void onReturn() { displayHomeRecipe(); }
+
+
 }
