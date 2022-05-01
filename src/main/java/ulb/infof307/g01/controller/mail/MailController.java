@@ -1,6 +1,8 @@
 package ulb.infof307.g01.controller.mail;
 
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
+import org.apache.jena.base.Sys;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.export.Mail;
@@ -120,9 +122,10 @@ public class MailController extends Controller implements MailViewController.Lis
                     Configuration.getCurrent().getMailAddressDao().insert(newMail);
                 }
             } catch (SQLException e) {
-                e.printStackTrace();
+                MailViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Le mail enregistrée existe déjà dans vos favoris");
             }
-            mailViewController.addMailToCombobox(newMail);
+
+            this.initComboboxFavoriteMail();
             popupFavoriteMail.close(); //Ferme la popup
         }
         else{
