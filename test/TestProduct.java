@@ -26,17 +26,17 @@ public class TestProduct {
 
     @Test
     public void testDecrease() {
-        assertFalse(productTest.decrease(), "La méthode à renvoyé True avec une réduction inférieure à 1");
+        assertFalse(productTest.decreaseQuantity(), "La méthode à renvoyé True avec une réduction inférieure à 1");
         assertEquals(productTest.getQuantity(), 1, "Le produit ne peut pas avoir une quantité inférieure à 1 !");
 
-        productTest.increase();
-        assertTrue(productTest.decrease(), "La quantité a renvoyé False avec un appel valide (réduction de 2 à 1)");
+        productTest.increaseQuantity();
+        assertTrue(productTest.decreaseQuantity(), "La quantité a renvoyé False avec un appel valide (réduction de 2 à 1)");
         assertEquals(productTest.getQuantity(), 1, "La quantité du produit n'a pas été réduite correctement'");
     }
 
     @Test
     public void testIncrease() {
-        productTest.increase();
+        productTest.increaseQuantity();
         assertEquals(productTest.getQuantity(), 2, "La quantité du produit n'a pas été augmentée");
     }
 

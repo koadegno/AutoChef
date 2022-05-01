@@ -17,7 +17,7 @@ abstract class ProductHashSet extends HashSet<Product> {
     @Override
     public boolean add(Product p) {
         if(contains(p)) {
-            this.getProduct(p).increase(p.getQuantity());
+            this.getProduct(p).increaseQuantity(p.getQuantity());
         }
         else {
             super.add(p.clone());
@@ -35,7 +35,7 @@ abstract class ProductHashSet extends HashSet<Product> {
     public boolean remove(Object object) {
         if (contains(object)) {
             Product product = getProduct((Product)object);
-            if(!product.decrease())
+            if(!product.decreaseQuantity())
                 super.remove(object);
             return true;
         }

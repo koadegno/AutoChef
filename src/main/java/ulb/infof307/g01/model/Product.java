@@ -78,7 +78,7 @@ public class Product {
      * Décrémente la quantité du Produit de 1, sauf si la quantité est déjà égale à 1
      * @return True si la quantité à effectivement été décrémenté, False sinon
      */
-    public boolean decrease() {
+    public boolean decreaseQuantity() {
         if (quantity == 1)
             return false;
         quantity--;
@@ -88,11 +88,11 @@ public class Product {
     /**
      * Augmente la quantité du Produit de 1
      */
-    public void increase(int quantity) {
+    public void increaseQuantity(int quantity) {
         this.quantity+=quantity;
     }
 
-    public void increase(){
+    public void increaseQuantity(){
         quantity++;
     }
 
