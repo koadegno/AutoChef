@@ -96,7 +96,8 @@ public class MailController extends Controller implements MailViewController.Lis
 
     public void initComboboxFavoriteMail(){
         try {
-            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
+            int userID = Configuration.getCurrent().getCurrentUser().getID();
+            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName(userID);
             mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
             e.printStackTrace();
@@ -119,7 +120,8 @@ public class MailController extends Controller implements MailViewController.Lis
         if(isValidEmailAddress(newMail)){
             try {
                 if(isSave){ //Enregistre le mail favorie dans la bdd
-                    Configuration.getCurrent().getMailAddressDao().insert(newMail);
+                    int userID = Configuration.getCurrent().getCurrentUser().getID();
+                    Configuration.getCurrent().getMailAddressDao().insert(newMail, userID);
                 }
             } catch (SQLException e) {
                 MailViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Le mail enregistrée existe déjà dans vos favoris");
