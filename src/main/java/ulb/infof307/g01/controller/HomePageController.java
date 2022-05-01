@@ -68,7 +68,7 @@ public class HomePageController extends Controller implements HomePageListener,L
     @Override
     public void onRecipeButtonClick() {
         RecipeController controller = new RecipeController();
-        controller.showHomeRecipe();
+        controller.displayHomeRecipe();
     }
 
     /**

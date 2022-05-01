@@ -21,8 +21,8 @@ public class CreateShoppingListController extends ShoppingListController {
         displayCreateShoppingList();
     }
 
-    public CreateShoppingListController(ShoppingList shoppingList) {
-        super(null);
+    public CreateShoppingListController(ShoppingList shoppingList,ListenerBackPreviousWindow listenerBackPreviousWindow) {
+        super(listenerBackPreviousWindow);
         displayCreateShoppingList();
         fillProductTable(shoppingList);
     }

@@ -87,7 +87,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     @Override
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(shoppingList);
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(shoppingList,this);
         createShoppingListController.setStage(currentStage);
     }
 

@@ -4,28 +4,18 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
-import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.shoppingList.RecipeShoppingListController;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.model.export.JSON;
-import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.*;
 
-import java.io.File;
-import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
 /**
  * Contrôleur responsable de tous les écrans en lien avec les recettes
  */
-public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener,
-        UserRecipesViewController.UserRecipesListener,
-        SearchRecipeViewController.Listener, FavoriteRecipeViewController.FavoriteRecipesListener, ListenerBackPreviousWindow {
+public class RecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener, ListenerBackPreviousWindow {
 
     // private Controller parentController; //TODO
 
@@ -42,12 +32,11 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
     private Recipe currentRecipe;
     private ShoppingList currentShoppingList;
-    private SearchRecipeListener listener;
 
     /**
      * Affiche l'écran d'accueil des recettes
      */
-    public void showHomeRecipe() {
+    public void displayHomeRecipe() {
         this.currentShoppingList = null;
         this.currentRecipe = null;
         FXMLLoader loader = loadFXML("HomeRecipe.fxml");
@@ -55,91 +44,6 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         viewController.setListener(this);
     }
 
-    public void setListener(SearchRecipeListener searchRecipeListener){
-        this.listener = searchRecipeListener;
-    }
-    // <-------------------------- Écran d'accueil des Recettes --------------------------> \\
-
-    /**
-     * Affiche l'écran permettant à l'utilisateur de voir ses recettes
-     */
-    @Override
-    public void onUserRecipesButtonClick() {
-        FXMLLoader loader = this.loadFXML("Recipe.fxml");
-        userRecipesViewController = loader.getController();
-        userRecipesViewController.setListener(this);
-    }
-
-    /**
-     * Affiche l'écran permettant de créer une nouvelle recette
-     */
-    @Override
-    public void onNewRecipeButtonClick() {
-        CreateRecipeController createRecipeController = new CreateRecipeController(currentStage,this);
-        createRecipeController.showCreateRecipe();
-    }
-
-    /**
-     * Retourne à l'écran principal
-     */
-    @Override
-    public void onBackButtonClick() {
-        //parentController.displayMain(); TODO
-        HomePageController homePageController = new HomePageController(currentStage);
-        homePageController.displayHome();
-    }
-
-
-
-    @Override
-    public void logout() {
-        userLogout();
-    }
-
-    @Override
-    public void onCancelButton()  { showHomeRecipe(); }
-
-
-    @Override
-    public void onFavoriteRecipe() {
-        FXMLLoader loader = this.loadFXML("FavoriteRecipe.fxml");
-        favoriteRecipeViewController = loader.getController();
-        favoriteRecipeViewController.setListener(this);
-        List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
-        favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
-    }
-
-
-
-    // <-------------------------- Écran de Liste des Recettes --------------------------> \\
-
-    /**
-     * Cherche si une recette existe dans la base de données et l'affiche si possible, sinon affiche une erreur
-     * sur le champ de recherche
-     * @param recipeName Nom de la recette à rechercher
-     */
-    @Override
-    public void onRecipeSearchTextFieldSubmit(String recipeName) {
-        if (recipeName.isBlank())
-            userRecipesViewController.recipeSearchTextFieldError(true);
-
-        try {
-            currentRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
-        }
-
-        if (currentRecipe == null)
-            userRecipesViewController.recipeSearchTextFieldError(true);
-        else {
-            userRecipesViewController.recipeSearchTextFieldError(false);
-            userRecipesViewController.setDisableRecipeButtons(false);
-            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe),
-                    currentRecipe.getPreparation());
-            userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
-        }
-
-    }
 
     /**
      * Convertit une Liste de {@link Product} en un {@link String} lisible par des humains
@@ -154,226 +58,54 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         }
         return res.toString();
     }
+    // <-------------------------- Écran d'accueil des Recettes --------------------------> \\
 
     /**
-     * Afficher l'écran permettant de modifier une recette déjà existante
+     * Affiche l'écran permettant à l'utilisateur de voir ses recettes
      */
     @Override
-    public void onModifyRecipeButtonClick() {
-        isWaitingModification = false;
-
-        this.sceneViewRecipe = currentStage.getScene();
-        // TODO  VOIR comment communiquer avec createRecipeView
-
-        List<Product> productList = new ArrayList<>(currentRecipe);
-        this.currentShoppingList = new ShoppingList(currentRecipe.getName());
-        currentShoppingList.addAll(productList);
-
-        CreateRecipeController createRecipeController = new CreateRecipeController(currentShoppingList,currentStage,this);
-        FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
-        createRecipeViewController = loader.getController();
-        createRecipeViewController.setListener(createRecipeController);
-        createRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
-                currentRecipe.getType(), currentRecipe.getCategory(),
-                currentRecipe.getNbrPerson(), productList);
-
-        createRecipeViewController.setCancelButtonToModifyRecipe();
+    public void onUserRecipesButtonClick() {
+        UserRecipesController userRecipesController = new UserRecipesController(currentStage,this,null);
+        userRecipesController.displayUserRecipes();
     }
 
     /**
-     * Supprime une recette de la Base de donnée
+     * Affiche l'écran permettant de créer une nouvelle recette
      */
     @Override
-    public void onDeleteRecipeButtonClick() {
-        try {
-            Configuration.getCurrent().getRecipeDao().delete(currentRecipe);
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
-        }
-        userRecipesViewController.setDisableRecipeButtons(true);
-        userRecipesViewController.resetRecipeTextArea();
-        currentRecipe = null;
+    public void onNewRecipeButtonClick() {
+        CreateRecipeController createRecipeController = new CreateRecipeController(currentStage,this);
+        createRecipeController.displayCreateRecipe();
     }
 
     /**
-     * Affiche l'écran permettant de sélectionner une recette parmis toutes celles existantes
+     * Retourne à l'écran principal
      */
     @Override
-    public void onSeeAllRecipesButtonClick() {
-        FXMLLoader loader = loadFXML("SearchRecipe.fxml");
-        searchRecipeViewController = loader.getController();
-        searchRecipeViewController.setListener(this);
-
-        try {
-            ArrayList<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
-            ArrayList<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
-            ArrayList<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
-            searchRecipeViewController.initialize(dietsList, typesList, recipesList);
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
-        }
+    public void onBackButtonClick() {
+        //parentController.displayMain(); TODO
+        HomePageController homePageController = new HomePageController(currentStage);
+        homePageController.displayHome();
     }
 
-    /**
-     * Affiche une {@code pop-up} permettant d'importer une recette depuis un fichier {@code JSON}
-     * @see JSON
-     */
-    @Override
-    public void onImportRecipeFromJSONButtonClick() {
-        final String windowTitle = "Importer une Recette depuis un fichier JSON";
-        File jsonRecipe = importJSON(windowTitle);
-
-        if(jsonRecipe != null){
-            JSON json = new JSON();
-            json.importRecipe(jsonRecipe.getAbsolutePath());
-            onRecipeSearchTextFieldSubmit(json.getNameRecipe());
-        }
-
-    }
-
-    /**
-     * Revient à la page d'accueil des recettes
-     */
-    @Override
-    public void onBackToHomeRecipeButtonClick() {
-        this.showHomeRecipe();
-    }
-
-    // <-------------------------- Écran de Recherche de Recette --------------------------> \\
-
-    /**
-     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
-     * et du nombre de personnes sélectionnés
-     */
-    @Override
-    public void onTypeComboBoxSelected(String recipeType) {
-        String recipeDiet = searchRecipeViewController.getDietComboBoxSelectedItem();
-        int recipeNbPerson = searchRecipeViewController.getNbPersonSpinnerValue();
-
-        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
-    }
-
-    /**
-     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
-     * et du nombre de personnes sélectionnés
-     */
-    @Override
-    public void onDietComboBoxSelected(String recipeDiet) {
-        String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
-        int recipeNbPerson = searchRecipeViewController.getNbPersonSpinnerValue();
-
-        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
-    }
-
-    /**
-     * Active le {@link javafx.scene.control.Spinner} permettant de filtrer en fonction
-     * d'un nombre de personnes
-     */
-    @Override
-    public void onNbPersonCheckBoxChecked(boolean isChecked) {
-        searchRecipeViewController.setDisableNbPersonSpinner(!isChecked);
-
-        onNbPersonSpinnerClicked(searchRecipeViewController.getNbPersonSpinnerValue());
-    }
-
-    /**
-     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
-     * et du nombre de personnes sélectionnés
-     */
-    @Override
-    public void onNbPersonSpinnerClicked(int recipeNbPerson) {
-        String recipeType = searchRecipeViewController.getTypeComboBoxSelectedItem();
-        String recipeDiet = searchRecipeViewController.getDietComboBoxSelectedItem();
-
-        refreshRecipeList(recipeType, recipeDiet, recipeNbPerson);
-    }
-
-    /**
-     * Filtre les recettes affichées en fonction du régime, de la catégorie du plat
-     * et du nombre de personnes sélectionnés
-     */
-    @Override
-    public void onNbPersonSpinnerKeyPressed(int recipeNbPerson) {
-        onNbPersonSpinnerClicked(recipeNbPerson);
-    }
-
-    /**
-     * Rafraichit la liste des recettes affichées en fonction du régime, de la catégorie du plat et du nombre
-     * de personnes sélectionnées
-     * @param recipeType le type de {@link Recipe} selon lequelle filtrer
-     * @param recipeDiet le régime de {@link Recipe} selon lequelle filtrer
-     * @param nbPerson le nombre de personnes de {@link Recipe} selon lequelle filtrer
-     */
-    private void refreshRecipeList(String recipeType, String recipeDiet, int nbPerson) {
-        try {
-            List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(recipeDiet, recipeType, nbPerson);
-            searchRecipeViewController.refreshRecipesTableView(recipesList);
-        } catch (SQLException e) {
-            ViewController.showErrorSQL();
-        }
-    }
-
-    /**
-     * Affiche une recette sélectionnée
-     * @see UserRecipesViewController
-     */
-    @Override
-    public void onRecipesTableViewClicked(Recipe selectedRecipe) {
-        if(listener == null) onUserRecipesButtonClick();
-
-        currentRecipe = selectedRecipe;
-        if (currentRecipe != null) {
-            if(listener == null){
-                userRecipesViewController.recipeSearchTextFieldError(false);
-                userRecipesViewController.setDisableRecipeButtons(false);
-                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe), currentRecipe.getPreparation());
-                userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
-
-            }else {
-                listener.onRecipeSelected(selectedRecipe);
-
-            }
-        }
-    }
 
     @Override
-    public void onCancelSearchButton() {
-        if(listener == null)onRecipesTableViewClicked(currentRecipe);
-        else listener.onCancelButtonClicked();
+    public void logout() {
+        userLogout();
     }
 
-    public interface SearchRecipeListener{
 
-        void onRecipeSelected(Recipe selectedRecipe);
-        void onCancelButtonClicked();
+    @Override
+    public void onFavoriteRecipe() {
+        FavoriteRecipesController favoriteRecipesController = new FavoriteRecipesController(currentStage,this);
+        favoriteRecipesController.displayFavoriteRecipe();
     }
 
     /***************************FAVORITERECIPE*******************************/
-    @Override
-    public void onFavoriteRecipesTableViewClicked(Recipe recipe) {
-        currentRecipe = recipe;
-        sceneFavoriteRecipe = currentStage.getScene();
-        onUserRecipesButtonClick();
-        userRecipesViewController.initReadOnlyMode();
-        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe),
-                currentRecipe.getPreparation());
-    }
+
+
+
 
     @Override
-    public void onEndViewFavoriteRecipeButton() {
-        currentStage.setScene(sceneFavoriteRecipe);
-    }
-
-    @Override
-    public void onFavoriteRecipeCheck(Boolean isChecked) {
-        currentRecipe.setFavorite(isChecked);
-        try {
-            Configuration.getCurrent().getRecipeDao().update(currentRecipe);
-        } catch (SQLException e) {
-            UserRecipesViewController.showErrorSQL();
-        }
-    }
-
-    @Override
-    public void onReturn() { showHomeRecipe(); }
+    public void onReturn() { displayHomeRecipe(); }
 }

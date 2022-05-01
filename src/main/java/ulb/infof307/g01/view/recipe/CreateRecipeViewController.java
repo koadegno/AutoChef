@@ -128,6 +128,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
 
     public void fillProductsTable(List<Product> productsList) {
         ingredientTableView.setItems(FXCollections.observableArrayList(productsList));
+        ingredientTableView.refresh();
     }
 
     public void prefillFields(String recipeName, String recipePreparation, String recipeType, String recipeDiet,

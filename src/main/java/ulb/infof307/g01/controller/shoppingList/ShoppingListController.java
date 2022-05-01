@@ -111,8 +111,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
     }
 
     public void returnToUserMenu(){
-        UserMenusController userMenusController = new UserMenusController(currentStage);
-        userMenusController.displayAllMenus();
+        listenerBackPreviousWindow.onReturn();
     }
 
     @Override
