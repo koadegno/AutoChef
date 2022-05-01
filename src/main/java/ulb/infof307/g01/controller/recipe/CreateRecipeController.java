@@ -7,6 +7,7 @@ import org.jetbrains.annotations.Nullable;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.controller.shoppingList.RecipeShoppingListController;
 import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
@@ -32,10 +33,11 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
     private ShoppingList currentShoppingList;
     private Scene sceneModifyRecipe;
 
-    public CreateRecipeController(Stage primaryStage) { this(primaryStage,null) ;}
+    public CreateRecipeController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow) { this(null,primaryStage,listenerBackPreviousWindow) ;}
 
-    public CreateRecipeController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public CreateRecipeController(ShoppingList currentShoppingList,Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
+        this.currentShoppingList = currentShoppingList;
         setStage(primaryStage);
     }
 
@@ -130,16 +132,16 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
 
     /**
      * Affiche l'écran permettant de modifier les produits contenus dans une recette
-     * @see ShoppingListController#initForCreateRecipe(ShoppingList)
+     * @see RecipeShoppingListController#initForCreateRecipe(ShoppingList)
      */
     @Override
     public void onModifyProductsButton() {
         this.sceneModifyRecipe = currentStage.getScene();
 
         if (currentShoppingList == null) currentShoppingList = new ShoppingList("temporary");
-        ShoppingListController shoppingListController = new ShoppingListController(this);
+        RecipeShoppingListController recipeShoppingListController = new RecipeShoppingListController(this);
 
-        shoppingListController.initForCreateRecipe(currentShoppingList);
+        recipeShoppingListController.initForCreateRecipe(currentShoppingList);
     }
 
     /**

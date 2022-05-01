@@ -134,7 +134,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         else {
             userRecipesViewController.recipeSearchTextFieldError(false);
             userRecipesViewController.setDisableRecipeButtons(false);
-            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
+            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe),
                     currentRecipe.getPreparation());
             userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }
@@ -145,7 +145,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
      * Convertit une Liste de {@link Product} en un {@link String} lisible par des humains
      * @return le String construit
      */
-    private String productListToString() {
+    public static String productListToString(Recipe currentRecipe) {
         StringBuilder res = new StringBuilder();
         for (Product p : currentRecipe) {
             res.append(p.getQuantity());
@@ -164,23 +164,21 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
 
         this.sceneViewRecipe = currentStage.getScene();
         // TODO  VOIR comment communiquer avec createRecipeView
-        CreateRecipeController createRecipeController = new CreateRecipeController(currentStage,this);
-        FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
-        createRecipeViewController = loader.getController();
-        createRecipeViewController.setListener(createRecipeController);
 
         List<Product> productList = new ArrayList<>(currentRecipe);
         this.currentShoppingList = new ShoppingList(currentRecipe.getName());
         currentShoppingList.addAll(productList);
+
+        CreateRecipeController createRecipeController = new CreateRecipeController(currentShoppingList,currentStage,this);
+        FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
+        createRecipeViewController = loader.getController();
+        createRecipeViewController.setListener(createRecipeController);
         createRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
                 currentRecipe.getType(), currentRecipe.getCategory(),
                 currentRecipe.getNbrPerson(), productList);
 
         createRecipeViewController.setCancelButtonToModifyRecipe();
     }
-
-
-
 
     /**
      * Supprime une recette de la Base de donnée
@@ -328,7 +326,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
             if(listener == null){
                 userRecipesViewController.recipeSearchTextFieldError(false);
                 userRecipesViewController.setDisableRecipeButtons(false);
-                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(), currentRecipe.getPreparation());
+                userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe), currentRecipe.getPreparation());
                 userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
 
             }else {
@@ -357,7 +355,7 @@ public class RecipeController extends Controller implements HomeRecipeViewContro
         sceneFavoriteRecipe = currentStage.getScene();
         onUserRecipesButtonClick();
         userRecipesViewController.initReadOnlyMode();
-        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(),
+        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), productListToString(currentRecipe),
                 currentRecipe.getPreparation());
     }
 

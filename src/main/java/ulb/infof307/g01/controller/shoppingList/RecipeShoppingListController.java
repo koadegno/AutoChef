@@ -1,18 +1,20 @@
 package ulb.infof307.g01.controller.shoppingList;
 
+import ulb.infof307.g01.controller.recipe.CreateRecipeController;
 import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
 public class RecipeShoppingListController extends ShoppingListController {
-    private final RecipeController recipeController;
 
-    public RecipeShoppingListController(ShoppingList shoppingList, RecipeController recipeController) {
+    private final CreateRecipeController createRecipeController;
+
+    public RecipeShoppingListController(CreateRecipeController createRecipeController) {
         super(null);
         modifyShoppingListViewController = new ModifyShoppingListViewController();
         modifyShoppingListViewController.setListener(this);
-        this.recipeController = recipeController;
-        initForCreateRecipe(shoppingList);
+        this.createRecipeController = createRecipeController;
+
     }
 
     /**
@@ -29,12 +31,12 @@ public class RecipeShoppingListController extends ShoppingListController {
 
     @Override
     public void cancelRecipeCreation() {
-        recipeController.modifyProductsCallback(null);
+        createRecipeController.modifyProductsCallback(null);
     }
 
     @Override
     public void returnAddedProducts() {
-        recipeController.modifyProductsCallback(shoppingListToSend);
+        createRecipeController.modifyProductsCallback(shoppingListToSend);
     }
 
 }
