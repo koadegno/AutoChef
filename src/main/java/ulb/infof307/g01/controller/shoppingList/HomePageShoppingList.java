@@ -1,13 +1,11 @@
 package ulb.infof307.g01.controller.shoppingList;
 
-import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
 public class HomePageShoppingList extends Controller implements HomeShoppingListViewController.Listener, ListenerBackPreviousWindow {
 
@@ -33,12 +31,7 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onMyShoppingListsButtonClick() {
-        UserShoppingListViewController windowUserShoppingListsController = new UserShoppingListViewController();
-        loadFXML(windowUserShoppingListsController, "ShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(windowUserShoppingListsController, this);
-
-        //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(false);
+        new ModifyShoppingListController(this);
     }
 
     /**
@@ -48,12 +41,7 @@ public class HomePageShoppingList extends Controller implements HomeShoppingList
      */
     @Override
     public void onCreateShoppingListsButtonClick() {
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "ShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController, this );
-
-        //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(true);
+        new CreateShoppingListController(this);
     }
 
     /**

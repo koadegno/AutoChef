@@ -3,25 +3,19 @@ package ulb.infof307.g01.view.shoppingList;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
-import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TextField;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
-import java.net.URL;
-import java.util.ResourceBundle;
 import java.util.Vector;
 
 /**
  * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
  */
 
-public class CreateUserShoppingListViewController extends ShoppingListViewController implements Initializable {
+public class CreateShoppingListViewController extends ShoppingListViewController {
 
     @FXML
     TextField nameMyCreateShoppingList;
@@ -35,32 +29,18 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     TableColumn<Product, Void> columnDelete;
     @FXML
     Label labelNameShoppingList;
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        activeElementVisibility(true);
-        this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
-        spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
-
-        columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
-        columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
-        columnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
-        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
-        columnDelete.setCellFactory(cellFactory);
-        returnToMenu.setOnAction((event) -> returnShoppingList());
-
-    }
 
     /**
      * Methode qui rend visible les boutons utilisée
      */
-    private void activeElementVisibility(boolean isVisible) {
-        btnAddNewProduct.setVisible(isVisible);
-        nameMyCreateShoppingList.setVisible(isVisible);
-        labelNameShoppingList.setVisible(isVisible);
-        comboBoxListUnity.setVisible(isVisible);
-        comboBoxListProduct.setVisible(isVisible);
-        spinnerQuantityOrNumber.setVisible(isVisible);
-        btnConfirm.setVisible(isVisible);
+    protected void activeElementVisibility() {
+        btnAddNewProduct.setVisible(true);
+        nameMyCreateShoppingList.setVisible(true);
+        labelNameShoppingList.setVisible(true);
+        comboBoxListUnity.setVisible(true);
+        comboBoxListProduct.setVisible(true);
+        spinnerQuantityOrNumber.setVisible(true);
+        btnConfirm.setVisible(true);
     }
 
     /**
@@ -113,6 +93,6 @@ public class CreateUserShoppingListViewController extends ShoppingListViewContro
     }
 
     public void helpShoppingList(){
-        listener.helpShoppingList(true);
+        listener.helpCreateShoppingList();
     }
 }

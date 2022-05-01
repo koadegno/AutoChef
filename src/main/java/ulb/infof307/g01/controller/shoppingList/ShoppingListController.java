@@ -1,11 +1,7 @@
 package ulb.infof307.g01.controller.shoppingList;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
 import javafx.scene.control.Alert;
-import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.recipe.CreateRecipeController;
@@ -15,9 +11,9 @@ import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.UserShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -26,182 +22,27 @@ import java.util.Objects;
 import java.util.Vector;
 
 
-public class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
-    private ShoppingListViewController shoppingListViewController;
-    private UserShoppingListViewController userShoppingListViewController;
-    private CreateUserShoppingListViewController createUserShoppingListViewController;
-    private ShoppingList shoppingListToSend;
-    private final int maxQuantityToNotProfessional = 100;
+public abstract class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
+    protected ModifyShoppingListViewController modifyShoppingListViewController;
+    protected CreateShoppingListViewController createShoppingListViewController;
+    protected ShoppingList shoppingListToSend;
 
-    CreateRecipeController recipeController = null;
+    //-------------------------CONSTRUCTEUR
 
-    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        this.shoppingListViewController = this.createUserShoppingListViewController = createUserShoppingListViewController;
-        this.shoppingListViewController.setListener(this);
-
     }
 
-    public ShoppingListController(UserShoppingListViewController userShoppingListViewController, ListenerBackPreviousWindow listenerBackPreviousWindow){
-        super(listenerBackPreviousWindow);
-        this.shoppingListViewController = this.userShoppingListViewController = userShoppingListViewController;
-        this.shoppingListViewController.setListener(this);
-
-    }
-
-    public ShoppingListController(CreateUserShoppingListViewController createUserShoppingListViewController){
-        this(createUserShoppingListViewController,null);
-    }
-
-
-    public ShoppingListController(CreateRecipeController recipeController) {
-        this.recipeController = recipeController;
-    }
-
-    // Methode Listener de CreateUserShoppingListViewController
-
-    public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){
-        createUserShoppingListViewController.removeBorderColor();
-
-        if(Objects.equals(shoppingListName, "")){ // champs du nom est vide
-            createUserShoppingListViewController.showNameUserCreateShoppingListError();
-        }
-        else if(sizeTableViewDisplayProductList == 0){ // table view est vide
-            createUserShoppingListViewController.showIsEmptyTableViewError();
-        }
-        else {
-            this.shoppingListToSend = new ShoppingList(shoppingListName);
-            createUserShoppingListViewController.fillShoppingListToSend();
-            try {
-                Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
-            }
-            catch (SQLiteException e) { //Erreur de doublon
-                createUserShoppingListViewController.showNameUserCreateShoppingListError();
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-            // else tout ce passe bien
-            createUserShoppingListViewController.returnToMenu.fire();
-        }
-    }
-
-    public void fillProductTable(ShoppingList shoppingList){
-        createUserShoppingListViewController.clearProductTableView();
-        Vector<Product> temp = new Vector<>(shoppingList);
-        final ObservableList<Product> data = FXCollections.observableArrayList(temp);
-        createUserShoppingListViewController.setProductTableView(data);
-        //Retour menu precedent : MainShoppingList
-        createUserShoppingListViewController.setReturnButtonAction();
-
-    }
-    // Fin Methode Listener de CreateUserShoppingListViewController
-
-    // Methode Listener de WindowUserShoppingListController
-
-    @Override
-    public void seeUserShoppingList(Object nameUserShoppingList){
-        if(Objects.equals(nameUserShoppingList, null)){ //nom est null
-            userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
-        }
-        else{
-            String currentShoppingListName = (String) nameUserShoppingList;
-            try {
-                // afficher les produits de la liste de course dans la table
-                ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
-                Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
-                userShoppingListViewController.addProductListToTableView(productOfShoppingList);
-                userShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
-                userShoppingListViewController.setCurrentShoppingListName(currentShoppingListName);
-            } catch (SQLException e) {
-                e.printStackTrace();
-            }
-        }
-    }
-
-    public void confirmUserModifyShoppingList(String currentShoppingListName){
-        try {
-            //Recupere liste de courses chez la bdd
-            ShoppingList shoppingListInDataBase = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
-            this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
-
-            //Renvoie liste de courses chez la bdd
-            userShoppingListViewController.fillShoppingListToSend();
-            Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
-
-            //Popup : confirmer que la liste de courses est enregistrer
-            displayPopupMessageInformation();
-
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
+    //Methode Listener de ShoppingListController
 
     /**
-     * Afficher une popup qui permet à l'utilisateur de savoir que sa liste de course a bien été modifiée
+     * Permet de rajouter les informations d'un produit dans le TableView
+     * @param shoppingListViewController instance de la classe ShoppingListViewController
+     * @param nameProductChoose nom du produit
+     * @param quantityOrNumberChoose la quantité du produit
+     * @param nameUnityChoose l'unité du produit
      */
-    public void displayPopupMessageInformation(){
-        //Refresh si la page liste de courses n'existe plus
-        if(shoppingListToSend.isEmpty()){
-            this.refreshModifyShoppingList();
-            this.showErrorDeleteShoppingList();
-        }
-        else{
-            this.showMessageCreateShoppingList();
-        }
-    }
-
-    private void showMessageCreateShoppingList(){
-        String message = "La liste de course a été enregistrée";
-        ShoppingListViewController.showAlert(Alert.AlertType.INFORMATION, "Message", message);
-    }
-
-    private void showErrorQuantityProduct(){
-        String message = "Il ne vous ait pas possible de rajouter plus de " + maxQuantityToNotProfessional + " quantité \n " +
-                "si vous n'êtes pas un professionnel.";
-        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", message);
-    }
-
-    /**
-     * Permet de refresh la fenetre pour modifier une liste de courses si celle ci a été supprimée
-     */
-    public void refreshModifyShoppingList(){
-        userShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
-        this.initInformationShoppingList(false);
-    }
-
-    public void showErrorDeleteShoppingList(){
-        String messageError = "Vous avez enregistré une liste de course vide.\n" +
-                " Elle est donc supprimée. ";
-        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
-
-    }
-
-    public void addProductToShoppingListToSend(Product product){
-        shoppingListToSend.add(product);
-    }
-
-    public void initInformationShoppingList(boolean isCreateUserShoppingListController){
-        try {
-            ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
-            ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
-            String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"};
-            allUnitName.removeAll(List.of(unitToRemove));
-            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
-
-            if(isCreateUserShoppingListController) createUserShoppingListViewController.initComboBox(allProduct, allUnitName);
-            else userShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
-
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    //Fin Methode Listener de WindowUserShoppingListController
-
-    //Methode Listener de WindowShoppingListControllerTools
-
-    public void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
+    public void addElementOfList(ShoppingListViewController shoppingListViewController, Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose){
         shoppingListViewController.removeBorderColor();
         shoppingListViewController.showAddProductError(false);
 
@@ -230,17 +71,43 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         boolean isProfessional = Configuration.getCurrent().getCurrentUser().isProfessional();
         boolean canAddProduct = true;
         if(!isProfessional){
+            int maxQuantityToNotProfessional = 100;
             if(quantityOrNumberChoose > maxQuantityToNotProfessional){
                 canAddProduct = false;
-                showErrorQuantityProduct();
+                this.showErrorQuantityProduct(maxQuantityToNotProfessional);
             }
         }
         return canAddProduct;
     }
 
-    @Override
-    public void returnHomeShoppingList() {
-        listenerBackPreviousWindow.onReturn();
+    /**
+     * Affiche une erreur quand la quantité choisie par l'utilisateur non professionnel n'est pas permise
+     * @param maxQuantityToNotProfessional le nombre max de quantité possible
+     */
+    public void showErrorQuantityProduct(int maxQuantityToNotProfessional){
+        String message = "Il ne vous ait pas possible de rajouter plus de " + maxQuantityToNotProfessional + " quantité \n " +
+                "si vous n'êtes pas un professionnel.";
+        ShoppingListViewController.showAlert(Alert.AlertType.ERROR, "Erreur", message);
+    }
+
+    /**
+     * Met les informations (noms des produits, noms des unités) pour pouvoir créer/modifier une liste de courses
+     * @param isCreateUserShoppingListController VRAI si c'est une instance de la classe CreateShoppingListController sinon c'est ModifyShoppingListController
+     */
+    public void initInformationShoppingList(boolean isCreateUserShoppingListController){
+        try {
+            ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
+            ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
+            String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"}; //supprime les unités pour une recette
+            allUnitName.removeAll(List.of(unitToRemove));
+            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
+
+            if(isCreateUserShoppingListController) createShoppingListViewController.initComboBox(allProduct, allUnitName);
+            else modifyShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
     }
 
     public void returnToUserMenu(){
@@ -248,59 +115,53 @@ public class ShoppingListController extends Controller implements ShoppingListVi
         userMenusController.displayAllMenus();
     }
 
-    public void exportShoppingList(String currentShoppingListName){
-        new ExportShoppingListController(currentShoppingListName);
-    }
-
-    public void sendShoppingListByMail(String currentShoppingListName){
-        ShoppingList shoppingList = null;
-        try {
-            shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-        MailController mailController = new MailController(shoppingList);
-        mailController.initMailView();
-    }
-
-    //Fin Methode Listener de WindowUserShoppingListController
-
-    public void initForCreateRecipe(ShoppingList shoppingList) {
-        shoppingListViewController = userShoppingListViewController = new UserShoppingListViewController();
-
-        shoppingListToSend = new ShoppingList("temporary");
-        loadFXML(userShoppingListViewController, "ShoppingList.fxml");
-        userShoppingListViewController.setListener(this);
-        userShoppingListViewController.initForCreateRecipe(shoppingList);
-        initInformationShoppingList(false);
-    }
-
     @Override
-    public void cancelRecipeCreation() {
-        recipeController.modifyProductsCallback(null);
+    public void returnHomeShoppingList() {
+        listenerBackPreviousWindow.onReturn();
     }
 
-    @Override
-    public void returnAddedProducts() {
-        recipeController.modifyProductsCallback(shoppingListToSend);
-    }
-
-    @Override
-    public void helpShoppingList(boolean isCreateShoppingList) {
-        int numberOfImageHelp;
-        String directory;
-        if(isCreateShoppingList){
-            numberOfImageHelp = 8;
-            directory = "helpCreateShoppingList/";
-        }
-        else{
-            numberOfImageHelp = 12;
-            directory = "helpUserShoppingList/";
-        }
-        HelpController helpController = new HelpController(directory, numberOfImageHelp);
-        helpController.displayHelpShop();
+    public void addProductToShoppingListToSend(Product product){
+        shoppingListToSend.add(product);
     }
 
     @Override
     public void logout(){userLogout();}
+
+    //Fin Methode Listener de ShoppingListViewController
+
+
+    //------------------------Methode Listener de CreateShoppingListViewController : implementer dans CreateShoppingListController
+
+    public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){}
+
+    @Override
+    public void helpCreateShoppingList() {}
+
+    // Fin Methode Listener de CreateShoppingListViewController
+
+    //Methode Listener de ModifyShoppingListViewController : implementer dans ModifyShoppingListController
+
+    @Override
+    public void helpModifyShoppingList(){}
+
+    @Override
+    public void exportShoppingList(String currentShoppingListName) {}
+
+    @Override
+    public void sendShoppingListByMail(String currentShoppingListName) {}
+
+    @Override
+    public void seeUserShoppingList(Object nameUserShoppingList) {}
+
+    @Override
+    public void confirmUserModifyShoppingList(String currentShoppingListName) {}
+
+    //Fin Listener de ModifyShoppingListViewController
+
+    //Methode Listener pour Recipe : implémenter dans RecipeShoppingListController
+    @Override
+    public void returnAddedProducts() {}
+    @Override
+    public void cancelRecipeCreation() {}
+    // Fin pour recipe
 }
