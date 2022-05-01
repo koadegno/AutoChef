@@ -4,6 +4,7 @@
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.MenuItem?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
@@ -12,6 +13,9 @@
 
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
     <MenuBar layoutX="14.0" layoutY="14.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+        <Menu mnemonicParsing="false" text="Aide">
+            <MenuItem mnemonicParsing="false" onAction="#helpMap" text="Tutoriel" />
+        </Menu>
         <Menu mnemonicParsing="false" text="Chercher un magasin">
             <graphic>
                 <TextField fx:id="textFieldMenuBar" onAction="#onShopSearchBoxAction" promptText="Chercher un nom de magasin" />
@@ -24,16 +28,11 @@
         </Menu>
       <Menu mnemonicParsing="false">
          <graphic>
-            <Button mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="63.0" text="Retour" />
-         </graphic>
-      </Menu>
-      <Menu mnemonicParsing="false">
-         <graphic>
-            <Button mnemonicParsing="false" onAction="#helpMap" prefHeight="25.0" prefWidth="56.0" text="Aide" />
+            <Button mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="102.0" text="Retour" />
          </graphic>
       </Menu>
     </MenuBar>
-   <VBox layoutY="33.0" prefHeight="567.0" prefWidth="744.0">
+   <VBox layoutY="33.0" prefHeight="567.0" prefWidth="744.0" AnchorPane.bottomAnchor="-0.33333333333337123" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="33.0">
       <children>
           <StackPane fx:id="mapViewStackPane" prefHeight="498.0" prefWidth="744.0" />
          <VBox prefHeight="69.0" prefWidth="744.0" spacing="2.0">

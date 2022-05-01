@@ -3,19 +3,23 @@ package ulb.infof307.g01.view.shoppingList;
 import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.util.Callback;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
+import java.net.URL;
 import java.util.List;
+import java.util.ResourceBundle;
 
 /**
  * Super Classe contenant les méthodes doublons qu'utilise la fenêtre creation/modif liste de courses
  */
 
-public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> {
+public abstract class ShoppingListViewController extends ViewController<ShoppingListViewController.Listener> implements Initializable {
 
     private final int maxQuantity = 10000;
     protected SpinnerValueFactory.IntegerSpinnerValueFactory spinnerValueFactory = new SpinnerValueFactory.IntegerSpinnerValueFactory(0, maxQuantity);
@@ -40,6 +44,23 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     public Button returnToMenu, btnSendMail;
     protected String currentShoppingListName;
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        activeElementVisibility();
+        this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
+        spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
+
+        columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
+        columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
+        columnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
+        Callback<TableColumn<Product, Void>, TableCell<Product, Void>> cellFactory = createColWithButton(tableViewDisplayProductList);
+        columnDelete.setCellFactory(cellFactory);
+        returnToMenu.setOnAction((event) -> returnShoppingList());
+
+    }
+
+    protected void activeElementVisibility(){}
 
 
     public void removeBorderColor() {
@@ -94,7 +115,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
 
-        listener.addElementOfList(nameProductChoose, quantityOrNumberChoose, nameUnityChoose);
+        listener.addElementOfList(this, nameProductChoose, quantityOrNumberChoose, nameUnityChoose);
     }
 
     public void showAddProductError(boolean isError){
@@ -161,7 +182,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public interface Listener{
         void returnHomeShoppingList();
         void returnToUserMenu();
-        void addElementOfList(Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
+        void addElementOfList(ShoppingListViewController shoppingListViewController, Object nameProductChoose, int quantityOrNumberChoose, Object nameUnityChoose);
         void initInformationShoppingList(boolean isCreateUserShoppingListController);
         void exportShoppingList(String currentShoppingListName);
         void sendShoppingListByMail(String currentShoppingListName);
@@ -173,7 +194,8 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void cancelRecipeCreation();
         void returnAddedProducts();
 
-        void helpShoppingList(boolean isCreateShoppingList);
+        void helpCreateShoppingList();
+        void helpModifyShoppingList();
         void logout();
     }
 }

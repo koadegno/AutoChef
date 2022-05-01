@@ -40,7 +40,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
     public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
     public static final int CORRECTION_POSITION_Y = 5;
-    public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 7;
+    public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
     public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
@@ -56,7 +56,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * Lance l'affichage de la carte
      */
     public void displayMap(){
-        FXMLLoader loader = this.loadFXML("ShowMap.fxml");
+        FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();

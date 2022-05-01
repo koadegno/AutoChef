@@ -5,10 +5,9 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.recipe.RecipeController;
+import ulb.infof307.g01.controller.recipe.SearchRecipeController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
@@ -25,7 +24,7 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, RecipeController.SearchRecipeListener {
+public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private ShowMenuViewController windowShowMenuViewController;
@@ -164,15 +163,9 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public void onAddRecipeClicked() {
         currentScene = currentStage.getScene();
-        RecipeController recipeController = new RecipeController();
-        recipeController.setStage(currentStage);
-        recipeController.setListener(this);
-        recipeController.onSeeAllRecipesButtonClick();
-    }
-
-    @Override
-    public void onCancelButtonClicked() {
-        currentStage.setScene(currentScene);
+        SearchRecipeController searchRecipeController = new SearchRecipeController(currentStage,this);
+        searchRecipeController.setListener(this);
+        searchRecipeController.displaySearchRecipe();
     }
 
     @Override
@@ -183,4 +176,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
         menu.addRecipeTo(day,selectedRecipe);
         createMenuViewController.refreshTableView();
     }
+
+    @Override
+    public void onReturn() { currentStage.setScene(currentScene);}
 }

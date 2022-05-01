@@ -7,14 +7,14 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
+import ulb.infof307.g01.controller.shoppingList.CreateShoppingListController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
-import ulb.infof307.g01.view.shoppingList.CreateUserShoppingListViewController;
+import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -36,7 +36,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     }
 
     public void displayMenu(){
-        FXMLLoader loader = this.loadFXML("ShowMenu.fxml");
+        FXMLLoader loader = this.loadFXML("Menu.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
         startMenu();
@@ -87,14 +87,8 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     @Override
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
-        CreateUserShoppingListViewController createUserShoppingListViewController = new CreateUserShoppingListViewController();
-        loadFXML(createUserShoppingListViewController, "UserShoppingList.fxml");
-        ShoppingListController shoppingListController = new ShoppingListController(createUserShoppingListViewController);
-
-        //Initialise la page avec les informations de la bdd
-        shoppingListController.initInformationShoppingList(true);
-        shoppingListController.setStage(currentStage);
-        shoppingListController.fillProductTable(shoppingList);
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(shoppingList,this);
+        createShoppingListController.setStage(currentStage);
     }
 
     @Override

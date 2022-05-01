@@ -9,7 +9,6 @@ import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -111,7 +110,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
      * */
     @FXML
 //    public void displayMain(){
-//        this.loadFXML("ShowMap.fxml");
+//        this.loadFXML("Map.fxml");
 //    }
 
     @Override

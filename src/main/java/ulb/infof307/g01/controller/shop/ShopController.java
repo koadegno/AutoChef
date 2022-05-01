@@ -20,7 +20,7 @@ import static ulb.infof307.g01.controller.map.MapController.COLOR_RED;
 
 public class ShopController extends Controller implements ShopViewController.Listener {
 
-    public static final String SHOW_SHOP_FXML = "ShowShop.fxml";
+    public static final String SHOW_SHOP_FXML = "Shop.fxml";
     private ShopViewController viewController;
     private final ShopListener listener;
     private final Shop shop;
