@@ -314,7 +314,6 @@ public class MapController extends Controller implements MapViewController.Liste
                         double totalTimeBike = route.getTotalTime() / timeBike; // calcul du temps en vélo
                         viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
 
-//                        route.getDirectionManeuvers().forEach(step -> System.out.println(step.getDirectionText()));
                     } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");}
                 });
             } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }

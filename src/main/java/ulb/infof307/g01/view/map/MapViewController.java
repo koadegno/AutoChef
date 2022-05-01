@@ -202,7 +202,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void itineraryInformation(double timeFeet, double timeBike, double length){
         timeFeetLabel.setText(timeFeet +  " min");
         timeBikeLabel.setText(timeBike + " min");
-        lengthLabel.setText(length + " Km");
+        lengthLabel.setText(length + " m");
     }
 
     public void deleteItineraryInformation(){
