@@ -1,16 +1,12 @@
 package ulb.infof307.g01.controller.recipe;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Scene;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
-import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
 import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
@@ -20,19 +16,8 @@ import java.util.List;
 
 public class SearchRecipeController extends Controller implements SearchRecipeViewController.Listener {
 
-    Scene sceneViewRecipe = null;
-
-    Scene sceneFavoriteRecipe = null;
-
-    boolean isWaitingModification = false;
-
-    private CreateRecipeViewController createRecipeViewController;
-    private UserRecipesViewController userRecipesViewController;
     private SearchRecipeViewController searchRecipeViewController;
-    private FavoriteRecipeViewController favoriteRecipeViewController;
 
-    private Recipe currentRecipe;
-    private ShoppingList currentShoppingList;
     private SearchRecipeListener listener;
 
 

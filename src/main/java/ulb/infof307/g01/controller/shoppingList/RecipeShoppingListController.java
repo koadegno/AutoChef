@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import ulb.infof307.g01.controller.recipe.CreateRecipeController;
-import ulb.infof307.g01.controller.recipe.RecipeController;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 

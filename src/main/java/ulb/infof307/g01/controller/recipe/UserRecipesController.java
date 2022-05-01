@@ -25,14 +25,9 @@ public class UserRecipesController extends Controller implements UserRecipesView
 
     Scene sceneViewRecipe = null;
 
-    Scene sceneFavoriteRecipe = null;
-
     boolean isWaitingModification = false;
 
-    private CreateRecipeViewController createRecipeViewController;
     private UserRecipesViewController userRecipesViewController;
-    private SearchRecipeViewController searchRecipeViewController;
-    private FavoriteRecipeViewController favoriteRecipeViewController;
 
     private Recipe currentRecipe;
     private ShoppingList currentShoppingList;
@@ -69,14 +64,12 @@ public class UserRecipesController extends Controller implements UserRecipesView
         else {
             userRecipesViewController.recipeSearchTextFieldError(false);
             userRecipesViewController.setDisableRecipeButtons(false);
-            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), RecipeController.productListToString(currentRecipe),
+            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe),
                     currentRecipe.getPreparation());
             userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }
 
     }
-
-
 
     /**
      * Afficher l'écran permettant de modifier une recette déjà existante
@@ -176,7 +169,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
 
     public void initReadOnlyRecipeController() {
         userRecipesViewController.initReadOnlyMode();
-        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), RecipeController.productListToString(currentRecipe),
+        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe),
                 currentRecipe.getPreparation());
     }
 
@@ -186,7 +179,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
         if (currentRecipe != null) {
             userRecipesViewController.recipeSearchTextFieldError(false);
             userRecipesViewController.setDisableRecipeButtons(false);
-            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), RecipeController.productListToString(currentRecipe), currentRecipe.getPreparation());
+            userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe), currentRecipe.getPreparation());
             userRecipesViewController.checkFavoriteCheckBox(currentRecipe.isFavorite());
         }
     }

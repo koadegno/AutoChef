@@ -5,7 +5,7 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.HomePageMenuController;
-import ulb.infof307.g01.controller.recipe.RecipeController;
+import ulb.infof307.g01.controller.recipe.HomePageRecipeController;
 import ulb.infof307.g01.controller.shoppingList.HomePageShoppingList;
 import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
@@ -67,7 +67,7 @@ public class HomePageController extends Controller implements HomePageListener,L
      */
     @Override
     public void onRecipeButtonClick() {
-        RecipeController controller = new RecipeController();
+        HomePageRecipeController controller = new HomePageRecipeController();
         controller.displayHomeRecipe();
     }
 

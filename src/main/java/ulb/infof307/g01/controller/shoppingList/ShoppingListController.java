@@ -3,11 +3,6 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.recipe.CreateRecipeController;
-import ulb.infof307.g01.controller.recipe.RecipeController;
-import ulb.infof307.g01.controller.mail.MailController;
-import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -19,7 +14,6 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
-import java.util.Vector;
 
 
 public abstract class ShoppingListController extends Controller implements ShoppingListViewController.Listener {

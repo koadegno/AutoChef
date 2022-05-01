@@ -22,8 +22,6 @@ import java.util.Vector;
 
 public class CreateRecipeController extends Controller implements CreateRecipeViewController.CreateRecipeListener {
 
-    Scene sceneViewRecipe = null;
-
     private CreateRecipeViewController createRecipeViewController;
 
     boolean isWaitingModification = false;
