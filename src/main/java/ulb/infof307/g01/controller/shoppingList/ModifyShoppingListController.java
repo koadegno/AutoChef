@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.mail.MailController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
@@ -124,5 +125,13 @@ public class ModifyShoppingListController extends ShoppingListController {
         }
         MailController mailController = new MailController(shoppingList);
         mailController.initMailView();
+    }
+
+    public void helpModifyShoppingList(){
+    int numberOfImageHelp = 12;
+    String directory = "helpModifyShoppingList/";
+
+    HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 }

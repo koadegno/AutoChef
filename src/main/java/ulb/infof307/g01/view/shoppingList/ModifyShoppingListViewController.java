@@ -82,7 +82,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
     }
 
     public void helpShoppingList(){
-        listener.helpShoppingList(false);
+        listener.helpModifyShoppingList();
     }
 
 

@@ -3,7 +3,6 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
@@ -105,26 +104,6 @@ public abstract class ShoppingListController extends Controller implements Shopp
         }
     }
 
-    /**
-     * Affiche la popup d'aide pour la création ou la modification d'une liste de courses
-     * @param isCreateShoppingList VRAI si c'est l'aide de la création qu'on veut sinon c'est la modification
-     */
-    @Override
-    public void helpShoppingList(boolean isCreateShoppingList) {
-        int numberOfImageHelp;
-        String directory;
-        if(isCreateShoppingList){
-            numberOfImageHelp = 8;
-            directory = "helpCreateShoppingList/";
-        }
-        else{
-            numberOfImageHelp = 12;
-            directory = "helpUserShoppingList/";
-        }
-        HelpController helpController = new HelpController(directory, numberOfImageHelp);
-        helpController.displayHelpShop();
-    }
-
     public void returnToUserMenu(){
         UserMenusController userMenusController = new UserMenusController(currentStage);
         userMenusController.displayAllMenus();
@@ -149,9 +128,15 @@ public abstract class ShoppingListController extends Controller implements Shopp
 
     public void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList){}
 
+    @Override
+    public void helpCreateShoppingList() {}
+
     // Fin Methode Listener de CreateShoppingListViewController
 
     //Methode Listener de ModifyShoppingListViewController : implementer dans ModifyShoppingListController
+
+    @Override
+    public void helpModifyShoppingList(){}
 
     @Override
     public void exportShoppingList(String currentShoppingListName) {}

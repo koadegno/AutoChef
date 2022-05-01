@@ -194,7 +194,8 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void cancelRecipeCreation();
         void returnAddedProducts();
 
-        void helpShoppingList(boolean isCreateShoppingList);
+        void helpCreateShoppingList();
+        void helpModifyShoppingList();
         void logout();
     }
 }

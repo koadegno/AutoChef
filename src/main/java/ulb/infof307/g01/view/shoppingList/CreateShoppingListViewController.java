@@ -93,6 +93,6 @@ public class CreateShoppingListViewController extends ShoppingListViewController
     }
 
     public void helpShoppingList(){
-        listener.helpShoppingList(true);
+        listener.helpCreateShoppingList();
     }
 }

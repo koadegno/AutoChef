@@ -4,6 +4,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import org.sqlite.SQLiteException;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -76,6 +77,14 @@ public class CreateShoppingListController extends ShoppingListController {
         //Retour menu precedent : MainShoppingList
         createShoppingListViewController.setReturnButtonAction();
 
+    }
+
+    public void helpCreateShoppingList(){
+        int numberOfImageHelp = 8;
+        String directory = "helpCreateShoppingList/";
+
+        HelpController helpController = new HelpController(directory, numberOfImageHelp);
+        helpController.displayHelpShop();
     }
 
 }
