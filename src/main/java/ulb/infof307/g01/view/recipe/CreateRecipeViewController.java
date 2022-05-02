@@ -64,6 +64,9 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         tableColumnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
     }
 
+    /**
+     * Permet de soumettre les choix de l'utilisateur concernant la recette qu'il veut créer
+     */
     public void onSubmitButton() {
         String diet = dietComboBox.getSelectionModel().getSelectedItem();
         String type = typeComboBox.getSelectionModel().getSelectedItem();
@@ -117,6 +120,9 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         setNodeColor(nbPersonSpinner, true);
     }
 
+    /**
+     * Efface les nodes qui étaient en rouge à cause d'une erreur causé par l'utilisateur
+     */
     public void clearErrors(){
         setNodeColor(dietComboBox, false);
         setNodeColor(typeComboBox, false);

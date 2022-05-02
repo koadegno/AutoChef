@@ -9,6 +9,9 @@ import ulb.infof307.g01.view.ViewController;
 
 import java.util.List;
 
+/**
+ * La classe gère la vue pour la recherche d'une recette
+ */
 public class SearchRecipeViewController extends ViewController<SearchRecipeViewController.Listener> {
 
     @FXML
@@ -25,7 +28,12 @@ public class SearchRecipeViewController extends ViewController<SearchRecipeViewC
     @FXML
     private TableColumn<Recipe, String> columnRecipeName;
 
-
+    /**
+     * Inialise les Combobox qui permet à l'utilisateur de faire des choix pour la recherche de sa recette
+     * @param dietList une liste contient les noms des types de régimes
+     * @param typeList une liste qui contient les noms des types de recettes
+     * @param recipeList une liste qui contient les recettes
+     */
     public void initialize(List<String> dietList, List<String> typeList, List<Recipe> recipeList) {
         columnRecipeName.setCellValueFactory(new PropertyValueFactory<>("name"));
 
@@ -43,7 +51,7 @@ public class SearchRecipeViewController extends ViewController<SearchRecipeViewC
                 new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
         );
 
-        this.onlyIntValue(nbPersonSpinner);
+        this.onlyIntValue(nbPersonSpinner); //empecher l'utilisateur d'écrire autres choses que des nombres int
     }
 
     public void refreshRecipesTableView(List<Recipe> recipesList) {
