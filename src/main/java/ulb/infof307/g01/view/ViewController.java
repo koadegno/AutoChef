@@ -88,6 +88,10 @@ abstract public class ViewController<Listener> {
         });
     }
 
+    /**
+     * Permet d'écrire seulement des nombres en int dans un textfield
+     * @param textField TextField qui contient un string ou un int
+     */
     @FXML
     protected void onlyIntValue(TextField textField){
         //Seulement écrire des nombres
