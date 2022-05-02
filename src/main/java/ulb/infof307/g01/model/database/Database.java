@@ -4,6 +4,8 @@ import ulb.infof307.g01.model.*;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,11 +47,12 @@ public class Database {
 
     /**
      * Méthode de création de la base de données qui lit et execute
-     * ligne par ligne le fichier bdd.txt qui représente le ddl.
+     * ligne par ligne le fichier DDLDatabase.txt qui représente le ddl.
      */
     private void createDB(){
         try{
-            FileInputStream fileDb =new FileInputStream("bdd.txt");
+            InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
+            if(fileDb == null) throw new IOException();
             Scanner scanner =new Scanner(fileDb);
             while(scanner.hasNextLine()){
                 sendRequest(scanner.nextLine());

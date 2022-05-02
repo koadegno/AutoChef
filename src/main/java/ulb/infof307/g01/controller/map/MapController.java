@@ -146,11 +146,11 @@ public class MapController extends Controller implements MapViewController.Liste
         Graphic textPointOnMap = shopOverlay.getRight();
         TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
         shopName.setText(shop.getName());
-        }
+    }
 
     /**
      * Cherche le magasin correspondant à la position et lance le popup
-      * @throws SQLException erreur au niveau de la base de donnée
+     * @throws SQLException erreur au niveau de la base de donnée
      */
     @Override
     public void onUpdateShopClicked() throws SQLException {
