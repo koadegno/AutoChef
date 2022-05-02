@@ -6,7 +6,11 @@ import ulb.infof307.g01.view.help.HelpViewController;
 
 import java.io.IOException;
 
-
+/**
+ * Classe qui contrôle la section d'aide
+ * Permet d'avoir un affichage de différentes photos, expliquant comment
+ * fonctionne l'interface actuellement affichée
+ */
 public class HelpController extends Controller implements HelpViewController.Listener {
     private HelpViewController helpViewController;
     private Stage helpShopPopup;

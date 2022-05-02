@@ -21,6 +21,10 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
+/**
+ * Classe qui contrôle l'affiche d'un menu de l'utilisateur
+ * Permet de voir le menu, de générer une liste de course et de modifier un ce menu
+ */
 public class ShowMenuController extends Controller implements ShowMenuViewController.Listener,ListenerBackPreviousWindow {
 
     private Menu menu;

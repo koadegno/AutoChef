@@ -18,6 +18,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Classe qui contrôle les mails
+ * permet d'envoyer ses listes de courses par mails
+ */
 public class MailController extends Controller implements MailViewController.Listener, FavoriteMailViewController.Listener  {
     private final ShoppingList shoppingList;
     private MailViewController mailViewController;

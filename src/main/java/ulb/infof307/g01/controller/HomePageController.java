@@ -13,7 +13,8 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
 
 /**
  * Contrôleur principal de l'application.
- * Créé au démarrage de l'application.
+ * Permet d'aller sur les 4 fonctionnalités principales : liste de courses, menus, recettes et la map
+ * Créé quand l'utilisateur se connecte
  */
 public class HomePageController extends Controller implements HomePageListener,ListenerBackPreviousWindow {
 
