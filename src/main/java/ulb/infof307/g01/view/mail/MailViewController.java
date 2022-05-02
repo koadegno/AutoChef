@@ -11,6 +11,10 @@ import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.model.ShoppingList;
 import java.util.List;
 
+/**
+ * La classe gère la vue pour l'envoie d'un mail
+ */
+
 public class MailViewController extends ViewController<MailViewController.Listener> {
 
     @FXML
