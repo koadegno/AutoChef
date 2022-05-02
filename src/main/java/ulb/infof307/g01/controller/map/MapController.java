@@ -271,6 +271,12 @@ public class MapController extends Controller implements MapViewController.Liste
         helpController.displayHelpShop();
     }
 
+    @Override
+    public void logout() {
+        userLogout();
+    }
+
+
     /**
      * Calcule et affiche l'itinéraire
      */

@@ -247,6 +247,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
         listener.helpMapClicked();
     }
 
+    public void logout() { listener.logout(); }
+
     public interface Listener {
         void onInitializeMapShop() throws SQLException;
         void onAddShopClicked();
@@ -259,6 +261,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void onItineraryClicked();
         boolean onDeleteItineraryClicked();
         void helpMapClicked();
+
+        void logout();
     }
 }
 
