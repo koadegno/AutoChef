@@ -4,8 +4,8 @@ import javafx.fxml.FXML;
 import ulb.infof307.g01.view.ViewController;
 
 /**
- * Classe qui permet d'afficher la fenetre principal de la liste de courses avec deux boutons
- * qui dirige chacun vers une autre sous fenetre de liste de courses
+ * Classe qui permet d'afficher la fenêtre principale de la liste de courses avec deux boutons
+ * qui dirige chacun vers une autre sous fenêtre de liste de courses
  */
 
 public class HomeShoppingListViewController extends ViewController<HomeShoppingListViewController.Listener> {

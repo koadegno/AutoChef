@@ -12,7 +12,7 @@ import ulb.infof307.g01.model.ShoppingList;
 import java.util.Vector;
 
 /**
- * Classe qui permet d'afficher la fenetre de creation d'une liste de courses
+ * Classe qui permet d'afficher la fenêtre de creation d'une liste de courses
  */
 
 public class CreateShoppingListViewController extends ShoppingListViewController {
@@ -53,7 +53,6 @@ public class CreateShoppingListViewController extends ShoppingListViewController
         listener.confirmUserCreateShoppingList(shoppingListName, sizeTableViewDisplayProductList);
     }
 
-    //TODO: changer ça parce que ce n'est pas MVC
     /**Methode permettant de remplir le tableau des elements d'une liste de courses
      * @param myExistentShoppingList : liste de shopping contenant la liste de courses
      */
