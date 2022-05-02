@@ -74,6 +74,10 @@ abstract public class ViewController<Listener> {
         alert.showAndWait();
     }
 
+    /**
+     * Permet d'écrire seulement des nombres en int dans un spinner
+     * @param numberOfPersonSpinner le spinner de la View
+     */
     @FXML
     protected void onlyIntValue(Spinner<Integer> numberOfPersonSpinner){
         //Seulement écrire des nombres
@@ -94,6 +98,14 @@ abstract public class ViewController<Listener> {
         });
     }
 
+    /**
+     * Permet d'afficher l'explorateur de fichiers pour choisir un fichier
+     * @param windowTitle le titre qu'aura la fenêtre
+     * @param extensionDescription la description de l'extension choisie
+     * @param extension l'extension du fichier qu'il est possible de choisir
+     * @param ownerWindow la fenêtre
+     * @return retourne le dialog de la fenêtre
+     */
     public static File showFileChooser(String windowTitle, String extensionDescription,
                                        String extension, Window ownerWindow) {
 
