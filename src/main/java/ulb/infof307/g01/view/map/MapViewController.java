@@ -21,6 +21,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * La classe gère la vue pour l'affichage de la carte
+ */
+
 public class MapViewController extends ViewController<MapViewController.Listener> implements Initializable  {
 
     public static final double LATITUDE_BRUSSELS = 50.85045;
@@ -104,15 +108,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
         setNodeColor(searchBox, found);
     }
 
-    /**
-     * Affiche la page principale de l'application.
-     * @see ulb.infof307.g01.Main
-     * */
-    @FXML
-//    public void displayMain(){
-//        this.loadFXML("Map.fxml");
-//    }
-
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMapService();
@@ -152,7 +147,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
 
-            // selectionner un point avec un simple clique droit
+            // selection un point avec un simple clique droit
             if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
                 shopGraphicsCircleOverlay.clearSelection();
                 listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
