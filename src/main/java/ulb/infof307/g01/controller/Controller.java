@@ -64,7 +64,7 @@ public abstract class Controller {
      * @param filename le nom du fichier fxml
      * @param controller le contrôleur associé à la pop up
      * @return javafx stage
-     * @throws IOException
+     * @throws IOException erreur lors de l'ouverture du fichier FXML
      */
     protected Stage popupFXML(String filename, ViewController controller) throws IOException {
         Stage popup = new Stage();
@@ -106,9 +106,9 @@ public abstract class Controller {
     }
 
     /**
-     *
-     * @param windowTitle
-     * @return
+     * importe un fichier json
+     * @param windowTitle le fichier a importé
+     * @return Le fichier json
      */
     public File importJSON(String windowTitle){
         String extensionDescription = "Fichier JSON";

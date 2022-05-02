@@ -1,5 +1,8 @@
 package ulb.infof307.g01.model;
 
+/**
+ * Model représentant l'adresse d'un utilisateur
+ */
 public class Address {
     String country;
     String city;
@@ -7,7 +10,6 @@ public class Address {
     String streetName;
     int houseNumber;
 
-    public Address() {}
     public Address(String country, String city, int postalCode, String streetName, int houseNumber) {
         this.country = country;
         this.city = city;
@@ -30,20 +32,5 @@ public class Address {
     }
     public int getHouseNumber() {
         return houseNumber;
-    }
-    public void setCountry(String country) {
-        this.country = country;
-    }
-    public void setCity(String city) {
-        this.city = city;
-    }
-    public void setPostalCode(int postalCode) {
-        this.postalCode = postalCode;
-    }
-    public void setStreetName(String streetName) {
-        this.streetName = streetName;
-    }
-    public void setHouseNumber(int houseNumber) {
-        this.houseNumber = houseNumber;
     }
 }

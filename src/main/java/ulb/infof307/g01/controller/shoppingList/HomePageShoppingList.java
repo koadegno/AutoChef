@@ -7,6 +7,9 @@ import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
+/**
+ * Contrôleur de la page d'accueil d'une liste de course
+ */
 public class HomePageShoppingList extends Controller implements HomeShoppingListViewController.Listener, ListenerBackPreviousWindow {
 
 

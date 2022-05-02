@@ -4,6 +4,9 @@ import com.esri.arcgisruntime.geometry.Point;
 
 import java.util.HashSet;
 
+/**
+ * Classe représentant un magasin
+ */
 public class Shop extends HashSet<Product> {
 
     private String name;

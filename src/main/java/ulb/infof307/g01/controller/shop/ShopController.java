@@ -18,6 +18,9 @@ import java.util.ArrayList;
 
 import static ulb.infof307.g01.controller.map.MapController.COLOR_RED;
 
+/**
+ * Contrôleur lié à au magasin
+ */
 public class ShopController extends Controller implements ShopViewController.Listener {
 
     public static final String SHOW_SHOP_FXML = "Shop.fxml";
@@ -99,12 +102,18 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     }
 
+    /**
+     * lance la fenetre pour crée un nouveau produit
+     */
     @Override
     public void createNewProductClicked() {
         ProductController productController = new ProductController(viewController);
         productController.displayCreateNewProduct();
     }
 
+    /**
+     * Affiche l'aide
+     */
     @Override
     public void displayHelpShop() {
         int numberOfImageHelp = 14;

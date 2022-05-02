@@ -16,6 +16,9 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.Objects;
 
+/**
+ * Classe qui contrôle l'ajout d'un produit
+ */
 public class ProductController extends Controller implements ProductViewController.Listener {
     private ProductViewController productViewController;
     private ShopViewController shopViewController;
@@ -25,6 +28,9 @@ public class ProductController extends Controller implements ProductViewControll
         this.shopViewController = shopViewController;
     }
 
+    /**
+     * lance l'affichage d'ajout de produit
+     */
     public void displayCreateNewProduct(){
         productViewController = new ProductViewController();
         String nameCreateProductFXML = "CreateProduct.fxml";
@@ -37,6 +43,9 @@ public class ProductController extends Controller implements ProductViewControll
         }
     }
 
+    /**
+     * initialise les objets pour le controleur de vue
+     */
     public void initCreateProductFXML(){
         ArrayList<String> nameProductFamily = null;
         ArrayList<String> nameProductUnity = null;
@@ -51,6 +60,12 @@ public class ProductController extends Controller implements ProductViewControll
         productViewController.initComboboxInformation(nameProductFamily,nameProductUnity);
     }
 
+    /**
+     * check si la création du produit est possible
+     * @param nameProduct le nom du produit
+     * @param nameProductFamily la type de produit
+     * @param nameProductUnity l'unité du produit
+     */
     @Override
     public void confirmCreateProduct(String nameProduct, String nameProductFamily, String nameProductUnity) {
         productViewController.removeShowErrorProduct(false);
@@ -86,6 +101,9 @@ public class ProductController extends Controller implements ProductViewControll
 
     }
 
+    /**
+     * Importe le fichier json lié au produit
+     */
     @Override
     public void importProductJsonFile() {
         final String windowTitle = "Importer un PRODUIT depuis un fichier JSON";
