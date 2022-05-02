@@ -14,6 +14,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * La classe gère la vue pour la création et la modification d'un magasin
+ */
 public class ShopViewController extends ViewController<ShopViewController.Listener> implements Initializable {
 
     public TableView<Product> tableViewShop;
