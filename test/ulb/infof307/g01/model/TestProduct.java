@@ -1,11 +1,13 @@
 package ulb.infof307.g01.model;
 
-import ulb.infof307.g01.model.Product;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test de la classe produit
+ */
 public class TestProduct {
 
     private Product productTest;

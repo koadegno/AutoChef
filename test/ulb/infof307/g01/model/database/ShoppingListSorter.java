@@ -7,7 +7,7 @@ import java.util.Comparator;
 import java.util.Vector;
 
 /**
- * Classe utilitaire permettant de sort une Liste de Course
+ * Classe utilitaire permettant de trier une Liste de Course
  */
 public class ShoppingListSorter {
 

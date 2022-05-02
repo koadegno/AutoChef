@@ -13,6 +13,9 @@ import java.io.IOException;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test de l'exportation en PDF
+ */
 class TestPDF {
     static private ShoppingList shoppingList;
 

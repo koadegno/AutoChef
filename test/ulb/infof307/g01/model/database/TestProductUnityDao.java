@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test du DAO d'unité lié a un produit
+ */
 class TestProductUnityDao {
 
     static private final String gram = "g";

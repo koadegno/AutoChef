@@ -6,6 +6,9 @@ import ulb.infof307.g01.model.Recipe;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test de la classe recipe
+ */
 public class TestRecipe {
 
     private Recipe recipeTest;

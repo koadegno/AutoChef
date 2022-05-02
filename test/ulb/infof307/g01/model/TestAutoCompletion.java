@@ -18,6 +18,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test de l'auto-completion
+ */
 class TestAutoCompletion {
 
     static private final Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");

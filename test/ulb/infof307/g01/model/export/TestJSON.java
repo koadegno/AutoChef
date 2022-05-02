@@ -15,7 +15,9 @@ import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.export.JSON;
 
-
+/**
+ * Test de la classe JSON
+ */
 class TestJSON {
     final static private String fileNameDB   = "testJSON.sqlite";
     final static private String fileNameRecipe = "testRecette.json";

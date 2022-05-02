@@ -7,6 +7,9 @@ import java.util.Vector;
 
 import ulb.infof307.g01.model.*;
 
+/**
+ * test de la classe shoppingList
+ */
 class TestShoppingList {
 
     static private ShoppingList list;

@@ -12,6 +12,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 
+/**
+ * tests des models menus
+ */
 class TestMenu {
 
     static private final Menu menu = new Menu("Menu Test");

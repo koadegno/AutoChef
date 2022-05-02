@@ -16,6 +16,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test du DAO du magasin
+ */
 class TestShopDao {
 
     static private final String FRUIT = "Fruit";

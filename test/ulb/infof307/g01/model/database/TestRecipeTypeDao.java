@@ -12,6 +12,9 @@ import java.util.ArrayList;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test du DAO du type de recette
+ */
 class TestRecipeTypeDao {
     static private final String meal = "Plat";
 
