@@ -24,6 +24,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe qui contrôle l'affichage d'une recette
+ * Permet de modifier cette recette, et de la visualiser
+ */
 public class UserRecipesController extends Controller implements UserRecipesViewController.UserRecipesListener, ListenerBackPreviousWindow, SearchRecipeController.SearchRecipeListener, CreateRecipeController.ListenerGetRecipe {
 
     Scene sceneViewRecipe = null;

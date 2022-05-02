@@ -14,6 +14,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Classe qui contrôle l'affichage de toutes les recettes
+ * Permet d'appliquer un filtre sur les recettes que l'on souhaite visualiser
+ */
 public class SearchRecipeController extends Controller implements SearchRecipeViewController.Listener {
 
     private SearchRecipeViewController searchRecipeViewController;
