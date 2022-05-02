@@ -1,3 +1,5 @@
+package ulb.infof307.g01.model;
+
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 

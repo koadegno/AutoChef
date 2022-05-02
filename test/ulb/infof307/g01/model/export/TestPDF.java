@@ -1,3 +1,5 @@
+package ulb.infof307.g01.model.export;
+
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
