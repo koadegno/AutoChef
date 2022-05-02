@@ -9,6 +9,10 @@ import ulb.infof307.g01.model.ShoppingList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * La classe gère la vue pour la modification d'un menu
+ */
+
 public class ModifyShoppingListViewController extends ShoppingListViewController {
     @FXML
     Button btnConfirm, btnAddNewProduct;
@@ -64,8 +68,6 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
 
 
     public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
-        //TODO: regler ce probleme pour init
-        //super.initComboBox(allProduct, allUnitName);
         comboBoxShoppingNameList.setVisible(false);
         btnSeeShoppingList.setVisible(false);
         Vector<Product> productOfShoppingList = new Vector<>(shoppingList);

@@ -9,6 +9,10 @@ import ulb.infof307.g01.view.ViewController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * La classe gère la vue pour la création d'un compte utilisateur
+ */
+
 public class SignUpViewController extends ViewController<SignUpViewController.SignUpListener> implements Initializable {
 
     @FXML
@@ -21,6 +25,9 @@ public class SignUpViewController extends ViewController<SignUpViewController.Si
     @FXML
     private CheckBox isProfessionalCheckBox;
 
+    /**
+     * Soumets les données de l'utilisateur pour la création de son compte
+     */
     public void onSubmitButton() {
         String pseudo = pseudoTextField.getText();
         String lastName = lastNameTextField.getText();

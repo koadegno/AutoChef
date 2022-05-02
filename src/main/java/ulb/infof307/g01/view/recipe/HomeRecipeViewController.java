@@ -1,8 +1,11 @@
 package ulb.infof307.g01.view.recipe;
 
-import javafx.event.ActionEvent;
+
 import ulb.infof307.g01.view.ViewController;
 
+/**
+ * La classe gère la vue de la page d'accueil pour les recettes
+ */
 public class HomeRecipeViewController extends ViewController<HomeRecipeViewController.HomeRecipeListener> {
 
     public void onUserRecipesButtonClick() {listener.onUserRecipesButtonClick();}
