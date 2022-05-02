@@ -27,7 +27,7 @@ public class ProductController extends Controller implements ProductViewControll
 
     public void displayCreateNewProduct(){
         productViewController = new ProductViewController();
-        String nameCreateProductFXML = "createProduct.fxml";
+        String nameCreateProductFXML = "CreateProduct.fxml";
         try {
             createProductStage = popupFXML(nameCreateProductFXML, productViewController);
             productViewController.setListener(this);
@@ -66,11 +66,11 @@ public class ProductController extends Controller implements ProductViewControll
                     userProduct = new Product(nameProduct, nameProductUnity ,nameProductFamily);
                     try {
                         Configuration.getCurrent().getProductDao().insert(userProduct);
+                        shopViewController.setNameProduct(nameProduct);
+                        createProductStage.close();
                     } catch (SQLException e) {
-                        e.printStackTrace();
+                        ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Ce produit existe déjà. Veuillez préciser la marque s'il le faut");
                     }
-                    shopViewController.setNameProduct(nameProduct);
-                    createProductStage.close();
                 }
                 else{
                     productViewController.showErrorNotChooseNameProductUnity(true);
@@ -96,12 +96,12 @@ public class ProductController extends Controller implements ProductViewControll
             JSON json = new JSON();
             try {
                 json.importProduct(jsonProduct.getAbsolutePath());
+                String nameProduct = json.getNameProduct();
+                shopViewController.setNameProduct(nameProduct);
             } catch (SQLException e) {
                 String messageError = "Le contenu du JSON est incorrecte ou \nle produit existe deja";
                 ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
                }
-            String nameProduct = json.getNameProduct();
-            shopViewController.setNameProduct(nameProduct);
             createProductStage.close();
         }
         else{

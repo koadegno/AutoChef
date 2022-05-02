@@ -171,7 +171,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onRecipeSelected(Recipe selectedRecipe) {
-        currentStage.setScene(currentScene);
         int selectedIndex = createMenuViewController.getDaysComboBox().getSelectionModel().getSelectedIndex();
         Day day = daysName.get(selectedIndex);
         menu.addRecipeTo(day,selectedRecipe);
