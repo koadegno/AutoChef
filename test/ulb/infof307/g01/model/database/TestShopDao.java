@@ -24,6 +24,8 @@ class TestShopDao {
     static private final String GRAM = "g";
     static private final Product PEACH = new Product("peche", 1, GRAM, FRUIT);
     static private final Product STRAWBERRY = new Product( "fraise", 1, GRAM, FRUIT);
+    static private final Product MANGO = new Product( "mango", 1, GRAM, FRUIT);
+    static private final Product MELON = new Product( "melon", 1, GRAM, FRUIT);
     static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0));
     static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1));
     static private final Shop ALDI_SHOP2 = new Shop("aldi Namur",new Point(0,3));
@@ -46,9 +48,13 @@ class TestShopDao {
         Configuration.getCurrent().getProductFamilyDao().insert(FRUIT);
         Configuration.getCurrent().getProductDao().insert(PEACH);
         Configuration.getCurrent().getProductDao().insert(STRAWBERRY);
+        Configuration.getCurrent().getProductDao().insert(MANGO);
+        Configuration.getCurrent().getProductDao().insert(MELON);
         Configuration.getCurrent().getShopDao().insert(ALDI_SHOP);
         Configuration.getCurrent().getShopDao().insert(ALDI_RUE_NEUVE);
         Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS);
+        Configuration.getCurrent().getShopDao().insert(ALDI_SHOP2);
+        Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS2);
 
     }
 
@@ -124,8 +130,7 @@ class TestShopDao {
 
     @Test
     void getShopWithProductList() throws SQLException {
-        Configuration.getCurrent().getShopDao().insert(ALDI_SHOP2);
-        Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS2);
+
         int nbShops = 2;
         String shoppingListName = "myShoppingForTest";
         ShoppingList myShoppingList = new ShoppingList(shoppingListName);
@@ -146,5 +151,41 @@ class TestShopDao {
         assertTrue(allShopsWithShoppingList.contains(aldi));
         assertTrue(allShopsWithShoppingList.contains(carrefour));
 
+    }
+
+    @Test
+    void getShopWithMinPriceForProductList() throws SQLException {
+        int nbShopWithMinPrice = 1;
+        double carrefourMangoPrice = 2;
+        double aldiMangoPrice = 24;
+        double carrefourMelonPrice = 4;
+        double aldiMelonPrice = 6;
+        //products
+        Product mango = Configuration.getCurrent().getProductDao().get(MANGO.getName());
+        Product melon = Configuration.getCurrent().getProductDao().get(MELON.getName());
+        //ShoppingList
+        String shoppingListName = "myShoppingForTestMinPrice";
+        ShoppingList myShoppingList = new ShoppingList(shoppingListName);
+        myShoppingList.add(mango);
+        myShoppingList.add(melon);
+        Configuration.getCurrent().getShoppingListDao().insert(myShoppingList);
+        myShoppingList = Configuration.getCurrent().getShoppingListDao().get(shoppingListName);
+        //shops
+        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
+        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        mango.setPrice(aldiMangoPrice);
+        melon.setPrice(aldiMelonPrice);
+        aldi.add(mango);
+        aldi.add(melon);
+        Configuration.getCurrent().getShopDao().update(aldi);
+        mango.setPrice(carrefourMangoPrice);
+        melon.setPrice(carrefourMelonPrice);
+        carrefour.add(mango);
+        carrefour.add(melon);
+        Configuration.getCurrent().getShopDao().update(carrefour);
+        //test
+        List<Shop> allShopsWithMinPriceShoppingList = Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(myShoppingList);
+        assertEquals(allShopsWithMinPriceShoppingList.size(), nbShopWithMinPrice);
+        assertTrue(allShopsWithMinPriceShoppingList.contains(carrefour));
     }
 }

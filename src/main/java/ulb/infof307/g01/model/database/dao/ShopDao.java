@@ -218,18 +218,21 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
         String query = String.format("""
-                SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
-                FROM
-                                                        
-                    (
-                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
-                        FROM  Magasin as M
-                                  INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
-                                  INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
-                        WHERE LCI.ListeCourseID = %d
-                        GROUP BY MI.MagasinID
-                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
-                    ) sommes
+                SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                            FROM
+                            (
+                                SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
+                                FROM
+                                    (
+                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
+                                        FROM  Magasin as M
+                                                  INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                                  INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                        WHERE LCI.ListeCourseID = %d
+                                        GROUP BY MI.MagasinID
+                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                    ) sommes
+                            ) resultats
                                         """, shoppingList.getId(), shoppingList.getId());
 
         return getShopsList(query);

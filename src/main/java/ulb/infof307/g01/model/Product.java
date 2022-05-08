@@ -148,5 +148,10 @@ public class Product {
     public String toString(){
         return name + " "+price+"€/$";
     }
+
+
+    public void setPrice(double price) {
+        this.price = price;
+    }
 }
 
