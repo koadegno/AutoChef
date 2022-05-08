@@ -239,6 +239,29 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     }
 
+    public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
+        String query = String.format("""
+                        SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                        FROM
+                        (
+                            SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.distance)
+                            FROM
+                                
+                                (
+                                    SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
+                                    FROM  Magasin as M
+                                              INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                              INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                    WHERE LCI.ListeCourseID = %d
+                                    GROUP BY MI.MagasinID
+                                    HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                ) sommes
+                        ) resultats
+                """, position.getX(),position.getY(),shoppingList.getId(), shoppingList.getId());
+        return getShopsList(query);
+    }
+
+
     @NotNull
     private ArrayList<Shop> getShopsList(String query) throws SQLException {
         ArrayList<Shop> shopsList;
