@@ -2,6 +2,7 @@ package ulb.infof307.g01.model.database.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
@@ -210,4 +211,18 @@ public class ShopDao extends Database implements Dao<Shop> {
         delete(MAGASIN_TABLE_NAME,List.of(constraint));
 
     }
+
+
+    public void getShopWithProductList(ShoppingList shoppingList){
+        String query = String.format("""
+                                        SELECT MI.MagasinID
+                                        FROM MagasinIngredient as MI
+                                        INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                        WHERE LCI.ListeCourseID = %d
+                                        GROUP BY MI.MagasinID
+                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                        """, shoppingList.getId(), shoppingList.getId());
+    }
+
+
 }
