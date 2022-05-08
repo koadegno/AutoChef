@@ -26,6 +26,8 @@ class TestShopDao {
     static private final Product STRAWBERRY = new Product( "fraise", 1, GRAM, FRUIT);
     static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0));
     static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1));
+    static private final Shop ALDI_SHOP2 = new Shop("aldi Namur",new Point(0,3));
+    static private final Shop CARREFOUR_ANVERS2 = new Shop("Carrefour Anvers",new Point(0,17));
     static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve",new Point(0,2));
     static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers", new Point(50,30));
 
@@ -122,6 +124,8 @@ class TestShopDao {
 
     @Test
     void getShopWithProductList() throws SQLException {
+        Configuration.getCurrent().getShopDao().insert(ALDI_SHOP2);
+        Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS2);
         int nbShops = 2;
         String shoppingListName = "myShoppingForTest";
         ShoppingList myShoppingList = new ShoppingList(shoppingListName);
@@ -129,8 +133,8 @@ class TestShopDao {
         myShoppingList.add(PEACH);
         Configuration.getCurrent().getShoppingListDao().insert(myShoppingList);
         myShoppingList = Configuration.getCurrent().getShoppingListDao().get(shoppingListName);
-        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP.getName(), ALDI_SHOP.getCoordinate());
-        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS.getName(), CARREFOUR_ANVERS.getCoordinate());
+        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
+        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
         aldi.add(STRAWBERRY);
         aldi.add(PEACH);
         carrefour.add(STRAWBERRY);
