@@ -2,6 +2,7 @@ package ulb.infof307.g01.model.database.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReferences;
+import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
@@ -147,24 +148,13 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private List<Shop> getAllShops() throws SQLException {
         ArrayList<Shop> shopsList;
-        try (ResultSet querySelectShop = sendQuery(String.format("""
+        String query = String.format("""
                         SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE UtilisateurMagasin.UtilisateurID = %d""",
-                Configuration.getCurrent().getCurrentUser().getId()))) {
-
-            shopsList = new ArrayList<>();
-            while (querySelectShop.next()) {
-                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
-                double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
-                double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
-                Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                shopsList.add(new Shop(shopID, shopName, shopPoint));
-            }
-        }
-        return shopsList;
+                Configuration.getCurrent().getCurrentUser().getId());
+        return getShopsList(query);
     }
 
     @Override
@@ -212,7 +202,6 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     }
     public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
-        ArrayList<Shop> shopsList;
         String query = String.format("""
                                         SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
                                         FROM  Magasin as M
@@ -223,6 +212,33 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
                                         """, shoppingList.getId(), shoppingList.getId());
 
+        return getShopsList(query);
+
+    }
+
+    public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
+        String query = String.format("""
+                SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
+                FROM
+                                                        
+                    (
+                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
+                        FROM  Magasin as M
+                                  INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                  INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                        WHERE LCI.ListeCourseID = %d
+                        GROUP BY MI.MagasinID
+                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                    ) sommes
+                                        """, shoppingList.getId(), shoppingList.getId());
+
+        return getShopsList(query);
+
+    }
+
+    @NotNull
+    private ArrayList<Shop> getShopsList(String query) throws SQLException {
+        ArrayList<Shop> shopsList;
         try (ResultSet querySelectShop = sendQuery(query)){
             shopsList = new ArrayList<>();
             while (querySelectShop.next()) {
@@ -235,6 +251,5 @@ public class ShopDao extends Database implements Dao<Shop> {
             }
         }
         return shopsList;
-
     }
 }
