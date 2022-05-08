@@ -6,12 +6,14 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.User;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -118,4 +120,27 @@ class TestShopDao {
 
     }
 
+    @Test
+    void getShopWithProductList() throws SQLException {
+        int nbShops = 2;
+        String shoppingListName = "myShoppingForTest";
+        ShoppingList myShoppingList = new ShoppingList(shoppingListName);
+        myShoppingList.add(STRAWBERRY);
+        myShoppingList.add(PEACH);
+        Configuration.getCurrent().getShoppingListDao().insert(myShoppingList);
+        myShoppingList = Configuration.getCurrent().getShoppingListDao().get(shoppingListName);
+        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP.getName(), ALDI_SHOP.getCoordinate());
+        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS.getName(), CARREFOUR_ANVERS.getCoordinate());
+        aldi.add(STRAWBERRY);
+        aldi.add(PEACH);
+        carrefour.add(STRAWBERRY);
+        carrefour.add(PEACH);
+        Configuration.getCurrent().getShopDao().update(aldi);
+        Configuration.getCurrent().getShopDao().update(carrefour);
+        List<Shop> allShopsWithShoppingList = Configuration.getCurrent().getShopDao().getShopWithProductList(myShoppingList);
+        assertEquals(allShopsWithShoppingList.size(), nbShops);
+        assertTrue(allShopsWithShoppingList.contains(aldi));
+        assertTrue(allShopsWithShoppingList.contains(carrefour));
+
+    }
 }

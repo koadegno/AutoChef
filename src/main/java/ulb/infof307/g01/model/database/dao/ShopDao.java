@@ -211,18 +211,30 @@ public class ShopDao extends Database implements Dao<Shop> {
         delete(MAGASIN_TABLE_NAME,List.of(constraint));
 
     }
-
-
-    public void getShopWithProductList(ShoppingList shoppingList){
+    public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
+        ArrayList<Shop> shopsList;
         String query = String.format("""
-                                        SELECT MI.MagasinID
-                                        FROM MagasinIngredient as MI
+                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                                        FROM  Magasin as M
+                                        INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                         INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
                                         WHERE LCI.ListeCourseID = %d
                                         GROUP BY MI.MagasinID
                                         HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
                                         """, shoppingList.getId(), shoppingList.getId());
+
+        try (ResultSet querySelectShop = sendQuery(query)){
+            shopsList = new ArrayList<>();
+            while (querySelectShop.next()) {
+                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
+                String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
+                double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
+                double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
+                Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
+                shopsList.add(new Shop(shopID, shopName, shopPoint));
+            }
+        }
+        return shopsList;
+
     }
-
-
 }
