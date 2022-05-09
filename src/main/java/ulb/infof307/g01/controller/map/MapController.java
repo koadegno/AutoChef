@@ -68,7 +68,6 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
-        if(readOnlyMode) viewController.initReadOnlyMode();
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -132,9 +131,15 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     private void displaysShopsWithProductlist() throws SQLException {
+        viewController.initReadOnlyMode();
         List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
+        List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
+        //List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(); (Departure?)
         for(Shop shop: shopListWithProducts){
-            addCircle(COLOR_BLUE, shop.getName(), shop.getCoordinate(), true);
+            String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
+            int color = COLOR_BLACK;
+            if(shopWithMinPriceForProductList.contains(shop)) color = COLOR_RED;
+            addCircle(color, toDisplay, shop.getCoordinate(), true);
         }
     }
 
