@@ -29,12 +29,12 @@
             </menus>
          </MenuBar>
           <MenuBar>
-              <Menu mnemonicParsing="false" text="Chercher un magasin">
+              <Menu fx:id="searchShopNameMenu" mnemonicParsing="false" text="Chercher un magasin">
                   <graphic>
                       <TextField fx:id="textFieldMenuBar" onAction="#onShopSearchBoxAction" promptText="Chercher un nom de magasin" />
                   </graphic>
               </Menu>
-              <Menu mnemonicParsing="false" text="Chercher une adresse">
+              <Menu fx:id="searchAdressMenu" mnemonicParsing="false" text="Chercher une adresse">
                   <graphic>
                       <TextField fx:id="searchBox" onAction="#onAddressSearchBoxAction" promptText="Chercher une adresse" />
                   </graphic>
