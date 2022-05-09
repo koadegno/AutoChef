@@ -68,6 +68,7 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
+        if(readOnlyMode) viewController.initReadOnlyMode();
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -120,7 +121,6 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onInitializeMapShop() throws SQLException {
 
         if(readOnlyMode){
-            viewController.initReadOnlyMode();
             displaysShopsWithProductlist();
         }
         else {
