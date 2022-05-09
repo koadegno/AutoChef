@@ -176,14 +176,12 @@ class TestShopDao {
         melon.setPrice(aldiMelonPrice);
         aldi.add(mango);
         aldi.add(melon);
-        System.out.println(aldi);
         Configuration.getCurrent().getShopDao().update(aldi);
         mango.setPrice(carrefourMangoPrice);
         melon.setPrice(carrefourMelonPrice);
         carrefour.add(mango);
         carrefour.add(melon);
         Configuration.getCurrent().getShopDao().update(carrefour);
-        System.out.println(carrefour);
         //test
         List<Shop> allShopsWithMinPriceShoppingList = Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(myShoppingList);
         assertEquals(allShopsWithMinPriceShoppingList.size(), nbShopWithMinPrice);
@@ -206,7 +204,7 @@ class TestShopDao {
         assertEquals(nearestShopsWithShoppingList.size(), nbShops);
         assertTrue(nearestShopsWithShoppingList.contains(aldi));
     }
-/*
+
     @Test
     void getShoppingListPriceInShop() throws SQLException {
         double carrefourMangoPrice = 2;
@@ -221,8 +219,8 @@ class TestShopDao {
         carrefour.add(mango);
         carrefour.add(melon);
         Configuration.getCurrent().getShopDao().update(carrefour);
-        System.out.println(Configuration.getCurrent().getShopDao().getShopWithProductList(myShoppingList));
+        carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
         Double price = Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(carrefour,myShoppingList);
         assertEquals(price, carrefourMangoPrice + carrefourMelonPrice);
-    }*/
+    }
 }

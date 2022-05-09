@@ -264,18 +264,12 @@ public class ShopDao extends Database implements Dao<Shop> {
     public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
         double totalPrice = -1; //error value
         final int indexSum = 1;
-        System.out.println(shop);
-        System.out.println(shoppingList);
         String query = String.format("""
                 SELECT SUM(MI.prix)
                 FROM  MagasinIngredient as MI
                 INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
                 WHERE LCI.ListeCourseID = %d and MI.MagasinID = %d
-                GROUP BY MI.MagasinID
-                HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
-                
-                """, shoppingList.getId(), shop.getID(), shoppingList.getId());
-        System.out.println(query);
+                """, shoppingList.getId(), shop.getID());
         try (ResultSet querySelectShop = sendQuery(query)){
             if(querySelectShop.next()) {
                 totalPrice = querySelectShop.getDouble(indexSum);
