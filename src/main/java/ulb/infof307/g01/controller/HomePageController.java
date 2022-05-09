@@ -57,7 +57,8 @@ public class HomePageController extends Controller implements HomePageListener,L
      */
     @Override
     public void onMapButtonClick() {
-        MapController mapController = new MapController(currentStage,this);
+        Boolean notReadOnlyMode = false;
+        MapController mapController = new MapController(currentStage,this,notReadOnlyMode );
         mapController.displayMap();
     }
 

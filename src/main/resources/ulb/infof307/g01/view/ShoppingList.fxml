@@ -2,7 +2,6 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.Menu?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.MenuItem?>
@@ -31,10 +30,10 @@
       </MenuBar>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="573.0" spacing="20.0">
             <children>
-                <Label fx:id="labelNameShoppingList" text="Nom de la liste : " visible="false" />
-                <TextField fx:id="nameMyCreateShoppingList" promptText="nom de la liste" visible="false" />
+                <TextField fx:id="nameMyCreateShoppingList" promptText="Nom de la liste " visible="false" />
                 <ComboBox fx:id="comboBoxShoppingNameList" prefHeight="25.0" prefWidth="179.0" promptText="Nom de liste de courses" visible="false" />
                 <Button fx:id="btnSeeShoppingList" mnemonicParsing="false" text="Voir" visible="false" />
+                 <Button fx:id="btnSeeShoppingListOnMap" mnemonicParsing="false" visible="false"  text="Carte" />
             </children>
         </HBox>
         <TableView fx:id="tableViewDisplayProductList" prefHeight="299.0" prefWidth="750.0">

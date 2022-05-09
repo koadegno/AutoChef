@@ -21,6 +21,7 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
+import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
@@ -48,12 +49,15 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int WALKING = 4;
     private MapViewController viewController;
     private boolean onItineraryMode;
+    private boolean readOnlyMode;
+    private ShoppingList productListToSearchInShops ;
 
 
-    public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
         onItineraryMode = false;
+        this.readOnlyMode = readOnlyMode;
     }
 
     /**
@@ -64,6 +68,10 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
+    }
+
+    public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
+        this.productListToSearchInShops = productListToSearchInShops;
     }
 
     /**
@@ -110,9 +118,23 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onInitializeMapShop() throws SQLException {
-        List<Shop> allShopList = Configuration.getCurrent().getShopDao().getShops();
-        for(Shop shop: allShopList){
-            addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+
+        if(readOnlyMode){
+            viewController.initReadOnlyMode();
+            displaysShopsWithProductlist();
+        }
+        else {
+            List<Shop> allShopList  = Configuration.getCurrent().getShopDao().getShops();
+            for(Shop shop: allShopList){
+                addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+            }
+        }
+    }
+
+    private void displaysShopsWithProductlist() throws SQLException {
+        List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
+        for(Shop shop: shopListWithProducts){
+            addCircle(COLOR_BLUE, shop.getName(), shop.getCoordinate(), true);
         }
     }
 

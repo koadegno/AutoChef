@@ -3,6 +3,7 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -20,6 +21,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
     protected ModifyShoppingListViewController modifyShoppingListViewController;
     protected CreateShoppingListViewController createShoppingListViewController;
     protected ShoppingList shoppingListToSend;
+    ListenerBackPreviousWindow listenerBackPreviousWindow;
 
     //-------------------------CONSTRUCTEUR
 
@@ -119,6 +121,25 @@ public abstract class ShoppingListController extends Controller implements Shopp
 
     @Override
     public void logout(){userLogout();}
+
+    @Override
+    public void viewShoppingListOnMap(Object nameUserShoppingList){
+        if(Objects.equals(nameUserShoppingList, null)){ //nom est null
+            return;
+        }
+        else { //Initialiser la MAP
+            String currentShoppingListName = (String) nameUserShoppingList;
+            try {
+                ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+                Boolean readOnlyMode = true;
+                MapController mapController = new MapController(currentStage,listenerBackPreviousWindow,readOnlyMode );
+                mapController.setProductListToSearchInShops(shoppingList);
+                mapController.displayMap();
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+    }
 
     //Fin Methode Listener de ShoppingListViewController
 

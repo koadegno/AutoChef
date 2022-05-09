@@ -14,7 +14,7 @@
 <AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
    <VBox prefHeight="77.0" prefWidth="750.0">
       <children>
-         <MenuBar prefHeight="26.0" prefWidth="750.0">
+         <MenuBar fx:id="appMenuBar" prefHeight="26.0" prefWidth="750.0">
             <menus>
                <Menu mnemonicParsing="false" text="Profil">
                   <items>

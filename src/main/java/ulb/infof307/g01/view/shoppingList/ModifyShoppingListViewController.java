@@ -23,6 +23,12 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
          listener.seeUserShoppingList(nameUserShoppingList);
     }
 
+    @FXML
+    public void viewShoppingListOnMap() {
+        Object nameUserShoppingList =  comboBoxShoppingNameList.getSelectionModel().getSelectedItem();
+        listener.viewShoppingListOnMap(nameUserShoppingList);
+    }
+
     public void setCurrentShoppingListName(String currentShoppingListName){
         this.currentShoppingListName = currentShoppingListName;
     }
@@ -55,6 +61,8 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         btnConfirm.setText("Enregistrer");
         btnSeeShoppingList.setVisible(true);
         btnSeeShoppingList.setOnAction(e-> seeMyShoppingListTableView());
+        btnSeeShoppingListOnMap.setVisible(true);
+        btnSeeShoppingListOnMap.setOnAction(e-> viewShoppingListOnMap());
     }
 
     public void initComboBox(List<String> allProduct, List<String> allUnitName, List<String> allShoppinListName ){
@@ -68,6 +76,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         //super.initComboBox(allProduct, allUnitName);
         comboBoxShoppingNameList.setVisible(false);
         btnSeeShoppingList.setVisible(false);
+        btnSeeShoppingListOnMap.setVisible(false);
         Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);

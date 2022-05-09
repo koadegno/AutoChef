@@ -36,7 +36,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     @FXML
     protected ComboBox<String> comboBoxListProduct;
     @FXML
-    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct, btnExportShoppingList;
+    protected Button btnConfirm, btnSeeShoppingList, btnAddNewProduct, btnExportShoppingList,btnSeeShoppingListOnMap;
     @FXML
     protected Spinner<Integer> spinnerQuantityOrNumber;
     @FXML
@@ -178,6 +178,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public void sendShoppingListByMail() {
         listener.sendShoppingListByMail(currentShoppingListName);
     }
+    public void onSeeShoppingListOnMap(){listener.viewShoppingListOnMap(currentShoppingListName);}
     public void logout(){listener.logout();}
 
 
@@ -195,6 +196,8 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
         void confirmUserCreateShoppingList(String shoppingListName, int sizeTableViewDisplayProductList);
         void cancelRecipeCreation();
         void returnAddedProducts();
+
+        void viewShoppingListOnMap(Object nameUserShoppingList);
 
         void helpCreateShoppingList();
         void helpModifyShoppingList();

@@ -55,6 +55,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     @FXML
     private TextField searchBox;
+    @FXML
+    private MenuBar mapMenuBar;
 
     public GraphicsOverlay getShopGraphicsCercleList() {
         return shopGraphicsCircleOverlay;
@@ -242,6 +244,11 @@ public class MapViewController extends ViewController<MapViewController.Listener
         else {getItineraryShopMenuItem().setText("Itinéraire");}
     }
 
+
+    @FXML
+    public void initReadOnlyMode() {
+        //mapMenuBar.setVisible(false);
+    }
 
     public void helpMap() {
         listener.helpMapClicked();
