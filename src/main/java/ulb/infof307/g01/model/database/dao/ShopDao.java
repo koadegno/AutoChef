@@ -110,6 +110,11 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     public List<Shop> getShops() throws SQLException {
         List<Shop> shops = getAllShops();
+        return fillAllShopsWithProducts(shops);
+    }
+
+    @NotNull
+    private List<Shop> fillAllShopsWithProducts(List<Shop> shops) throws SQLException {
         for(Shop shop: shops){
             fillShopWithProducts(shop);
         }
@@ -147,7 +152,6 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private List<Shop> getAllShops() throws SQLException {
-        ArrayList<Shop> shopsList;
         String query = String.format("""
                         SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
                         FROM Magasin as M
@@ -212,7 +216,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
                                         """, shoppingList.getId(), shoppingList.getId());
 
-        return getShopsList(query);
+        return fillAllShopsWithProducts(getShopsList(query));
 
     }
 
@@ -235,7 +239,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                             ) resultats
                                         """, shoppingList.getId(), shoppingList.getId());
 
-        return getShopsList(query);
+        return fillAllShopsWithProducts(getShopsList(query));
 
     }
 
@@ -258,7 +262,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                                 ) sommes
                         ) resultats
                 """, position.getX(),position.getY(),shoppingList.getId(), shoppingList.getId());
-        return getShopsList(query);
+        return fillAllShopsWithProducts(getShopsList(query));
     }
 
     public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
