@@ -79,7 +79,7 @@ public class ShopDao extends Database implements Dao<Shop> {
 
         String shopID = String.valueOf(getGeneratedID());
 
-        for (Product product: shop) {
+        for (Product product: shop.getProduct()) {
             String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
             String price =  String.valueOf(product.getPrice());
             String[] productValues = {shopID,productID,price};
