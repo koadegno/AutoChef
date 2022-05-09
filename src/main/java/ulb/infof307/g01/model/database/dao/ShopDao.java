@@ -261,6 +261,30 @@ public class ShopDao extends Database implements Dao<Shop> {
         return getShopsList(query);
     }
 
+    public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
+        double totalPrice = -1; //error value
+        final int indexSum = 1;
+        System.out.println(shop);
+        System.out.println(shoppingList);
+        String query = String.format("""
+                SELECT SUM(MI.prix)
+                FROM  MagasinIngredient as MI
+                INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                WHERE LCI.ListeCourseID = %d and MI.MagasinID = %d
+                GROUP BY MI.MagasinID
+                HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                
+                """, shoppingList.getId(), shop.getID(), shoppingList.getId());
+        System.out.println(query);
+        try (ResultSet querySelectShop = sendQuery(query)){
+            if(querySelectShop.next()) {
+                totalPrice = querySelectShop.getDouble(indexSum);
+            }
+
+        }
+        return totalPrice;
+    }
+
 
     @NotNull
     private ArrayList<Shop> getShopsList(String query) throws SQLException {
@@ -273,7 +297,8 @@ public class ShopDao extends Database implements Dao<Shop> {
                 double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                shopsList.add(new Shop(shopID, shopName, shopPoint));
+                Shop shop =  new Shop(shopID, shopName, shopPoint);
+                shopsList.add(shop);
             }
         }
         return shopsList;
