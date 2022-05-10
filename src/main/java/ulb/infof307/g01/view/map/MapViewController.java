@@ -69,12 +69,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public GraphicsOverlay getShopGraphicsTextList() { return shopGraphicsTextOverlay;}
 
-    public GraphicsOverlay getItineraryGraphicsTextList() {
-        return itineraryGraphicsTextOverlay;
-    }
-
-    public GraphicsOverlay getItineraryGraphicsCircleList() { return itineraryGraphicsCircleOverlay;}
-
     public MapView getMapView() {
         return mapView;
     }
@@ -249,6 +243,13 @@ public class MapViewController extends ViewController<MapViewController.Listener
         else {getItineraryShopMenuItem().setText("Itinéraire");}
     }
 
+    public List<Graphic> getItineraryGraphicsCircleList(){
+        return itineraryGraphicsCircleOverlay.getGraphics();
+    }
+
+    public List<Graphic> getItineraryGraphicsTextList(){
+        return itineraryGraphicsTextOverlay.getGraphics();
+    }
 
     @FXML
     public void initReadOnlyMode() {
@@ -273,10 +274,12 @@ public class MapViewController extends ViewController<MapViewController.Listener
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
         void onItineraryClicked();
-        boolean onDeleteItineraryClicked();
+        void onDeleteItineraryClicked();
         void helpMapClicked();
 
         void logout();
     }
+
+
 }
 

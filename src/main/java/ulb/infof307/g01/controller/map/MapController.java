@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.stream.Collectors;
 
-public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener {
+public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
 
     public static final int COLOR_RED = 0xFFFF0000;
     public static final int COLOR_BLACK = 0xFF000000;
@@ -42,21 +42,27 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
     public static final int CORRECTION_POSITION_Y = 5;
     public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
-    public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
-    public static final int AVERAGE_TIME_PEDESTRIAN = 5;
-    public static final int AVERAGE_TIME_BIKE = 15;
+
     public static final int WIDTH = 4;
-    public static final int WALKING = 4;
     private MapViewController viewController;
-    private boolean onItineraryMode;
+
+    private boolean isOnItineraryMode;
+
     private boolean readOnlyMode;
     private ShoppingList productListToSearchInShops ;
+
+    private RouteService routeService;
+
+    @Override
+    public void setOnItineraryMode(boolean onItineraryMode) {
+        isOnItineraryMode = onItineraryMode;
+    }
 
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
-        onItineraryMode = false;
+        isOnItineraryMode = false;
         this.readOnlyMode = readOnlyMode;
     }
 
@@ -68,6 +74,7 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController = loader.getController();
         viewController.setListener(this);
         viewController.start();
+        routeService = new RouteService(viewController,this);
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -82,6 +89,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param coordinate   Coordonnée du cercle
      * @param shop         Si l'élément à ajouter est un magasin
      */
+    @Override
     public void addCircle(int color, String textCircle, Point coordinate, Boolean shop) {
 
         //crée un cercle
@@ -106,8 +114,8 @@ public class MapController extends Controller implements MapViewController.Liste
         }
 
         else {
-            viewController.getItineraryGraphicsCircleList().getGraphics().add(circlePoint);
-            viewController.getItineraryGraphicsTextList().getGraphics().add(textPoint);
+            viewController.getItineraryGraphicsCircleList().add(circlePoint);
+            viewController.getItineraryGraphicsTextList().add(textPoint);
         }
     }
 
@@ -203,45 +211,10 @@ public class MapController extends Controller implements MapViewController.Liste
         listenerBackPreviousWindow.onReturn();
     }
 
-    /**
-     * Supprime l'itinéraire
-     */
+
     @Override
-    public boolean onDeleteItineraryClicked() {
-
-        GraphicsOverlay itineraryGraphicsCercleList = viewController.getItineraryGraphicsCircleList();
-        GraphicsOverlay itineraryGraphicsTextList   = viewController.getItineraryGraphicsTextList();
-
-        int vide = 0;
-        int itineraryIndex = 2;
-        int departureIndex = 1;
-        int arrival = 0;
-
-        if (itineraryGraphicsCercleList.getGraphics().size() == vide) {return true;}
-
-        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer l'itinéraire actuel ? ");
-        if (alertResult == ButtonType.OK) {
-
-            if (itineraryGraphicsCercleList.getGraphics().size() > itineraryIndex) {
-                itineraryGraphicsCercleList.getGraphics().remove(itineraryIndex);
-            }
-
-            if (itineraryGraphicsCercleList.getGraphics().size() > departureIndex) {
-                itineraryGraphicsCercleList.getGraphics().remove(departureIndex);
-                itineraryGraphicsTextList.getGraphics().remove(departureIndex);
-            }
-
-            else { switchVisibilityContextMenu();}
-
-            itineraryGraphicsCercleList.getGraphics().remove(arrival);
-            itineraryGraphicsTextList.getGraphics().remove(arrival);
-
-            onItineraryMode = false;
-            viewController.deleteItineraryInformation();
-            return true;
-        }
-
-        return false;
+    public void onDeleteItineraryClicked() {
+        routeService.onDeleteItinerary();
     }
 
     /**
@@ -249,45 +222,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onItineraryClicked() {
-        onItineraryMode = true;
-        MapView mapView = viewController.getMapView();
-        mapView.setCursor(Cursor.DEFAULT);
-
-        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
-        if(shopOverlay == null && viewController.getItineraryGraphicsCircleList().getGraphics().isEmpty()) return;
-
-        // Si un itinéraire est déjà calculé, demande à supprimé le précédent
-        int itineraryAlreadyExist = 1;
-        boolean isDelete = true;
-        if (viewController.getItineraryGraphicsCircleList().getGraphics().size() > itineraryAlreadyExist) { isDelete = onDeleteItineraryClicked();}
-
-        // Affiche le texte en fonction de ce qui est recherché
-        if(isDelete){
-            String text;
-            Point mapPoint;
-            if (viewController.getIfSearchDeparture()) {
-                text = "Départ";
-                // Il y a une correction de la position
-                MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
-                Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                        addShopMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
-                Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-                mapPoint = mapView.screenToLocation(cursorCoordinate);
-            }
-            else {
-                text = "";
-                Graphic shop = shopOverlay.getLeft();
-                mapPoint = (Point) shop.getGeometry();
-
-            }
-            addCircle(COLOR_BLUE, text, mapPoint, false);
-
-            switchVisibilityContextMenu();
-
-            int readyToCalculRoute = 2;
-            if (viewController.getItineraryGraphicsCircleList().getGraphics().size() == readyToCalculRoute) { calculRoute();}
-        }
+        routeService.onItinerary();
     }
+
 
     /**
      * Lance la page d'aide
@@ -303,74 +240,11 @@ public class MapController extends Controller implements MapViewController.Liste
         userLogout();
     }
 
-
-    /**
-     * Calcule et affiche l'itinéraire
-     */
-    private void calculRoute() {
-
-        Graphic routeGraphic = new Graphic();
-        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, COLOR_BLUE, WIDTH));
-
-        viewController.getItineraryGraphicsCircleList().getGraphics().add(routeGraphic);
-        RouteTask routeTask = new RouteTask(ROUTE_TASK_URL);
-        ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
-
-        // Récupère les positions de départ et d'arrivée
-        List<Stop> stops = viewController.getItineraryGraphicsCircleList().getGraphics()
-                .stream()
-                .filter(graphic -> graphic.getGeometry() != null)
-                .map(graphic -> new Stop((Point) graphic.getGeometry()))
-                .collect(Collectors.toList());
-
-        routeParametersFuture.addDoneListener(() -> {
-            try {
-                RouteParameters routeParameters = routeParametersFuture.get();
-                routeParameters.setStops(stops);
-
-                //routeParameters.setReturnDirections(true);
-                routeParameters.setDirectionsLanguage("fr");
-
-                // choisis le mode de voyage
-                routeParameters.setTravelMode(routeTask.getRouteTaskInfo().getTravelModes().get(WALKING));
-
-                // calcul l'itinéraire
-                ListenableFuture<RouteResult> routeResultFuture = routeTask.solveRouteAsync(routeParameters);
-
-                // dessine l'itinéraire
-                routeResultFuture.addDoneListener(() -> {
-                    try {
-                        RouteResult routeResult = routeResultFuture.get();
-                        int firstRoute= 0;
-                        Route route = routeResult.getRoutes().get(firstRoute);
-                        routeGraphic.setGeometry(route.getRouteGeometry());
-
-                        // Affiche la durée et la distance de l'itinéraire calculé
-                        int timeBike = getTimeBike();
-                        double totalTimeBike = route.getTotalTime() / timeBike; // calcul du temps en vélo
-                        viewController.itineraryInformation(Math.ceil(route.getTotalTime()), Math.ceil(totalTimeBike),Math.ceil(route.getTotalLength()));
-
-                    } catch (Exception e) {
-                        ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
-                        onDeleteItineraryClicked();
-                    }
-                });
-            } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }
-        });
-    }
-
-    /**
-     * Vitesse moyenne de vélo calculer à partir de donnée d'internet
-     * @return la vitesse moyenne de vélo
-     */
-    private int getTimeBike() {
-        return AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
-    }
-
     /**
      * Rend inaccessible certains items du contexte menu
      */
-    private void switchVisibilityContextMenu() {
+    @Override
+    public void switchVisibilityContextMenu() {
 
         // Rend invisible les boutons non nécessaires
         viewController.modifyVisibilityAddShopMenuItem();
@@ -404,7 +278,7 @@ public class MapController extends Controller implements MapViewController.Liste
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
-        if(!onItineraryMode){
+        if(!isOnItineraryMode){
 
             ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
             if (alertResult == ButtonType.OK ) {
@@ -432,7 +306,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * renvoie la paire d'objet graphique associé aux coordonnées cliquer
      * @return paire d'objet graphique
      */
-    private Pair<Graphic, Graphic> getSelectedShop(){
+    public Pair<Graphic, Graphic> getSelectedShop(){
         GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
         GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
@@ -547,4 +421,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
         viewController.getMapView().setViewpointCenterAsync(geocodeResult.getDisplayLocation());
     }
+
+
+
 }
