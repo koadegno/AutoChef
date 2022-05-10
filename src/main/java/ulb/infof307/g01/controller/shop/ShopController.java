@@ -72,7 +72,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillTableViewShop() {
-        viewController.getTableViewShopItems().addAll(shop.getProduct());
+        viewController.getTableViewShopItems().addAll(shop);
     }
 
     /**
