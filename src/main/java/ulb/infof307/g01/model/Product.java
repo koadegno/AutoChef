@@ -16,13 +16,8 @@ public class Product {
     }
 
     public Product(String productName, int quantity) {
-        name = productName;
+        this(productName);
         this.quantity = quantity;
-    }
-
-    @Override
-    public int hashCode() {
-        return name.hashCode();
     }
 
     /**
@@ -42,18 +37,13 @@ public class Product {
     }
 
     public Product(String productName, int quantity, String nameUnity,String famillyProduct, double price) {
-        name = productName;
-        this.quantity = quantity;
-        this.nameUnity = nameUnity;
-        this.famillyProduct = famillyProduct;
+        this(productName,quantity,nameUnity,famillyProduct);
         this.price = price;
     }
 
     public Product(String productName, int quantity, String nameUnity,String famillyProduct) {
-        name = productName;
+        this(productName,nameUnity,famillyProduct);
         this.quantity = quantity;
-        this.nameUnity = nameUnity;
-        this.famillyProduct = famillyProduct;
     }
 
     public Product(String productName,  String nameUnity,String famillyProduct) {
@@ -63,11 +53,12 @@ public class Product {
     }
 
     public Product(Product other) {
-        this.name = other.name;
-        this.quantity = other.quantity;
-        this.nameUnity = other.nameUnity;
-        this.famillyProduct = other.famillyProduct;
-        this.price = other.price;
+        this(other.name,other.quantity,other.nameUnity,other.famillyProduct, other.price);
+    }
+
+    @Override
+    public int hashCode() {
+        return name.hashCode();
     }
 
     public void rename(String newName) {
