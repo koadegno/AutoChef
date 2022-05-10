@@ -21,7 +21,6 @@ public abstract class ShoppingListController extends Controller implements Shopp
     protected ModifyShoppingListViewController modifyShoppingListViewController;
     protected CreateShoppingListViewController createShoppingListViewController;
     protected ShoppingList shoppingListToSend;
-    ListenerBackPreviousWindow listenerBackPreviousWindow;
 
     //-------------------------CONSTRUCTEUR
 
