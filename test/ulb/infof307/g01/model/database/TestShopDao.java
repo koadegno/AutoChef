@@ -82,7 +82,7 @@ class TestShopDao {
 
         Configuration.getCurrent().getShopDao().delete(CARREFOUR_ANVERS);
         List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
-        assertEquals(shopList.get(shopList.size()-1), CARREFOUR_ANVERS);
+        assertNotEquals(shopList.get(shopList.size()-1), CARREFOUR_ANVERS);
     }
 
     @Test
