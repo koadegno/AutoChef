@@ -9,7 +9,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
@@ -151,18 +150,16 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * Lance le popup pour choisir les informations concernant le magasin
+     * @param mapView la mapView contient les methodes de conversion d'une coordonnée X,Y en un point sur la carte
+     * @param cursorX la coordonnée X du curseur
+     * @param cursorY la coordonnée Y du curseur
      */
     @Override
-    public void onAddShopClicked() {
-
-        MapView mapView = viewController.getMapView();
-        MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
+    public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
 
         //il y a une correction de la position
-        Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
-                addShopMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
-        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        Point mapPoint = mapView.screenToLocation(cursorCoordinate);
+        Point2D cursorPoint2D = new Point2D(cursorX,cursorY);
+        Point mapPoint = mapView.screenToLocation(cursorPoint2D);
 
         ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
         shopController.show();
@@ -217,12 +214,14 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * Récupère la position départ ou d'arrivée de l'itinéraire et y dessine un cercle bleu
+     * @param posX position du curseur en X
+     * @param posY position du curseur en Y
      */
     @Override
-    public void onItineraryClicked() {
+    public void onItineraryClicked(Double posX, Double posY) {
         Pair<Graphic, Graphic> selectedShop= getSelectedShop();
         if(selectedShop != null){
-            routeService.onItinerary(selectedShop);
+            routeService.itinerary(selectedShop, posX, posY);
 
         }
     }

@@ -33,7 +33,7 @@ public class RouteService {
     }
 
 
-    public void onItinerary(Pair<Graphic, Graphic> selectedShop) {
+    public void itinerary(Pair<Graphic, Graphic> selectedShop, Double posX, Double posY) {
 
         listener.setOnItineraryMode(true);
 
@@ -50,7 +50,7 @@ public class RouteService {
             if (mapViewController.getIfSearchDeparture()) {
                 text = "Départ";
                 MapView mapView = mapViewController.getMapView();
-                mapPoint = cursorPoint(mapView);
+                mapPoint = cursorPoint(mapView,posX,posY);
             }
             else {
                 text = "";
@@ -72,15 +72,12 @@ public class RouteService {
      * @param mapView la mapView contient la fonction de calcul
      * @return le point de la map
      */
-    private Point cursorPoint(MapView mapView) {
+    private Point cursorPoint(MapView mapView, double posX, double poxY) {
         // Il y a une correction de la position
 
         Point mapPoint;
-        MenuItem addShopMenuItem = mapViewController.getAddShopMenuItem();
-        Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + MapController.CORRECTION_POSITION_X,
-                addShopMenuItem.getParentPopup().getY() + MapController.CORRECTION_POSITION_Y);
-        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        mapPoint = mapView.screenToLocation(cursorCoordinate);
+        Point2D cursorPoint2D = new Point2D(posX,poxY);
+        mapPoint = mapView.screenToLocation(cursorPoint2D);
         return mapPoint;
     }
 

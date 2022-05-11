@@ -35,7 +35,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public Label timeBikeLabel;
     public Label lengthLabel;
     private boolean ifSearchDeparture = false;
-    private static final int ONCE_CLICKED = 1;
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
@@ -57,6 +56,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private Menu searchAddressMenu;
     @FXML
     private Menu searchShopNameMenu;
+
+    private Double currentCursorPosX;
+    private Double currentCursorPosY;
 
     public MapView getMapView() {
         return mapView;
@@ -114,11 +116,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private void initializeMapEvent() {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
+            currentCursorPosX = mouseEvent.getX();
+            currentCursorPosY = mouseEvent.getY();
+
 
             // selectionner un point avec un simple clique droit
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
-                listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY(),mapView,shopGraphicsCircleOverlay);
+                listener.highlightGraphicPoint(currentCursorPosX,currentCursorPosY,mapView,shopGraphicsCircleOverlay);
             }
         });
     }
@@ -133,7 +138,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         deleteItineraryItem.setVisible(false);
 
         // contexte menu pour l'ajout
-        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked());
+        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked(mapView,currentCursorPosX ,currentCursorPosY ));
 
         // contexte menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
@@ -154,7 +159,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         });
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked());
+        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY ));
 
         // Supprime l'itinéraire
         deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked());
@@ -175,7 +180,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
 
-    public MenuItem getAddShopMenuItem() {return addShopMenuItem;}
 
     public MenuItem getDeleteShopMenuItem() { return deleteShopMenuItem;}
 
@@ -189,7 +193,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public List<Graphic> getAddressGraphicsOverlay() {return addressGraphicsOverlay.getGraphics();}
 
-    public void modifyVisibilityAddShopMenuItem() {getAddShopMenuItem().setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityAddShopMenuItem() {addShopMenuItem.setVisible(getIfSearchDeparture());}
 
     public void modifyVisibilityDeleteShopMenuItem() {getDeleteShopMenuItem().setVisible(getIfSearchDeparture());}
 
@@ -269,13 +273,13 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public interface Listener {
-        void onAddShopClicked();
+        void onAddShopClicked(MapView mapView, Double posX, Double posY);
         void onDeleteShopClicked() throws SQLException;
         void onUpdateShopClicked() throws SQLException;
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
-        void onItineraryClicked();
+        void onItineraryClicked(Double posX, Double posY);
         void onDeleteItineraryClicked();
         void helpMapClicked();
         void logout();
