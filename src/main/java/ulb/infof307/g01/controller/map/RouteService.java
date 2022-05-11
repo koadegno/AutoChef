@@ -16,6 +16,9 @@ import ulb.infof307.g01.view.map.MapViewController;
 import java.util.List;
 import java.util.stream.Collectors;
 
+/**
+ * Classe permettant d'utiliser le service de localisation de route de ARCGIS
+ */
 public class RouteService {
     public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
     private final MapViewController mapViewController;
