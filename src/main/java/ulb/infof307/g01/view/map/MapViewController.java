@@ -2,6 +2,8 @@ package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
@@ -43,7 +45,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
-    private GeocodeParameters geocodeParameters;
     private LocatorTask locatorTask;
     private MapView mapView;
 
@@ -58,7 +59,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     private MenuBar appMenuBar;
     @FXML
-    private Menu searchAdressMenu;
+    private Menu searchAddressMenu;
     @FXML
     private Menu searchShopNameMenu;
 
@@ -101,8 +102,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     private void onAddressSearchBoxAction() {
         String address = searchBox.getText();
-        boolean found = listener.onSearchAddress(address);
-        setNodeColor(searchBox, found);
+        boolean isfound = listener.onSearchAddress(address);
+        setNodeColor(searchBox, !isfound);
     }
 
     /**
@@ -125,25 +126,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
             listener.onInitializeMapShop();
             initializeContextMenu();
             initializeMapEvent();
-            createLocatorTaskAndDefaultParameters();
         } catch (SQLException e) {
             e.printStackTrace();
         }
-    }
-
-    /**
-     * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
-     * Pour parametrer le service de geocoding Locator
-     * et Parametre par defaut du service de geocoding
-     */
-    void createLocatorTaskAndDefaultParameters() {
-        locatorTask = new LocatorTask("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
-
-        geocodeParameters = new GeocodeParameters();
-        geocodeParameters.getResultAttributeNames().add("*"); // permet de retourner tous les attributs
-        geocodeParameters.setMaxResults(1);
-        // comment les coordonnées doivent correspondre a la location
-        geocodeParameters.setOutputSpatialReference(mapView.getSpatialReference());
     }
 
     /**
@@ -160,7 +145,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
             }
         });
     }
-
 
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
@@ -228,8 +212,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public GraphicsOverlay getAddressGraphicsOverlay() {return addressGraphicsOverlay;}
 
-    public ListenableFuture<List<GeocodeResult>> getGeocodeAsync() {return locatorTask.geocodeAsync(searchBox.getText(), geocodeParameters);}
-
     public void modifyVisibilityAddShopMenuItem() {getAddShopMenuItem().setVisible(getIfSearchDeparture());}
 
     public void modifyVisibilityDeleteShopMenuItem() {getDeleteShopMenuItem().setVisible(getIfSearchDeparture());}
@@ -255,7 +237,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void initReadOnlyMode() {
         appMenuBar.setVisible(false);
         searchShopNameMenu.setVisible(false);
-        searchAdressMenu.setVisible(false);
+        searchAddressMenu.setVisible(false);
     }
 
     public void helpMap() {
@@ -263,6 +245,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public void logout() { listener.logout(); }
+
+    public SpatialReference getSpatialReference() {
+        return mapView.getSpatialReference();
+    }
+
+    public void setViewPointCenter(Point displayLocation) {
+        mapView.setViewpointCenterAsync(displayLocation);
+    }
 
     public interface Listener {
         void onInitializeMapShop() throws SQLException;
@@ -279,6 +269,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
         void logout();
     }
+
 
 
 }

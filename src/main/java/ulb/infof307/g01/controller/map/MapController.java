@@ -3,11 +3,8 @@ package ulb.infof307.g01.controller.map;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
-import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
-import com.esri.arcgisruntime.tasks.networkanalysis.*;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
@@ -29,8 +26,6 @@ import ulb.infof307.g01.view.map.MapViewController;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
-import java.util.stream.Collectors;
 
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
 
@@ -52,12 +47,12 @@ public class MapController extends Controller implements MapViewController.Liste
     private ShoppingList productListToSearchInShops ;
 
     private RouteService routeService;
+    private LocatorService locatorService;
 
     @Override
     public void setOnItineraryMode(boolean onItineraryMode) {
         isOnItineraryMode = onItineraryMode;
     }
-
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
@@ -75,6 +70,7 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.setListener(this);
         viewController.start();
         routeService = new RouteService(viewController,this);
+        locatorService = new LocatorService(viewController);
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -128,7 +124,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onInitializeMapShop() throws SQLException {
 
         if(readOnlyMode){
-            displaysShopsWithProductlist();
+            displayShopsWithProductList();
         }
         else {
             List<Shop> allShopList  = Configuration.getCurrent().getShopDao().getShops();
@@ -138,7 +134,7 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
-    private void displaysShopsWithProductlist() throws SQLException {
+    private void displayShopsWithProductList() throws SQLException {
         viewController.initReadOnlyMode();
         List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
         List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
@@ -378,49 +374,16 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
     private boolean performGeocode(String address) {
-        AtomicBoolean found= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
-        ListenableFuture<List<GeocodeResult>> geocodeResults = viewController.getGeocodeAsync();
-        geocodeResults.addDoneListener(() -> {  // récupérer le résultat
-            try {
-                List<GeocodeResult> geocodes = geocodeResults.get();
-                if (geocodes.size() > 0) {
-                    GeocodeResult result = geocodes.get(0);
-                    displayResult(result);
-                    found.set(true);
-                } else {
-                    // pas d'adresse trouvée
-                    found.set(false);
-                }
-            } catch (InterruptedException | ExecutionException exception) {
-                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du résultat\nContactez un responsable");
-                found.set(false);
-            }
-        });
-        return found.get();
+        boolean isGeocodePerformed = locatorService.performGeocode(address);
+        System.out.println("le res : " + isGeocodePerformed);
+        if( !isGeocodePerformed){
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du résultat\nContactez un responsable");
+        }
+        return isGeocodePerformed;
+
     }
 
-    /**
-     * Crée et afficher l'objet graphique associé à une recherche d'adresse sur la map
-     *
-     * @param geocodeResult le résultat d'une recherche
-     */
-    void displayResult(GeocodeResult geocodeResult) {
-        GraphicsOverlay addressGraphicsOverlay = viewController.getAddressGraphicsOverlay();
-        addressGraphicsOverlay.getGraphics().clear();
 
-        // creation de l'objet graphique avec l'adresse
-        String label = geocodeResult.getLabel();
-        TextSymbol textSymbol = new TextSymbol(ADDRESS_SIZE, label, COLOR_BLACK, TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-        Graphic textGraphic = new Graphic(geocodeResult.getDisplayLocation(), textSymbol);
-        addressGraphicsOverlay.getGraphics().add(textGraphic);
-
-        // creation de l'objet graphique avec le carré rouge
-        SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE, COLOR_RED, ADDRESS_MARKER_SIZE);
-        Graphic markerGraphic = new Graphic(geocodeResult.getDisplayLocation(), geocodeResult.getAttributes(), markerSymbol);
-        addressGraphicsOverlay.getGraphics().add(markerGraphic);
-
-        viewController.getMapView().setViewpointCenterAsync(geocodeResult.getDisplayLocation());
-    }
 
 
 

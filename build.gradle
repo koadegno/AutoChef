@@ -21,7 +21,6 @@ java {
 }
 
 test {
-    forkEvery = 1
     useJUnitPlatform()
     testLogging {events "passed", "skipped", "failed"}
 }
