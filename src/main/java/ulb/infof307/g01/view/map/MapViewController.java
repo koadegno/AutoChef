@@ -1,15 +1,12 @@
 package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
-import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
-import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -45,7 +42,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
-    private LocatorTask locatorTask;
     private MapView mapView;
 
     @FXML
@@ -62,13 +58,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private Menu searchAddressMenu;
     @FXML
     private Menu searchShopNameMenu;
-
-
-    public GraphicsOverlay getShopGraphicsCercleList() {
-        return shopGraphicsCircleOverlay;
-    }
-
-    public GraphicsOverlay getShopGraphicsTextList() { return shopGraphicsTextOverlay;}
 
     public MapView getMapView() {
         return mapView;
@@ -233,6 +222,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
         return itineraryGraphicsTextOverlay.getGraphics();
     }
 
+    public List<Graphic> getShopGraphicsCircleList(){
+        return shopGraphicsCircleOverlay.getGraphics();
+    }
+
+    public List<Graphic> getShopGraphicsTextList(){
+        return shopGraphicsTextOverlay.getGraphics();
+    }
+
     @FXML
     public void initReadOnlyMode() {
         appMenuBar.setVisible(false);
@@ -252,6 +249,35 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public void setViewPointCenter(Point displayLocation) {
         mapView.setViewpointCenterAsync(displayLocation);
+    }
+
+    public void switchVisibilityContextMenu() {
+        // Rend invisible les boutons non nécessaires
+        modifyVisibilityAddShopMenuItem();
+        modifyVisibilityDeleteShopMenuItem();
+        modifyVisibilityModifyShopMenuItem();
+        modifyVisibilityDeleteItinerary();
+
+        // Switch la variable ifSearchDeparture
+        setIfSearchDeparture();
+
+        // Modifie le texte du bouton itinéraire
+        modifyItineraryShopMenuItemText();
+    }
+
+    public void addShopGraphics(Graphic circlePoint,Graphic textPoint) {
+        shopGraphicsCircleOverlay.getGraphics().add(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().add(textPoint);
+    }
+
+    public void addItineraryGraphics(Graphic circlePoint, Graphic textPoint) {
+        itineraryGraphicsCircleOverlay.getGraphics().add(circlePoint);
+        itineraryGraphicsTextOverlay.getGraphics().add(textPoint);
+    }
+
+    public void removeShopGraphics(Graphic circlePoint, Graphic textPoint) {
+        shopGraphicsCircleOverlay.getGraphics().remove(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().remove(textPoint);
     }
 
     public interface Listener {

@@ -7,7 +7,6 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
-import javafx.scene.Cursor;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.scene.control.MenuItem;
@@ -105,13 +104,11 @@ public class MapController extends Controller implements MapViewController.Liste
         // rajoute les cercles créés au bon overlay
 
         if (shop) {
-            viewController.getShopGraphicsCercleList().getGraphics().add(circlePoint);
-            viewController.getShopGraphicsTextList().getGraphics().add(textPoint);
+            viewController.addShopGraphics(circlePoint,textPoint);
         }
 
         else {
-            viewController.getItineraryGraphicsCircleList().add(circlePoint);
-            viewController.getItineraryGraphicsTextList().add(textPoint);
+            viewController.addItineraryGraphics(circlePoint,textPoint);
         }
     }
 
@@ -155,7 +152,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
         MapView mapView = viewController.getMapView();
         MenuItem addShopMenuItem = viewController.getAddShopMenuItem();
-        mapView.setCursor(Cursor.DEFAULT);
+
         //il y a une correction de la position
         Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + CORRECTION_POSITION_X,
                 addShopMenuItem.getParentPopup().getY() + CORRECTION_POSITION_Y);
@@ -207,7 +204,6 @@ public class MapController extends Controller implements MapViewController.Liste
         listenerBackPreviousWindow.onReturn();
     }
 
-
     @Override
     public void onDeleteItineraryClicked() {
         routeService.onDeleteItinerary();
@@ -241,18 +237,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void switchVisibilityContextMenu() {
-
-        // Rend invisible les boutons non nécessaires
-        viewController.modifyVisibilityAddShopMenuItem();
-        viewController.modifyVisibilityDeleteShopMenuItem();
-        viewController.modifyVisibilityModifyShopMenuItem();
-        viewController.modifyVisibilityDeleteItinerary();
-
-        // Switch la variable ifSearchDeparture
-        viewController.setIfSearchDeparture();
-
-        // Modifie le texte du bouton itinéraire
-        viewController.modifyItineraryShopMenuItemText();
+        viewController.switchVisibilityContextMenu();
     }
 
 
@@ -270,15 +255,13 @@ public class MapController extends Controller implements MapViewController.Liste
      * Supprime le point sélectionné de l'overlay
      */
     public void onDeleteShopClicked() throws SQLException {
-        GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
-        GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
         if(!isOnItineraryMode){
 
             ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
             if (alertResult == ButtonType.OK ) {
-                Graphic cerclePointOnMap = shopOverlay.getLeft();
+                Graphic circlePointOnMap = shopOverlay.getLeft();
                 Graphic textPointOnMap = shopOverlay.getRight();
 
                 TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
@@ -287,8 +270,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 Shop shopToDelete = Configuration.getCurrent().getShopDao().get(shopName.getText(), shopPoint);
                 Configuration.getCurrent().getShopDao().delete(shopToDelete);
 
-                shopGraphicsCercleList.getGraphics().remove(cerclePointOnMap);
-                shopGraphicsTextList.getGraphics().remove(textPointOnMap);
+                viewController.removeShopGraphics(circlePointOnMap,textPointOnMap);
             }
         }
         else{
@@ -303,15 +285,15 @@ public class MapController extends Controller implements MapViewController.Liste
      * @return paire d'objet graphique
      */
     public Pair<Graphic, Graphic> getSelectedShop(){
-        GraphicsOverlay shopGraphicsCercleList = viewController.getShopGraphicsCercleList();
-        GraphicsOverlay shopGraphicsTextList = viewController.getShopGraphicsTextList();
+        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();
+        List<Graphic> shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
-        for (int i = 0; i < shopGraphicsCercleList.getGraphics().size(); i++) {
-            Graphic cerclePointOnMap = shopGraphicsCercleList.getGraphics().get(i);
-            Graphic textPointOnMap = shopGraphicsTextList.getGraphics().get(i); // le symbole texte associer au point aussi
+        for (int i = 0; i < shopGraphicsCircleList.size(); i++) {
+            Graphic circlePointOnMap = shopGraphicsCircleList.get(i);
+            Graphic textPointOnMap = shopGraphicsTextList.get(i); // le symbole texte associer au point aussi
 
-            if (cerclePointOnMap.isSelected()) {
-                return new Pair<>(cerclePointOnMap, textPointOnMap);
+            if (circlePointOnMap.isSelected()) {
+                return new Pair<>(circlePointOnMap, textPointOnMap);
             }
         }
         return null;
@@ -324,11 +306,8 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void onSearchShop(String shopName) {
 
-        GraphicsOverlay mapTextOverlay = viewController.getShopGraphicsTextList();
-        List<Graphic> mapTextGraphics = mapTextOverlay.getGraphics();
-
-        GraphicsOverlay mapCercleOverlay = viewController.getShopGraphicsCercleList();
-        List<Graphic> mapCercleGraphics = mapCercleOverlay.getGraphics();
+        List<Graphic> mapTextGraphics = viewController.getShopGraphicsTextList();
+        List<Graphic> mapCercleGraphics = viewController.getShopGraphicsCircleList();
 
         boolean isVisible;
         for(int index = 0; index < mapTextGraphics.size(); index++){
@@ -351,7 +330,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public void highlightGraphicPoint(double mouseX, double mouseY) {
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);
         ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = viewController.getMapView().identifyGraphicsOverlayAsync(
-                viewController.getShopGraphicsCercleList(),
+                viewController.getShopGraphicsCircleList(),
                 mapViewPoint, SIZE, false, 1);
 
         graphicsOverlayAsyncIdentified.addDoneListener(() -> {
