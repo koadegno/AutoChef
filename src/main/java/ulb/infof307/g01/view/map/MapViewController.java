@@ -7,7 +7,6 @@ import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -63,7 +62,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         return mapView;
     }
 
-    private void initializeMapService(){
+    private void initializeMap(){
         mapView = new MapView();
         //TODO trouver un meilleur moyen de mettre la clé
         String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
@@ -78,46 +77,35 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.getGraphicsOverlays().add(itineraryGraphicsTextOverlay);
     }
 
+
+    /**
+     * Cherche les magasins sur la carte avec le bon nom entré
+     */
     @FXML
     void onShopSearchBoxAction() {
         String fieldText = textFieldMenuBar.getText();
-        listener.onSearchShop(fieldText);
+        listener.onSearchShop(fieldText,getShopGraphicsTextList(),getShopGraphicsCircleList());
     }
 
     /**
      * Methode de recherche des adresses lié a la searchBox
-     *
      */
     @FXML
     private void onAddressSearchBoxAction() {
         String address = searchBox.getText();
-        boolean isfound = listener.onSearchAddress(address);
-        setNodeColor(searchBox, !isfound);
+        boolean isFound = listener.onSearchAddress(address);
+        setNodeColor(searchBox, !isFound);
     }
-
-    /**
-     * Affiche la page principale de l'application.
-     * @see ulb.infof307.g01.Main
-     * */
-    @FXML
-//    public void displayMain(){
-//        this.loadFXML("Map.fxml");
-//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMapService();
+        initializeMap();
         mapViewStackPane.getChildren().add(mapView);
     }
 
     public void start(){
-        try {
-            listener.onInitializeMapShop();
-            initializeContextMenu();
-            initializeMapEvent();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
+        initializeContextMenu();
+        initializeMapEvent();
     }
 
     /**
@@ -128,9 +116,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
             mapView.setCursor(Cursor.DEFAULT);
 
             // selectionner un point avec un simple clique droit
-            if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
-                listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
+                listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY(),mapView,shopGraphicsCircleOverlay);
             }
         });
     }
@@ -199,7 +187,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public void setIfSearchDeparture() {ifSearchDeparture = !ifSearchDeparture;}
 
-    public GraphicsOverlay getAddressGraphicsOverlay() {return addressGraphicsOverlay;}
+    public List<Graphic> getAddressGraphicsOverlay() {return addressGraphicsOverlay.getGraphics();}
 
     public void modifyVisibilityAddShopMenuItem() {getAddShopMenuItem().setVisible(getIfSearchDeparture());}
 
@@ -281,19 +269,17 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public interface Listener {
-        void onInitializeMapShop() throws SQLException;
         void onAddShopClicked();
         void onDeleteShopClicked() throws SQLException;
         void onUpdateShopClicked() throws SQLException;
-        void onSearchShop(String shopName);
-        void highlightGraphicPoint(double mouseX, double mouseY);
+        void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address);
         void onBackButtonClicked();
         void onItineraryClicked();
         void onDeleteItineraryClicked();
         void helpMapClicked();
-
         void logout();
+        void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay);
     }
 
 

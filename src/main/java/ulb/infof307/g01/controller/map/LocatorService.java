@@ -58,40 +58,40 @@ public class LocatorService {
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
     public boolean performGeocode(String address) {
-        AtomicBoolean found= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
+        AtomicBoolean isFound= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
         ListenableFuture<List<GeocodeResult>> geocodeResults = getGeocodeAsync(address);
 
         try {
             geocodeResults.get();
         } catch (InterruptedException | ExecutionException e) {
-           return found.get();
+           return isFound.get();
         }
-        setGeocode(found, geocodeResults);
+        setGeocode(isFound, geocodeResults);
 
-        return found.get();
+        return isFound.get();
     }
 
     /**
      * ajoute le listener au geocodeResults
-     * @param found stock si la recherche est fructueuse ou non
+     * @param isGeocodeFound stock si la recherche est fructueuse ou non
      * @param geocodeResults résultat de la recherche
      */
-    private void setGeocode(AtomicBoolean found, ListenableFuture<List<GeocodeResult>> geocodeResults) {
+    private void setGeocode(AtomicBoolean isGeocodeFound, ListenableFuture<List<GeocodeResult>> geocodeResults) {
         geocodeResults.addDoneListener(() -> {  // récupérer le résultat
             try {
                 List<GeocodeResult> geocodes = geocodeResults.get();
                 if (geocodes.size() > 0) { // trouver qlq chose
                     GeocodeResult result = geocodes.get(0);
                     displayResult(result);
-                    found.set(true);
+                    isGeocodeFound.set(true);
 
                 } else {
                     // pas d'adresse trouvée
-                    found.set(false);
+                    isGeocodeFound.set(false);
 
                 }
             } catch (InterruptedException | ExecutionException exception) {
-                found.set(false);
+                isGeocodeFound.set(false);
 
             }
         });
@@ -103,8 +103,8 @@ public class LocatorService {
      * @param geocodeResult le résultat d'une recherche
      */
     private void displayResult(GeocodeResult geocodeResult) {
-        GraphicsOverlay addressGraphicsOverlay = mapViewController.getAddressGraphicsOverlay();
-        addressGraphicsOverlay.getGraphics().clear();
+        List<Graphic> addressGraphicsOverlay = mapViewController.getAddressGraphicsOverlay();
+        addressGraphicsOverlay.clear();
 
         // creation de l'objet graphique avec l'adresse
         String label = geocodeResult.getLabel();
@@ -115,7 +115,7 @@ public class LocatorService {
                 TextSymbol.VerticalAlignment.BOTTOM);
         Point displayLocation = geocodeResult.getDisplayLocation();
         Graphic textGraphic = new Graphic(displayLocation, textSymbol);
-        addressGraphicsOverlay.getGraphics().add(textGraphic);
+        addressGraphicsOverlay.add(textGraphic);
 
         // creation de l'objet graphique avec le carré rouge
         SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE,
@@ -123,7 +123,7 @@ public class LocatorService {
                 MapController.ADDRESS_MARKER_SIZE);
 
         Graphic markerGraphic = new Graphic(displayLocation, geocodeResult.getAttributes(), markerSymbol);
-        addressGraphicsOverlay.getGraphics().add(markerGraphic);
+        addressGraphicsOverlay.add(markerGraphic);
 
         mapViewController.setViewPointCenter(displayLocation);
     }

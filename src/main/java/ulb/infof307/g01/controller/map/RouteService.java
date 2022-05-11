@@ -15,7 +15,6 @@ import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
 public class RouteService {
@@ -34,11 +33,11 @@ public class RouteService {
     }
 
 
-    public void onItinerary() {
+    public void onItinerary(Pair<Graphic, Graphic> selectedShop) {
+
         listener.setOnItineraryMode(true);
 
-        Pair<Graphic, Graphic> shopOverlay = listener.getSelectedShop();
-        if(shopOverlay == null && mapViewController.getItineraryGraphicsCircleList().isEmpty()) return;
+        if(selectedShop == null && mapViewController.getItineraryGraphicsCircleList().isEmpty()) return;
 
 
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
@@ -55,11 +54,12 @@ public class RouteService {
             }
             else {
                 text = "";
-                Graphic shop = shopOverlay.getLeft();
+                assert selectedShop != null;
+                Graphic shop = selectedShop.getLeft();
                 mapPoint = (Point) shop.getGeometry();
             }
             listener.addCircle(MapController.COLOR_BLUE, text, mapPoint, false);
-            listener.switchVisibilityContextMenu();
+            mapViewController.switchVisibilityContextMenu();
 
             int readyToCalculRoute = 2;
             if (mapViewController.getItineraryGraphicsCircleList().size() == readyToCalculRoute) {
@@ -111,7 +111,7 @@ public class RouteService {
                 itineraryGraphicsTextList.remove(departureIndex);
             }
 
-            else { listener.switchVisibilityContextMenu();}
+            else { mapViewController.switchVisibilityContextMenu();}
 
             itineraryGraphicsCercleList.remove(arrival);
             itineraryGraphicsTextList.remove(arrival);
@@ -196,9 +196,7 @@ public class RouteService {
     }
 
     public interface Listener{
-        void switchVisibilityContextMenu();
         void setOnItineraryMode(boolean isOnItineraryMode);
         void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
-        Pair<Graphic,Graphic> getSelectedShop();
     }
 }

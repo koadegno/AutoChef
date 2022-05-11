@@ -67,9 +67,15 @@ public class MapController extends Controller implements MapViewController.Liste
         FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-        viewController.start();
-        routeService = new RouteService(viewController,this);
-        locatorService = new LocatorService(viewController);
+        try {
+            onInitializeMapShop();
+            viewController.start();
+            routeService = new RouteService(viewController,this);
+            locatorService = new LocatorService(viewController);
+        } catch (SQLException e) {
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
+
+        }
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -117,7 +123,6 @@ public class MapController extends Controller implements MapViewController.Liste
      * Initialise les magasins sur la carte
      * @throws SQLException erreur au niveau de la base de donnée
      */
-    @Override
     public void onInitializeMapShop() throws SQLException {
 
         if(readOnlyMode){
@@ -167,6 +172,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * Met a jour le shop afficher sur la carte
      * @param shop le magasin existant qu'il faut mettre a jour
      */
+    @Override
     public void updateShop(Shop shop){
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
@@ -214,7 +220,11 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onItineraryClicked() {
-        routeService.onItinerary();
+        Pair<Graphic, Graphic> selectedShop= getSelectedShop();
+        if(selectedShop != null){
+            routeService.onItinerary(selectedShop);
+
+        }
     }
 
 
@@ -235,8 +245,7 @@ public class MapController extends Controller implements MapViewController.Liste
     /**
      * Rend inaccessible certains items du contexte menu
      */
-    @Override
-    public void switchVisibilityContextMenu() {
+    private void switchVisibilityContextMenu() {
         viewController.switchVisibilityContextMenu();
     }
 
@@ -284,7 +293,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * renvoie la paire d'objet graphique associé aux coordonnées cliquer
      * @return paire d'objet graphique
      */
-    public Pair<Graphic, Graphic> getSelectedShop(){
+    private Pair<Graphic, Graphic> getSelectedShop(){
         List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();
         List<Graphic> shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
@@ -304,13 +313,9 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param shopName le nom du magasin
      */
     @Override
-    public void onSearchShop(String shopName) {
-
-        List<Graphic> mapTextGraphics = viewController.getShopGraphicsTextList();
-        List<Graphic> mapCercleGraphics = viewController.getShopGraphicsCircleList();
-
+    public void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics) {
         boolean isVisible;
-        for(int index = 0; index < mapTextGraphics.size(); index++){
+        for(int index = 0; index < mapCercleGraphics.size(); index++){
             Graphic textGraphic = mapTextGraphics.get(index);
             Graphic cercleGraphic = mapCercleGraphics.get(index);
             TextSymbol textSymbol = (TextSymbol) textGraphic.getSymbol();
@@ -327,10 +332,11 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param mouseX La position en X de la souris
      * @param mouseY La position en Y de la souris
      */
-    public void highlightGraphicPoint(double mouseX, double mouseY) {
+    @Override
+    public void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay) {
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);
-        ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = viewController.getMapView().identifyGraphicsOverlayAsync(
-                viewController.getShopGraphicsCircleList(),
+        ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = mapView.identifyGraphicsOverlayAsync(
+                shopGraphicOverlay,
                 mapViewPoint, SIZE, false, 1);
 
         graphicsOverlayAsyncIdentified.addDoneListener(() -> {
@@ -354,9 +360,8 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     private boolean performGeocode(String address) {
         boolean isGeocodePerformed = locatorService.performGeocode(address);
-        System.out.println("le res : " + isGeocodePerformed);
         if( !isGeocodePerformed){
-            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Erreur lors de la récupération du résultat\nContactez un responsable");
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Adresse non valide");
         }
         return isGeocodePerformed;
 
