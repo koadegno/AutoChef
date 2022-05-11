@@ -9,7 +9,6 @@ import com.esri.arcgisruntime.tasks.networkanalysis.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
@@ -33,7 +32,7 @@ public class RouteService {
     }
 
 
-    public void itinerary(Pair<Graphic, Graphic> selectedShop, Double posX, Double posY) {
+    public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint) {
 
         listener.setOnItineraryMode(true);
 
@@ -46,11 +45,8 @@ public class RouteService {
         // Affiche le texte en fonction de ce qui est recherché
         if(isDelete){
             String text;
-            Point mapPoint;
             if (mapViewController.getIfSearchDeparture()) {
                 text = "Départ";
-                MapView mapView = mapViewController.getMapView();
-                mapPoint = cursorPoint(mapView,posX,posY);
             }
             else {
                 text = "";
@@ -82,7 +78,8 @@ public class RouteService {
     }
 
     /**
-     * Supprime l'itinéraire
+     *  Supprime l'itinéraire
+     * @return Vrai si l'itinéraire est supprimé
      */
     public boolean onDeleteItinerary() {
 
@@ -124,7 +121,11 @@ public class RouteService {
 
     }
 
-    public boolean deleteOldRoute() {
+    /**
+     * supprime l'ancien itinéraire s'il existe
+     * @return Vrai si l'itinéraire est supprimé
+     */
+    private boolean deleteOldRoute() {
         int itineraryAlreadyExist = 1;
         boolean isDelete = true;
         if (mapViewController.getItineraryGraphicsCircleList().size() > itineraryAlreadyExist) { isDelete = onDeleteItinerary();}
@@ -182,14 +183,6 @@ public class RouteService {
                 });
             } catch (Exception e) { ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Problème avec l'itinéraire"); }
         });
-    }
-
-    /**
-     * Vitesse moyenne de vélo calculer à partir de donnée d'internet
-     * @return la vitesse moyenne de vélo
-     */
-    private int getTimeBike() {
-        return AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
     }
 
     public interface Listener{

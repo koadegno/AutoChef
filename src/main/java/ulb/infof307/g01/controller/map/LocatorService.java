@@ -57,7 +57,7 @@ public class LocatorService {
      *
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
-    public boolean performGeocode(String address) {
+    public boolean performGeocode(String address,List<Graphic> addressGraphicsOverlay) {
         AtomicBoolean isFound= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
         ListenableFuture<List<GeocodeResult>> geocodeResults = getGeocodeAsync(address);
 
@@ -66,7 +66,7 @@ public class LocatorService {
         } catch (InterruptedException | ExecutionException e) {
            return isFound.get();
         }
-        setGeocode(isFound, geocodeResults);
+        setGeocode(isFound, geocodeResults,addressGraphicsOverlay);
 
         return isFound.get();
     }
@@ -76,13 +76,13 @@ public class LocatorService {
      * @param isGeocodeFound stock si la recherche est fructueuse ou non
      * @param geocodeResults résultat de la recherche
      */
-    private void setGeocode(AtomicBoolean isGeocodeFound, ListenableFuture<List<GeocodeResult>> geocodeResults) {
+    private void setGeocode(AtomicBoolean isGeocodeFound, ListenableFuture<List<GeocodeResult>> geocodeResults,List<Graphic> addressGraphicsOverlay) {
         geocodeResults.addDoneListener(() -> {  // récupérer le résultat
             try {
                 List<GeocodeResult> geocodes = geocodeResults.get();
                 if (geocodes.size() > 0) { // trouver qlq chose
                     GeocodeResult result = geocodes.get(0);
-                    displayResult(result);
+                    displayResult(result,addressGraphicsOverlay);
                     isGeocodeFound.set(true);
 
                 } else {
@@ -102,8 +102,7 @@ public class LocatorService {
      *
      * @param geocodeResult le résultat d'une recherche
      */
-    private void displayResult(GeocodeResult geocodeResult) {
-        List<Graphic> addressGraphicsOverlay = mapViewController.getAddressGraphicsOverlay();
+    private void displayResult(GeocodeResult geocodeResult,List<Graphic> addressGraphicsOverlay ) {
         addressGraphicsOverlay.clear();
 
         // creation de l'objet graphique avec l'adresse

@@ -32,8 +32,7 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final int COLOR_BLUE   = 0xFF008DFF;
     public static final int ADDRESS_SIZE = 18;
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
-    public static final int CORRECTION_POSITION_X = 10, SIZE = 10;
-    public static final int CORRECTION_POSITION_Y = 5;
+    public static final int SIZE = 10;
     public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
 
     public static final int WIDTH = 4;
@@ -158,11 +157,15 @@ public class MapController extends Controller implements MapViewController.Liste
     public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
 
         //il y a une correction de la position
-        Point2D cursorPoint2D = new Point2D(cursorX,cursorY);
-        Point mapPoint = mapView.screenToLocation(cursorPoint2D);
+        Point mapPoint = cursorPoint(mapView, cursorX, cursorY);
 
         ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
         shopController.show();
+    }
+
+    private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
+        Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
+        return mapView.screenToLocation(cursorPoint2D);
     }
 
     /**
@@ -186,10 +189,10 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void onUpdateShopClicked() throws SQLException {
 
-        Pair<Graphic, Graphic> shopOverlays = getSelectedShop();
-        if(shopOverlays == null) return;
-        Graphic cercleGraphic = shopOverlays.getLeft();
-        Graphic textGraphic = shopOverlays.getRight();
+        Pair<Graphic, Graphic> graphicPair = getSelectedShop();
+        if(graphicPair == null) return;
+        Graphic cercleGraphic = graphicPair.getLeft();
+        Graphic textGraphic = graphicPair.getRight();
 
         Point mapPoint = (Point) cercleGraphic.getGeometry();
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
@@ -207,6 +210,9 @@ public class MapController extends Controller implements MapViewController.Liste
         listenerBackPreviousWindow.onReturn();
     }
 
+    /**
+     * suppression de l'itinéraire
+     */
     @Override
     public void onDeleteItineraryClicked() {
         routeService.onDeleteItinerary();
@@ -218,14 +224,12 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param posY position du curseur en Y
      */
     @Override
-    public void onItineraryClicked(Double posX, Double posY) {
+    public void onItineraryClicked(Double posX, Double posY, MapView mapView) {
         Pair<Graphic, Graphic> selectedShop= getSelectedShop();
         if(selectedShop != null){
-            routeService.itinerary(selectedShop, posX, posY);
-
+            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY));
         }
     }
-
 
     /**
      * Lance la page d'aide
@@ -248,15 +252,14 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.switchVisibilityContextMenu();
     }
 
-
     /**
      * Recherche avec l'adresse d'un magasin
      * @param address l'adresse du magasin (Ville, rue, commune, numéro)
      * @return boolean est ce que l'adresse a été trouvé ou non
      */
     @Override
-    public boolean onSearchAddress(String address) {
-        return !address.isBlank() && performGeocode(address);
+    public boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay) {
+        return !address.isBlank() && performGeocode(address,addressGraphicsOverlay);
     }
 
     /**
@@ -357,8 +360,8 @@ public class MapController extends Controller implements MapViewController.Liste
      *
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
-    private boolean performGeocode(String address) {
-        boolean isGeocodePerformed = locatorService.performGeocode(address);
+    private boolean performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
+        boolean isGeocodePerformed = locatorService.performGeocode(address,addressGraphicsOverlay);
         if( !isGeocodePerformed){
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Adresse non valide");
         }
