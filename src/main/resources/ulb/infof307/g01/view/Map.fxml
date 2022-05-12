@@ -1,79 +1,57 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
-   <VBox prefHeight="77.0" prefWidth="750.0">
-      <children>
-         <MenuBar fx:id="appMenuBar" prefHeight="26.0" prefWidth="750.0">
-            <menus>
-               <Menu mnemonicParsing="false" text="Profil">
-                  <items>
-                     <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
-                  </items>
-               </Menu>
-               <Menu fx:id="helpRecipeMenu" mnemonicParsing="false" text="Aide">
-                  <items>
-                     <MenuItem mnemonicParsing="false" onAction="#helpMap" text="Tutoriel" />
-                  </items>
-               </Menu>
-            </menus>
-         </MenuBar>
-          <MenuBar>
-              <Menu fx:id="searchShopNameMenu" mnemonicParsing="false" text="Chercher un magasin">
-                  <graphic>
-                      <TextField fx:id="textFieldMenuBar" onAction="#onShopSearchBoxAction" promptText="Chercher un nom de magasin" />
-                  </graphic>
-              </Menu>
-              <Menu fx:id="searchAdressMenu" mnemonicParsing="false" text="Chercher une adresse">
-                  <graphic>
-                      <TextField fx:id="searchBox" onAction="#onAddressSearchBoxAction" promptText="Chercher une adresse" />
-                  </graphic>
-              </Menu>
-            <Menu mnemonicParsing="false">
-               <graphic>
-                  <Button mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="102.0" text="Retour" />
-               </graphic>
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
+    <VBox prefHeight="77.0" prefWidth="750.0">
+        <MenuBar fx:id="appMenuBar" prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
+            <Menu mnemonicParsing="false" text="Profil">
+                <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter"/>
             </Menu>
-          </MenuBar>
-      </children>
-   </VBox>
-   <VBox layoutX="11.0" layoutY="61.0" prefHeight="539.0" prefWidth="733.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="61.0">
-      <children>
-          <StackPane fx:id="mapViewStackPane" prefHeight="498.0" prefWidth="744.0" />
-         <VBox prefHeight="69.0" prefWidth="744.0" spacing="2.0">
-            <children>
-               <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="722.0">
-                  <children>
-                     <Label prefHeight="17.0" prefWidth="80.0" text="    Iténéraire " />
-                  </children>
-               </HBox>
-               <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                  <children>
-                     <Label prefHeight="17.0" prefWidth="80.0" text="    Durée : " />
-                     <Label fx:id="timeFeetLabel" prefHeight="17.0" prefWidth="80.0" />
-                     <Label prefHeight="17.0" prefWidth="80.0" text="à pied " />
-                     <Label fx:id="timeBikeLabel" prefHeight="17.0" prefWidth="80.0" />
-                     <Label prefHeight="17.0" prefWidth="80.0" text="en vélo" />
-                  </children>
-               </HBox>
-               <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
-                  <children>
-                     <Label prefHeight="17.0" prefWidth="80.0" text="    Kilomètres :" />
-                     <Label fx:id="lengthLabel" prefHeight="17.0" prefWidth="80.0" />
-                  </children>
-               </HBox>
-            </children>
-         </VBox>
-      </children>
-   </VBox>
+            <Menu fx:id="helpRecipeMenu" mnemonicParsing="false" text="Aide">
+                <MenuItem mnemonicParsing="false" onAction="#helpMap" text="Tutoriel"/>
+            </Menu>
+        </MenuBar>
+        <MenuBar style="-fx-background-color: #915F6D;">
+            <Menu fx:id="searchShopNameMenu" mnemonicParsing="false" text="Chercher un magasin">
+                <graphic>
+                    <TextField fx:id="textFieldMenuBar" onAction="#onShopSearchBoxAction"
+                               promptText="Chercher un nom de magasin"/>
+                </graphic>
+            </Menu>
+            <Menu fx:id="searchAdressMenu" mnemonicParsing="false" text="Chercher une adresse">
+                <graphic>
+                    <TextField fx:id="searchBox" onAction="#onAddressSearchBoxAction"
+                               promptText="Chercher une adresse"/>
+                </graphic>
+            </Menu>
+          <Menu mnemonicParsing="false">
+              <graphic>
+                  <Button mnemonicParsing="false" onAction="#returnMainMenu" prefHeight="25.0" prefWidth="102.0"
+                          text="Retour"/>
+              </graphic>
+          </Menu>
+        </MenuBar>
+    </VBox>
+    <VBox layoutX="11.0" layoutY="61.0" prefHeight="539.0" prefWidth="733.0" AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="11.0" AnchorPane.rightAnchor="6.0" AnchorPane.topAnchor="61.0">
+        <StackPane fx:id="mapViewStackPane" prefHeight="498.0" prefWidth="744.0"/>
+        <VBox prefHeight="69.0" prefWidth="744.0" spacing="2.0">
+            <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="722.0">
+                <Label prefHeight="17.0" prefWidth="80.0" text="    Iténéraire "/>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                <Label prefHeight="17.0" prefWidth="80.0" text="    Durée : "/>
+                <Label fx:id="timeFeetLabel" prefHeight="17.0" prefWidth="80.0"/>
+                <Label prefHeight="17.0" prefWidth="80.0" text="à pied "/>
+                <Label fx:id="timeBikeLabel" prefHeight="17.0" prefWidth="80.0"/>
+                <Label prefHeight="17.0" prefWidth="80.0" text="en vélo"/>
+            </HBox>
+            <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
+                <Label prefHeight="17.0" prefWidth="80.0" text="    Kilomètres :"/>
+                <Label fx:id="lengthLabel" prefHeight="17.0" prefWidth="80.0"/>
+            </HBox>
+        </VBox>
+    </VBox>
 </AnchorPane>
