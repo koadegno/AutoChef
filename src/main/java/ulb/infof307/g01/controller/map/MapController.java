@@ -39,8 +39,8 @@ public class MapController extends Controller implements MapViewController.Liste
     public static final float ADDRESS_MARKER_SIZE = 12.0f;
     public static final int SIZE = 10;
     public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
-
     public static final int WIDTH = 4;
+
     private MapViewController viewController;
 
     private boolean isOnItineraryMode;
@@ -120,7 +120,6 @@ public class MapController extends Controller implements MapViewController.Liste
             viewController.addItineraryGraphics(circlePoint,textPoint);
         }
     }
-
 
 
     /**
@@ -276,13 +275,6 @@ public class MapController extends Controller implements MapViewController.Liste
         userLogout();
     }
 
-    /**
-     * Rend inaccessible certains items du contexte menu
-     */
-    private void switchVisibilityContextMenu() {
-        viewController.switchVisibilityContextMenu();
-    }
-
 
     /**
      * Recherche avec l'adresse d'un magasin
@@ -328,7 +320,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * @return paire d'objet graphique
      */
     private Pair<Graphic, Graphic> getSelectedShop(){
-        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();
+        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();//TODO changer ca
         List<Graphic> shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
         for (int i = 0; i < shopGraphicsCircleList.size(); i++) {
