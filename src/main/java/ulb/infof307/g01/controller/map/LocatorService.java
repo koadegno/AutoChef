@@ -61,6 +61,7 @@ public class LocatorService {
         AtomicBoolean isFound= new AtomicBoolean(false); // tu utilises ça, car le geocodeResults est exécuté de manière asynchrone il te faut donc un type atomique
         ListenableFuture<List<GeocodeResult>> geocodeResults = getGeocodeAsync(address);
 
+        // attendre que le geocode se fasse
         try {
             geocodeResults.get();
         } catch (InterruptedException | ExecutionException e) {

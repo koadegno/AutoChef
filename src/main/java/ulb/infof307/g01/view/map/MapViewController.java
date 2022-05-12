@@ -38,7 +38,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public Label timeFeetLabel;
     public Label timeBikeLabel;
     public Label lengthLabel;
-    private boolean ifSearchDeparture = false;
+    private boolean isSearchDepartureActive = false;
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
@@ -159,10 +159,10 @@ public class MapViewController extends ViewController<MapViewController.Listener
         });
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView));
+        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView,getItineraryGraphicsCircleList(),getItineraryGraphicsTextList(), isSearchDepartureActive));
 
         // Supprime l'itinéraire
-        deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked());
+        deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked(getItineraryGraphicsCircleList(),getItineraryGraphicsTextList()));
     }
 
     public void itineraryInformation(double timeFeet, double timeBike, double length){
@@ -180,20 +180,21 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
 
-    public boolean getIfSearchDeparture() {return ifSearchDeparture;}
+    public boolean getSearchDepartureActive() {return isSearchDepartureActive;}
 
-    public void setIfSearchDeparture() {ifSearchDeparture = !ifSearchDeparture;}
+    public void setIfSearchDeparture() {
+        isSearchDepartureActive = !isSearchDepartureActive;}
 
-    public void modifyVisibilityAddShopMenuItem() {addShopMenuItem.setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityAddShopMenuItem() {addShopMenuItem.setVisible(getSearchDepartureActive());}
 
-    public void modifyVisibilityDeleteShopMenuItem() {deleteItineraryItem.setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityDeleteShopMenuItem() {deleteItineraryItem.setVisible(getSearchDepartureActive());}
 
-    public void modifyVisibilityModifyShopMenuItem() {modifyShopMenuItem.setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityModifyShopMenuItem() {modifyShopMenuItem.setVisible(getSearchDepartureActive());}
 
-    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(getSearchDepartureActive());}
 
     public void modifyItineraryShopMenuItemText() {
-        if (getIfSearchDeparture()) {itineraryShopMenuItem.setText("Point de départ");}
+        if (getSearchDepartureActive()) {itineraryShopMenuItem.setText("Point de départ");}
         else {itineraryShopMenuItem.setText("Itinéraire");}
     }
 
@@ -271,8 +272,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();
-        void onItineraryClicked(Double posX, Double posY, MapView mapView);
-        void onDeleteItineraryClicked();
+        void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryList, List<Graphic> itineraryTextList, boolean isDeparture);
+        void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList);
         void helpMapClicked();
         void logout();
         void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay);

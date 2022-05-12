@@ -91,10 +91,10 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param color        Couleur du cercle
      * @param textCircle   Texte écrit à côté du cercle
      * @param coordinate   Coordonnée du cercle
-     * @param shop         Si l'élément à ajouter est un magasin
+     * @param isShop       Vrai si l'élément à ajouter est un magasin
      */
     @Override
-    public void addCircle(int color, String textCircle, Point coordinate, Boolean shop) {
+    public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop) {
 
         //crée un cercle
         SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
@@ -112,7 +112,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
         // rajoute les cercles créés au bon overlay
 
-        if (shop) {
+        if (isShop) {
             viewController.addShopGraphics(circlePoint,textPoint);
         }
 
@@ -122,10 +122,7 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
 
-    /**
-     * Initialise les magasins sur la carte
-     * @throws SQLException erreur au niveau de la base de donnée
-     */
+
     /**
      * Initialise les magasins sur la carte
      * @throws SQLException erreur au niveau de la base de donnée
@@ -172,6 +169,11 @@ public class MapController extends Controller implements MapViewController.Liste
         shopController.show();
     }
 
+    /**
+     * récupère la coordonnée géographique associé au curseur
+     * @param mapView la mapView contient la fonction de calcul
+     * @return une coordonnée géographique correspondant a la position du curseur et la position de la map
+     */
     private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
         Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
         return mapView.screenToLocation(cursorPoint2D);
@@ -221,22 +223,42 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * suppression de l'itinéraire
+     * @param itineraryGraphicsCercleList La liste des objets cercle graphique associés à l'itinéraire
+     * @param itineraryGraphicsTextList La liste des objets texte graphique associés à l'itinéraire
      */
     @Override
-    public void onDeleteItineraryClicked() {
-        routeService.onDeleteItinerary();
+    public void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList) {
+        routeService.onDeleteItinerary(itineraryGraphicsCercleList, itineraryGraphicsTextList);
     }
 
     /**
-     * Récupère la position départ ou d'arrivée de l'itinéraire et y dessine un cercle bleu
+     * Lance l'itinéraire quand la position de départ et d'arrivée sont disponibles
      * @param posX position du curseur en X
      * @param posY position du curseur en Y
+     * @param itineraryCircleList la liste des objets graphique present sur l'écran pour l'itinéraire (cercle)
+     * @param itineraryTextList la liste des objets graphique present sur l'écran pour l'itinéraire (texte)
+     * @param isDeparture Vrai si on place le point associer au depart
      */
     @Override
-    public void onItineraryClicked(Double posX, Double posY, MapView mapView) {
+    public void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList, boolean isDeparture) {
         Pair<Graphic, Graphic> selectedShop= getSelectedShop();
         if(selectedShop != null){
-            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY));
+            int readyToCalculRoute = 2;
+
+            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY), itineraryCircleList,itineraryTextList,isDeparture );
+            viewController.switchVisibilityContextMenu();
+
+            if (itineraryCircleList.size() == readyToCalculRoute) {
+                boolean isRouteFound = routeService.calculateRoute(itineraryCircleList);
+                System.out.println("la route a ete trouvé : " + isRouteFound);
+                if(! isRouteFound) ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
+                else{
+                    viewController.itineraryInformation(routeService.getTotalTime(),
+                            routeService.getTotalTimeBike(),
+                            routeService.getTotalLength());
+                }
+            }
+
         }
     }
 
