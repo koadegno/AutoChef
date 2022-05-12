@@ -2,17 +2,14 @@ package ulb.infof307.g01.view.recipe;
 
 
 import javafx.collections.FXCollections;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -45,23 +42,21 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        try {
-            ArrayList<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
-            ArrayList<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
-
-            dietComboBox.setItems(FXCollections.observableArrayList(recipeCategoriesList));
-            typeComboBox.setItems(FXCollections.observableArrayList(recipeTypesList));
-        } catch (SQLException e) {
-            showErrorSQL();
-        }
-
-        nbPersonSpinner.setValueFactory(
-                new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000)
-        );
+        nbPersonSpinner.setValueFactory(new SpinnerValueFactory.IntegerSpinnerValueFactory(1, 1000));
         this.onlyIntValue(nbPersonSpinner);
         tableColumnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
         tableColumnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
         tableColumnUnity.setCellValueFactory(new PropertyValueFactory<>("nameUnity"));
+    }
+
+    /**
+     * Initialise les élèments pour les combobox diet et type
+     * @param recipeCategoriesList une liste qui contient les noms des catégories de recettes
+     * @param recipeTypesList une liste qui contient les noms des types de recettes
+     */
+    public void initCombobox(ArrayList<String> recipeCategoriesList, ArrayList<String> recipeTypesList ){
+        dietComboBox.setItems(FXCollections.observableArrayList(recipeCategoriesList));
+        typeComboBox.setItems(FXCollections.observableArrayList(recipeTypesList));
     }
 
     /**
@@ -172,9 +167,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         void onModifyProductsButton();
         void onCancelButton();
         void onCancelModifyButton();
-
         void onHelpCreateRecipeClicked();
-
         void logout();
     }
 }

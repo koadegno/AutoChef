@@ -44,7 +44,6 @@ public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeV
     }
 
     public  interface FavoriteRecipesListener{
-
         void logout();
         void onCancelButton();
         void onFavoriteRecipesTableViewClicked(Recipe recipe);
