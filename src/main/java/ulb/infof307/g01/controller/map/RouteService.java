@@ -63,7 +63,7 @@ public class RouteService{
      */
     public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint, List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList, boolean isDeparture) {
 
-        listener.setOnItineraryMode(true);
+        listener.setOnItineraryMode(true);//TODO trouver un moyen de bouger ca
         if(selectedShop == null && itineraryCircleList.isEmpty()) return;
 
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
@@ -112,7 +112,7 @@ public class RouteService{
             itineraryGraphicsCercleList.remove(arrival);
             itineraryGraphicsTextList.remove(arrival);
 
-            listener.setOnItineraryMode(false);
+            listener.setOnItineraryMode(false);//TODO trouver un moyen de bouger ca
             return true;
         }
 

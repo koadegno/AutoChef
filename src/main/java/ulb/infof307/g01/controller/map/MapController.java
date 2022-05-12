@@ -121,7 +121,6 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
-
     /**
      * Initialise les magasins sur la carte
      * @throws SQLException erreur au niveau de la base de donnée
@@ -160,7 +159,6 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
 
-        //il y a une correction de la position
         Point mapPoint = cursorPoint(mapView, cursorX, cursorY);
 
         ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
@@ -274,7 +272,6 @@ public class MapController extends Controller implements MapViewController.Liste
         userLogout();
     }
 
-
     /**
      * Recherche avec l'adresse d'un magasin
      * @param address l'adresse du magasin (Ville, rue, commune, numéro)
@@ -305,6 +302,7 @@ public class MapController extends Controller implements MapViewController.Liste
     /**
      * Supprime le point sélectionné de l'overlay
      */
+    @Override
     public void onDeleteShopClicked() throws SQLException {
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
@@ -401,16 +399,13 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
     private Point performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
-        Point adressPosition = locatorService.performGeocode(address,addressGraphicsOverlay);
-        if( adressPosition == null){
+        Point addressPosition = locatorService.performGeocode(address,addressGraphicsOverlay);
+        if( addressPosition == null){
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Adresse non valide");
         }
-        return adressPosition;
+        return addressPosition;
 
     }
-
-
-
 
 
 }
