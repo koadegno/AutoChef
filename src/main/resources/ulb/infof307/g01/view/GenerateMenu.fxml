@@ -1,37 +1,66 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-
-<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="300.0" prefWidth="500.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" >
-   <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-         <children>
-            <Label text="Nombre de plats végétariens : " />
-            <Spinner fx:id="vegetarianSpinner" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
-         <children>
-            <Label text="Nombre de plats de viande : " />
-            <Spinner fx:id="meatSpinner" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="84.0" prefWidth="500.0" spacing="50.0">
-         <children>
-            <Label text="Nombre de plats de poisson : " />
-            <Spinner fx:id="fishSpinner" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
-         <children>
-            <Button  fx:id="cancelButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Annuler " />
-            <Button  fx:id="validateButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0" text="Valider" />
-         </children>
-      </HBox>
-   </children>
+<VBox alignment="CENTER" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity"
+      prefHeight="300.0" prefWidth="500.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1">
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0"
+         style="-fx-background-color: E9D9C6;">
+      <Label text="Nombre de plats végétariens : ">
+         <font>
+            <Font name="Yu Gothic Medium" size="18.0"/>
+         </font>
+      </Label>
+      <Spinner fx:id="vegetarianSpinner" style="-fx-background-color: #915F6D;">
+         <HBox.margin>
+            <Insets left="-5.0"/>
+         </HBox.margin>
+      </Spinner>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0"
+         style="-fx-background-color: E9D9C6;">
+      <Label text="Nombre de plats à la viande : ">
+         <font>
+            <Font size="18.0"/>
+         </font>
+      </Label>
+      <Spinner fx:id="meatSpinner" style="-fx-background-color: #915F6D;">
+         <HBox.margin>
+            <Insets left="7.0"/>
+         </HBox.margin>
+      </Spinner>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="84.0" prefWidth="500.0" spacing="50.0" style="-fx-background-color: E9D9C6;">
+      <Label text="Nombre de plats au poisson : ">
+         <font>
+            <Font name="Yu Gothic Medium" size="18.0"/>
+         </font>
+      </Label>
+      <Spinner fx:id="fishSpinner" style="-fx-background-color: #915F6D;"/>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0"
+         style="-fx-background-color: E9D9C6;">
+      <Button fx:id="cancelButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0"
+              style="-fx-background-color: #cf1020;" text="Annuler " textFill="WHITE">
+         <font>
+            <Font name="Yu Gothic Medium" size="16.0"/>
+         </font>
+         <HBox.margin>
+            <Insets left="10.0"/>
+         </HBox.margin>
+      </Button>
+      <Button fx:id="validateButton" mnemonicParsing="false" prefHeight="30.0" prefWidth="100.0"
+              style="-fx-background-color: YELLOWGREEN;" text="Valider" textFill="WHITE">
+         <font>
+            <Font name="Yu Gothic Medium" size="16.0"/>
+         </font>
+         <HBox.margin>
+            <Insets left="200.0" right="10.0"/>
+         </HBox.margin>
+      </Button>
+   </HBox>
 </VBox>
