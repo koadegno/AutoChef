@@ -218,7 +218,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void initReadOnlyMode() {
         appMenuBar.setVisible(false);
         searchShopNameMenu.setVisible(false);
-        searchAddressMenu.setVisible(false);
+        //searchAddressMenu.setVisible(false);
     }
 
     public void helpMap() {

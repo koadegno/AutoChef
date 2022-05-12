@@ -109,8 +109,8 @@ public class MapController extends Controller implements MapViewController.Liste
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
-
         // rajoute les cercles créés au bon overlay
+        System.out.println(coordinate);
 
         if (shop) {
             viewController.addShopGraphics(circlePoint,textPoint);
@@ -147,7 +147,6 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.initReadOnlyMode();
         List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
         List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
-        //List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(); (Departure?)
         for(Shop shop: shopListWithProducts){
             String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
             int color = COLOR_BLACK;
@@ -269,7 +268,24 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay) {
-        return !address.isBlank() && performGeocode(address,addressGraphicsOverlay);
+        if(address.isBlank()) return false;
+
+        Point adressPosition = performGeocode(address, addressGraphicsOverlay);
+
+        if(readOnlyMode && adressPosition != null){
+            System.out.println(adressPosition.getX() +" " +adressPosition.getY());
+            try {
+                List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(productListToSearchInShops,adressPosition);
+                for(Shop shop: nearestShopWithProductList){
+                    String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
+                    addCircle(COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
+
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return adressPosition != null;
     }
 
     /**
@@ -370,12 +386,12 @@ public class MapController extends Controller implements MapViewController.Liste
      *
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
-    private boolean performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
-        boolean isGeocodePerformed = locatorService.performGeocode(address,addressGraphicsOverlay);
-        if( !isGeocodePerformed){
+    private Point performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
+        Point adressPosition = locatorService.performGeocode(address,addressGraphicsOverlay);
+        if( adressPosition == null){
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Adresse non valide");
         }
-        return isGeocodePerformed;
+        return adressPosition;
 
     }
 
