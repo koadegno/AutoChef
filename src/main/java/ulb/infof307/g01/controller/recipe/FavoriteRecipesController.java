@@ -8,7 +8,6 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
-
 import java.util.List;
 
 /**
