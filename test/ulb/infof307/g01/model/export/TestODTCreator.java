@@ -15,6 +15,9 @@ import java.util.Comparator;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test de l'exporatation en ODT
+ */
 class TestODTCreator {
     public static final String NAME_SHOPPING_LIST = "test/testShoppingList";
     static private ShoppingList shoppingList;

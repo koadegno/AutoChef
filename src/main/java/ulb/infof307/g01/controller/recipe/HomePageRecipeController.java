@@ -11,6 +11,7 @@ import ulb.infof307.g01.view.recipe.*;
 
 /**
  * Contrôleur responsable de tous les écrans en lien avec les recettes
+ * Permet d'accéder à la création d'une recette, la visualisation des toutes ses recettes et de ses recettes favorites
  */
 public class HomePageRecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener, ListenerBackPreviousWindow {
 

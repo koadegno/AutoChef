@@ -16,6 +16,10 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Classe qui contrôle l'affichage de tous les menus existants de l'utilisateur
+ * Permet de voir une liste de menus
+ */
 public class UserMenusController extends Controller implements UserMenusViewController.Listener,ListenerBackPreviousWindow {
     private ArrayList<Menu> menus ;
     private List<String> allMenusNames;

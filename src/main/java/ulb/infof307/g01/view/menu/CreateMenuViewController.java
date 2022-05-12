@@ -11,6 +11,10 @@ import ulb.infof307.g01.view.ViewController;
 import java.net.URL;
 import java.util.ResourceBundle;
 
+/**
+ * La classe gère la vue pour la création d'un menu
+ */
+
 public class CreateMenuViewController extends ViewController<CreateMenuViewController.Listener> implements Initializable{
     @FXML
     ComboBox<Day> daysComboBox;

@@ -16,7 +16,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
 /**
- * Classe qui permet d'exporter une liste de course en pdf
+ * Classe qui permet d'exporter une liste de course en PDF
  */
 public class PDFCreator {
     private static String nameFile = null;

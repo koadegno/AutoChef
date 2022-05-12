@@ -20,6 +20,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Classe qui contrôle la création d'une recette
+ */
 public class CreateRecipeController extends Controller implements CreateRecipeViewController.CreateRecipeListener {
 
     private CreateRecipeViewController createRecipeViewController;

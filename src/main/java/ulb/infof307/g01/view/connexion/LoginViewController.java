@@ -5,6 +5,10 @@ import javafx.fxml.FXML;
 import javafx.scene.control.TextField;
 import ulb.infof307.g01.view.ViewController;
 
+/**
+ * La classe gère la partie vue pour la connexion d'un compte
+ */
+
 public class LoginViewController extends ViewController<LoginViewController.LoginListener> {
     @FXML
     private TextField password;

@@ -12,6 +12,10 @@ import ulb.infof307.g01.view.connexion.SignUpViewController;
 
 import java.sql.SQLException;
 
+/**
+ * Classe qui contrôle la creation d'un utilisateur
+ * Est créée par le LoginController
+ */
 public class SignUpController extends Controller implements SignUpViewController.SignUpListener {
 
     private SignUpViewController signUpViewController;

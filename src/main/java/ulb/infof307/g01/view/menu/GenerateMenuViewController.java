@@ -11,6 +11,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
 
+/**
+ * La classe gère la vue de la popup qui permet de générer un menu
+ */
 
 public class GenerateMenuViewController extends ViewController<GenerateMenuViewController.GenerateMenuListener> implements Initializable {
     public static final int SPINNER_MAX = 1000;

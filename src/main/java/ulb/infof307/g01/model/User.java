@@ -1,6 +1,8 @@
 package ulb.infof307.g01.model;
 
-//TODO: crée une class juste pour l'address
+/**
+ * Classe représentant un utilisateur
+ */
 public class User {
     private Address address;
     private int id = -1;

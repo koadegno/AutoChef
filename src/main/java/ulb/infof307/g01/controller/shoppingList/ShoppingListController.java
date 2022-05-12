@@ -16,7 +16,9 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
+/**
+ * Contrôleur abstrait de la liste de course
+ */
 public abstract class ShoppingListController extends Controller implements ShoppingListViewController.Listener {
     protected ModifyShoppingListViewController modifyShoppingListViewController;
     protected CreateShoppingListViewController createShoppingListViewController;

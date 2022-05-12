@@ -12,6 +12,10 @@ import ulb.infof307.g01.view.connexion.LoginViewController;
 import java.sql.SQLException;
 import java.util.Objects;
 
+/**
+ * Classe qui contrôle la gestion du login
+ * Créée au démarrage
+ */
 public class LoginController extends Controller implements LoginViewController.LoginListener,  ListenerBackPreviousWindow {
 
     private LoginViewController loginViewController;

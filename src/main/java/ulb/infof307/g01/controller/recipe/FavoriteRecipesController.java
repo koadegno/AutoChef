@@ -11,6 +11,10 @@ import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
 
 import java.util.List;
 
+/**
+ * Classe qui contrôle les recettes favorites d'un utilisateur
+ * Permet d'afficher une liste des recettes favorites + de visualiser une recette sélectionnée
+ */
 public class FavoriteRecipesController extends Controller implements FavoriteRecipeViewController.FavoriteRecipesListener,ListenerBackPreviousWindow {
 
     Scene sceneFavoriteRecipe = null;

@@ -13,6 +13,9 @@ import ulb.infof307.g01.view.shoppingList.ExportShoppingListViewController;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * Contrôleur pour la fenêtre d'exportation de la liste de course
+ */
 public class ExportShoppingListController extends Controller implements ExportShoppingListViewController.Listener {
     private ExportShoppingListViewController exportShoppingListViewController;
     private Stage popupExportShoppingList;

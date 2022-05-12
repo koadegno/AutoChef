@@ -25,6 +25,11 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Classe qui contrôle les fonctionnalités de la map
+ * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
+ * chemin d'un point A à un point B
+ */
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
 
     public static final int COLOR_RED = 0xFFFF0000;
@@ -117,6 +122,10 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
 
+    /**
+     * Initialise les magasins sur la carte
+     * @throws SQLException erreur au niveau de la base de donnée
+     */
     /**
      * Initialise les magasins sur la carte
      * @throws SQLException erreur au niveau de la base de donnée
@@ -251,6 +260,7 @@ public class MapController extends Controller implements MapViewController.Liste
     private void switchVisibilityContextMenu() {
         viewController.switchVisibilityContextMenu();
     }
+
 
     /**
      * Recherche avec l'adresse d'un magasin

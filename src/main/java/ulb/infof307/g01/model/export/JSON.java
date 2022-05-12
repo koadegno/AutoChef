@@ -12,6 +12,9 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
 
+/**
+ * classe d'exportation d'une recette en JSON
+ */
 public class JSON {
 
     private String nameRecipeToAdd;

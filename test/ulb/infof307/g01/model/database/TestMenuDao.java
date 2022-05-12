@@ -14,6 +14,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test du DAO menu
+ */
 class TestMenuDao {
 
     static private final String meat = "Viande";

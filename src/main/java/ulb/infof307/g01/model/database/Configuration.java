@@ -7,6 +7,7 @@ import java.sql.SQLException;
 
 /**
  * Singleton permettant l'utilisation d'une base de données unique
+ * et d'un utilisateur unique
  */
 public class Configuration {
     private static Configuration current;

@@ -19,6 +19,10 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * La classe gère la vue pour l'affichage de la carte
+ */
+
 public class MapViewController extends ViewController<MapViewController.Listener> implements Initializable  {
 
     public static final double LATITUDE_BRUSSELS = 50.85045;
