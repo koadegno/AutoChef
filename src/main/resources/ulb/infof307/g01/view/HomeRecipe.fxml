@@ -42,7 +42,7 @@
         </HBox>
         <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0" style="-fx-background-color: E9D9C6;">
          <children>
-                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour">
+                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font>
