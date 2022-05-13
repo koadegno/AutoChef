@@ -1,6 +1,5 @@
 package ulb.infof307.g01.view.menu;
 
-import javafx.event.ActionEvent;
 import ulb.infof307.g01.view.ViewController;
 
 /**

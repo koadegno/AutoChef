@@ -14,6 +14,9 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Vector;
 
+/**
+ * Contrôleur de la création d'une liste de course
+ */
 public class CreateShoppingListController extends ShoppingListController {
 
     public static final int NUMBER_OF_IMAGE_HELP = 8;

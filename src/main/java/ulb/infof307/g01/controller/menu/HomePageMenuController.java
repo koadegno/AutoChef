@@ -7,6 +7,10 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 
+/**
+ * Classe qui contrôle le Home du menu
+ * Permet d'accéder à la création d'un menu et l'affichage de tous les menus créés par l'utilisateur
+ */
 public class HomePageMenuController extends Controller implements HomeMenuViewController.HomeMenuListener, ListenerBackPreviousWindow {
 
     public HomePageMenuController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow){

@@ -16,6 +16,9 @@ import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * test du DAO recette
+ */
 class TestRecipeDao {
 
     static private final String meat = "Viande";

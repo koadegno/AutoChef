@@ -6,6 +6,10 @@ import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import ulb.infof307.g01.view.ViewController;
 
+/**
+ * La classe gère la vue pour voir et modifier ses recettes
+ */
+
 public class UserRecipesViewController extends ViewController<UserRecipesViewController.UserRecipesListener> {
 
     @FXML
@@ -34,6 +38,12 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
 
     public void recipeSearchTextFieldError(boolean isError) {setNodeColor(recipeSearchTextField, isError);}
 
+    /**
+     * Permet d'aaficher le contenu de la recette
+     * @param recipeName le nom de la recette
+     * @param recipeProducts le nom des produits
+     * @param recipePreparation le contenu de la preparation de sa recette
+     */
     public void setRecipeTextArea(String recipeName, String recipeProducts, String recipePreparation) {
         final String nameHeader = "Nom de la recette :  ";
         final String productsHeader = "Ingrédients : \n";
@@ -58,8 +68,10 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     public void logout() {
         listener.logout();
     }
-    
 
+    /**
+     * Active seulement les éléments que l'utilisateur peut avoir pour le menu recette favorite
+     */
     public void initReadOnlyMode() {
         readOnly = true;
         recipeSearchTextField.setVisible(false);

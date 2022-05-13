@@ -13,6 +13,9 @@ import java.util.List;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotEquals;
 
+/**
+ * test du dao pour l'adresse mail
+ */
 class TestMailAddressDao {
     static private final String mail1 = "mail1@mail.be";
     static private final String mail1ID = "1";

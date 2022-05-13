@@ -15,6 +15,9 @@ import java.sql.SQLException;
 import java.util.Objects;
 import java.util.Vector;
 
+/**
+ * Contrôleur de la page de Modification de la liste de course
+ */
 public class ModifyShoppingListController extends ShoppingListController {
 
     public ModifyShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {

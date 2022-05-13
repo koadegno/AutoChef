@@ -8,6 +8,10 @@ import ulb.infof307.g01.view.ViewController;
 
 import java.io.InputStream;
 
+/**
+ * La classe gère la vue pour les sections d'aide de chaque menu
+ */
+
 public class HelpViewController extends ViewController<HelpViewController.Listener> {
     public VBox imageInformationVBox;
     private double x = 10;

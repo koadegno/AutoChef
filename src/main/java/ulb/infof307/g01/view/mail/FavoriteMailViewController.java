@@ -4,6 +4,10 @@ import javafx.scene.control.TextField;
 import javafx.scene.layout.VBox;
 import ulb.infof307.g01.view.ViewController;
 
+/**
+ * La classe gère la vue pour la création d'un mail favorite
+ */
+
 public class FavoriteMailViewController extends ViewController<FavoriteMailViewController.Listener> {
     public VBox vBox;
     public TextField newFavoriteMail;

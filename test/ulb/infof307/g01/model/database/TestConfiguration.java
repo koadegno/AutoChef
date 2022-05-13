@@ -13,7 +13,9 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.List;
 
-
+/**
+ * Test du singleton Configuration
+ */
 class TestConfiguration {
     static private final Product peach = new Product("peche", 1,"g", "Fruit");
 

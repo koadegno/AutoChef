@@ -1,7 +1,6 @@
 
 package ulb.infof307.g01.view.menu;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;

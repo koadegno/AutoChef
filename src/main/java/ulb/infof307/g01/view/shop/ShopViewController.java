@@ -1,6 +1,7 @@
 package ulb.infof307.g01.view.shop;
 
 import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -13,6 +14,9 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.*;
 
+/**
+ * La classe gère la vue pour la création et la modification d'un magasin
+ */
 public class ShopViewController extends ViewController<ShopViewController.Listener> implements Initializable {
 
     public TableView<Product> tableViewShop;
@@ -59,6 +63,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
+    @FXML
     public void createNewProduct(){
         listener.createNewProductClicked();
     }

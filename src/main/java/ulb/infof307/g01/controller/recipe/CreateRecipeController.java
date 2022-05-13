@@ -17,9 +17,13 @@ import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
+/**
+ * Classe qui contrôle la création d'une recette
+ */
 public class CreateRecipeController extends Controller implements CreateRecipeViewController.CreateRecipeListener {
 
     private CreateRecipeViewController createRecipeViewController;
@@ -56,6 +60,22 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
         FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
         createRecipeViewController = loader.getController();
         createRecipeViewController.setListener(this);
+        this.initElementToDataBaseForCombobox();
+
+    }
+
+    /**
+     * Récupère les noms des catégories et des types des recettes de la base de donnée
+     */
+    public void initElementToDataBaseForCombobox(){
+        try {
+            ArrayList<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            ArrayList<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+            createRecipeViewController.initCombobox(recipeCategoriesList, recipeTypesList);
+
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
     }
 
     /**
@@ -75,10 +95,14 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
         if (isValid) {
             int idRecipe = 0;
             boolean favoris = false;
+
+            //Récupérer les informations de l'ancienne recette : ID + Favorite
             if (isWaitingModification) {
                 idRecipe = currentRecipe.getId();
                 favoris = currentRecipe.getFavorite();
             }
+
+            //Creation d'une nouvelle recette
             currentRecipe = new Recipe(recipeName);
             currentRecipe.setCategory(diet);
             currentRecipe.setPreparation(preparation);
@@ -164,7 +188,7 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
     public void onModifyProductsButton() {
         this.sceneModifyRecipe = currentStage.getScene();
 
-        if (currentShoppingList == null) currentShoppingList = new ShoppingList("temporary");
+        if (currentShoppingList == null) currentShoppingList = new ShoppingList("Liste d'ingrédient");
         RecipeShoppingListController recipeShoppingListController = new RecipeShoppingListController(this);
 
         recipeShoppingListController.initForCreateRecipe(currentShoppingList);

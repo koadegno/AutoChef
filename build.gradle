@@ -7,7 +7,6 @@ plugins {
 
 
 group 'ulb.infof307.g01'
-version '2'
 
 repositories {
     mavenCentral()
@@ -146,6 +145,6 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Jar) {
     destinationDirectory.set(file("$rootDir/dist"))
-    archivesBaseName = 'g01-iteration'
+    archivesBaseName = 'g01-iteration-3'
     archiveClassifier = ''
 }

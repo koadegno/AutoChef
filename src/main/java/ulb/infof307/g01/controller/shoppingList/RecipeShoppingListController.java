@@ -4,6 +4,9 @@ import ulb.infof307.g01.controller.recipe.CreateRecipeController;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
+/**
+ * Contrôleur de la page affichant les recettes sur la page d'une liste de course
+ */
 public class RecipeShoppingListController extends ShoppingListController {
 
     private final CreateRecipeController createRecipeController;

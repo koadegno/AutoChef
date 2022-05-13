@@ -25,17 +25,15 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 
+/**
+ * Classe qui contrôle les fonctionnalités de la map
+ * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
+ * chemin d'un point A à un point B
+ */
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
 
-    public static final int COLOR_RED = 0xFFFF0000;
-    public static final int COLOR_BLACK = 0xFF000000;
-    public static final int COLOR_BLUE   = 0xFF008DFF;
-    public static final int ADDRESS_SIZE = 18;
-    public static final float ADDRESS_MARKER_SIZE = 12.0f;
-    public static final int SIZE = 10;
-    public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
 
-    public static final int WIDTH = 4;
+
     private MapViewController viewController;
 
     private boolean isOnItineraryMode;
@@ -86,28 +84,27 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param color        Couleur du cercle
      * @param textCircle   Texte écrit à côté du cercle
      * @param coordinate   Coordonnée du cercle
-     * @param shop         Si l'élément à ajouter est un magasin
+     * @param isShop       Vrai si l'élément à ajouter est un magasin
      */
     @Override
-    public void addCircle(int color, String textCircle, Point coordinate, Boolean shop) {
+    public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop) {
 
         //crée un cercle
         SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
                 SimpleMarkerSymbol.Style.CIRCLE,
                 color,
-                SIZE);
+                MapConstants.SIZE);
 
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        SIZE, textCircle, COLOR_BLACK,
+                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
-
         // rajoute les cercles créés au bon overlay
 
-        if (shop) {
+        if (isShop) {
             viewController.addShopGraphics(circlePoint,textPoint);
         }
 
@@ -115,7 +112,6 @@ public class MapController extends Controller implements MapViewController.Liste
             viewController.addItineraryGraphics(circlePoint,textPoint);
         }
     }
-
 
     /**
      * Initialise les magasins sur la carte
@@ -129,7 +125,7 @@ public class MapController extends Controller implements MapViewController.Liste
         else {
             List<Shop> allShopList  = Configuration.getCurrent().getShopDao().getShops();
             for(Shop shop: allShopList){
-                addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+                addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
             }
         }
     }
@@ -138,11 +134,10 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.initReadOnlyMode();
         List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
         List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
-        //List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(); (Departure?)
         for(Shop shop: shopListWithProducts){
             String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
-            int color = COLOR_BLACK;
-            if(shopWithMinPriceForProductList.contains(shop)) color = COLOR_RED;
+            int color = MapConstants.COLOR_BLACK;
+            if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
             addCircle(color, toDisplay, shop.getCoordinate(), true);
         }
     }
@@ -156,13 +151,17 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
 
-        //il y a une correction de la position
         Point mapPoint = cursorPoint(mapView, cursorX, cursorY);
 
         ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
         shopController.show();
     }
 
+    /**
+     * récupère la coordonnée géographique associé au curseur
+     * @param mapView la mapView contient la fonction de calcul
+     * @return une coordonnée géographique correspondant a la position du curseur et la position de la map
+     */
     private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
         Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
         return mapView.screenToLocation(cursorPoint2D);
@@ -212,22 +211,42 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * suppression de l'itinéraire
+     * @param itineraryGraphicsCercleList La liste des objets cercle graphique associés à l'itinéraire
+     * @param itineraryGraphicsTextList La liste des objets texte graphique associés à l'itinéraire
      */
     @Override
-    public void onDeleteItineraryClicked() {
-        routeService.onDeleteItinerary();
+    public void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList) {
+        routeService.onDeleteItinerary(itineraryGraphicsCercleList, itineraryGraphicsTextList);
     }
 
     /**
-     * Récupère la position départ ou d'arrivée de l'itinéraire et y dessine un cercle bleu
+     * Lance l'itinéraire quand la position de départ et d'arrivée sont disponibles
      * @param posX position du curseur en X
      * @param posY position du curseur en Y
+     * @param itineraryCircleList la liste des objets graphique present sur l'écran pour l'itinéraire (cercle)
+     * @param itineraryTextList la liste des objets graphique present sur l'écran pour l'itinéraire (texte)
+     * @param isDeparture Vrai si on place le point associer au depart
      */
     @Override
-    public void onItineraryClicked(Double posX, Double posY, MapView mapView) {
+    public void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList, boolean isDeparture) {
         Pair<Graphic, Graphic> selectedShop= getSelectedShop();
         if(selectedShop != null){
-            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY));
+            int readyToCalculRoute = 2;
+
+            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY), itineraryCircleList,itineraryTextList,isDeparture );
+            viewController.switchVisibilityContextMenu();
+
+            if (itineraryCircleList.size() == readyToCalculRoute) {
+                boolean isRouteFound = routeService.calculateRoute(itineraryCircleList);
+                System.out.println("la route a ete trouvé : " + isRouteFound);
+                if(! isRouteFound) ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
+                else{
+                    viewController.itineraryInformation(routeService.getTotalTime(),
+                            routeService.getTotalTimeBike(),
+                            routeService.getTotalLength());
+                }
+            }
+
         }
     }
 
@@ -236,7 +255,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void helpMapClicked() {
-        HelpController helpController = new HelpController("helpMap/", LAST_NUMBER_IMAGE_HELP_PAGE);
+        HelpController helpController = new HelpController("helpMap/", MapConstants.LAST_NUMBER_IMAGE_HELP_PAGE);
         helpController.displayHelpShop();
     }
 
@@ -246,25 +265,35 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Rend inaccessible certains items du contexte menu
-     */
-    private void switchVisibilityContextMenu() {
-        viewController.switchVisibilityContextMenu();
-    }
-
-    /**
      * Recherche avec l'adresse d'un magasin
      * @param address l'adresse du magasin (Ville, rue, commune, numéro)
      * @return boolean est ce que l'adresse a été trouvé ou non
      */
     @Override
     public boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay) {
-        return !address.isBlank() && performGeocode(address,addressGraphicsOverlay);
+        if(address.isBlank()) return false;
+
+        Point adressPosition = performGeocode(address, addressGraphicsOverlay);
+
+        if(readOnlyMode && adressPosition != null){
+            try {
+                List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(productListToSearchInShops,adressPosition);
+                for(Shop shop: nearestShopWithProductList){
+                    String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
+                    addCircle(MapConstants.COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
+
+                }
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
+        }
+        return adressPosition != null;
     }
 
     /**
      * Supprime le point sélectionné de l'overlay
      */
+    @Override
     public void onDeleteShopClicked() throws SQLException {
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
@@ -296,7 +325,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * @return paire d'objet graphique
      */
     private Pair<Graphic, Graphic> getSelectedShop(){
-        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();
+        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();//TODO changer ca
         List<Graphic> shopGraphicsTextList = viewController.getShopGraphicsTextList();
 
         for (int i = 0; i < shopGraphicsCircleList.size(); i++) {
@@ -339,7 +368,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);
         ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = mapView.identifyGraphicsOverlayAsync(
                 shopGraphicOverlay,
-                mapViewPoint, SIZE, false, 1);
+                mapViewPoint, MapConstants.SIZE, false, 1);
 
         graphicsOverlayAsyncIdentified.addDoneListener(() -> {
             try {
@@ -360,17 +389,14 @@ public class MapController extends Controller implements MapViewController.Liste
      *
      * @param address une vraie adresse ex : Avenue Franklin Roosevelt 50 - 1050 Bruxelles
      */
-    private boolean performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
-        boolean isGeocodePerformed = locatorService.performGeocode(address,addressGraphicsOverlay);
-        if( !isGeocodePerformed){
+    private Point performGeocode(String address, List<Graphic> addressGraphicsOverlay) {
+        Point addressPosition = locatorService.performGeocode(address,addressGraphicsOverlay);
+        if( addressPosition == null){
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Adresse non valide");
         }
-        return isGeocodePerformed;
+        return addressPosition;
 
     }
-
-
-
 
 
 }

@@ -6,6 +6,7 @@ import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
@@ -16,8 +17,10 @@ import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-import static ulb.infof307.g01.controller.map.MapController.COLOR_RED;
 
+/**
+ * Contrôleur lié à au magasin
+ */
 public class ShopController extends Controller implements ShopViewController.Listener {
 
     public static final String SHOW_SHOP_FXML = "Shop.fxml";
@@ -63,7 +66,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
         }
         else {
             Configuration.getCurrent().getShopDao().insert(shop);
-            listener.addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+            listener.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }
     }
 
@@ -99,12 +102,18 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     }
 
+    /**
+     * lance la fenetre pour crée un nouveau produit
+     */
     @Override
     public void createNewProductClicked() {
         ProductController productController = new ProductController(viewController);
         productController.displayCreateNewProduct();
     }
 
+    /**
+     * Affiche l'aide
+     */
     @Override
     public void displayHelpShop() {
         int numberOfImageHelp = 14;

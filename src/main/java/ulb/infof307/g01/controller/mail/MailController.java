@@ -18,6 +18,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Objects;
 
+/**
+ * Classe qui contrôle les mails
+ * permet d'envoyer ses listes de courses par mails
+ */
 public class MailController extends Controller implements MailViewController.Listener, FavoriteMailViewController.Listener  {
     private final ShoppingList shoppingList;
     private MailViewController mailViewController;
@@ -118,15 +122,18 @@ public class MailController extends Controller implements MailViewController.Lis
         favoriteMailViewController.showAddressMailError(false);
         if(isValidEmailAddress(newMail)){
             try {
-                if(isSave){ //Enregistre le mail favorie dans la bdd
+                if(isSave){ //Enregistre le mail favorite dans la bdd
                     int userID = Configuration.getCurrent().getCurrentUser().getId();
                     Configuration.getCurrent().getMailAddressDao().insert(newMail, userID);
+                    this.initComboboxFavoriteMail();
+                }
+                else{
+                    mailViewController.addMailToCombobox(newMail);
                 }
             } catch (SQLException e) {
                 MailViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Le mail enregistrée existe déjà dans vos favoris");
             }
 
-            this.initComboboxFavoriteMail();
             popupFavoriteMail.close(); //Ferme la popup
         }
         else{

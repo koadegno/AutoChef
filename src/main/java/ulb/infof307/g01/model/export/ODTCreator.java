@@ -11,6 +11,9 @@ import java.util.Comparator;
 import java.util.Objects;
 import java.util.Vector;
 
+/**
+ * Classe d'exportation d'une recette en ODT
+ */
 public class ODTCreator {
 
 
