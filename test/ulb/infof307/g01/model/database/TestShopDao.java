@@ -1,9 +1,7 @@
 package ulb.infof307.g01.model.database;
 
 import com.esri.arcgisruntime.geometry.Point;
-import org.junit.jupiter.api.AfterAll;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
@@ -38,8 +36,8 @@ class TestShopDao {
     static ShoppingList myShoppingList;
 
 
-    @BeforeAll
-    static public void initConfig() throws SQLException {
+    @BeforeEach
+    public void initConfig() throws SQLException {
         Configuration.getCurrent().setDatabase(DATABASE_NAME);
 
         User testUser = new User("admin","admin",true);
@@ -66,8 +64,8 @@ class TestShopDao {
 
     }
 
-    @AfterAll
-    static public void deleteConfig() throws SQLException, IOException {
+    @AfterEach
+    public void deleteConfig() throws SQLException, IOException {
         Configuration.getCurrent().closeConnection();
         Files.deleteIfExists(Path.of(DATABASE_NAME));
     }

@@ -1,14 +1,12 @@
 package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
-import com.esri.arcgisruntime.concurrent.ListenableFuture;
+import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
-import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
-import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
@@ -37,14 +35,11 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public Label timeBikeLabel;
     public Label lengthLabel;
     private boolean ifSearchDeparture = false;
-    private static final int ONCE_CLICKED = 1;
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
-    private GeocodeParameters geocodeParameters;
-    private LocatorTask locatorTask;
     private MapView mapView;
 
     @FXML
@@ -58,22 +53,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     private MenuBar appMenuBar;
     @FXML
-    private Menu searchAdressMenu;
+    private Menu searchAddressMenu;
     @FXML
     private Menu searchShopNameMenu;
 
+    private Double currentCursorPosX;
+    private Double currentCursorPosY;
 
-    public GraphicsOverlay getShopGraphicsCercleList() {
-        return shopGraphicsCircleOverlay;
-    }
-
-    public GraphicsOverlay getShopGraphicsTextList() { return shopGraphicsTextOverlay;}
-
-    public MapView getMapView() {
-        return mapView;
-    }
-
-    private void initializeMapService(){
+    private void initializeMap(){
         mapView = new MapView();
         //TODO trouver un meilleur moyen de mettre la clé
         String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
@@ -88,62 +75,35 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.getGraphicsOverlays().add(itineraryGraphicsTextOverlay);
     }
 
+
+    /**
+     * Cherche les magasins sur la carte avec le bon nom entré
+     */
     @FXML
     void onShopSearchBoxAction() {
         String fieldText = textFieldMenuBar.getText();
-        listener.onSearchShop(fieldText);
+        listener.onSearchShop(fieldText,getShopGraphicsTextList(),getShopGraphicsCircleList());
     }
 
     /**
      * Methode de recherche des adresses lié a la searchBox
-     *
      */
     @FXML
     private void onAddressSearchBoxAction() {
         String address = searchBox.getText();
-        boolean found = listener.onSearchAddress(address);
-        setNodeColor(searchBox, found);
+        boolean isFound = listener.onSearchAddress(address, itineraryGraphicsCircleOverlay.getGraphics());
+        setNodeColor(searchBox, !isFound);
     }
-
-    /**
-     * Affiche la page principale de l'application.
-     * @see ulb.infof307.g01.Main
-     * */
-    @FXML
-//    public void displayMain(){
-//        this.loadFXML("Map.fxml");
-//    }
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        initializeMapService();
+        initializeMap();
         mapViewStackPane.getChildren().add(mapView);
     }
 
     public void start(){
-        try {
-            listener.onInitializeMapShop();
-            initializeContextMenu();
-            initializeMapEvent();
-            createLocatorTaskAndDefaultParameters();
-        } catch (SQLException e) {
-            e.printStackTrace();
-        }
-    }
-
-    /**
-     * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
-     * Pour parametrer le service de geocoding Locator
-     * et Parametre par defaut du service de geocoding
-     */
-    void createLocatorTaskAndDefaultParameters() {
-        locatorTask = new LocatorTask("https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer");
-
-        geocodeParameters = new GeocodeParameters();
-        geocodeParameters.getResultAttributeNames().add("*"); // permet de retourner tous les attributs
-        geocodeParameters.setMaxResults(1);
-        // comment les coordonnées doivent correspondre a la location
-        geocodeParameters.setOutputSpatialReference(mapView.getSpatialReference());
+        initializeContextMenu();
+        initializeMapEvent();
     }
 
     /**
@@ -152,15 +112,17 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private void initializeMapEvent() {
         mapView.setOnMouseClicked(mouseEvent -> {
             mapView.setCursor(Cursor.DEFAULT);
+            currentCursorPosX = mouseEvent.getX();
+            currentCursorPosY = mouseEvent.getY();
+
 
             // selectionner un point avec un simple clique droit
-            if (mouseEvent.getButton() == MouseButton.PRIMARY && mouseEvent.getClickCount() == ONCE_CLICKED) {
+            if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
-                listener.highlightGraphicPoint(mouseEvent.getX(),mouseEvent.getY());
+                listener.highlightGraphicPoint(currentCursorPosX,currentCursorPosY,mapView,shopGraphicsCircleOverlay);
             }
         });
     }
-
 
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
@@ -172,7 +134,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         deleteItineraryItem.setVisible(false);
 
         // contexte menu pour l'ajout
-        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked());
+        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked(mapView,currentCursorPosX ,currentCursorPosY ));
 
         // contexte menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
@@ -193,7 +155,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         });
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked());
+        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView));
 
         // Supprime l'itinéraire
         deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked());
@@ -214,35 +176,24 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
 
-    public MenuItem getAddShopMenuItem() {return addShopMenuItem;}
-
-    public MenuItem getDeleteShopMenuItem() { return deleteShopMenuItem;}
-
-    public MenuItem getModifyShopMenuItem() {return modifyShopMenuItem;}
-
-    public MenuItem getItineraryShopMenuItem() { return itineraryShopMenuItem;}
-
     public boolean getIfSearchDeparture() {return ifSearchDeparture;}
 
     public void setIfSearchDeparture() {ifSearchDeparture = !ifSearchDeparture;}
 
-    public GraphicsOverlay getAddressGraphicsOverlay() {return addressGraphicsOverlay;}
+    public void modifyVisibilityAddShopMenuItem() {addShopMenuItem.setVisible(getIfSearchDeparture());}
 
-    public ListenableFuture<List<GeocodeResult>> getGeocodeAsync() {return locatorTask.geocodeAsync(searchBox.getText(), geocodeParameters);}
+    public void modifyVisibilityDeleteShopMenuItem() {deleteItineraryItem.setVisible(getIfSearchDeparture());}
 
-    public void modifyVisibilityAddShopMenuItem() {getAddShopMenuItem().setVisible(getIfSearchDeparture());}
+    public void modifyVisibilityModifyShopMenuItem() {modifyShopMenuItem.setVisible(getIfSearchDeparture());}
 
-    public void modifyVisibilityDeleteShopMenuItem() {getDeleteShopMenuItem().setVisible(getIfSearchDeparture());}
-
-    public void modifyVisibilityModifyShopMenuItem() {getModifyShopMenuItem().setVisible(getIfSearchDeparture());}
-
-    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(true);}
+    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(getIfSearchDeparture());}
 
     public void modifyItineraryShopMenuItemText() {
-        if (getIfSearchDeparture()) {getItineraryShopMenuItem().setText("Point de départ");}
-        else {getItineraryShopMenuItem().setText("Itinéraire");}
+        if (getIfSearchDeparture()) {itineraryShopMenuItem.setText("Point de départ");}
+        else {itineraryShopMenuItem.setText("Itinéraire");}
     }
 
+    //TODO enlever ca et mettre en paramettre
     public List<Graphic> getItineraryGraphicsCircleList(){
         return itineraryGraphicsCircleOverlay.getGraphics();
     }
@@ -251,11 +202,19 @@ public class MapViewController extends ViewController<MapViewController.Listener
         return itineraryGraphicsTextOverlay.getGraphics();
     }
 
+    public List<Graphic> getShopGraphicsCircleList(){
+        return shopGraphicsCircleOverlay.getGraphics();
+    }
+
+    public List<Graphic> getShopGraphicsTextList(){
+        return shopGraphicsTextOverlay.getGraphics();
+    }
+
     @FXML
     public void initReadOnlyMode() {
         appMenuBar.setVisible(false);
         searchShopNameMenu.setVisible(false);
-        searchAdressMenu.setVisible(false);
+        searchAddressMenu.setVisible(false);
     }
 
     public void helpMap() {
@@ -264,21 +223,57 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public void logout() { listener.logout(); }
 
+    public SpatialReference getSpatialReference() {
+        return mapView.getSpatialReference();
+    }
+
+    public void setViewPointCenter(Point displayLocation) {
+        mapView.setViewpointCenterAsync(displayLocation);
+    }
+
+    public void switchVisibilityContextMenu() {
+        // Rend invisible les boutons non nécessaires
+        modifyVisibilityAddShopMenuItem();
+        modifyVisibilityDeleteShopMenuItem();
+        modifyVisibilityModifyShopMenuItem();
+        modifyVisibilityDeleteItinerary();
+
+        // Switch la variable ifSearchDeparture
+        setIfSearchDeparture();
+
+        // Modifie le texte du bouton itinéraire
+        modifyItineraryShopMenuItemText();
+    }
+
+    public void addShopGraphics(Graphic circlePoint,Graphic textPoint) {
+        shopGraphicsCircleOverlay.getGraphics().add(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().add(textPoint);
+    }
+
+    public void addItineraryGraphics(Graphic circlePoint, Graphic textPoint) {
+        itineraryGraphicsCircleOverlay.getGraphics().add(circlePoint);
+        itineraryGraphicsTextOverlay.getGraphics().add(textPoint);
+    }
+
+    public void removeShopGraphics(Graphic circlePoint, Graphic textPoint) {
+        shopGraphicsCircleOverlay.getGraphics().remove(circlePoint);
+        shopGraphicsTextOverlay.getGraphics().remove(textPoint);
+    }
+
     public interface Listener {
-        void onInitializeMapShop() throws SQLException;
-        void onAddShopClicked();
+        void onAddShopClicked(MapView mapView, Double posX, Double posY);
         void onDeleteShopClicked() throws SQLException;
         void onUpdateShopClicked() throws SQLException;
-        void onSearchShop(String shopName);
-        void highlightGraphicPoint(double mouseX, double mouseY);
-        boolean onSearchAddress(String address);
+        void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
+        boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();
-        void onItineraryClicked();
+        void onItineraryClicked(Double posX, Double posY, MapView mapView);
         void onDeleteItineraryClicked();
         void helpMapClicked();
-
         void logout();
+        void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay);
     }
+
 
 
 }

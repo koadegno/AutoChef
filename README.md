@@ -21,6 +21,7 @@ OU `java -jar g01-iteration-x.jar`
 
 OU `./gradlew runShadow` sur Linux et MacOS  
 `./gradlew.bat runShadow` sur Windows
+
 # Misc
 
 ## Développement

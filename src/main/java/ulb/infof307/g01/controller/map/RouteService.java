@@ -9,15 +9,16 @@ import com.esri.arcgisruntime.tasks.networkanalysis.*;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.scene.control.MenuItem;
 import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
 
+/**
+ * Classe permettant d'utiliser le service de localisation de route de ARCGIS
+ */
 public class RouteService {
     public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
     private final MapViewController mapViewController;
@@ -34,11 +35,11 @@ public class RouteService {
     }
 
 
-    public void onItinerary() {
+    public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint) {
+
         listener.setOnItineraryMode(true);
 
-        Pair<Graphic, Graphic> shopOverlay = listener.getSelectedShop();
-        if(shopOverlay == null && mapViewController.getItineraryGraphicsCircleList().isEmpty()) return;
+        if(selectedShop == null && mapViewController.getItineraryGraphicsCircleList().isEmpty()) return;
 
 
         // Si un itinéraire est déjà calculé, demande à supprimé le précédent
@@ -47,19 +48,17 @@ public class RouteService {
         // Affiche le texte en fonction de ce qui est recherché
         if(isDelete){
             String text;
-            Point mapPoint;
             if (mapViewController.getIfSearchDeparture()) {
                 text = "Départ";
-                MapView mapView = mapViewController.getMapView();
-                mapPoint = cursorPoint(mapView);
             }
             else {
                 text = "";
-                Graphic shop = shopOverlay.getLeft();
+                assert selectedShop != null;
+                Graphic shop = selectedShop.getLeft();
                 mapPoint = (Point) shop.getGeometry();
             }
             listener.addCircle(MapController.COLOR_BLUE, text, mapPoint, false);
-            listener.switchVisibilityContextMenu();
+            mapViewController.switchVisibilityContextMenu();
 
             int readyToCalculRoute = 2;
             if (mapViewController.getItineraryGraphicsCircleList().size() == readyToCalculRoute) {
@@ -72,20 +71,18 @@ public class RouteService {
      * @param mapView la mapView contient la fonction de calcul
      * @return le point de la map
      */
-    private Point cursorPoint(MapView mapView) {
+    private Point cursorPoint(MapView mapView, double posX, double poxY) {
         // Il y a une correction de la position
 
         Point mapPoint;
-        MenuItem addShopMenuItem = mapViewController.getAddShopMenuItem();
-        Point2D cursorPoint2D = new Point2D(addShopMenuItem.getParentPopup().getX() + MapController.CORRECTION_POSITION_X,
-                addShopMenuItem.getParentPopup().getY() + MapController.CORRECTION_POSITION_Y);
-        Point2D cursorCoordinate = mapView.screenToLocal(cursorPoint2D);
-        mapPoint = mapView.screenToLocation(cursorCoordinate);
+        Point2D cursorPoint2D = new Point2D(posX,poxY);
+        mapPoint = mapView.screenToLocation(cursorPoint2D);
         return mapPoint;
     }
 
     /**
-     * Supprime l'itinéraire
+     *  Supprime l'itinéraire
+     * @return Vrai si l'itinéraire est supprimé
      */
     public boolean onDeleteItinerary() {
 
@@ -111,7 +108,7 @@ public class RouteService {
                 itineraryGraphicsTextList.remove(departureIndex);
             }
 
-            else { listener.switchVisibilityContextMenu();}
+            else { mapViewController.switchVisibilityContextMenu();}
 
             itineraryGraphicsCercleList.remove(arrival);
             itineraryGraphicsTextList.remove(arrival);
@@ -127,7 +124,11 @@ public class RouteService {
 
     }
 
-    public boolean deleteOldRoute() {
+    /**
+     * supprime l'ancien itinéraire s'il existe
+     * @return Vrai si l'itinéraire est supprimé
+     */
+    private boolean deleteOldRoute() {
         int itineraryAlreadyExist = 1;
         boolean isDelete = true;
         if (mapViewController.getItineraryGraphicsCircleList().size() > itineraryAlreadyExist) { isDelete = onDeleteItinerary();}
@@ -187,18 +188,8 @@ public class RouteService {
         });
     }
 
-    /**
-     * Vitesse moyenne de vélo calculer à partir de donnée d'internet
-     * @return la vitesse moyenne de vélo
-     */
-    private int getTimeBike() {
-        return AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
-    }
-
     public interface Listener{
-        void switchVisibilityContextMenu();
         void setOnItineraryMode(boolean isOnItineraryMode);
         void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
-        Pair<Graphic,Graphic> getSelectedShop();
     }
 }
