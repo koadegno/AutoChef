@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
+import com.esri.arcgisruntime.geometry.SpatialReferences;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
@@ -45,7 +46,7 @@ public class LocatorService {
         geocodeParameters.getResultAttributeNames().add("*"); // permet de retourner tous les attributs
         geocodeParameters.setMaxResults(1);
         // comment les coordonnées doivent correspondre a la location
-        geocodeParameters.setOutputSpatialReference(mapViewController.getSpatialReference());
+        geocodeParameters.setOutputSpatialReference(SpatialReferences.getWebMercator());
     }
 
     /**
@@ -72,19 +73,19 @@ public class LocatorService {
      * @param geocodeResults résultat de la recherche
      */
     private Point setGeocode(ListenableFuture<List<GeocodeResult>> geocodeResults,List<Graphic> addressGraphicsOverlay) {
-        AtomicReference<Point> adressPosition = new AtomicReference<Point>(null);
+        AtomicReference<Point> addressPosition = new AtomicReference<>(null);
         geocodeResults.addDoneListener(() -> {  // récupérer le résultat
             try {
                 List<GeocodeResult> geocodes = geocodeResults.get();
                 if (geocodes.size() > 0) { // trouver qlq chose
                     GeocodeResult result = geocodes.get(0);
-                    adressPosition.set(displayResult(result, addressGraphicsOverlay));
+                    addressPosition.set(displayResult(result, addressGraphicsOverlay));
                 }
             } catch (InterruptedException | ExecutionException exception) {
-                adressPosition.set(null);
+                addressPosition.set(null);
             }
         });
-        return adressPosition.get();
+        return addressPosition.get();
     }
 
     /**
@@ -97,9 +98,9 @@ public class LocatorService {
 
         // creation de l'objet graphique avec l'adresse
         String label = geocodeResult.getLabel();
-        TextSymbol textSymbol = new TextSymbol(MapController.ADDRESS_SIZE,
+        TextSymbol textSymbol = new TextSymbol(MapConstants.ADDRESS_SIZE,
                 label,
-                MapController.COLOR_BLACK,
+                MapConstants.COLOR_BLACK,
                 TextSymbol.HorizontalAlignment.CENTER,
                 TextSymbol.VerticalAlignment.BOTTOM);
         Point displayLocation = geocodeResult.getDisplayLocation();
@@ -108,8 +109,8 @@ public class LocatorService {
 
         // creation de l'objet graphique avec le carré rouge
         SimpleMarkerSymbol markerSymbol = new SimpleMarkerSymbol(SimpleMarkerSymbol.Style.SQUARE,
-                MapController.COLOR_RED,
-                MapController.ADDRESS_MARKER_SIZE);
+                MapConstants.COLOR_RED,
+                MapConstants.ADDRESS_MARKER_SIZE);
 
         Graphic markerGraphic = new Graphic(displayLocation, geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.add(markerGraphic);

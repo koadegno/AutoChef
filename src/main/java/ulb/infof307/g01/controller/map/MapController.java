@@ -32,14 +32,7 @@ import java.util.concurrent.ExecutionException;
  */
 public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
 
-    public static final int COLOR_RED = 0xFFFF0000;
-    public static final int COLOR_BLACK = 0xFF000000;
-    public static final int COLOR_BLUE   = 0xFF008DFF;
-    public static final int ADDRESS_SIZE = 18;
-    public static final float ADDRESS_MARKER_SIZE = 12.0f;
-    public static final int SIZE = 10;
-    public static final int LAST_NUMBER_IMAGE_HELP_PAGE = 12;
-    public static final int WIDTH = 4;
+
 
     private MapViewController viewController;
 
@@ -100,17 +93,16 @@ public class MapController extends Controller implements MapViewController.Liste
         SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
                 SimpleMarkerSymbol.Style.CIRCLE,
                 color,
-                SIZE);
+                MapConstants.SIZE);
 
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
-                        SIZE, textCircle, COLOR_BLACK,
+                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
         Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
         // rajoute les cercles créés au bon overlay
-        System.out.println(coordinate);
 
         if (isShop) {
             viewController.addShopGraphics(circlePoint,textPoint);
@@ -133,7 +125,7 @@ public class MapController extends Controller implements MapViewController.Liste
         else {
             List<Shop> allShopList  = Configuration.getCurrent().getShopDao().getShops();
             for(Shop shop: allShopList){
-                addCircle(COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+                addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
             }
         }
     }
@@ -144,8 +136,8 @@ public class MapController extends Controller implements MapViewController.Liste
         List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
         for(Shop shop: shopListWithProducts){
             String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
-            int color = COLOR_BLACK;
-            if(shopWithMinPriceForProductList.contains(shop)) color = COLOR_RED;
+            int color = MapConstants.COLOR_BLACK;
+            if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
             addCircle(color, toDisplay, shop.getCoordinate(), true);
         }
     }
@@ -263,7 +255,7 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void helpMapClicked() {
-        HelpController helpController = new HelpController("helpMap/", LAST_NUMBER_IMAGE_HELP_PAGE);
+        HelpController helpController = new HelpController("helpMap/", MapConstants.LAST_NUMBER_IMAGE_HELP_PAGE);
         helpController.displayHelpShop();
     }
 
@@ -284,12 +276,11 @@ public class MapController extends Controller implements MapViewController.Liste
         Point adressPosition = performGeocode(address, addressGraphicsOverlay);
 
         if(readOnlyMode && adressPosition != null){
-            System.out.println(adressPosition.getX() +" " +adressPosition.getY());
             try {
                 List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(productListToSearchInShops,adressPosition);
                 for(Shop shop: nearestShopWithProductList){
                     String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
-                    addCircle(COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
+                    addCircle(MapConstants.COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
 
                 }
             } catch (SQLException e) {
@@ -377,7 +368,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Point2D mapViewPoint = new Point2D(mouseX, mouseY);
         ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = mapView.identifyGraphicsOverlayAsync(
                 shopGraphicOverlay,
-                mapViewPoint, SIZE, false, 1);
+                mapViewPoint, MapConstants.SIZE, false, 1);
 
         graphicsOverlayAsyncIdentified.addDoneListener(() -> {
             try {

@@ -78,7 +78,7 @@ public class RouteService{
                 Graphic shop = selectedShop.getLeft();
                 mapPoint = (Point) shop.getGeometry();
             }
-            listener.addCircle(MapController.COLOR_BLUE, text, mapPoint, false);
+            listener.addCircle(MapConstants.COLOR_BLUE, text, mapPoint, false);
         }
     }
 
@@ -144,7 +144,7 @@ public class RouteService{
         AtomicBoolean hasFoundRoute = new AtomicBoolean(false);
 
         Graphic routeGraphic = new Graphic();
-        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, MapController.COLOR_BLUE, MapController.WIDTH));
+        routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, MapConstants.COLOR_BLUE, MapConstants.WIDTH));
         itineraryCircleList.add(routeGraphic);
 
         ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
