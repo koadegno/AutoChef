@@ -54,7 +54,7 @@
             <children>
                <HBox alignment="CENTER_LEFT" prefHeight="100.0" prefWidth="722.0">
                   <children>
-                     <Label prefHeight="17.0" prefWidth="80.0" text="    Iténéraire " />
+                     <Label prefHeight="17.0" prefWidth="80.0" text="   Itinéraire " />
                   </children>
                </HBox>
                <HBox prefHeight="100.0" prefWidth="200.0" spacing="10.0">
