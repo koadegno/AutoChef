@@ -9,11 +9,9 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
-import ulb.infof307.g01.view.map.MapViewController;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -23,11 +21,9 @@ public class LocatorService {
     private LocatorTask locatorTask;
 
     public static final String GEOCODE_URL_TASK = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-    public MapViewController mapViewController;
 
 
-    public LocatorService( MapViewController mapViewController) {
-        this.mapViewController = mapViewController;
+    public LocatorService() {
         createLocatorTaskAndDefaultParameters();
     }
 
@@ -115,7 +111,6 @@ public class LocatorService {
         Graphic markerGraphic = new Graphic(displayLocation, geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.add(markerGraphic);
 
-        mapViewController.setViewPointCenter(displayLocation);
         return displayLocation;
     }
 }

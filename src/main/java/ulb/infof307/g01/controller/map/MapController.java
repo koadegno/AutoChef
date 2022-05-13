@@ -18,6 +18,7 @@ import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
 
@@ -30,9 +31,7 @@ import java.util.concurrent.ExecutionException;
  * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
  * chemin d'un point A à un point B
  */
-public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener {
-
-
+public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener, MapShop.MapShopListener {
 
     private MapViewController viewController;
 
@@ -43,6 +42,9 @@ public class MapController extends Controller implements MapViewController.Liste
 
     private RouteService routeService;
     private LocatorService locatorService;
+    private ShopDao shopDao;
+    private Configuration configuration;
+    private MapShop mapShop;
 
     @Override
     public void setOnItineraryMode(boolean onItineraryMode) {
@@ -63,19 +65,18 @@ public class MapController extends Controller implements MapViewController.Liste
         FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-        try {
-            onInitializeMapShop();
-            viewController.start();
-            routeService = new RouteService(viewController,this);
-            locatorService = new LocatorService(viewController);
-        } catch (SQLException e) {
-            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
+        configuration = Configuration.getCurrent();
+        shopDao = configuration.getShopDao();
+        mapShop = new MapShop(this);
+        onInitializeMapShop();
+        viewController.start();
+        routeService = new RouteService(viewController,this);
+        locatorService = new LocatorService();
 
-        }
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
-        this.productListToSearchInShops = productListToSearchInShops;
+        mapShop.setShoppingList(productListToSearchInShops);
     }
 
     /**
@@ -94,20 +95,19 @@ public class MapController extends Controller implements MapViewController.Liste
                 SimpleMarkerSymbol.Style.CIRCLE,
                 color,
                 MapConstants.SIZE);
+        Graphic circlePoint = new Graphic(coordinate, circleSymbol);
 
         // cree un texte attacher au point
         TextSymbol pierTextSymbol =
                 new TextSymbol(
                         MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
                         TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-        Graphic circlePoint = new Graphic(coordinate, circleSymbol);
         Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
         // rajoute les cercles créés au bon overlay
 
         if (isShop) {
             viewController.addShopGraphics(circlePoint,textPoint);
         }
-
         else {
             viewController.addItineraryGraphics(circlePoint,textPoint);
         }
@@ -117,28 +117,18 @@ public class MapController extends Controller implements MapViewController.Liste
      * Initialise les magasins sur la carte
      * @throws SQLException erreur au niveau de la base de donnée
      */
-    public void onInitializeMapShop() throws SQLException {
+    public void onInitializeMapShop() {
 
-        if(readOnlyMode){
-            displayShopsWithProductList();
-        }
-        else {
-            List<Shop> allShopList  = Configuration.getCurrent().getShopDao().getShops();
-            for(Shop shop: allShopList){
-                addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+        try {
+            if(readOnlyMode){
+                viewController.initReadOnlyMode();
+                mapShop.displayShopsWithProductList();
             }
-        }
-    }
-
-    private void displayShopsWithProductList() throws SQLException {
-        viewController.initReadOnlyMode();
-        List<Shop> shopListWithProducts = Configuration.getCurrent().getShopDao().getShopWithProductList(productListToSearchInShops);
-        List<Shop> shopWithMinPriceForProductList =  Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(productListToSearchInShops);
-        for(Shop shop: shopListWithProducts){
-            String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
-            int color = MapConstants.COLOR_BLACK;
-            if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
-            addCircle(color, toDisplay, shop.getCoordinate(), true);
+            else{
+                mapShop.initAllShops();
+            }
+        } catch (SQLException e) {
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
         }
     }
 
@@ -196,7 +186,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Point mapPoint = (Point) cercleGraphic.getGeometry();
         String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
 
-        Shop shopToModify = Configuration.getCurrent().getShopDao().get(shopName,mapPoint);
+        Shop shopToModify = shopDao.get(shopName,mapPoint);
         ShopController showShopController = new ShopController(shopToModify,true, this);
         showShopController.show();
     }
@@ -273,13 +263,13 @@ public class MapController extends Controller implements MapViewController.Liste
     public boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay) {
         if(address.isBlank()) return false;
 
-        Point adressPosition = performGeocode(address, addressGraphicsOverlay);
+        Point addressPosition = performGeocode(address, addressGraphicsOverlay);
 
-        if(readOnlyMode && adressPosition != null){
+        if(readOnlyMode && addressPosition != null){
             try {
-                List<Shop> nearestShopWithProductList =  Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(productListToSearchInShops,adressPosition);
+                List<Shop> nearestShopWithProductList =  shopDao.getNearestShopsWithProductList(productListToSearchInShops,addressPosition);
                 for(Shop shop: nearestShopWithProductList){
-                    String toDisplay = shop.getName() + ": " + Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
+                    String toDisplay = shop.getName() + ": " + shopDao.getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
                     addCircle(MapConstants.COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
 
                 }
@@ -287,7 +277,12 @@ public class MapController extends Controller implements MapViewController.Liste
                 throw new RuntimeException(e);
             }
         }
-        return adressPosition != null;
+        else if (addressPosition != null){
+            viewController.setViewPointCenter(addressPosition);
+
+
+        }
+        return addressPosition != null;
     }
 
     /**
@@ -304,11 +299,11 @@ public class MapController extends Controller implements MapViewController.Liste
                 Graphic circlePointOnMap = shopOverlay.getLeft();
                 Graphic textPointOnMap = shopOverlay.getRight();
 
-                TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
+                String shopName = ((TextSymbol) textPointOnMap.getSymbol()).getText();
                 Point shopPoint = (Point) textPointOnMap.getGeometry();
 
-                Shop shopToDelete = Configuration.getCurrent().getShopDao().get(shopName.getText(), shopPoint);
-                Configuration.getCurrent().getShopDao().delete(shopToDelete);
+                Shop shopToDelete = shopDao.get(shopName, shopPoint);
+                shopDao.delete(shopToDelete);
 
                 viewController.removeShopGraphics(circlePointOnMap,textPointOnMap);
             }
