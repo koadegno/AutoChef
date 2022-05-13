@@ -1,17 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.ComboBox?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Spinner?>
-<?import javafx.scene.control.TableColumn?>
-<?import javafx.scene.control.TableView?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="614.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="325.0" prefWidth="614.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
@@ -22,33 +16,39 @@
                         <Font size="13.0" />
                      </font>
                   </Label>
-                  <TextField fx:id="nameShopTextField" promptText="nom du magasin" />
+                  <TextField fx:id="nameShopTextField" prefHeight="26.0" prefWidth="170.0" promptText="Entrez un nom du magasin" />
                </children>
             </HBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="115.0">
                <children>
-                  <Button onAction="#helpShop" mnemonicParsing="false" text="Aide" />
+                  <Button mnemonicParsing="false" onAction="#helpShop" style="-fx-background-color: #9F667A;" text="Aide" />
                </children>
             </HBox>
          </children>
       </HBox>
       <TableView fx:id="tableViewShop" prefHeight="249.0" prefWidth="750.0">
         <columns>
-          <TableColumn fx:id="columnProduct" prefWidth="484.66669714450836" text="Produit" />
-            <TableColumn fx:id="columnPrice" prefWidth="127.99996948242188" text="Prix" />
+          <TableColumn fx:id="columnProduct" prefWidth="484.66669714450836" style="-fx-background-color: #915F6D;" text="Produit" />
+            <TableColumn fx:id="columnPrice" prefWidth="127.99996948242188" style="-fx-background-color: #915F6D;" text="Prix" />
         </columns>
       </TableView>
       <HBox alignment="CENTER" prefHeight="102.0" prefWidth="750.0" spacing="10.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#createNewProduct" text="Créer un produit" />
-            <ComboBox fx:id="comboBoxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" />
-            <Spinner fx:id="spinnerPrice" amountToStepBy=".1" initialValue="3.2" max="10000.0" min="0.1" prefHeight="25.0" prefWidth="123.0" promptText="Prix" />
-            <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addProductToTableView" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
+            <Button mnemonicParsing="false" onAction="#createNewProduct" style="-fx-background-color: #9F667A;" text="Créer un produit" />
+            <ComboBox fx:id="comboBoxProduct" prefHeight="25.0" prefWidth="199.0" promptText="Produit" style="-fx-background-color: #9F667A;" />
+            <Spinner fx:id="spinnerPrice" amountToStepBy=".1" initialValue="3.2" max="10000.0" min="0.1" prefHeight="25.0" prefWidth="123.0" promptText="Prix" style="-fx-background-color: #9F667A;" />
+            <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addProductToTableView" prefHeight="25.0" prefWidth="139.0" style="-fx-background-color: #9F667A;" text="Ajouter" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="216.0" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="100.0" style="-fx-background-color: yellowgreen; -fx-text-fill: white;" text="Confirmer">
+               <font>
+                  <Font name="Yu Gothic Medium" size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="500.0" />
+               </HBox.margin></Button>
          </children>
       </HBox>
    </children>

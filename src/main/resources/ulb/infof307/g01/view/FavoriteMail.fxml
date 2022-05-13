@@ -1,27 +1,41 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="217.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="217.0" prefWidth="405.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: E9D9C6;">
          <children>
-            <Label fx:id="nameFavoriteMail" text="Nouveau mail :" />
+            <Label fx:id="nameFavoriteMail" text="Nouveau mail :" underline="true">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Label>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="5.0" style="-fx-background-color: E9D9C6;">
          <children>
-            <TextField fx:id="newFavoriteMail" prefHeight="25.0" prefWidth="291.0" promptText="nouveau email favori" />
-            <Button onAction="#addFavoriteMail" mnemonicParsing="false" text="ajouter en favori" />
+            <TextField fx:id="newFavoriteMail" prefHeight="25.0" prefWidth="250.0" promptText="veuillez entrer une adresse mail">
+               <font>
+                  <Font size="14.0" />
+               </font></TextField>
+            <Button mnemonicParsing="false" onAction="#addFavoriteMail" style="-fx-background-color: #915F6D;" text="Ajouter aux favoris" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="14.0" />
+               </font></Button>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: E9D9C6;">
          <children>
-            <Button mnemonicParsing="false" onAction="#confirmMail" prefHeight="30.0" prefWidth="165.0" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#confirmMail" prefHeight="30.0" prefWidth="100.0" style="-fx-background-color: yellowgreen;" text="Confirmer">
+               <HBox.margin>
+                  <Insets left="300.0" right="5.0" />
+               </HBox.margin>
+               <font>
+                  <Font name="Yu Gothic Medium" size="14.0" />
+               </font></Button>
          </children>
       </HBox>
    </children>
