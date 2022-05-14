@@ -21,12 +21,12 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public static final int SHOP_ID_INDEX = 1;
     public static final int SHOP_NAME_INDEX = 2;
-    public static final int SHOP_LONGITUDE_INDEX = 4;
-    public static final int SHOP_LATITUDE_INDEX = 3;
+    public static final int SHOP_ADDRESS_INDEX = 3;
+    public static final int SHOP_LONGITUDE_INDEX = 5;
+    public static final int SHOP_LATITUDE_INDEX = 4;
     public static final String MAGASIN_TABLE_NAME = "Magasin";
     public static final String TABLE_SHOP_PRODUCT = "MagasinIngredient";
     public static final String TABLE_USER_MAGASIN = "UtilisateurMagasin";
-    public static final int SHOP_ADDRESS_INDEX = 3;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
