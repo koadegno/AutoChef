@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
@@ -15,19 +16,36 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="10.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="43.0" prefWidth="482.0">
+            <VBox spacing="5.0">
                <children>
-                  <Label prefHeight="17.0" prefWidth="113.0" text="Nom du magasin : ">
-                     <font>
-                        <Font size="13.0" />
-                     </font>
-                  </Label>
-                  <TextField fx:id="nameShopTextField" promptText="nom du magasin" />
+                  <HBox>
+                     <children>
+                        <Label prefHeight="19.0" prefWidth="145.0" text="Nom du magasin : " textAlignment="JUSTIFY">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="nameShopTextField" prefHeight="25.0" prefWidth="157.0" promptText="nom du magasin" />
+                     </children>
+                  </HBox>
+                  <HBox>
+                     <children>
+                        <Label prefHeight="19.0" prefWidth="146.0" text="Adresse du  magasin :" textAlignment="CENTER">
+                           <font>
+                              <Font size="13.0" />
+                           </font>
+                        </Label>
+                        <TextField fx:id="addressShopTextField" prefHeight="25.0" prefWidth="157.0" promptText="adresse du magasin" />
+                     </children>
+                  </HBox>
                </children>
-            </HBox>
+               <padding>
+                  <Insets top="5.0" />
+               </padding>
+            </VBox>
             <HBox alignment="CENTER_RIGHT" prefHeight="43.0" prefWidth="115.0">
                <children>
-                  <Button onAction="#helpShop" mnemonicParsing="false" text="Aide" />
+                  <Button mnemonicParsing="false" onAction="#helpShop" text="Aide" />
                </children>
             </HBox>
          </children>
