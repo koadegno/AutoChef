@@ -30,10 +30,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public static final double MAP_SCALE = 4000000.638572;
     // TODO: CONTEXT MENU DANS FXML ?
     private final ContextMenu contextMenu = new ContextMenu();
-    private final MenuItem addShopMenuItem = new MenuItem("Ajouter magasin");
     private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
     private final MenuItem deleteItineraryItem = new MenuItem("Supprimer itinéraire");
-    private final MenuItem modifyShopMenuItem = new MenuItem("Modifier magasin");
     private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
     public Label timeFeetLabel;
     public Label timeBikeLabel;
@@ -133,26 +131,14 @@ public class MapViewController extends ViewController<MapViewController.Listener
      */
     private void initializeContextMenu(){
 
-        contextMenu.getItems().addAll(addShopMenuItem, modifyShopMenuItem, deleteShopMenuItem, itineraryShopMenuItem, deleteItineraryItem);
+        contextMenu.getItems().addAll(deleteShopMenuItem, itineraryShopMenuItem, deleteItineraryItem);
         mapView.setContextMenu(contextMenu);
         deleteItineraryItem.setVisible(false);
-
-        // contexte menu pour l'ajout
-        addShopMenuItem.setOnAction(event -> listener.onAddShopClicked(mapView,currentCursorPosX ,currentCursorPosY ));
 
         // contexte menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
             listener.onDeleteShopClicked(); //
 
-        });
-
-        // contexte menu pour la modification
-        modifyShopMenuItem.setOnAction(event -> {
-            try {
-                listener.onUpdateShopClicked();
-            } catch (SQLException e) {
-                showErrorSQL();
-            }
         });
 
         // contexte menu pour le calcul d'itinéraire
@@ -182,11 +168,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void setIfSearchDeparture() {
         isSearchDepartureActive = !isSearchDepartureActive;}
 
-    public void modifyVisibilityAddShopMenuItem() {addShopMenuItem.setVisible(getSearchDepartureActive());}
 
     public void modifyVisibilityDeleteShopMenuItem() {deleteItineraryItem.setVisible(getSearchDepartureActive());}
 
-    public void modifyVisibilityModifyShopMenuItem() {modifyShopMenuItem.setVisible(getSearchDepartureActive());}
 
     public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(getSearchDepartureActive());}
 
@@ -235,9 +219,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public void switchVisibilityContextMenu() {
         // Rend invisible les boutons non nécessaires
-        modifyVisibilityAddShopMenuItem();
         modifyVisibilityDeleteShopMenuItem();
-        modifyVisibilityModifyShopMenuItem();
         modifyVisibilityDeleteItinerary();
 
         // Switch la variable ifSearchDeparture
@@ -263,9 +245,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public interface Listener {
-        void onAddShopClicked(MapView mapView, Double posX, Double posY);
         void onDeleteShopClicked();
-        void onUpdateShopClicked() throws SQLException;
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();
