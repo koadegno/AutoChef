@@ -26,6 +26,7 @@ public class ShopDao extends Database implements Dao<Shop> {
     public static final String MAGASIN_TABLE_NAME = "Magasin";
     public static final String TABLE_SHOP_PRODUCT = "MagasinIngredient";
     public static final String TABLE_USER_MAGASIN = "UtilisateurMagasin";
+    public static final int SHOP_ADDRESS_INDEX = 3;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -71,10 +72,11 @@ public class ShopDao extends Database implements Dao<Shop> {
     @Override
     public void insert(Shop shop) throws SQLException {
         String name = String.format("'%s'", shop.getName());
+        String address = String.format("'%s'", shop.getAddress());
         String latitude = String.valueOf(shop.getCoordinateX());
         String longitude = String.valueOf(shop.getCoordinateY());
 
-        String[] values = {"null", name,"null", longitude,latitude};
+        String[] values = {"null", name,address, longitude,latitude};
         insert(MAGASIN_TABLE_NAME, values);
 
         String shopID = String.valueOf(getGeneratedID());
@@ -153,7 +155,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private List<Shop> getAllShops() throws SQLException {
         String query = String.format("""
-                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE UtilisateurMagasin.UtilisateurID = %d""",
@@ -184,7 +186,7 @@ public class ShopDao extends Database implements Dao<Shop> {
 
             if (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                Shop shop = new Shop(shopID, name, coordinates);
+                Shop shop = new Shop(shopID, name,null, coordinates); //TODO changer l'adresse null ici par une vrai adr
                 fillShopWithProducts(shop);
                 return shop;
             }
@@ -292,10 +294,11 @@ public class ShopDao extends Database implements Dao<Shop> {
             while (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
                 String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
+                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
                 double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                Shop shop =  new Shop(shopID, shopName, shopPoint);
+                Shop shop =  new Shop(shopID, shopName,shopAddress, shopPoint);
                 shopsList.add(shop);
             }
         }

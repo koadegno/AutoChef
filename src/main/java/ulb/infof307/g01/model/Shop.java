@@ -20,9 +20,10 @@ public class Shop extends HashSet<Product> {
         this.coordinate = null;
     }
 
-    public Shop(int id,String name, Point coordinate){
+    public Shop(int id,String name,String address, Point coordinate){
         this(name,coordinate);
         this.id = id;
+        this.address = address;
     }
     public Shop(String name, Point coordinate){
         this.name = name;
