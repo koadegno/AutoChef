@@ -25,18 +25,15 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     public static final String SHOW_SHOP_FXML = "Shop.fxml";
     private ShopViewController viewController;
-    private final ShopListener listener;
     private Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
 
     public ShopController(boolean isModifying){
         this.isModifying = isModifying;
         shop = null;
-        listener = null;
     }
 
-    public ShopController(Shop shop, boolean isModifying, ShopListener listener){
-        this.listener = listener;
+    public ShopController(Shop shop, boolean isModifying){
         this.shop = shop;
         this.isModifying = isModifying;
     }
@@ -80,11 +77,9 @@ public class ShopController extends Controller implements ShopViewController.Lis
         shop.addAll(viewController.getTableViewShopItems());
         if (isModifying) {
             Configuration.getCurrent().getShopDao().update(shop);
-            listener.updateShop(shop);
         }
         else {
             Configuration.getCurrent().getShopDao().insert(shop);
-            //listener.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }
     }
 
@@ -139,11 +134,4 @@ public class ShopController extends Controller implements ShopViewController.Lis
         helpController.displayHelpShop();
     }
 
-    /**
-     * Permet l'ajout et la modification dans MapController
-     */
-    public interface ShopListener {
-        void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
-        void updateShop(Shop shop);
-    }
 }

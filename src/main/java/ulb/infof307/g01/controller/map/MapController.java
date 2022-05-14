@@ -55,6 +55,9 @@ public class MapController extends Controller implements MapViewController.Liste
         setStage(primaryStage);
         isOnItineraryMode = false;
         this.readOnlyMode = readOnlyMode;
+        Configuration configuration = Configuration.getCurrent();
+        shopDao = configuration.getShopDao();
+        locatorService = new LocatorService();
     }
 
     /**
@@ -64,14 +67,10 @@ public class MapController extends Controller implements MapViewController.Liste
         FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-        Configuration configuration = Configuration.getCurrent();
-        shopDao = configuration.getShopDao();
         mapShop = new MapShop(this);
         onInitializeMapShop();
         viewController.start();
         routeService = new RouteService(viewController,this);
-        locatorService = new LocatorService();
-
     }
 
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
@@ -131,19 +130,6 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Lance le popup pour choisir les informations concernant le magasin
-     * @param mapView la mapView contient les methodes de conversion d'une coordonnée X,Y en un point sur la carte
-     * @param cursorX la coordonnée X du curseur
-     * @param cursorY la coordonnée Y du curseur
-     */
-    @Override
-    public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
-        Point mapPoint = cursorPoint(mapView, cursorX, cursorY);
-        mapShop.showNewShop(mapPoint);
-
-    }
-
-    /**
      * récupère la coordonnée géographique associé au curseur
      * @param mapView la mapView contient la fonction de calcul
      * @return une coordonnée géographique correspondant a la position du curseur et la position de la map
@@ -151,19 +137,6 @@ public class MapController extends Controller implements MapViewController.Liste
     private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
         Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
         return mapView.screenToLocation(cursorPoint2D);
-    }
-
-    /**
-     * Cherche le magasin correspondant à la position et lance le popup
-     * @throws SQLException erreur au niveau de la base de donnée
-     */
-    @Override
-    public void onUpdateShopClicked() throws SQLException {
-
-        Pair<Graphic, Graphic> graphicPair = getSelectedShop();
-        if(graphicPair == null) return;
-        mapShop.setSelectedShop(graphicPair.getLeft(),graphicPair.getRight());
-        mapShop.updateShop();
     }
 
     /**

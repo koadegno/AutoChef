@@ -12,7 +12,7 @@ import ulb.infof307.g01.model.database.dao.ShopDao;
 import java.sql.SQLException;
 import java.util.List;
 
-public class MapShop implements ShopController.ShopListener{
+public class MapShop {
     private final ShopDao shopDao;
     private ShoppingList shoppingList ;
     private final MapShopListener listener;
@@ -51,49 +51,6 @@ public class MapShop implements ShopController.ShopListener{
         this.shoppingList = shoppingList;
     }
 
-    public void showNewShop(Point mapPoint) {
-        displayShop(new Shop(mapPoint), false);
-    }
-
-    @Override
-    public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop){
-        listener.addCircle(color, textCircle, coordinate, isShop);
-    }
-
-
-    /**
-     * Met a jour le magasin afficher sur la carte
-     * @param shop le magasin existant qu'il faut mettre a jour
-     */
-    @Override
-    public void updateShop(Shop shop){
-
-        TextSymbol textSymbol = (TextSymbol) currentGraphicTextMapShop.getSymbol();
-        textSymbol.setText(shop.getName());
-    }
-
-    /**
-     * Cherche le magasin correspondant à la position et lance le popup
-     * @throws SQLException erreur au niveau de la base de donnée
-     */
-    public void updateShop() throws SQLException {
-
-        Point mapPoint = (Point) currentGraphicCircleMapShop.getGeometry();
-        String shopName = ((TextSymbol) currentGraphicTextMapShop.getSymbol()).getText();
-
-        Shop shopToModify = shopDao.get(shopName,mapPoint);
-        displayShop(shopToModify, true);
-    }
-
-    /**
-     * affiche le magasin à l'écran
-     * @param shopToModify le magasin a affiché
-     * @param isModifying Vrai s'il est en train d'être modifié
-     */
-    private void displayShop(Shop shopToModify, boolean isModifying) {
-        ShopController showShopController = new ShopController(shopToModify, isModifying, this);
-        showShopController.displayShop();
-    }
 
     public void setSelectedShop(Graphic currentGraphicCircleMapShop, Graphic currentGraphicTextMapShop) {
         this.currentGraphicTextMapShop = currentGraphicTextMapShop;
