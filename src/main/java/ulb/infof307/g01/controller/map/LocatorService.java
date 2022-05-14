@@ -32,8 +32,8 @@ public class LocatorService {
 
     /**
      * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
-     * Pour parametrer le service de geocoding Locator
-     * et Parametre par defaut du service de geocoding
+     * Pour paramètrer le service de geocoding Locator
+     * et Paramètre par défaut du service de geocoding
      */
     void createLocatorTaskAndDefaultParameters() {
         locatorTask = new LocatorTask(GEOCODE_URL_TASK);

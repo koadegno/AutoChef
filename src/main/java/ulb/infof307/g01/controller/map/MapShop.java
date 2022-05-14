@@ -14,17 +14,16 @@ import java.sql.SQLException;
 import java.util.List;
 
 public class MapShop implements ShopController.ShopListener{
-    private Configuration configuration;
-    private ShopDao shopDao;
+    private final ShopDao shopDao;
     private ShoppingList shoppingList ;
-    private MapShopListener listener;
+    private final MapShopListener listener;
 
     private Graphic currentGraphicCircleMapShop;
     private Graphic currentGraphicTextMapShop;
 
 
     public MapShop(MapShopListener mapShopListener) {
-        configuration = Configuration.getCurrent();
+        Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
         listener = mapShopListener;
     }
@@ -87,6 +86,11 @@ public class MapShop implements ShopController.ShopListener{
         displayShop(shopToModify, true);
     }
 
+    /**
+     * affiche le magasin à l'écran
+     * @param shopToModify le magasin a affiché
+     * @param isModifying Vrai s'il est en train d'être modifié
+     */
     private void displayShop(Shop shopToModify, boolean isModifying) {
         ShopController showShopController = new ShopController(shopToModify, isModifying, this);
         showShopController.show();
@@ -95,6 +99,15 @@ public class MapShop implements ShopController.ShopListener{
     public void setSelectedShop(Graphic currentGraphicCircleMapShop, Graphic currentGraphicTextMapShop) {
         this.currentGraphicTextMapShop = currentGraphicTextMapShop;
         this.currentGraphicCircleMapShop = currentGraphicCircleMapShop;
+    }
+
+    public void deleteShop() throws SQLException {
+
+        String shopName = ((TextSymbol) currentGraphicTextMapShop.getSymbol()).getText();
+        Point shopPoint = (Point) currentGraphicTextMapShop.getGeometry();
+
+        Shop shopToDelete = shopDao.get(shopName, shopPoint);
+        shopDao.delete(shopToDelete);
     }
 
     public interface MapShopListener{

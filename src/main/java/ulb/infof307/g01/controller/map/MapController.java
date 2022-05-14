@@ -43,7 +43,6 @@ public class MapController extends Controller implements MapViewController.Liste
     private RouteService routeService;
     private LocatorService locatorService;
     private ShopDao shopDao;
-    private Configuration configuration;
     private MapShop mapShop;
 
     @Override
@@ -65,7 +64,7 @@ public class MapController extends Controller implements MapViewController.Liste
         FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-        configuration = Configuration.getCurrent();
+        Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
         mapShop = new MapShop(this);
         onInitializeMapShop();
@@ -115,7 +114,6 @@ public class MapController extends Controller implements MapViewController.Liste
 
     /**
      * Initialise les magasins sur la carte
-     * @throws SQLException erreur au niveau de la base de donnée
      */
     public void onInitializeMapShop() {
 
@@ -155,9 +153,6 @@ public class MapController extends Controller implements MapViewController.Liste
         return mapView.screenToLocation(cursorPoint2D);
     }
 
-
-
-
     /**
      * Cherche le magasin correspondant à la position et lance le popup
      * @throws SQLException erreur au niveau de la base de donnée
@@ -167,7 +162,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
         Pair<Graphic, Graphic> graphicPair = getSelectedShop();
         if(graphicPair == null) return;
-        mapShop.setSelectedShop(graphicPair.getRight(),graphicPair.getLeft());
+        mapShop.setSelectedShop(graphicPair.getLeft(),graphicPair.getRight());
         mapShop.updateShop();
     }
 
@@ -259,8 +254,6 @@ public class MapController extends Controller implements MapViewController.Liste
         }
         else if (addressPosition != null){
             viewController.setViewPointCenter(addressPosition);
-
-
         }
         return addressPosition != null;
     }
@@ -269,28 +262,26 @@ public class MapController extends Controller implements MapViewController.Liste
      * Supprime le point sélectionné de l'overlay
      */
     @Override
-    public void onDeleteShopClicked() throws SQLException {
+    public void onDeleteShopClicked() {
         Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
         if(shopOverlay == null) return;
+        mapShop.setSelectedShop(shopOverlay.getLeft(),shopOverlay.getRight());
         if(!isOnItineraryMode){
 
             ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
             if (alertResult == ButtonType.OK ) {
                 Graphic circlePointOnMap = shopOverlay.getLeft();
                 Graphic textPointOnMap = shopOverlay.getRight();
-
-                String shopName = ((TextSymbol) textPointOnMap.getSymbol()).getText();
-                Point shopPoint = (Point) textPointOnMap.getGeometry();
-
-                Shop shopToDelete = shopDao.get(shopName, shopPoint);
-                shopDao.delete(shopToDelete);
-
-                viewController.removeShopGraphics(circlePointOnMap,textPointOnMap);
+                try {
+                    mapShop.deleteShop();
+                    viewController.removeShopGraphics(circlePointOnMap,textPointOnMap);
+                } catch (SQLException e) {
+                    ViewController.showErrorSQL();
+                }
             }
         }
         else{
             ViewController.showAlert(Alert.AlertType.INFORMATION, "Tu ne peux pas supprimer un magasin.\nSupprime d'abord l'itinéraire", "");
-
         }
     }
 

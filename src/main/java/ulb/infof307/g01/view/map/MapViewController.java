@@ -142,11 +142,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
         // contexte menu pour la suppression
         deleteShopMenuItem.setOnAction(event -> {
-            try {
-                listener.onDeleteShopClicked(); //
-            } catch (SQLException e) {
-                showErrorSQL();
-            }
+            listener.onDeleteShopClicked(); //
+
         });
 
         // contexte menu pour la modification
@@ -267,7 +264,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public interface Listener {
         void onAddShopClicked(MapView mapView, Double posX, Double posY);
-        void onDeleteShopClicked() throws SQLException;
+        void onDeleteShopClicked();
         void onUpdateShopClicked() throws SQLException;
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
