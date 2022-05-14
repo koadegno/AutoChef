@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
  * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
  * chemin d'un point A à un point B
  */
-public class MapController extends Controller implements MapViewController.Listener, ShopController.ShopListener, RouteService.Listener, MapShop.MapShopListener {
+public class MapController extends Controller implements MapViewController.Listener, RouteService.Listener, MapShop.MapShopListener {
 
     private MapViewController viewController;
 
@@ -140,11 +140,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onAddShopClicked(MapView mapView, Double cursorX, Double cursorY) {
-
         Point mapPoint = cursorPoint(mapView, cursorX, cursorY);
+        mapShop.showNewShop(mapPoint);
 
-        ShopController shopController = new ShopController(new Shop(mapPoint),false,  this);
-        shopController.show();
     }
 
     /**
@@ -157,19 +155,8 @@ public class MapController extends Controller implements MapViewController.Liste
         return mapView.screenToLocation(cursorPoint2D);
     }
 
-    /**
-     * Met a jour le shop afficher sur la carte
-     * @param shop le magasin existant qu'il faut mettre a jour
-     */
-    @Override
-    public void updateShop(Shop shop){
-        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
-        if(shopOverlay == null) return;
 
-        Graphic textPointOnMap = shopOverlay.getRight();
-        TextSymbol shopName = (TextSymbol) textPointOnMap.getSymbol();
-        shopName.setText(shop.getName());
-    }
+
 
     /**
      * Cherche le magasin correspondant à la position et lance le popup
@@ -180,15 +167,8 @@ public class MapController extends Controller implements MapViewController.Liste
 
         Pair<Graphic, Graphic> graphicPair = getSelectedShop();
         if(graphicPair == null) return;
-        Graphic cercleGraphic = graphicPair.getLeft();
-        Graphic textGraphic = graphicPair.getRight();
-
-        Point mapPoint = (Point) cercleGraphic.getGeometry();
-        String shopName = ((TextSymbol) textGraphic.getSymbol()).getText();
-
-        Shop shopToModify = shopDao.get(shopName,mapPoint);
-        ShopController showShopController = new ShopController(shopToModify,true, this);
-        showShopController.show();
+        mapShop.setSelectedShop(graphicPair.getRight(),graphicPair.getLeft());
+        mapShop.updateShop();
     }
 
     /**
@@ -392,6 +372,5 @@ public class MapController extends Controller implements MapViewController.Liste
         return addressPosition;
 
     }
-
 
 }
