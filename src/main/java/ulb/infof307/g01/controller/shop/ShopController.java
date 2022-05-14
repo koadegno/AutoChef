@@ -55,8 +55,10 @@ public class ShopController extends Controller implements ShopViewController.Lis
             viewController.setListener(this);
             viewController.createPopup();
             if(isModifying){
-                viewController.setNameShopTextField(shop.getName());
-                //TODO set l'adresse
+                viewController.setBasicShopTextField(shop.getName(),shop.getAddress() );
+            }
+            else{
+                shop = new Shop("","");
             }
 
             setStage(shopStage);
@@ -68,12 +70,13 @@ public class ShopController extends Controller implements ShopViewController.Lis
     /**
      * Sauvegarde le magasin crée par l'utilisateur
      * @param shopName le nom du magasin
+     * @param shopAddress
      * @throws SQLException erreur au niveau de la base de donnée
      */
     @Override
-    public void onSaveShopClicked(String shopName) throws SQLException {
+    public void onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
         shop.setName(shopName);
-        //TODO set l'adresse avant de faire la mise a jour
+        shop.setAddress(shopAddress);
         shop.addAll(viewController.getTableViewShopItems());
         if (isModifying) {
             Configuration.getCurrent().getShopDao().update(shop);
@@ -81,7 +84,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
         }
         else {
             Configuration.getCurrent().getShopDao().insert(shop);
-            listener.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+            //listener.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
         }
     }
 

@@ -11,9 +11,10 @@ import java.util.HashSet;
 public class Shop extends HashSet<Product> {
 
     private String name;
-    private final Point coordinate;
+    private Point coordinate;
     private String address;
     private int id = -1;
+    private LocatorService locatorService;
 
     public Shop(){
         this.coordinate = null;
@@ -32,10 +33,10 @@ public class Shop extends HashSet<Product> {
         this(null,shopPoint);
     }
 
-    public Shop(String name, String address) {//TODO faire la locator ici
+    public Shop(String name, String address) {
         this.name = name;
         this.address = address;
-        LocatorService locatorService = new LocatorService();
+        locatorService = new LocatorService();
         coordinate = locatorService.convertAddressToPoint(address);
     }
 
@@ -84,5 +85,10 @@ public class Shop extends HashSet<Product> {
 
     public String getAddress() {
         return address;
+    }
+
+    public void setAddress(String shopAddress) {
+        address = shopAddress;
+        coordinate = locatorService.convertAddressToPoint(shopAddress);
     }
 }

@@ -25,7 +25,8 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     public TableColumn<Product,String> columnProduct;
     public TableColumn<Product,String> columnPrice;
     public TextField nameShopTextField;
-    public VBox vBox; 
+    public TextField addressShopTextField;
+    public VBox vBox;
 
 
     public void createPopup(){
@@ -38,8 +39,10 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
-    public void setNameShopTextField(String nameShop){
+    public void setBasicShopTextField(String nameShop, String shopAddress){
+
         nameShopTextField.setText(nameShop);
+        addressShopTextField.setText(shopAddress);
     }
 
     @Override
@@ -81,11 +84,12 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
 
     public void saveNewShop() {
         setNodeColor(nameShopTextField, false);
-        String getNameShop = nameShopTextField.getText();
+        String shopName = nameShopTextField.getText();
+        String shopAddress = addressShopTextField.getText();
 
-        if (!Objects.equals(getNameShop, "")){
+        if (!Objects.equals(shopName, "")){
             try {
-                listener.onSaveShopClicked(getNameShop);
+                listener.onSaveShopClicked(shopName,shopAddress);
                 Stage stage = (Stage) vBox.getScene().getWindow();
                 stage.close();
             } catch (SQLException e) {
@@ -113,7 +117,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
 
 
     public interface Listener{
-        void onSaveShopClicked(String shopName) throws SQLException;
+        void onSaveShopClicked(String shopName, String shopAddress) throws SQLException;
 
         void fillTableViewShop();
 
