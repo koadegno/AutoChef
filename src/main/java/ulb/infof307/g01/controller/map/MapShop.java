@@ -2,7 +2,6 @@ package ulb.infof307.g01.controller.map;
 
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.Graphic;
-import com.esri.arcgisruntime.symbology.Symbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
@@ -93,7 +92,7 @@ public class MapShop implements ShopController.ShopListener{
      */
     private void displayShop(Shop shopToModify, boolean isModifying) {
         ShopController showShopController = new ShopController(shopToModify, isModifying, this);
-        showShopController.show();
+        showShopController.displayShop();
     }
 
     public void setSelectedShop(Graphic currentGraphicCircleMapShop, Graphic currentGraphicTextMapShop) {

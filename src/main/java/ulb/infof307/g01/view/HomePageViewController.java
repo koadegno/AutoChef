@@ -33,6 +33,9 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
     @FXML
     public void redirectToRecipe(){listener.onRecipeButtonClick();}
 
+    @FXML
+    public void redirectToShop(){listener.onShopButtonClick();}
+
     public void logout() {
         listener.logout();
     }
@@ -46,6 +49,7 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
         void onMenuButtonClick();
         void onMapButtonClick();
         void onRecipeButtonClick();
+        void onShopButtonClick();
         void logout();
     }
 }

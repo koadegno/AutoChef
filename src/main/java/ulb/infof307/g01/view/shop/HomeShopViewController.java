@@ -11,6 +11,7 @@ import ulb.infof307.g01.view.ViewController;
  * */
 public class HomeShopViewController extends ViewController<HomeShopViewController.HomeShopListener> {
 
+
     @FXML
     void logout() {
         listener.logout();

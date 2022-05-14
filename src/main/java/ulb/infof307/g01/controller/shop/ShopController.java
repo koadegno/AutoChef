@@ -26,8 +26,14 @@ public class ShopController extends Controller implements ShopViewController.Lis
     public static final String SHOW_SHOP_FXML = "Shop.fxml";
     private ShopViewController viewController;
     private final ShopListener listener;
-    private final Shop shop;
+    private Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
+
+    public ShopController(boolean isModifying){
+        this.isModifying = isModifying;
+        shop = null;
+        listener = null;
+    }
 
     public ShopController(Shop shop, boolean isModifying, ShopListener listener){
         this.listener = listener;
@@ -35,16 +41,24 @@ public class ShopController extends Controller implements ShopViewController.Lis
         this.isModifying = isModifying;
     }
 
+    public void setShop(Shop shop){
+        this.shop = shop;
+    }
+
     /**
      * Lance l'affichage de la carte
      */
-    public void show(){
+    public void displayShop(){
         try {
             viewController = new ShopViewController();
             Stage shopStage = popupFXML(SHOW_SHOP_FXML,viewController);
             viewController.setListener(this);
             viewController.createPopup();
-            if(isModifying) viewController.setNameShopTextField(shop.getName());
+            if(isModifying){
+                viewController.setNameShopTextField(shop.getName());
+                //TODO set l'adresse
+            }
+
             setStage(shopStage);
         } catch (IOException e) {
             ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
@@ -59,6 +73,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
     @Override
     public void onSaveShopClicked(String shopName) throws SQLException {
         shop.setName(shopName);
+        //TODO set l'adresse avant de faire la mise a jour
         shop.addAll(viewController.getTableViewShopItems());
         if (isModifying) {
             Configuration.getCurrent().getShopDao().update(shop);

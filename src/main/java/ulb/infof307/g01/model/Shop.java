@@ -1,6 +1,7 @@
 package ulb.infof307.g01.model;
 
 import com.esri.arcgisruntime.geometry.Point;
+import ulb.infof307.g01.controller.map.LocatorService;
 
 import java.util.HashSet;
 
@@ -11,7 +12,12 @@ public class Shop extends HashSet<Product> {
 
     private String name;
     private final Point coordinate;
+    private String address;
     private int id = -1;
+
+    public Shop(){
+        this.coordinate = null;
+    }
 
     public Shop(int id,String name, Point coordinate){
         this(name,coordinate);
@@ -24,6 +30,13 @@ public class Shop extends HashSet<Product> {
 
     public Shop(Point shopPoint) {
         this(null,shopPoint);
+    }
+
+    public Shop(String name, String address) {//TODO faire la locator ici
+        this.name = name;
+        this.address = address;
+        LocatorService locatorService = new LocatorService();
+        coordinate = locatorService.convertAddressToPoint(address);
     }
 
     public void setName(String shopName){
@@ -69,4 +82,7 @@ public class Shop extends HashSet<Product> {
         return this.name.equals(otherShop.name) && (this.coordinate.getX() == otherShop.coordinate.getX()) && this.coordinate.getY() == otherShop.coordinate.getY();
     }
 
+    public String getAddress() {
+        return address;
+    }
 }

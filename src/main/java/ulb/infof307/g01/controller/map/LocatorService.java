@@ -10,6 +10,7 @@ import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.atomic.AtomicReference;
@@ -43,6 +44,11 @@ public class LocatorService {
         geocodeParameters.setMaxResults(1);
         // comment les coordonnées doivent correspondre a la location
         geocodeParameters.setOutputSpatialReference(SpatialReferences.getWebMercator());
+    }
+
+    public Point convertAddressToPoint(String address){
+        List<Graphic> fakeAddresseOveralay = new ArrayList<>();
+        return performGeocode(address,fakeAddresseOveralay);
     }
 
     /**
