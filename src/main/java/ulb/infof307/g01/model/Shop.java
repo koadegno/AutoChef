@@ -18,6 +18,8 @@ public class Shop extends HashSet<Product> {
 
     public Shop(){
         this.coordinate = null;
+        this.name = this.address = "";
+        this.locatorService = new LocatorService();
     }
 
     public Shop(int id,String name,String address, Point coordinate){
@@ -28,10 +30,6 @@ public class Shop extends HashSet<Product> {
     public Shop(String name, Point coordinate){
         this.name = name;
         this.coordinate = coordinate;
-    }
-
-    public Shop(Point shopPoint) {
-        this(null,shopPoint);
     }
 
     public Shop(String name, String address) {
@@ -88,7 +86,7 @@ public class Shop extends HashSet<Product> {
         return address;
     }
 
-    public void setAddress(String shopAddress) {
+    public void setAddress(String shopAddress) throws NullPointerException {
         address = shopAddress;
         coordinate = locatorService.convertAddressToPoint(shopAddress);
     }

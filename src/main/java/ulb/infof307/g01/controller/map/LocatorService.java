@@ -9,6 +9,7 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
+import org.jetbrains.annotations.NotNull;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -46,9 +47,11 @@ public class LocatorService {
         geocodeParameters.setOutputSpatialReference(SpatialReferences.getWebMercator());
     }
 
-    public Point convertAddressToPoint(String address){
-        List<Graphic> fakeAddresseOveralay = new ArrayList<>();
-        return performGeocode(address,fakeAddresseOveralay);
+    public Point convertAddressToPoint(String address) throws NullPointerException{
+        List<Graphic> fakeAddressOverlay = new ArrayList<>();
+        Point addressPoint = performGeocode(address,fakeAddressOverlay);
+        if(addressPoint == null) throw new NullPointerException("Il n'y a pas de coordonnée correspondant a cette adresse");
+        return addressPoint;
     }
 
     /**

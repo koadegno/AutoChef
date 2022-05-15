@@ -178,7 +178,7 @@ public class ShopDao extends Database implements Dao<Shop> {
     public Shop get(String name, Point coordinates) throws SQLException {
 
         try (ResultSet querySelectShop = sendQuery(String.format("""
-                        SELECT M.MagasinID
+                        SELECT M.MagasinID,M.Nom, M.adresse
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
@@ -186,7 +186,8 @@ public class ShopDao extends Database implements Dao<Shop> {
 
             if (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                Shop shop = new Shop(shopID, name,null, coordinates); //TODO changer l'adresse null ici par une vrai adr
+                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
+                Shop shop = new Shop(shopID, name,shopAddress, coordinates);
                 fillShopWithProducts(shop);
                 return shop;
             }

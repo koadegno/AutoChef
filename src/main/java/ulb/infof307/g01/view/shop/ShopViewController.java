@@ -81,24 +81,30 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
-
+    @FXML
     public void saveNewShop() {
         setNodeColor(nameShopTextField, false);
         String shopName = nameShopTextField.getText();
         String shopAddress = addressShopTextField.getText();
+        if (shopName.isEmpty()){
+            setNodeColor(nameShopTextField, true);
+            return;
+        }
+        if (shopAddress.isEmpty()){
+            setNodeColor(addressShopTextField, true);
+            return;
+        }
 
-        if (!Objects.equals(shopName, "")){
-            try {
-                listener.onSaveShopClicked(shopName,shopAddress);
+        try {
+            boolean isSaved = listener.onSaveShopClicked(shopName,shopAddress);
+            if(isSaved){
                 Stage stage = (Stage) vBox.getScene().getWindow();
                 stage.close();
-            } catch (SQLException e) {
-                showErrorSQL();
             }
+        } catch (SQLException e) {
+            showErrorSQL();
         }
-        else{
-            setNodeColor(nameShopTextField, true);
-        }
+
     }
 
     public ObservableList<Product> getTableViewShopItems() {
@@ -117,7 +123,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
 
 
     public interface Listener{
-        void onSaveShopClicked(String shopName, String shopAddress) throws SQLException;
+        boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException;
 
         void fillTableViewShop();
 

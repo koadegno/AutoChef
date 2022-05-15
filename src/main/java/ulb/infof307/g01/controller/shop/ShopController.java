@@ -1,12 +1,11 @@
 package ulb.infof307.g01.controller.shop;
 
-import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
@@ -30,12 +29,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     public ShopController(boolean isModifying){
         this.isModifying = isModifying;
-        shop = null;
-    }
-
-    public ShopController(Shop shop, boolean isModifying){
-        this.shop = shop;
-        this.isModifying = isModifying;
+        shop = new Shop();
     }
 
     public void setShop(Shop shop){
@@ -52,12 +46,8 @@ public class ShopController extends Controller implements ShopViewController.Lis
             viewController.setListener(this);
             viewController.createPopup();
             if(isModifying){
-                viewController.setBasicShopTextField(shop.getName(),shop.getAddress() );
+                viewController.setBasicShopTextField(shop.getName(),shop.getAddress());
             }
-            else{
-                shop = new Shop("","");
-            }
-
             setStage(shopStage);
         } catch (IOException e) {
             ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
@@ -69,18 +59,29 @@ public class ShopController extends Controller implements ShopViewController.Lis
      * @param shopName le nom du magasin
      * @param shopAddress
      * @throws SQLException erreur au niveau de la base de donnée
+     * @return
      */
     @Override
-    public void onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
-        shop.setName(shopName);
-        shop.setAddress(shopAddress);
-        shop.addAll(viewController.getTableViewShopItems());
-        if (isModifying) {
-            Configuration.getCurrent().getShopDao().update(shop);
+    public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
+        boolean isSaved = true;
+        try {
+
+            shop.addAll(viewController.getTableViewShopItems());
+            shop.setName(shopName);
+            shop.setAddress(shopAddress);
+
+            if (isModifying) {
+                Configuration.getCurrent().getShopDao().update(shop);
+            }
+            else {
+                Configuration.getCurrent().getShopDao().insert(shop);
+            }
         }
-        else {
-            Configuration.getCurrent().getShopDao().insert(shop);
+        catch (NullPointerException e) {
+            ViewController.showAlert(Alert.AlertType.ERROR, "L'adresse entrer n'existe pas", "");
+            return !isSaved;
         }
+        return isSaved;
     }
 
     /**
@@ -116,7 +117,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
     }
 
     /**
-     * lance la fenetre pour crée un nouveau produit
+     * lance la fenêtre pour créer un nouveau produit
      */
     @Override
     public void createNewProductClicked() {

@@ -41,7 +41,6 @@ public class HomeShopController extends Controller implements HomeShopViewContro
     @Override
     public void onAddShopClicked() {
         ShopController shopController = new ShopController(false);
-        shopController.setShop(new Shop());
         shopController.displayShop();
     }
 
