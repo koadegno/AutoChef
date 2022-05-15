@@ -32,7 +32,7 @@ import java.util.concurrent.ExecutionException;
  * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
  * chemin d'un point A à un point B
  */
-public class MapController extends Controller implements MapViewController.Listener, RouteService.Listener, MapShop.MapShopListener {
+public class MapController extends Controller implements MapViewController.Listener, RouteService.Listener {
 
     private MapViewController viewController;
 
@@ -43,7 +43,6 @@ public class MapController extends Controller implements MapViewController.Liste
     private RouteService routeService;
     private final LocatorService locatorService;
     private final ShopDao shopDao;
-    private MapShop mapShop;
 
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
@@ -60,7 +59,6 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     public void displayMap(){
         launchFXML();
-        mapShop = new MapShop(this);
         onInitializeMapShop();
         viewController.start();
         routeService = new RouteService(viewController,this);
@@ -137,7 +135,10 @@ public class MapController extends Controller implements MapViewController.Liste
                 viewController.initReadOnlyMode();
             }
             else{
-                mapShop.initAllShops();
+                List<Shop> allShopList  = shopDao.getShops();
+                for(Shop shop: allShopList){
+                    addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+                }
             }
         } catch (SQLException e) {
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
@@ -217,6 +218,10 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void logout() {
         userLogout();
+    }
+
+    public void setProductListToSearchInShops(ShoppingList productListToSearchInShops) {
+        this.productListToSearchInShops = productListToSearchInShops;
     }
 
     /**

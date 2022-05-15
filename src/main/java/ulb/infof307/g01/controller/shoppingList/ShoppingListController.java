@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.scene.control.Alert;
-import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.map.MapController;
@@ -137,9 +136,8 @@ public abstract class ShoppingListController extends Controller implements Shopp
                 Boolean readOnlyMode = true;
                 MapController mapController = new MapController(currentStage,listenerBackPreviousWindow,readOnlyMode );
                 MapShop mapShop = new MapShop();
-                var type = mapShop.shopWithProductList(shoppingList);
-                System.out.println(type.stream().map(Pair::getLeft).toList());
-                mapController.displayShopMap(type);
+                mapController.setProductListToSearchInShops(shoppingList);
+                mapController.displayShopMap(mapShop.shopWithProductList(shoppingList));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
