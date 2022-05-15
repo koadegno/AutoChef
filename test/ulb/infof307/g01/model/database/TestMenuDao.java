@@ -77,7 +77,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
@@ -110,7 +110,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
@@ -139,7 +139,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }

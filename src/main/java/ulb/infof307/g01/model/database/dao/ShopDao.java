@@ -134,7 +134,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             while (querySelectProductList != null && querySelectProductList.next()) {
                 String productName = querySelectProductList.getString("Nom");
                 double productPrice = querySelectProductList.getDouble("prix");
-                shop.add(new Product(productName, productPrice));
+                shop.add(new Product.ProductBuilder().withName(productName).withPrice(productPrice).build());
             }
         }
     }

@@ -9,7 +9,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 
@@ -21,8 +20,9 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestProductDao {
     static private final String fruit = "Fruit";
     static private final String gram = "g";
-    static private final Product peach = new Product("peche", 1, gram, fruit);
-    static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
+    
+    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withNameUnity(gram).withFamilyProduct(fruit).build();
+    static private final Product strawberry = new Product.ProductBuilder().withName("fraise").withQuantity(1).withNameUnity(gram).withFamilyProduct(fruit).build();
 
     @BeforeAll
     static public void initConfig() throws SQLException {
@@ -51,7 +51,7 @@ class TestProductDao {
         Product strawberry2 = Configuration.getCurrent().getProductDao().get(strawberry.getName());
         assertEquals(strawberry.getName(), strawberry2.getName());
         assertEquals(strawberry.getNameUnity(), strawberry2.getNameUnity());
-        assertEquals(strawberry.getFamillyProduct(), strawberry2.getFamillyProduct());
+        assertEquals(strawberry.getFamilyProduct(), strawberry2.getFamilyProduct());
     }
 
     @Test
@@ -59,6 +59,6 @@ class TestProductDao {
         Product peach2 = Configuration.getCurrent().getProductDao().get(peach.getName());
         assertEquals(peach.getName(), peach2.getName());
         assertEquals(peach.getNameUnity(), peach2.getNameUnity());
-        assertEquals(peach.getFamillyProduct(), peach2.getFamillyProduct());
+        assertEquals(peach.getFamilyProduct(), peach2.getFamilyProduct());
     }
 }

@@ -36,7 +36,7 @@ public class JSON {
             String unite = (String) product.get("Unite");
 
             //Envoyer recette à la base de donnee
-            Product productToSend = new Product(nameProductToAdd, unite, familleAliment);
+            Product productToSend = new Product.ProductBuilder().withName(nameProductToAdd).withFamilyProduct(familleAliment).withNameUnity(unite).build();
             Configuration.getCurrent().getProductDao().insert(productToSend);
 
 

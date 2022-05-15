@@ -313,7 +313,7 @@ public class Database {
             String unityName = querySelectProduct.getString(3);
             int quantity = querySelectProduct.getInt(4);
 
-            Product product = new Product(productName, quantity, unityName,familyName);
+            Product product = new Product.ProductBuilder().withName(productName).withQuantity(quantity).withNameUnity(unityName).withFamilyProduct(familyName).build();
             recipe.add(product);
         }
     }

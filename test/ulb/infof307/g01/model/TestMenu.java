@@ -43,8 +43,8 @@ class TestMenu {
         recipes  = new Recipe [7];
         products = new Product[2];
 
-        products[0] = new Product("Abricot");
-        products[1] = new Product("Fraise");
+        products[0] = new Product.ProductBuilder().withName("Abricot").build();
+        products[1] =  new Product.ProductBuilder().withName("Fraise").build();
 
 
         recipes[0] = new Recipe.RecipeBuilder().withId(4).withName("test1").withDuration(3).withCategory(TestConstante.FOOD_CATEGORY_VEGAN).withType(TestConstante.FOOD_TYPE_DESSERT).withPreparation("Avant le code").build();

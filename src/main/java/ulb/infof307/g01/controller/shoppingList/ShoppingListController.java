@@ -49,7 +49,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
 
             if (!(Objects.equals(nameProductChoose, null) || quantityOrNumberChoose <= 0 || Objects.equals(nameUnityChoose, null))) {
                 //Cree le produit pour le mettre dans le tableView
-                userProduct = new Product(nameProductChoose.toString(), quantityOrNumberChoose, nameUnityChoose.toString());
+                userProduct = new Product.ProductBuilder().withName(nameProductChoose.toString()).withQuantity(quantityOrNumberChoose).withNameUnity(nameUnityChoose.toString()).build();
 
                 shoppingListViewController.addProductToTableView(userProduct);
                 shoppingListViewController.clearElementAddProduct();

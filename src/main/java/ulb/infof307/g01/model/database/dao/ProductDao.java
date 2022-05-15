@@ -26,17 +26,17 @@ public class ProductDao extends Database implements Dao<Product> {
 
     @Override
     public List<String> getAllName() throws SQLException {
-        String query = String.format("""
+        String query = """
                 SELECT nom
                 FROM Ingredient 
                 ORDER BY Nom ASC
-                """);
+                """;
         return getListOfName(query);
     }
 
     @Override
     public void insert(Product product) throws SQLException {
-        int familyID = getIDFromName("FamilleAliment",product.getFamillyProduct(),"FamilleAlimentID");
+        int familyID = getIDFromName("FamilleAliment",product.getFamilyProduct(),"FamilleAlimentID");
         int unityID = getIDFromName("Unite",product.getNameUnity(),"UniteID");
         String stringFamilyID = String.format("%d", familyID);
         String stringUnityID = String.format("%d",unityID);
@@ -67,6 +67,6 @@ public class ProductDao extends Database implements Dao<Product> {
         String familyProduct = getNameFromID("FamilleAliment", familyProductID,"FamilleAlimentID");
         String unityProduct = getNameFromID("Unite", unityProductID,"UniteID");
 
-        return new Product(nameProduct,1,unityProduct,familyProduct);
+        return new Product.ProductBuilder().withName(nameProduct).withQuantity(1).withFamilyProduct(familyProduct).withNameUnity(unityProduct).build();
     }
 }

@@ -4,6 +4,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.database.TestConstante;
 import ulb.infof307.g01.model.export.PDFCreator;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -22,8 +23,8 @@ class TestPDF {
     @BeforeAll
     static public void createShoppingList() {
         shoppingList =  new ShoppingList("test/testShoppingList");
-        Product testProduct = new Product("Banane", 3, "kg", "Fruits");
-        Product testProduct2 = new Product("Carotte", 7, "g", "Viande");
+        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
+        Product testProduct2 = new Product.ProductBuilder().withName("Carotte").withQuantity(7).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         shoppingList.add(testProduct);
         shoppingList.add(testProduct2);
     }

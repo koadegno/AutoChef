@@ -103,7 +103,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
             String productName = querySelectShoppingList.getString(2);
             String productUnity = querySelectShoppingList.getString(3);
             String productFamily = querySelectShoppingList.getString(4);
-            shoppingList.add(new Product(productName,productQuantity,productUnity,productFamily));
+
+            shoppingList.add(new Product.ProductBuilder().withName(productName).withQuantity(productQuantity).withFamilyProduct(productFamily).withNameUnity(productUnity).build());
         }
         return shoppingList;
     }

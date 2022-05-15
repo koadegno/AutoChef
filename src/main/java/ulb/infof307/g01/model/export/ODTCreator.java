@@ -21,14 +21,14 @@ public class ODTCreator {
         OdfTextDocument odt = OdfTextDocument.newTextDocument();
 
         Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
-        sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
-        String nameFamilyProduct = sortedShoppingList.get(0).getFamillyProduct();
+        sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
+        String nameFamilyProduct = sortedShoppingList.get(0).getFamilyProduct();
         writeODT(odt,"Liste de course : "+shoppingList.getName()+"\n");
         writeODT(odt, nameFamilyProduct+" : ");
 
         for (Product product : sortedShoppingList) {
-            if (!Objects.equals(product.getFamillyProduct(), nameFamilyProduct)){
-                nameFamilyProduct = product.getFamillyProduct();
+            if (!Objects.equals(product.getFamilyProduct(), nameFamilyProduct)){
+                nameFamilyProduct = product.getFamilyProduct();
                 writeODT(odt,nameFamilyProduct +" : ");
             }
             String productString = String.format("\t%s %d %s",product.getName(),product.getQuantity(),product.getNameUnity());
@@ -78,10 +78,10 @@ public class ODTCreator {
                   }
                     if(createProduct){ // permet de savoir quand cree un produit
                         String[] productElementArray = productElements.split(" ");
-                        shoppingList.add(new Product(productElementArray[0],
-                                Integer.parseInt(productElementArray[1]),
-                                productElementArray[2],
-                                familyProduct));
+                        String nameUnity = productElementArray[2];
+                        int quantity = Integer.parseInt(productElementArray[1]);
+                        String name = productElementArray[0];
+                        shoppingList.add(new Product.ProductBuilder().withName(name).withQuantity(quantity).withNameUnity(nameUnity).withFamilyProduct(familyProduct).build());
                         createProduct = false;
                     }
 

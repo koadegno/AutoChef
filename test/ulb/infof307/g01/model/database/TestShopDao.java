@@ -22,12 +22,11 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestShopDao {
     static  private final String MY_SHOPPING_LIST_FOR_TEST = "myShoppingForTest";
-    static private final String FRUIT = "Fruit";
-    static private final String GRAM = "g";
-    static private final Product PEACH = new Product("peche", 1, GRAM, FRUIT);
-    static private final Product STRAWBERRY = new Product( "fraise", 1, GRAM, FRUIT);
-    static private final Product MANGO = new Product( "mango", 1, GRAM, FRUIT);
-    static private final Product MELON = new Product( "melon", 1, GRAM, FRUIT);
+    static private final Product PEACH = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product STRAWBERRY = new Product.ProductBuilder().withName("fraise").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product MANGO = new Product.ProductBuilder().withName("mango").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product MELON =  new Product.ProductBuilder().withName("melon").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+
     static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0));
     static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1));
     static private final Shop ALDI_SHOP2 = new Shop("Namur2",new Point(0,3));
@@ -47,8 +46,8 @@ class TestShopDao {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getProductUnityDao().insert(GRAM);
-        Configuration.getCurrent().getProductFamilyDao().insert(FRUIT);
+        Configuration.getCurrent().getProductUnityDao().insert(TestConstante.GRAM);
+        Configuration.getCurrent().getProductFamilyDao().insert(TestConstante.FRUIT);
         Configuration.getCurrent().getProductDao().insert(PEACH);
         Configuration.getCurrent().getProductDao().insert(STRAWBERRY);
         Configuration.getCurrent().getProductDao().insert(MANGO);

@@ -19,8 +19,8 @@ class TestShoppingList {
     static public void createList() {
         list = new ShoppingList("Liste de course pour Noël");
 
-        Product testProduct = new Product("Dinde");
-        Product testProduct2 = new Product("Orange");
+        Product testProduct =  new Product.ProductBuilder().withName("Dinde").build();
+        Product testProduct2 =  new Product.ProductBuilder().withName("Orange").build();
 
         testList = new Vector<>(2);
         testList.add(testProduct);
@@ -41,7 +41,7 @@ class TestShoppingList {
 
     @Test
     void add() {
-        Product product = new Product("Dinde");
+        Product product =  new Product.ProductBuilder().withName("Dinde").build();
 
         assertTrue(list.contains(product));
         assertTrue(list.contains(testList.get(1)));
@@ -71,7 +71,7 @@ class TestShoppingList {
         assertFalse(list.contains(testList.get(0)),
                 "Le produit list[0] n'as pas été supprimé avec une quantité de 0");
 
-        assertFalse(list.remove(new Product("false")),
+        assertFalse(list.remove( new Product.ProductBuilder().withName("false").build()),
                 "ShoppingList.remove() n'a pas renvoyé False avec un objet non présent dans la liste");
     }
 
