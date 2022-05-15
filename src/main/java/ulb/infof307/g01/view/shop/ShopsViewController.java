@@ -31,8 +31,8 @@ public class ShopsViewController extends ViewController<ShopsViewController.Shop
         });
     }
 
-    public void displayShops(List<String> userFavoriteRecipe) {
-        shopsTableView.getItems().addAll(userFavoriteRecipe);
+    public void displayShops(List<String> shops) {
+        shopsTableView.getItems().addAll(shops);
     }
     public void onReturnButton() {
         listener.onReturnButton();

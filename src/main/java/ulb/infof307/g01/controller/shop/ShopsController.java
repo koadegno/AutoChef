@@ -3,11 +3,11 @@ package ulb.infof307.g01.controller.shop;
 import javafx.fxml.FXMLLoader;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.HomePageViewController;
-import ulb.infof307.g01.view.shop.ShopViewController;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ShopsViewController;
 
 import java.sql.SQLException;
@@ -16,9 +16,13 @@ import java.util.List;
 
 public class ShopsController extends Controller implements ShopsViewController.ShopsListener, ListenerBackPreviousWindow {
 
+    private ShopDao shopDao;
+
+
     public ShopsController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-
+        Configuration configuration = Configuration.getCurrent();
+        shopDao = configuration.getShopDao();
     }
 
     public void displayShops(){
@@ -26,7 +30,7 @@ public class ShopsController extends Controller implements ShopsViewController.S
         ShopsViewController viewController = loader.getController();
         viewController.setListener(this);
         try {
-            List<Shop> allShop = Configuration.getCurrent().getShopDao().getShops();
+            List<Shop> allShop = shopDao.getShops();
             List<String> allShopName = new ArrayList<>();
             for(Shop shop: allShop){
                 allShopName.add(shop.getName()+"-"+shop.getAddress());
@@ -55,20 +59,25 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     @Override
     public void onShopTableViewClicked(String shopName) {
-        System.out.println("le texte : "+ shopName);
         if(!shopName.isEmpty() && !shopName.isBlank()){
 
-            Shop shop = getShop(shopName);
-            ShopController shopController = new ShopController(true);
-            shopController.setShop(shop);
-            shopController.displayShop();
+            try {
+                Shop shop = getShop(shopName);
+                ShopController shopController = new ShopController(true);
+                shopController.setShop(shop);
+                shopController.displayShop();
+            } catch (SQLException e) {
+                ViewController.showErrorSQL();
+            }
         }
 
     }
 
-    private Shop getShop(String shopName){
+    private Shop getShop(String shopName) throws SQLException {
         String[] shopNameSplit = shopName.split("-"); // 0 =  le nom , 1 = l'adresse
-        return new Shop(shopNameSplit[0],shopNameSplit[1]);
+        Shop shop = new Shop(shopNameSplit[0],shopNameSplit[1]);
+        shop = shopDao.get(shop.getName(),shop.getCoordinate());
+        return shop ;
     }
 
     @Override

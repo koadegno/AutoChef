@@ -1,5 +1,6 @@
 package ulb.infof307.g01.view.shop;
 
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -19,11 +20,11 @@ import java.util.*;
  */
 public class ShopViewController extends ViewController<ShopViewController.Listener> implements Initializable {
 
-    public TableView<Product> tableViewShop;
+    public TableView<ProductWrapper> tableViewShop;
     public ComboBox<String> comboBoxProduct;
     public Spinner<Double> spinnerPrice;
-    public TableColumn<Product,String> columnProduct;
-    public TableColumn<Product,String> columnPrice;
+    public TableColumn<ProductWrapper,String> columnProduct;
+    public TableColumn<ProductWrapper,Double> columnPrice;
     public TextField nameShopTextField;
     public TextField addressShopTextField;
     public VBox vBox;
@@ -48,8 +49,8 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tableViewShop.setEditable(false);
-        columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        columnPrice.setCellValueFactory(new PropertyValueFactory<Product, String>("price"));
+        columnProduct.setCellValueFactory(new PropertyValueFactory<ProductWrapper, String>("productName"));
+        columnPrice.setCellValueFactory(new PropertyValueFactory<ProductWrapper, Double>("productPrice"));
     }
 
 
@@ -107,7 +108,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
 
     }
 
-    public ObservableList<Product> getTableViewShopItems() {
+    public ObservableList<ProductWrapper> getTableViewShopItems() {
         return tableViewShop.getItems();
     }
 
@@ -134,5 +135,23 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void createNewProductClicked();
 
         void displayHelpShop();
+    }
+
+    public static class ProductWrapper {
+        String productName;
+        double productPrice;
+
+        public ProductWrapper(String productName, double productPrice) {
+            this.productName = productName;
+            this.productPrice = productPrice;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public double getProductPrice() {
+            return productPrice;
+        }
     }
 }

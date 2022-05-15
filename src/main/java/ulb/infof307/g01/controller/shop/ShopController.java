@@ -15,6 +15,7 @@ import ulb.infof307.g01.view.shop.ShopViewController;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -65,8 +66,8 @@ public class ShopController extends Controller implements ShopViewController.Lis
     public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
         boolean isSaved = true;
         try {
-
-            shop.addAll(viewController.getTableViewShopItems());
+            System.out.println(viewController.getTableViewShopItems());
+//            shop.addAll();
             shop.setName(shopName);
             shop.setAddress(shopAddress);
 
@@ -89,7 +90,9 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillTableViewShop() {
-        viewController.getTableViewShopItems().addAll(shop);
+        System.out.println(shop.toString());
+        List<ShopViewController.ProductWrapper> productList = shop.stream().map(product -> new ShopViewController.ProductWrapper(product.getName(),product.getPrice())).toList();
+        viewController.getTableViewShopItems().addAll(productList);
     }
 
     /**
@@ -111,7 +114,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void onAddProductClicked(String nameProduct, double priceProduct){
-        Product product = new Product(nameProduct, priceProduct);
+        ShopViewController.ProductWrapper product = new ShopViewController.ProductWrapper(nameProduct, priceProduct);
         viewController.getTableViewShopItems().add(product);
 
     }
