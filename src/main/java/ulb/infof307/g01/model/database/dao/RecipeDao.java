@@ -113,14 +113,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
                 WHERE UtilisateurRecette.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getId());
-        ResultSet queryAllName = sendQuery(query);
-        List<String> nameList = new ArrayList<>();
-        while(queryAllName.next()){
-            nameList.add(queryAllName.getString(1));
-        }
-
-        return nameList;
+                """, getUserID());
+        return getListOfName(query);
     }
 
     /**

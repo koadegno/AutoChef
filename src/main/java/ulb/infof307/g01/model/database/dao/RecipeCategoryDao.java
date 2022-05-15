@@ -4,6 +4,7 @@ import ulb.infof307.g01.model.database.Database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accès à la base de données pour les données concernant les catégories de recettes
@@ -20,8 +21,12 @@ public class RecipeCategoryDao extends Database implements Dao<String> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("Categorie",null);
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT Nom
+                FROM Categorie
+                """);
+        return getListOfName(query);
     }
 
     @Override

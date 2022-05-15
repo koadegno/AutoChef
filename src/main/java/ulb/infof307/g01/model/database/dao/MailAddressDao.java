@@ -29,7 +29,14 @@ public class MailAddressDao extends Database implements Dao<String> {
 
     @Override
     public List<String> getAllName() throws SQLException {
-        return getAllNameFromTable(TABLE_MAIL_ADDRESS,"ORDER BY Nom ASC");
+        String query = String.format("""
+                SELECT AdresseMail.Nom
+                FROM UtilisateurMailFavoris as UMF
+                INNER JOIN AdresseMail ON UMF.AdresseMailID = AdresseMail.AdresseMailID
+                WHERE UMF.UtilisateurID = %d
+                """, getUserID());
+
+        return getListOfName(query);
     }
 
     /**
@@ -65,28 +72,7 @@ public class MailAddressDao extends Database implements Dao<String> {
 
     }
 
-    /**
-     * Renvoyer toutes les adresses mails favoris d'un utilisateur en particulier
-     * @param userID l'identifiant de l'utilisateur
-     * @return la liste de tous les mails. Peut-être vide
-     * @throws SQLException erreur lié à la base de donnée
-     */
-    public List<String> getAllName(int userID) throws SQLException {
-        String query = String.format("""
-                SELECT AdresseMail.Nom
-                FROM UtilisateurMailFavoris as UMF
-                INNER JOIN AdresseMail ON UMF.AdresseMailID = AdresseMail.AdresseMailID
-                WHERE UMF.UtilisateurID = %d""",userID);
-        ResultSet querySelectUserMail = sendQuery(query);
-        List<String> userMails = new ArrayList<>();
-        while (querySelectUserMail.next()){ // attention peut etre vide
-            userMails.add(querySelectUserMail.getString(1));
-        }
-        return userMails;
-    }
-
     @Override
-    @Deprecated
     public void update(String s) throws SQLException{
         throw new IllegalCallerException("Cette methode n'est pas implementé");
     }

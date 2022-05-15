@@ -99,8 +99,7 @@ public class MailController extends Controller implements MailViewController.Lis
 
     public void initComboboxFavoriteMail(){
         try {
-            int userID = Configuration.getCurrent().getCurrentUser().getId();
-            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName(userID);
+            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
             mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
             e.printStackTrace();

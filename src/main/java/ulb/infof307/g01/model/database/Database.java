@@ -2,10 +2,8 @@ package ulb.infof307.g01.model.database;
 import ulb.infof307.g01.model.*;
 
 import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
-import java.net.URL;
 import java.sql.*;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -43,6 +41,10 @@ public class Database {
         } catch (SQLException e) {
             e.printStackTrace(); //TODO lancer une erreur
         }
+    }
+
+    protected static int getUserID() {
+        return Configuration.getCurrent().getCurrentUser().getId();
     }
 
     /**
@@ -343,6 +345,19 @@ public class Database {
             parts.add("=");
         }
         return parts;
+    }
+
+    //TOOLS FOR ALL DAO
+    protected List<String> getListOfName(String query) throws SQLException {
+        List<String> nameList;
+        int columnIndex = 1;
+        try (ResultSet queryAllName = sendQuery(query)) {
+            nameList = new ArrayList<>();
+            while (queryAllName.next()) {
+                nameList.add(queryAllName.getString(columnIndex));
+            }
+        }
+        return nameList;
     }
 
 }

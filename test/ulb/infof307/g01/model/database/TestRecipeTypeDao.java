@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
 
@@ -33,7 +34,7 @@ class TestRecipeTypeDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        List<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
         assertEquals(meal, types.get(0));
     }
 
@@ -41,7 +42,7 @@ class TestRecipeTypeDao {
     void testInsert() throws SQLException {
         String simmered = "Mijoté";
         Configuration.getCurrent().getRecipeTypeDao().insert(simmered);
-        ArrayList<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        List<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
         assertEquals(simmered, types.get(1));
     }
 }

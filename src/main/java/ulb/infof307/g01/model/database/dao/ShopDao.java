@@ -45,7 +45,6 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     @Override
     public List<String> getAllName() throws SQLException {
-
         String query = String.format("""
                 SELECT R.Nom
                 FROM Magasin as R
@@ -53,15 +52,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 WHERE UtilisateurMagasin.UtilisateurID = %d
                 ORDER BY Nom ASC
                 """, Configuration.getCurrent().getCurrentUser().getId());
-        List<String> nameList;
-        try (ResultSet queryAllName = sendQuery(query)) {
-            nameList = new ArrayList<>();
-            while (queryAllName.next()) {
-                nameList.add(queryAllName.getString(1));
-            }
-        }
-
-        return nameList;
+        return getListOfName(query);
     }
 
     /**

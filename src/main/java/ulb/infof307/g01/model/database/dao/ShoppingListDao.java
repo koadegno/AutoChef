@@ -40,14 +40,8 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
                 INNER JOIN UtilisateurListeCourse ON R.ListeCourseID = UtilisateurListeCourse.ListeCourseID
                 WHERE UtilisateurListeCourse.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getId());
-        ResultSet queryAllName = sendQuery(query);
-        List<String> nameList = new ArrayList<>();
-        while(queryAllName.next()){
-            nameList.add(queryAllName.getString(1));
-        }
-
-        return nameList;
+                """, getUserID());
+        return getListOfName(query);
     }
 
     /**

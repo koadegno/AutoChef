@@ -47,9 +47,9 @@ public class Configuration {
         this.recipeDao = new RecipeDao(dbPath);
         this.recipeTypeDao = new RecipeTypeDao(dbPath);
         this.shoppingListDao = new ShoppingListDao(dbPath);
-        shopDao = new ShopDao(dbPath);
-        mailAddressDao = new MailAddressDao(dbPath);
-        userDao = new UserDao(dbPath);
+        this.shopDao = new ShopDao(dbPath);
+        this.mailAddressDao = new MailAddressDao(dbPath);
+        this.userDao = new UserDao(dbPath);
     }
 
     public void closeConnection() throws SQLException {

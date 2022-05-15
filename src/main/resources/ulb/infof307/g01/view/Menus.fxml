@@ -1,65 +1,60 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.TreeView?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.text.Font?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.menu.UserMenusViewController">
-   <children>
-      <MenuBar prefHeight="26.0" prefWidth="750.0">
-         <menus>
-            <Menu mnemonicParsing="false" text="Profil">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
-               </items>
-            </Menu>
-            <Menu mnemonicParsing="false" text="Aide">
-               <items>
-                  <MenuItem mnemonicParsing="false" onAction="#helpUserMenus" text="Tutoriel" />
-               </items>
-            </Menu>
-         </menus>
-      </MenuBar>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Label alignment="CENTER" prefHeight="100.0" prefWidth="601.0" text="Liste de Menus">
-               <font>
-                  <Font size="40.0" />
-               </font>
-            </Label>
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0">
-         <children>
-            <TextField fx:id="menuName" onKeyTyped="#keyTyped" prefHeight="26.0" prefWidth="189.0" promptText="Nom du menu" />
-            <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController" prefHeight="31.0" prefWidth="75.0" text="Afficher">
-               <HBox.margin>
-                  <Insets left="30.0" />
-               </HBox.margin>
-            </Button>
-         </children>
-      </HBox>
-      <Label alignment="CENTER" prefHeight="50.0" prefWidth="694.0" text="Quel menu souhaitez vous afficher?">
+<VBox prefHeight="600.0" prefWidth="750.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16"
+      xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.menu.UserMenusViewController">
+   <MenuBar prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
+      <Menu mnemonicParsing="false" text="Profil">
+         <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter"/>
+      </Menu>
+      <Menu mnemonicParsing="false" text="Aide">
+         <MenuItem mnemonicParsing="false" onAction="#helpUserMenus" text="Tutoriel"/>
+      </Menu>
+   </MenuBar>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Label alignment="CENTER" prefHeight="100.0" prefWidth="601.0" text="Liste de Menus">
          <font>
-            <Font size="18.0" />
-         </font></Label>
-      <HBox alignment="CENTER" prefHeight="278.0" prefWidth="600.0">
-         <children>
-            <TreeView fx:id="menuTreeView" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu" prefHeight="278.0" prefWidth="313.0" showRoot="false" />
-         </children>
-      </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-         <children>
-            <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToMainMenuController" prefHeight="34.0" prefWidth="339.0" text="Retour" />
-         </children>
-      </HBox>
-   </children>
+            <Font name="Yu Gothic Medium" size="40.0"/>
+         </font>
+      </Label>
+   </HBox>
+   <Label alignment="CENTER" prefHeight="48.0" prefWidth="726.0" text="Quel menu souhaitez vous afficher?"
+          textAlignment="CENTER">
+      <font>
+         <Font name="Yu Gothic Medium" size="18.0"/>
+      </font>
+   </Label>
+   <HBox alignment="CENTER" prefHeight="57.0" prefWidth="600.0" spacing="15.0">
+      <TextField fx:id="menuName" onKeyTyped="#keyTyped" prefHeight="26.0" prefWidth="189.0"
+                 promptText="Nom du menu"/>
+      <Button fx:id="btnDisplayMenu" mnemonicParsing="false" onMousePressed="#redirectToShowMenuController"
+              prefHeight="31.0" prefWidth="80.0" style="-fx-background-color: #9F667A;" text="Afficher"
+              textFill="WHITE">
+         <HBox.margin>
+            <Insets left="30.0"/>
+         </HBox.margin>
+         <font>
+            <Font name="Yu Gothic Medium" size="16.0"/>
+         </font>
+      </Button>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="278.0" prefWidth="600.0">
+      <TreeView fx:id="menuTreeView" onContextMenuRequested="#selectedMenu" onMouseClicked="#selectedMenu"
+                prefHeight="278.0" prefWidth="313.0" showRoot="false"/>
+   </HBox>
+   <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <Button alignment="CENTER" mnemonicParsing="false" onAction="#backToMainMenuController" prefHeight="34.0"
+              prefWidth="100.0" style="-fx-background-color: #9F667A;" text="Retour" textFill="WHITE">
+         <HBox.margin>
+            <Insets right="600.0"/>
+         </HBox.margin>
+         <font>
+            <Font name="Yu Gothic Medium" size="18.0"/>
+         </font>
+      </Button>
+   </HBox>
 </VBox>

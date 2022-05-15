@@ -14,6 +14,7 @@ import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -47,8 +48,8 @@ public class ProductController extends Controller implements ProductViewControll
      * initialise les objets pour le controleur de vue
      */
     public void initCreateProductFXML(){
-        ArrayList<String> nameProductFamily = null;
-        ArrayList<String> nameProductUnity = null;
+        List<String> nameProductFamily = null;
+        List<String> nameProductUnity = null;
         try {
             nameProductFamily = Configuration.getCurrent().getProductFamilyDao().getAllName();
             nameProductUnity = Configuration.getCurrent().getProductUnityDao().getAllName();

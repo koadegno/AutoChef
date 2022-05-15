@@ -7,6 +7,7 @@ import javafx.scene.control.TextField;
 import ulb.infof307.g01.view.ViewController;
 
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * La classe gère la vue pour la création d'un produit
@@ -21,7 +22,7 @@ public class ProductViewController extends ViewController<ProductViewController.
      * @param nameProductFamily une liste de string contenant le nom des familles de produits
      * @param nameProductUnity une liste de string contenant le nom des unités pour les produits
      */
-    public void initComboboxInformation(ArrayList<String> nameProductFamily, ArrayList<String> nameProductUnity){
+    public void initComboboxInformation(List<String> nameProductFamily, List<String> nameProductUnity){
         nameProductFamilyCombobox.setItems(FXCollections.observableArrayList(nameProductFamily));
         nameProductUnityCombobox.setItems(FXCollections.observableArrayList(nameProductUnity));
     }
