@@ -7,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
@@ -19,13 +18,14 @@ import java.util.*;
  */
 public class ShopViewController extends ViewController<ShopViewController.Listener> implements Initializable {
 
-    public TableView<Product> tableViewShop;
+    public TableView<ProductWrapper> tableViewShop;
     public ComboBox<String> comboBoxProduct;
     public Spinner<Double> spinnerPrice;
-    public TableColumn<Product,String> columnProduct;
-    public TableColumn<Product,String> columnPrice;
+    public TableColumn<ProductWrapper,String> columnProduct;
+    public TableColumn<ProductWrapper,Double> columnPrice;
     public TextField nameShopTextField;
-    public VBox vBox; 
+    public TextField addressShopTextField;
+    public VBox vBox;
 
 
     public void createPopup(){
@@ -38,15 +38,17 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
-    public void setNameShopTextField(String nameShop){
+    public void setBasicShopTextField(String nameShop, String shopAddress){
+
         nameShopTextField.setText(nameShop);
+        addressShopTextField.setText(shopAddress);
     }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tableViewShop.setEditable(false);
-        columnProduct.setCellValueFactory(new PropertyValueFactory<Product, String>("name"));
-        columnPrice.setCellValueFactory(new PropertyValueFactory<Product, String>("price"));
+        columnProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        columnPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
     }
 
 
@@ -78,26 +80,46 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
     }
 
-
+    @FXML
     public void saveNewShop() {
         setNodeColor(nameShopTextField, false);
-        String getNameShop = nameShopTextField.getText();
-
-        if (!Objects.equals(getNameShop, "")){
-            try {
-                listener.onSaveShopClicked(getNameShop);
-                Stage stage = (Stage) vBox.getScene().getWindow();
-                stage.close();
-            } catch (SQLException e) {
-                showErrorSQL();
-            }
-        }
-        else{
+        String shopName = nameShopTextField.getText();
+        String shopAddress = addressShopTextField.getText();
+        if (shopName.isEmpty()){
             setNodeColor(nameShopTextField, true);
+            return;
         }
+        if (shopAddress.isEmpty()){
+            setNodeColor(addressShopTextField, true);
+            return;
+        }
+
+        try {
+            boolean isSaved = listener.onSaveShopClicked(shopName,shopAddress);
+            if(isSaved){
+                closePopUp();
+            }
+        } catch (SQLException e) {
+            showErrorSQL();
+        }
+
     }
 
-    public ObservableList<Product> getTableViewShopItems() {
+    private void closePopUp() {
+        Stage stage = (Stage) vBox.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void onDeleteShop() {
+        boolean isDelete = listener.deleteShop();
+        if(isDelete){
+            closePopUp();
+        }
+
+    }
+
+    public ObservableList<ProductWrapper> getTableViewShopItems() {
         return tableViewShop.getItems();
     }
 
@@ -113,7 +135,7 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
 
 
     public interface Listener{
-        void onSaveShopClicked(String shopName) throws SQLException;
+        boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException;
 
         void fillTableViewShop();
 
@@ -124,5 +146,25 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void createNewProductClicked();
 
         void displayHelpShop();
+
+        boolean deleteShop();
+    }
+
+    public static class ProductWrapper {
+        String productName;
+        double productPrice;
+
+        public ProductWrapper(String productName, double productPrice) {
+            this.productName = productName;
+            this.productPrice = productPrice;
+        }
+
+        public String getProductName() {
+            return productName;
+        }
+
+        public double getProductPrice() {
+            return productPrice;
+        }
     }
 }

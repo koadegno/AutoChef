@@ -6,9 +6,11 @@ import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.HomePageMenuController;
 import ulb.infof307.g01.controller.recipe.HomePageRecipeController;
+import ulb.infof307.g01.controller.shop.HomeShopController;
 import ulb.infof307.g01.controller.shoppingList.HomePageShoppingList;
 import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
+import ulb.infof307.g01.view.shop.HomeShopViewController;
 
 
 /**
@@ -71,6 +73,16 @@ public class HomePageController extends Controller implements HomePageListener,L
     public void onRecipeButtonClick() {
         HomePageRecipeController controller = new HomePageRecipeController();
         controller.displayHomeRecipe();
+    }
+
+    /**
+     * Affiche la page principale des magasins
+     * //TODO: @see ControllerDeVue Accueil Magasins
+     */
+    @Override
+    public void onShopButtonClick() {
+        HomeShopController controller = new HomeShopController(currentStage,this);
+        controller.displayHomeShop();
     }
 
     /**

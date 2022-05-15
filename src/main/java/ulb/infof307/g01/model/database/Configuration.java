@@ -93,7 +93,9 @@ public class Configuration {
 
     public ShoppingListDao getShoppingListDao() { return (ShoppingListDao) shoppingListDao; }
 
-    public ShopDao getShopDao() { return (ShopDao) shopDao; }
+    public ShopDao getShopDao() {
+        return (ShopDao) shopDao;
+    }
 
     public UserDao getUserDao() { return (UserDao) userDao; }
 }

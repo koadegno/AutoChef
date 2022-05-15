@@ -9,11 +9,11 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeParameters;
 import com.esri.arcgisruntime.tasks.geocode.GeocodeResult;
 import com.esri.arcgisruntime.tasks.geocode.LocatorTask;
-import ulb.infof307.g01.view.map.MapViewController;
+import org.jetbrains.annotations.NotNull;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.atomic.AtomicBoolean;
 import java.util.concurrent.atomic.AtomicReference;
 
 
@@ -23,11 +23,9 @@ public class LocatorService {
     private LocatorTask locatorTask;
 
     public static final String GEOCODE_URL_TASK = "https://geocode.arcgis.com/arcgis/rest/services/World/GeocodeServer";
-    public MapViewController mapViewController;
 
 
-    public LocatorService( MapViewController mapViewController) {
-        this.mapViewController = mapViewController;
+    public LocatorService() {
         createLocatorTaskAndDefaultParameters();
     }
 
@@ -36,8 +34,8 @@ public class LocatorService {
 
     /**
      * Utilisation du service de geocoding(coordonné GPS associer a un lieu des infos) de ArcGis
-     * Pour parametrer le service de geocoding Locator
-     * et Parametre par defaut du service de geocoding
+     * Pour paramètrer le service de geocoding Locator
+     * et Paramètre par défaut du service de geocoding
      */
     void createLocatorTaskAndDefaultParameters() {
         locatorTask = new LocatorTask(GEOCODE_URL_TASK);
@@ -47,6 +45,13 @@ public class LocatorService {
         geocodeParameters.setMaxResults(1);
         // comment les coordonnées doivent correspondre a la location
         geocodeParameters.setOutputSpatialReference(SpatialReferences.getWebMercator());
+    }
+
+    public Point convertAddressToPoint(String address) throws NullPointerException{
+        List<Graphic> fakeAddressOverlay = new ArrayList<>();
+        Point addressPoint = performGeocode(address,fakeAddressOverlay);
+        if(addressPoint == null) throw new NullPointerException("Il n'y a pas de coordonnée correspondant a cette adresse");
+        return addressPoint;
     }
 
     /**
@@ -115,7 +120,6 @@ public class LocatorService {
         Graphic markerGraphic = new Graphic(displayLocation, geocodeResult.getAttributes(), markerSymbol);
         addressGraphicsOverlay.add(markerGraphic);
 
-        mapViewController.setViewPointCenter(displayLocation);
         return displayLocation;
     }
 }

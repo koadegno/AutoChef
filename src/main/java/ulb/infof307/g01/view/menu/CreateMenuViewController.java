@@ -36,8 +36,12 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
     public void refreshTableView() {
         setNodeColor(menuNameTextField, false);
         setNodeColor(menuTableView, false);
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
+        int dayIndex = getSelectedIndex();
         listener.onDaysComboBoxClicked(dayIndex);
+    }
+
+    public int getSelectedIndex() {
+        return daysComboBox.getSelectionModel().getSelectedIndex();
     }
 
     /**
@@ -51,7 +55,7 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
 
     @FXML
     public void removeRecipeAction() {
-        int dayIndex = daysComboBox.getSelectionModel().getSelectedIndex();
+        int dayIndex = getSelectedIndex();
         listener.onRemoveRecipeClicked(dayIndex);
         refreshTableView();
         removeRecipeButton.setVisible(false);
@@ -130,6 +134,10 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
    
     public void logout() {
         listener.logout();
+    }
+
+    public void setDay(int currentDay) {
+        daysComboBox.getSelectionModel().select(currentDay);
     }
 
 

@@ -21,8 +21,9 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public static final int SHOP_ID_INDEX = 1;
     public static final int SHOP_NAME_INDEX = 2;
-    public static final int SHOP_LONGITUDE_INDEX = 4;
-    public static final int SHOP_LATITUDE_INDEX = 3;
+    public static final int SHOP_ADDRESS_INDEX = 3;
+    public static final int SHOP_LONGITUDE_INDEX = 5;
+    public static final int SHOP_LATITUDE_INDEX = 4;
     public static final String MAGASIN_TABLE_NAME = "Magasin";
     public static final String TABLE_SHOP_PRODUCT = "MagasinIngredient";
     public static final String TABLE_USER_MAGASIN = "UtilisateurMagasin";
@@ -62,10 +63,11 @@ public class ShopDao extends Database implements Dao<Shop> {
     @Override
     public void insert(Shop shop) throws SQLException {
         String name = String.format("'%s'", shop.getName());
+        String address = String.format("'%s'", shop.getAddress());
         String latitude = String.valueOf(shop.getCoordinateX());
         String longitude = String.valueOf(shop.getCoordinateY());
 
-        String[] values = {"null", name,"null", longitude,latitude};
+        String[] values = {"null", name,address, longitude,latitude};
         insert(MAGASIN_TABLE_NAME, values);
 
         String shopID = String.valueOf(getGeneratedID());
@@ -144,7 +146,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private List<Shop> getAllShops() throws SQLException {
         String query = String.format("""
-                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE UtilisateurMagasin.UtilisateurID = %d""",
@@ -167,7 +169,7 @@ public class ShopDao extends Database implements Dao<Shop> {
     public Shop get(String name, Point coordinates) throws SQLException {
 
         try (ResultSet querySelectShop = sendQuery(String.format("""
-                        SELECT M.MagasinID
+                        SELECT M.MagasinID,M.Nom, M.adresse
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
@@ -175,7 +177,8 @@ public class ShopDao extends Database implements Dao<Shop> {
 
             if (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                Shop shop = new Shop(shopID, name, coordinates);
+                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
+                Shop shop = new Shop(shopID, name,shopAddress, coordinates);
                 fillShopWithProducts(shop);
                 return shop;
             }
@@ -198,7 +201,7 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
     public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
         String query = String.format("""
-                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
                                         FROM  Magasin as M
                                         INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                         INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
@@ -213,13 +216,13 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
         String query = String.format("""
-                SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
                             FROM
                             (
-                                SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
+                                SELECT sommes.MagasinID , sommes.Nom,  sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
                                 FROM
                                     (
-                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
                                         FROM  Magasin as M
                                                   INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                                   INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
@@ -236,14 +239,14 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
         String query = String.format("""
-                        SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                        SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
                         FROM
                         (
-                            SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.distance)
+                            SELECT sommes.MagasinID , sommes.Nom, sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.distance)
                             FROM
                                 
                                 (
-                                    SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
+                                    SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
                                     FROM  Magasin as M
                                               INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                               INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
@@ -283,10 +286,11 @@ public class ShopDao extends Database implements Dao<Shop> {
             while (querySelectShop.next()) {
                 int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
                 String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
+                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
                 double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                Shop shop =  new Shop(shopID, shopName, shopPoint);
+                Shop shop =  new Shop(shopID, shopName,shopAddress, shopPoint);
                 shopsList.add(shop);
             }
         }

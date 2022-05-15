@@ -1,21 +1,22 @@
 package ulb.infof307.g01.controller.shop;
 
-import com.esri.arcgisruntime.geometry.Point;
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ShopViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -26,49 +27,80 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     public static final String SHOW_SHOP_FXML = "Shop.fxml";
     private ShopViewController viewController;
-    private final ShopListener listener;
-    private final Shop shop;
+    private Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
+    private ShopListener listener;
+    private final ShopDao shopDao;
 
-    public ShopController(Shop shop, boolean isModifying, ShopListener listener){
-        this.listener = listener;
-        this.shop = shop;
+    public ShopController(boolean isModifying){
         this.isModifying = isModifying;
+        Configuration current = Configuration.getCurrent();
+        shopDao = current.getShopDao();
+        shop = new Shop();
+    }
+
+    public void setListener(ShopListener listener){
+        this.listener = listener;
+    }
+    public void setShop(Shop shop){
+        this.shop = shop;
     }
 
     /**
      * Lance l'affichage de la carte
      */
-    public void show(){
+    public void displayShop(){
         try {
             viewController = new ShopViewController();
             Stage shopStage = popupFXML(SHOW_SHOP_FXML,viewController);
             viewController.setListener(this);
             viewController.createPopup();
-            if(isModifying) viewController.setNameShopTextField(shop.getName());
+            if(isModifying){
+                viewController.setBasicShopTextField(shop.getName(),shop.getAddress());
+            }
             setStage(shopStage);
         } catch (IOException e) {
             ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
         }
     }
+    private void addAllWrappedProduct(Collection<ShopViewController.ProductWrapper> productsWrapper){
+        for(ShopViewController.ProductWrapper productWrapper: productsWrapper){
+            shop.add(new Product(productWrapper.getProductName(),productWrapper.getProductPrice()));
+
+        }
+    }
+
 
     /**
      * Sauvegarde le magasin crée par l'utilisateur
      * @param shopName le nom du magasin
+     * @param shopAddress l'adresse du magasin
      * @throws SQLException erreur au niveau de la base de donnée
+     * @return Vrai si le magasin a été ajouté
      */
     @Override
-    public void onSaveShopClicked(String shopName) throws SQLException {
-        shop.setName(shopName);
-        shop.addAll(viewController.getTableViewShopItems());
-        if (isModifying) {
-            Configuration.getCurrent().getShopDao().update(shop);
-            listener.updateShop(shop);
+    public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
+        boolean isSaved = true;
+        try {
+            System.out.println(viewController.getTableViewShopItems());
+            addAllWrappedProduct(viewController.getTableViewShopItems());
+            shop.setName(shopName);
+            shop.setAddress(shopAddress);
+
+            if (isModifying) {
+                shopDao.update(shop);
+                listener.update();
+            }
+            else {
+                shopDao.insert(shop);
+            }
         }
-        else {
-            Configuration.getCurrent().getShopDao().insert(shop);
-            listener.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+        catch (NullPointerException e) {
+            e.printStackTrace();
+            ViewController.showAlert(Alert.AlertType.ERROR, "L'adresse entrer n'existe pas", "");
+            return !isSaved;
         }
+        return isSaved;
     }
 
     /**
@@ -76,7 +108,9 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillTableViewShop() {
-        viewController.getTableViewShopItems().addAll(shop);
+        System.out.println(shop.toString());
+        List<ShopViewController.ProductWrapper> productList = shop.stream().map(product -> new ShopViewController.ProductWrapper(product.getName(),product.getPrice())).toList();
+        viewController.getTableViewShopItems().addAll(productList);
     }
 
     /**
@@ -98,13 +132,13 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void onAddProductClicked(String nameProduct, double priceProduct){
-        Product product = new Product(nameProduct, priceProduct);
+        ShopViewController.ProductWrapper product = new ShopViewController.ProductWrapper(nameProduct, priceProduct);
         viewController.getTableViewShopItems().add(product);
 
     }
 
     /**
-     * lance la fenetre pour crée un nouveau produit
+     * lance la fenêtre pour créer un nouveau produit
      */
     @Override
     public void createNewProductClicked() {
@@ -122,11 +156,25 @@ public class ShopController extends Controller implements ShopViewController.Lis
         helpController.displayHelpShop();
     }
 
-    /**
-     * Permet l'ajout et la modification dans MapController
-     */
-    public interface ShopListener {
-        void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
-        void updateShop(Shop shop);
+    @Override
+    public boolean deleteShop() {
+        boolean isDelete = false;
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
+        if (alertResult == ButtonType.OK ) {
+            try {
+                shopDao.delete(shop);
+                listener.update();
+                isDelete = true;
+
+            } catch (SQLException e) {
+                ViewController.showErrorSQL();
+            }
+        }
+        return isDelete;
     }
+
+    public interface ShopListener{
+        void update();
+    }
+
 }

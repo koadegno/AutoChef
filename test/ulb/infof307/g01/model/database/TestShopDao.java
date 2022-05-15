@@ -33,7 +33,7 @@ class TestShopDao {
     static private final Shop ALDI_SHOP2 = new Shop("Namur2",new Point(0,3));
     static private final Shop CARREFOUR_ANVERS2 = new Shop("Carrefour Anvers2",new Point(0,17));
     static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve",new Point(0,2));
-    static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers", new Point(50,30));
+    static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers","TOTO", new Point(50,30));
 
     static private final String DATABASE_NAME = "test.sqlite";
     static ShoppingList myShoppingList;
@@ -101,9 +101,9 @@ class TestShopDao {
     @Test
     void testUpdate() throws SQLException {
         Point coordinate = new Point(1,1);
-        Shop aldiBruxellesShop = new Shop(2,"aldi Bruxelles",coordinate);
+        Shop aldiBruxellesShop = new Shop(2,"aldi Bruxelles","TITI",coordinate);
         Configuration.getCurrent().getShopDao().insert(aldiBruxellesShop);
-        aldiBruxellesShop = new Shop(2,"aldi Zaventem",coordinate);
+        aldiBruxellesShop = new Shop(2,"aldi Zaventem","TATA",coordinate);
         Configuration.getCurrent().getShopDao().update(aldiBruxellesShop);
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
 

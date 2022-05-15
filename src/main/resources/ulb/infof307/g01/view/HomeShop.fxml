@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.text.*?>
+
+<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.shop.HomeShopViewController">
+    <children>
+        <MenuBar prefHeight="26.0" prefWidth="750.0">
+            <menus>
+                <Menu mnemonicParsing="false" text="Profil">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
+        <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+            <children>
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="103.0" prefWidth="447.0" text="Magasins" textAlignment="CENTER" textFill="#383434" textOverrun="WORD_ELLIPSIS">
+                    <font>
+                        <Font size="25.0" />
+                    </font></Label>
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="339.0" prefWidth="750.0" spacing="80.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onAddShopClicked" prefHeight="50.0" prefWidth="170.0" text="Ajouter magasin" />
+                <Button mnemonicParsing="false" onAction="#onUpdateShopClicked" prefHeight="50.0" prefWidth="170.0" text="Modifier magasin" />
+            </children>
+        </HBox>
+        <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
+            <children>
+                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="50.0" prefWidth="294.0" text="Retour" />
+            </children>
+        </HBox>
+    </children>
+
+</VBox>

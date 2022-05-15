@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.map.MapController;
+import ulb.infof307.g01.controller.map.MapShop;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -134,8 +135,9 @@ public abstract class ShoppingListController extends Controller implements Shopp
                 ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
                 Boolean readOnlyMode = true;
                 MapController mapController = new MapController(currentStage,listenerBackPreviousWindow,readOnlyMode );
+                MapShop mapShop = new MapShop();
                 mapController.setProductListToSearchInShops(shoppingList);
-                mapController.displayMap();
+                mapController.displayShopMap(mapShop.shopWithProductList(shoppingList));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }

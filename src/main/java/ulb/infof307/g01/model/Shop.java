@@ -1,6 +1,7 @@
 package ulb.infof307.g01.model;
 
 import com.esri.arcgisruntime.geometry.Point;
+import ulb.infof307.g01.controller.map.LocatorService;
 
 import java.util.HashSet;
 
@@ -10,20 +11,34 @@ import java.util.HashSet;
 public class Shop extends HashSet<Product> {
 
     private String name;
-    private final Point coordinate;
+    private Point coordinate;
+    private String address;
     private int id = -1;
+    private final LocatorService locatorService;
 
-    public Shop(int id,String name, Point coordinate){
+    public Shop(){
+        this.coordinate = null;
+        this.name = this.address = "";
+        this.locatorService = new LocatorService();
+    }
+
+    public Shop(int id,String name,String address, Point coordinate){
         this(name,coordinate);
         this.id = id;
+        this.address = address;
+
     }
     public Shop(String name, Point coordinate){
         this.name = name;
         this.coordinate = coordinate;
+        this.locatorService = new LocatorService();
+
     }
 
-    public Shop(Point shopPoint) {
-        this(null,shopPoint);
+    public Shop(String name, String address) {
+        this(name, (Point) null);
+        this.address = address;
+        coordinate = locatorService.convertAddressToPoint(address);
     }
 
     public void setName(String shopName){
@@ -68,5 +83,16 @@ public class Shop extends HashSet<Product> {
 
         return this.name.equals(otherShop.name) && (this.coordinate.getX() == otherShop.coordinate.getX()) && this.coordinate.getY() == otherShop.coordinate.getY();
     }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String shopAddress) throws NullPointerException {
+        System.out.println("l'adresse du magasin : " + shopAddress);
+        address = shopAddress;
+        coordinate = locatorService.convertAddressToPoint(shopAddress);
+    }
+
 
 }

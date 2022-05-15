@@ -33,11 +33,9 @@ public class MenuController extends Controller implements CreateMenuViewControll
     private Menu menu;
     protected ArrayList<Day> daysName;
     private Stage popup = null;
-    private Scene currentScene;
     private boolean isModifying;
+    private int currentDay;
 
-
-    public MenuController(Stage primaryStage){ this(primaryStage,null); }
 
     public MenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
@@ -58,8 +56,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     public void fillMenuTableView(Day day) {
         List<Recipe> valueList = menu.getRecipesfor(day);
-        for (Recipe products : valueList) {
-            createMenuViewController.getMenuTableView().getItems().add(products);
+        for (Recipe recipe : valueList) {
+            createMenuViewController.getMenuTableView().getItems().add(recipe);
         }
     }
 
@@ -67,6 +65,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
         FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
         createMenuViewController = loader.getController();
         createMenuViewController.setListener(this);
+        createMenuViewController.setDay(currentDay);
         start();
         isModifying = false;
     }
@@ -167,7 +166,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onAddRecipeClicked() {
-        currentScene = currentStage.getScene();
+        currentDay = createMenuViewController.getSelectedIndex();
         SearchRecipeController searchRecipeController = new SearchRecipeController(currentStage,this);
         searchRecipeController.setListener(this);
         searchRecipeController.displaySearchRecipe();
@@ -175,12 +174,13 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onRecipeSelected(Recipe selectedRecipe) {
-        int selectedIndex = createMenuViewController.getDaysComboBox().getSelectionModel().getSelectedIndex();
-        Day day = daysName.get(selectedIndex);
+        Day day = daysName.get(currentDay);
         menu.addRecipeTo(day,selectedRecipe);
+        createMenuViewController.setDay(currentDay);
         createMenuViewController.refreshTableView();
     }
 
     @Override
-    public void onReturn() { displayCreateMenu();}
+    public void onReturn() {
+        displayCreateMenu();}
 }
