@@ -11,7 +11,7 @@ public class ShoppingList extends ProductHashSet {
     private int id;
     private String name;
     private Date creationDate;
-    private boolean isArchived = false;
+    private final boolean isArchived = false;
 
     public ShoppingList(String name) {this.name = name;}
     public ShoppingList(String name, int id) {
@@ -29,12 +29,6 @@ public class ShoppingList extends ProductHashSet {
     }
     public String getName() {return name;}
     public void setName(String name) {this.name = name;}
-    public boolean isArchived() {return isArchived;}
-    public void setArchived(boolean isArchived) {this.isArchived = isArchived;}
-    public Date getCreationDate() {return creationDate;}
-    public void setCreationDate(Date creationDate) {
-        this.creationDate = creationDate;
-    }
 
     @Override
     public boolean equals(Object other) {
