@@ -15,6 +15,7 @@ import ulb.infof307.g01.view.shop.ShopViewController;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 
@@ -54,20 +55,27 @@ public class ShopController extends Controller implements ShopViewController.Lis
             ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
         }
     }
+    private void addAllWrappedProduct(Collection<ShopViewController.ProductWrapper> productsWrapper){
+        for(ShopViewController.ProductWrapper productWrapper: productsWrapper){
+            shop.add(new Product(productWrapper.getProductName(),productWrapper.getProductPrice()));
+
+        }
+    }
+
 
     /**
      * Sauvegarde le magasin crée par l'utilisateur
      * @param shopName le nom du magasin
-     * @param shopAddress
+     * @param shopAddress l'adresse du magasin
      * @throws SQLException erreur au niveau de la base de donnée
-     * @return
+     * @return Vrai si le magasin a été ajouté
      */
     @Override
     public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
         boolean isSaved = true;
         try {
             System.out.println(viewController.getTableViewShopItems());
-//            shop.addAll();
+            addAllWrappedProduct(viewController.getTableViewShopItems());
             shop.setName(shopName);
             shop.setAddress(shopAddress);
 

@@ -52,4 +52,5 @@ public class ShopsViewController extends ViewController<ShopsViewController.Shop
         void onReturnButton();
         void onShopTableViewClicked(String shopName);
     }
+
 }

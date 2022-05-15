@@ -14,7 +14,7 @@ public class Shop extends HashSet<Product> {
     private Point coordinate;
     private String address;
     private int id = -1;
-    private LocatorService locatorService;
+    private final LocatorService locatorService;
 
     public Shop(){
         this.coordinate = null;
@@ -93,4 +93,6 @@ public class Shop extends HashSet<Product> {
         address = shopAddress;
         coordinate = locatorService.convertAddressToPoint(shopAddress);
     }
+
+
 }
