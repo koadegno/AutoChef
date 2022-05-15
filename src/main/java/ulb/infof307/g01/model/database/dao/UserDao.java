@@ -38,11 +38,12 @@ public class UserDao extends Database implements Dao<User>{
     @Override
     public void insert(User user) throws SQLException {
         String userID  = (user.getId() == -1) ? "null": String.valueOf(user.getId());
+        String format = "'%s'";
         String[] values = {userID
-                ,String.format("'%s'",user.getName())
-                ,String.format("'%s'",user.getFamilyName())
-                ,String.format("'%s'",user.getPseudo())
-                ,String.format("'%s'",user.getPassword())
+                ,String.format(format,user.getName())
+                ,String.format(format,user.getFamilyName())
+                ,String.format(format,user.getPseudo())
+                ,String.format(format,user.getPassword())
                 ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
         userID = String.valueOf(getGeneratedID());

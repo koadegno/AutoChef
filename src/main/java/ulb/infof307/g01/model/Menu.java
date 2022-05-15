@@ -1,10 +1,7 @@
 package ulb.infof307.g01.model;
 
 import java.sql.SQLException;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Vector;
-import java.util.Collections;
+import java.util.*;
 
 /**
 * Classe représentant un Menu Hebdomadaire
@@ -14,7 +11,7 @@ public class Menu {
 
     private String name;
     private static final int NB_OF_DAYS = 7;
-    private Vector<Vector<Recipe>> menu = new Vector<>(NB_OF_DAYS);
+    private List<List<Recipe>> menu = new ArrayList<>(NB_OF_DAYS);
 
     public Menu(String name) {
         this.name = name;
@@ -27,9 +24,9 @@ public class Menu {
     }
 
     private void initVector() {
-        menu = new Vector<>(10);
+        menu = new ArrayList<>(10);
         for (int i = 0; i< NB_OF_DAYS; i++) {
-            menu.add(new Vector<>());
+            menu.add(new ArrayList<>());
         }
     }
 
@@ -41,7 +38,7 @@ public class Menu {
      */
     public int size() {
         int size = 0;
-        for(Vector<Recipe> vector : menu){
+        for(List<Recipe> vector : menu){
             size += vector.size();
         }
         return size;
@@ -120,7 +117,7 @@ public class Menu {
      */
     public ShoppingList generateShoppingList() {
         ShoppingList shopList = new ShoppingList(name);
-        for (Vector<Recipe> recipes : menu) {
+        for (List<Recipe> recipes : menu) {
             for (Recipe meal : recipes) {
                 shopList.addAll(meal);
             }
@@ -133,8 +130,8 @@ public class Menu {
      */
     private List<Recipe> getAllRecipes() {
 
-        Vector<Recipe> allRecipesList = new Vector<>();
-        for (Vector<Recipe> menuDay : menu) {
+        List<Recipe> allRecipesList = new ArrayList<>();
+        for (List<Recipe> menuDay : menu) {
             allRecipesList.addAll(menuDay);
         }
         return allRecipesList;
@@ -159,7 +156,7 @@ public class Menu {
         int index = 0;
         int nbMealDay = (int) Math.ceil((double)(nbVegetarian + nbMeat + nbFish + recipesUsed.size())/ 7);
 
-        for (Vector<Recipe> nbMeal : menu) {
+        for (List<Recipe> nbMeal : menu) {
             int nbRecipesToAdd = nbMealDay - nbMeal.size();
             if (nbRecipesToAdd > 0) {
                 List<Recipe> recipesChosed;
@@ -176,7 +173,7 @@ public class Menu {
 
     public String toStringTest(){
         StringBuilder toReturn = new StringBuilder(this.name + ": \n");
-        for(Vector<Recipe> vector : menu){
+        for(List<Recipe> vector : menu){
             toReturn.append("\t");
             for(Recipe recipe: vector){
                 toReturn.append(recipe.getName()).append(" - ");

@@ -41,7 +41,7 @@ public class JSON {
 
 
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            throw new SQLException(e);
         }
 
     }
@@ -49,15 +49,10 @@ public class JSON {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
-        FileReader reader;
         JSONObject recipe;
-        try {
-            reader = new FileReader(fileName);
-
+        try (FileReader reader = new FileReader(fileName)) {
             //Read JSON file
-            Object obj = jsonParser.parse(reader);
-            recipe = (JSONObject) obj;
-
+            recipe = (JSONObject) jsonParser.parse(reader);
         } catch (IOException e) {
             throw new IOException(e);
         }

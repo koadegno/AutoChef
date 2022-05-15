@@ -63,7 +63,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereCategory() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT,null,0);
+        List<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT,null,0);
         assertEquals(bolo.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(bolo.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(bolo.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -74,7 +74,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereType() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, TestConstante.FOOD_TYPE_MEAL,0);
+        List<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, TestConstante.FOOD_TYPE_MEAL,0);
         assertEquals(pesto.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(pesto.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(pesto.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -85,7 +85,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereNbPerson() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null,null,3);
+        List<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null,null,3);
         assertEquals(pesto.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(pesto.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(pesto.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -96,7 +96,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereAll() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT, TestConstante.FOOD_TYPE_SIMMERED,4);
+        List<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT, TestConstante.FOOD_TYPE_SIMMERED,4);
         assertEquals(bolo.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(bolo.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(bolo.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");

@@ -89,7 +89,6 @@ public class Shop extends HashSet<Product> {
     }
 
     public void setAddress(String shopAddress) throws NullPointerException {
-        System.out.println("l'adresse du magasin : " + shopAddress);
         address = shopAddress;
         coordinate = locatorService.convertAddressToPoint(shopAddress);
     }

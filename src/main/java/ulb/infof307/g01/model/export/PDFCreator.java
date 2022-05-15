@@ -28,7 +28,7 @@ public class PDFCreator {
     private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
             Font.BOLD);
     public  void createPDF(ShoppingList shoppingList) throws PDFException {
-        Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
+        List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
         sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
 
         nameFile = shoppingList.getName();
@@ -38,14 +38,14 @@ public class PDFCreator {
             document.open();
             addContent(document, sortedShoppingList);
         } catch (DocumentException | FileNotFoundException e) {
-            throw new PDFException();
+            throw new PDFException(e);
         }
         finally {
             document.close();
         }
     }
 
-    private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
+    private static void addContent(Document document, List<Product> productList) throws DocumentException {
         String nameFamilyProduct = productList.get(0).getFamilyProduct();
 
         Anchor anchor = new Anchor("Liste de courses : " + nameFile, catFont); //catFont

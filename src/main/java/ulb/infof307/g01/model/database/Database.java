@@ -3,7 +3,6 @@ import ulb.infof307.g01.model.*;
 
 import java.io.File;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -68,7 +67,7 @@ public class Database {
                     sendRequest(scanner.nextLine());
                 }
             }catch (SQLException e){
-                throw new SQLException();
+                throw new SQLException(e);
             }
         }
         else throw new FileNotFoundException();
@@ -134,7 +133,7 @@ public class Database {
         }
         query.deleteCharAt(query.length()-1).append(");");
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
-            ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
+            List<String> columnValues = new ArrayList<>(Arrays.asList(values));
             fillPreparedStatementValues(statement, columnValues);
             sendQueryUpdate(statement);
         }
@@ -148,7 +147,7 @@ public class Database {
     protected PreparedStatement select(String nameTable, List<String> constraintToAppend, String orderBy) throws SQLException {
         String stringQuery;
         StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s ", nameTable));
-        ArrayList<String> valueOfPreparedStatement;
+        List<String> valueOfPreparedStatement;
         if (!constraintToAppend.isEmpty()) {
             query.append(" WHERE ");
         }
@@ -172,7 +171,7 @@ public class Database {
      * @param statement le PreparedStatement à remplir
      * @param valueOfPreparedStatement les types à déterminer
      */
-    protected void fillPreparedStatementValues(PreparedStatement statement, ArrayList<String> valueOfPreparedStatement) throws SQLException {
+    protected void fillPreparedStatementValues(PreparedStatement statement, List<String> valueOfPreparedStatement) throws SQLException {
         if (valueOfPreparedStatement ==null) return;
         for(int i = 1; i < valueOfPreparedStatement.size() +1; i++){
             String columnValue = valueOfPreparedStatement.get(i-1);
@@ -198,7 +197,7 @@ public class Database {
 
     protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        ArrayList<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
         query.append(";");
         String stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);
@@ -212,11 +211,11 @@ public class Database {
      * @param constraintToAppend contraintes à ajouter à requête
      * @return requete avec contrainte
      */
-    protected ArrayList<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
-        ArrayList<String> columnValues = new ArrayList<>();
+    protected List<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
+        List<String> columnValues = new ArrayList<>();
         if (!constraintToAppend.isEmpty()) {
             for (String s : constraintToAppend) {
-                ArrayList<String> columnAndValue = splitOnCharacter(s);
+                List<String> columnAndValue = splitOnCharacter(s);
                 query.append(columnAndValue.get(0)).append(columnAndValue.get(2)).append(" ?").append(" AND ");
                 columnValues.add(columnAndValue.get(1));
             }
@@ -228,7 +227,7 @@ public class Database {
     protected void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable, nameToUpdate));
         //nameTable,nameToUpdate
-        ArrayList<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
 
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
@@ -242,7 +241,7 @@ public class Database {
      * @return Nom correspondant à l'ID
      */
     protected String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
+        List<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
         PreparedStatement statement = select(table,constraint,null);
         ResultSet res = sendQuery(statement);
@@ -255,7 +254,7 @@ public class Database {
      */
     protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
 
-        ArrayList<String> constraint = new ArrayList<>();
+        List<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s='%s'","Nom",name));
         PreparedStatement statement =  select(table,constraint,null);
 
@@ -294,8 +293,8 @@ public class Database {
      * @param s string a split
      * @return list de 3 strings
      */
-    protected ArrayList<String> splitOnCharacter(String s){
-        ArrayList<String> parts = null;
+    protected List<String> splitOnCharacter(String s){
+        List<String> parts = null;
         if(s.contains(">=")){
             //split sur base de >=
             parts = new ArrayList<>(Arrays.asList(s.split(">=")));

@@ -7,20 +7,22 @@ import org.w3c.dom.NodeList;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
-import java.util.Comparator;
-import java.util.Objects;
-import java.util.Vector;
+import java.util.*;
 
 /**
  * Classe d'exportation d'une recette en ODT
  */
 public class ODTCreator {
 
-
+    /**
+     * Crée un fichier ODT à partir d'une liste de course
+     * @param shoppingList la liste de course
+     * @throws Exception Erreur lors de l'écriture de l'exception
+     */
     public void createODT(ShoppingList shoppingList) throws Exception {
         OdfTextDocument odt = OdfTextDocument.newTextDocument();
 
-        Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
+        List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
         sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
         String nameFamilyProduct = sortedShoppingList.get(0).getFamilyProduct();
         writeODT(odt,"Liste de course : "+shoppingList.getName()+"\n");

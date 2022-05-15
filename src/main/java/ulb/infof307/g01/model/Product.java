@@ -96,10 +96,8 @@ public class Product {
      * Modifie la quantité avec {@code newQuantity}, si la valeur est inférieure à 1, la quantité est mise à 1
      */
     public void setQuantity(int newQuantity) {
-        if (newQuantity > 0)
-            quantity = newQuantity;
-        else
-            quantity = 1;
+        if (newQuantity > 0) quantity = newQuantity;
+        else quantity = 1;
     }
 
     public int getQuantity() {
@@ -122,12 +120,8 @@ public class Product {
     @Override
     public boolean equals(Object other) {
 
-        if (this == other)
-            return true;
-
-        if (other == null || this.getClass() != other.getClass())
-            return false;
-
+        if (this == other) return true;
+        if (other == null || this.getClass() != other.getClass()) return false;
         Product product = (Product)other;
 
         return this.getName().equals(product.getName());
