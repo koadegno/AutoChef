@@ -2,6 +2,7 @@ package ulb.infof307.g01.model.database;
 import ulb.infof307.g01.model.*;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.sql.*;
@@ -23,23 +24,30 @@ public class Database {
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
+     * Le programme s'arrête si aucune connexion ne peut être établie avec une base de données.
      * @param nameDB nom de la base de données que l'ont veut charger/créer.
      */
     public Database(String nameDB) {
         String dbName = "jdbc:sqlite:" + nameDB;
         File file = new File(nameDB);
         boolean fileExist = file.exists();
+
+        if(connection != null && request != null){
+            return;
+        }
         try {
-            if(connection != null && request != null){
-                return; //TODO changer ca un jour
-            }
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
             if(! fileExist ) {
                 createDB();
             }
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur
+        } catch (SQLException | FileNotFoundException e) {
+            try {
+                request.close();
+                connection.close();
+                file.delete();
+            } catch (SQLException ignored) {}
+            System.exit(1);
         }
     }
 
@@ -48,22 +56,22 @@ public class Database {
     }
 
     /**
-     * Méthode de création de la base de données qui lit et execute
+     * Méthode de création d'une base de données qui lit et execute
      * ligne par ligne le fichier DDLDatabase.txt qui représente le ddl.
+     * Si le fichier DDLDatabase.txt n'existe pas, la création est impossible
      */
-    private void createDB(){
-        try{
-            InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
-            if(fileDb == null) throw new IOException();
-            Scanner scanner =new Scanner(fileDb);
-            while(scanner.hasNextLine()){
-                sendRequest(scanner.nextLine());
+    private void createDB() throws FileNotFoundException, SQLException {
+        InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
+        if (fileDb != null) {
+            try (Scanner scanner =new Scanner(fileDb); ){
+                while(scanner.hasNextLine()){
+                    sendRequest(scanner.nextLine());
+                }
+            }catch (SQLException e){
+                throw new SQLException();
             }
-            scanner.close();
         }
-        catch(IOException e) {
-            e.printStackTrace(); //TODO lancer une erreur
-        }
+        else throw new FileNotFoundException();
     }
 
     public void closeConnection() throws SQLException {
@@ -79,13 +87,8 @@ public class Database {
      * Requete de la base de données uniquement pour la creation de table
      * @param query requete sql
      */
-    public void sendRequest(String query) {
-        try {
-            request.execute(query);
-        } catch (SQLException e) {
-            //TODO lancer une erreur
-            e.printStackTrace();
-        }
+    public void sendRequest(String query) throws SQLException {
+        request.execute(query);
     }
 
     /**
@@ -93,25 +96,12 @@ public class Database {
      * @param statement requete sql
      * @return resultat de la requete, ou null si la requete echoue
      */
-    protected ResultSet sendQuery(PreparedStatement statement) {
-        ResultSet res = null;
-        try {
-            res =  statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur;
-
-        }
-        return res;
+    protected ResultSet sendQuery(PreparedStatement statement) throws SQLException {
+        return statement.executeQuery();
     }
 
-    protected ResultSet sendQuery(String query) { //to delete
-        ResultSet res = null;
-        try {
-            res =  request.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur
-        }
-        return res;
+    protected ResultSet sendQuery(String query) throws SQLException { //to delete
+        return request.executeQuery(query);
     }
 
     /**
@@ -125,15 +115,10 @@ public class Database {
     /**
      * @return un id généré par la base de données, null si l'id n'est pas créé
      */
-    protected Integer getGeneratedID(){
-        try {
-            ResultSet getID = request.getGeneratedKeys();
-            getID.next();
-            return getID.getInt(1);
-        }catch (SQLException e){
-            e.printStackTrace(); //TODO lancer une erreur;
-        }
-        return null;
+    protected Integer getGeneratedID() throws SQLException {
+        ResultSet getID = request.getGeneratedKeys();
+        getID.next();
+        return getID.getInt(1);
     }
 
     /**
@@ -148,11 +133,11 @@ public class Database {
             query.append("?").append(",");
         }
         query.deleteCharAt(query.length()-1).append(");");
-        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
-        ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
-        fillPreparedStatementValues(statement, columnValues);
-        sendQueryUpdate(statement);
-        statement.close();
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
+            fillPreparedStatementValues(statement, columnValues);
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
@@ -283,20 +268,6 @@ public class Database {
         return res.getInt(nameIDColumn);
     }
 
-    /**
-     *
-     * @param orderBy si non nul, ajoute la contrainte de triée par
-     */
-    protected ArrayList<String> getAllNameFromTable(String table, String orderBy) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        PreparedStatement statement =  select(table, constraint,orderBy);
-        ResultSet queryAllTableName = sendQuery(statement);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllTableName.next()){
-            allProductName.add(queryAllTableName.getString("Nom"));
-        }
-        return allProductName;
-    }
 
     protected void fillRecipeWithProducts(Recipe recipe) throws SQLException {
         ResultSet querySelectProduct = sendQuery(String.format("""

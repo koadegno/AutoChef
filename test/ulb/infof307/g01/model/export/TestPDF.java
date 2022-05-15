@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.TestConstante;
+import ulb.infof307.g01.model.exception.PDFException;
 import ulb.infof307.g01.model.export.PDFCreator;
 
 import com.itextpdf.text.pdf.PdfReader;
@@ -32,7 +33,11 @@ class TestPDF {
     @Test
      public void testCreatePDF() throws IOException {
         PDFCreator pdfCreator = new PDFCreator();
-        pdfCreator.createPDF(shoppingList);
+        try {
+            pdfCreator.createPDF(shoppingList);
+        } catch (PDFException e) {
+            e.printStackTrace();
+        }
         String text = """
                 1. Liste de courses : test/testShoppingList
                 1.1. Fruits

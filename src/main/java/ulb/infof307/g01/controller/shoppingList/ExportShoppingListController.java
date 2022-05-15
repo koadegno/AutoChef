@@ -3,6 +3,7 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.model.exception.PDFException;
 import ulb.infof307.g01.model.export.ODTCreator;
 import ulb.infof307.g01.model.export.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
@@ -54,7 +55,11 @@ public class ExportShoppingListController extends Controller implements ExportSh
      */
     public void exportToPDF(){
         PDFCreator pdfCreator = new PDFCreator();
-        pdfCreator.createPDF(shoppingList);
+        try {
+            pdfCreator.createPDF(shoppingList);
+        } catch (PDFException e) {
+            ViewController.showAlert(Alert.AlertType.ERROR, "ERREUR", "Une erreur s'est produite lors de l'exportation en PDF.");
+        }
         popupExportShoppingList.close();
     }
 
