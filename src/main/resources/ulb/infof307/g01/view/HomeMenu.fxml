@@ -23,17 +23,17 @@
       </Label>
       <HBox alignment="CENTER" prefHeight="267.0" prefWidth="750.0" spacing="40.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onUserMenusButtonClick" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #915F6D;" text="Voir mes Menus" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#onUserMenusButtonClick" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #9F667A;" text="Voir mes Menus" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="20.0" />
                </font></Button>
-            <Button mnemonicParsing="false" onAction="#onCreateMenuButtonClick" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #915F6D;" text="Créer un Menu" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#onCreateMenuButtonClick" prefHeight="45.0" prefWidth="200.0" style="-fx-background-color: #9F667A;" text="Créer un Menu" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="20.0" />
                </font></Button>
          </children>
       </HBox>
-      <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: #9F667A;" text="Retour" textFill="WHITE">
+      <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" styleClass="#915F6D" text="Retour" textFill="WHITE">
          <font>
             <Font name="Yu Gothic Medium" size="18.0" />
          </font>

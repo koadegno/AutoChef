@@ -9,7 +9,7 @@
    <children>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
          <children>
-            <Label alignment="CENTER" prefHeight="65.0" prefWidth="409.0" text="S'enregistrer" textAlignment="CENTER" underline="true">
+            <Label alignment="CENTER" prefHeight="65.0" prefWidth="409.0" text="S'enregistrer" textAlignment="CENTER">
                <font>
                   <Font name="Yu Gothic Medium" size="40.0" />
                </font>
@@ -49,13 +49,13 @@
             </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="750.0" spacing="400.0">
+      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="750.0" spacing="500.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onCancelButton" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour">
+            <Button mnemonicParsing="false" onAction="#onCancelButton" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font></Button>
-            <Button mnemonicParsing="false" onAction="#onSubmitButton" prefHeight="43.0" prefWidth="150.0" style="-fx-background-color: yellowgreen;" text="Confirmer">
+            <Button mnemonicParsing="false" onAction="#onSubmitButton" prefHeight="43.0" prefWidth="120.0" style="-fx-background-color: yellowgreen;" text="Enregistrer" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font></Button>
