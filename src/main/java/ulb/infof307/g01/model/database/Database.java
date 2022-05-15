@@ -266,20 +266,6 @@ public class Database {
         return res.getInt(nameIDColumn);
     }
 
-    /**
-     *
-     * @param orderBy si non nul, ajoute la contrainte de triée par
-     */
-    protected ArrayList<String> getAllNameFromTable(String table, String orderBy) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        PreparedStatement statement =  select(table, constraint,orderBy);
-        ResultSet queryAllTableName = sendQuery(statement);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllTableName.next()){
-            allProductName.add(queryAllTableName.getString("Nom"));
-        }
-        return allProductName;
-    }
 
     protected void fillRecipeWithProducts(Recipe recipe) throws SQLException {
         ResultSet querySelectProduct = sendQuery(String.format("""
