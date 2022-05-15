@@ -79,6 +79,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
             }
         }
         catch (NullPointerException e) {
+            e.printStackTrace();
             ViewController.showAlert(Alert.AlertType.ERROR, "L'adresse entrer n'existe pas", "");
             return !isSaved;
         }
