@@ -1,6 +1,8 @@
 package ulb.infof307.g01.controller.shop;
 
 import javafx.collections.FXCollections;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
@@ -8,11 +10,13 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ShopViewController;
 
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Collection;
 import java.util.List;
 
 
