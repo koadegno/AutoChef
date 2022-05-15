@@ -5,9 +5,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" spacing="10.0" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
+<VBox fx:id="vBox" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="650.0" spacing="10.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1">
    <children>
-      <MenuBar prefHeight="26.0" prefWidth="750.0">
+      <MenuBar prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
          <menus>
             <Menu mnemonicParsing="false" text="Profil">
                <items>
@@ -23,25 +23,25 @@
       </MenuBar>
       <HBox alignment="CENTER" prefHeight="61.0" prefWidth="750.0">
          <children>
-            <Label text="Envoyer un mail">
+            <Label text="Envoyer un mail" underline="true">
                <font>
-                  <Font size="24.0" />
+                  <Font name="Yu Gothic Medium" size="30.0" />
                </font>
             </Label>
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="54.0" prefWidth="750.0">
          <children>
-            <Label fx:id="nameShoppingList" prefHeight="27.0" prefWidth="567.0" text="Liste de courses :">
+            <Label fx:id="nameShoppingList" prefHeight="23.0" prefWidth="523.0" text="Liste de courses :">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="54.0" prefWidth="750.0" spacing="10.0">
+      <HBox alignment="CENTER" prefHeight="54.0" prefWidth="750.0" spacing="30.0">
          <children>
-            <Label prefHeight="27.0" prefWidth="94.0" text="                  À :  ">
+            <Label prefHeight="26.0" prefWidth="115.0" text="                   À :  ">
                <font>
                   <Font size="14.0" />
                </font>
@@ -49,18 +49,18 @@
                   <Insets left="-30.0" />
                </HBox.margin>
             </Label>
-            <ComboBox fx:id="mailReceiver" prefHeight="25.0" prefWidth="322.0" promptText="les mails favoris" />
-            <Button mnemonicParsing="false" onAction="#chooseFavoriteMail" prefHeight="25.0" prefWidth="93.0" text="nouveau mail" />
+            <ComboBox fx:id="mailReceiver" prefHeight="26.0" prefWidth="270.0" promptText="séléctionner un mail favoris" style="-fx-background-color: #9F667A;" />
+            <Button mnemonicParsing="false" onAction="#chooseFavoriteMail" prefHeight="26.0" prefWidth="100.0" style="-fx-background-color: #9F667A;" text="Autre mail" textFill="WHITE" />
          </children>
       </HBox>
       <HBox alignment="CENTER" prefHeight="52.0" prefWidth="750.0">
          <children>
-            <Label prefHeight="27.0" prefWidth="72.0" text="      Objet :  ">
+            <Label prefHeight="26.0" prefWidth="110.0" text="      Objet :  ">
                <font>
                   <Font size="14.0" />
                </font>
             </Label>
-            <TextField fx:id="subject" prefHeight="25.0" prefWidth="453.0" promptText="sujet du mail">
+            <TextField fx:id="subject" prefHeight="26.0" prefWidth="406.0" promptText="Entrez l'objet du mail">
                <HBox.margin>
                   <Insets left="10.0" />
                </HBox.margin></TextField>
@@ -73,8 +73,11 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="61.0" prefWidth="750.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#sendMail" prefHeight="25.0" prefWidth="531.0" text="Envoyer le mail" />
+            <Button mnemonicParsing="false" onAction="#sendMail" prefHeight="25.0" prefWidth="531.0" style="-fx-background-color: #915F6D;" text="Envoyer le mail" textFill="WHITE" />
          </children>
       </HBox>
    </children>
+   <padding>
+      <Insets bottom="10.0" />
+   </padding>
 </VBox>
