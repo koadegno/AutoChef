@@ -136,6 +136,10 @@ public class CreateMenuViewController extends ViewController<CreateMenuViewContr
         listener.logout();
     }
 
+    public void setDay(int currentDay) {
+        daysComboBox.getSelectionModel().select(currentDay);
+    }
+
 
     public interface Listener{
         void onGenerateMenu();
