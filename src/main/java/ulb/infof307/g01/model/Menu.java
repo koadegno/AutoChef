@@ -62,9 +62,11 @@ public class Menu {
      * Ajoute une {@code Recipe} dans la liste des Recette pour le jour {@code day}
      * @param day Le jour dans lequel il faut ajouter {@code meal}
      * @param meal La {@code Recipe} qu'il faut ajouter à la liste des Recettes pour le jour {@code day}
+     * @return le menu (this)
      */
-    public void addRecipeTo(Day day, Recipe meal) {
+    public Menu addRecipeTo(Day day, Recipe meal) {
         menu.get(day.index).add(meal);
+        return this;
     }
 
     public void addRecipeTo(int day, Recipe meal) {

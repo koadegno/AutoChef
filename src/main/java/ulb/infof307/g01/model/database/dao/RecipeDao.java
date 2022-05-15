@@ -35,9 +35,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         int nbPersons = result.getInt(4);
         String type = result.getString(5);
         String category = result.getString(6);
-        String method = result.getString(7);
-        Boolean isFavorite = result.getBoolean(8);
-        return new Recipe(recipeID, name, duration, category, type, nbPersons, method,isFavorite);
+        String preparations = result.getString(7);
+        boolean isFavorite = result.getBoolean(8);
+        return new Recipe.RecipeBuilder().withId(recipeID).withName(name).withDuration(duration).withCategory(category).withType(type).withNumberOfPerson(nbPersons).withPreparation(preparations).isFavorite(isFavorite).build();
     }
 
     /**

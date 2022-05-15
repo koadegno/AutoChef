@@ -49,8 +49,8 @@ public class JSON {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
-        FileReader reader = null;
-        JSONObject recipe = null;
+        FileReader reader;
+        JSONObject recipe;
         try {
             reader = new FileReader(fileName);
 
@@ -71,7 +71,8 @@ public class JSON {
             String preparation = (String) recipe.get("Preparation");
 
             //Envoyer recette à la base de donnee
-            Recipe recipeToSend = new Recipe(nameRecipeToAdd, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
+
+            Recipe recipeToSend = new Recipe.RecipeBuilder().withName(nameRecipeToAdd).withDuration(Math.toIntExact(duration)).withCategory(category).withType(type).withNumberOfPerson(Math.toIntExact(nbrPerson)).withPreparation(preparation).build();
             Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
 
         }

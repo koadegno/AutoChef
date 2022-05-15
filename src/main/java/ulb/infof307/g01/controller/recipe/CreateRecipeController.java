@@ -103,11 +103,7 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
             }
 
             //Creation d'une nouvelle recette
-            currentRecipe = new Recipe(recipeName);
-            currentRecipe.setCategory(diet);
-            currentRecipe.setPreparation(preparation);
-            currentRecipe.setType(type);
-            currentRecipe.setNbrPerson(nbPerson);
+            currentRecipe = new Recipe.RecipeBuilder().withName(recipeName).withNumberOfPerson(nbPerson).withType(type).withPreparation(preparation).withCategory(diet).build();
             currentRecipe.addAll(currentShoppingList);
             try {
                 if (isWaitingModification) {

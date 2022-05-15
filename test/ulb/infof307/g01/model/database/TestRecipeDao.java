@@ -21,21 +21,15 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestRecipeDao {
 
-    static private final String meat = "Viande";
-    static private final String fish = "Poisson";
-
-    static private final String simmered = "Mijoté";
-    static private final String meal = "Plat";
-
     static private final String fruit = "Fruit";
     static private final String gram = "g";
 
     static private final Product peach = new Product("peche", 1, gram, fruit);
     static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
 
-    static private final Recipe bolo = new Recipe("Bolognaise", 60, meat, simmered,4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-    static private final Recipe carbo = new Recipe("Carbonara", 60, fish, meal,5, "Cuire des pâtes, poisson");
-    static private final Recipe pesto = new Recipe("Pesto", 20, fish, meal,3, "Cuire des pâtes, poisson");
+    static private final Recipe bolo = TestConstante.BOLO_RECIPE;
+    static private final Recipe carbo = TestConstante.CARBO_RECIPE;
+    static private final Recipe pesto = TestConstante.PESTO_RECIPE;
 
     @BeforeAll
     static public void initConfig() throws SQLException {
@@ -45,11 +39,11 @@ class TestRecipeDao {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert(fish);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(meat);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
 
-        Configuration.getCurrent().getRecipeTypeDao().insert(meal);
-        Configuration.getCurrent().getRecipeTypeDao().insert(simmered);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
 
         Configuration.getCurrent().getProductUnityDao().insert(gram);
         Configuration.getCurrent().getProductFamilyDao().insert(fruit);
@@ -73,7 +67,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereCategory() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(meat,null,0);
+        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT,null,0);
         assertEquals(bolo.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(bolo.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(bolo.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -84,7 +78,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereType() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, meal,0);
+        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, TestConstante.FOOD_TYPE_MEAL,0);
         assertEquals(pesto.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(pesto.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(pesto.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -106,7 +100,7 @@ class TestRecipeDao {
 
     @Test
     public void testGetRecipeWhereAll() throws SQLException {
-        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(meat, simmered,4);
+        ArrayList<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT, TestConstante.FOOD_TYPE_SIMMERED,4);
         assertEquals(bolo.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(bolo.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
         assertEquals(bolo.getCategory(), recipes.get(0).getCategory(),"Test categorie de la recette");
@@ -135,10 +129,10 @@ class TestRecipeDao {
 
     @Test
     void testUpdate() throws SQLException {
-        Recipe myPesto = new Recipe("Pesto maison", 20, fish, meal,3, "Faire cuire des cheveux");
+        Recipe myPesto = new Recipe.RecipeBuilder().withName("Pesto maison").withDuration(20).withCategory(TestConstante.FOOD_CATEGORY_FISH).withType(TestConstante.FOOD_TYPE_MEAL).withNumberOfPerson(3).withPreparation("Faire cuire des cheveux").build();
         Configuration.getCurrent().getRecipeDao().insert(myPesto);
         myPesto = Configuration.getCurrent().getRecipeDao().get(myPesto.getName());
-        Recipe newMyPesto = new Recipe(myPesto.getId(), "Pesto maison", 25, fish, meal,2, "Faire cuire des cheveux et des pieds poilus ");
+        Recipe newMyPesto = new Recipe.RecipeBuilder().withId(myPesto.getId()).withName("Pesto maison").withDuration(25).withCategory(TestConstante.FOOD_CATEGORY_FISH).withType(TestConstante.FOOD_TYPE_MEAL).withNumberOfPerson(2).withPreparation("Faire cuire des cheveux et des pieds poilus ").build();
         Configuration.getCurrent().getRecipeDao().update(newMyPesto);
         Recipe pestoUpdated = Configuration.getCurrent().getRecipeDao().get(myPesto.getName());
 
@@ -167,7 +161,7 @@ class TestRecipeDao {
 
     @Test
     void testDelete() throws SQLException {
-        Recipe tomateCrevette = new Recipe("tomate aux crevettes grises", 20, fish, meal,3, "Mange un steak frite c'est mieux");
+        Recipe tomateCrevette = new Recipe.RecipeBuilder().withName("tomate aux crevettes grises").withDuration(20).withCategory(TestConstante.FOOD_CATEGORY_FISH).withType(TestConstante.FOOD_TYPE_MEAL).withNumberOfPerson(3).withPreparation( "Mange un steak frite c'est mieux").build();
         Configuration.getCurrent().getRecipeDao().insert(tomateCrevette);
         tomateCrevette = Configuration.getCurrent().getRecipeDao().get(tomateCrevette.getName());
         Configuration.getCurrent().getRecipeDao().delete(tomateCrevette);

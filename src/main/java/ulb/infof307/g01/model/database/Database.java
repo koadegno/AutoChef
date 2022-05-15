@@ -276,7 +276,9 @@ public class Database {
 
         ResultSet res = sendQuery(statement);
 
-        res.next();//TODO lancer une erreur
+        if(!res.next()){
+            throw new SQLException();
+        }
 
         return res.getInt(nameIDColumn);
     }

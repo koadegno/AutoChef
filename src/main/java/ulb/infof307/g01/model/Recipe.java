@@ -6,8 +6,6 @@ package ulb.infof307.g01.model;
 
 public class Recipe extends ProductHashSet {
 
-    public void setId(int id) {this.id = id;}
-
 
     private int id;
     private String name;
@@ -16,27 +14,69 @@ public class Recipe extends ProductHashSet {
     private String type;
     private int nbrPerson;
     private String preparation;
+    private  boolean isFavorite;
 
-    private  Boolean isFavorite = false;
+    /**
+     * Builder pour construire des recettes
+     */
+    public static class RecipeBuilder{
 
-    public Recipe (String name){
-        this.name = name;
+        private int id = -1;
+        private String name = "";
+        private int duration = -1;
+        private String category = "";
+        private String type = "";
+        private int nbrPerson = 1;
+        private String preparation = "";
+        private  boolean isFavorite = false;
+
+        public RecipeBuilder withId(int id){
+            this.id = id;
+            return this;
+        }
+        public RecipeBuilder withName(String name){
+            this.name = name;
+            return this;
+        }
+        public RecipeBuilder withDuration(int duration){
+            this.duration = duration;
+            return this;
+        }
+        public RecipeBuilder withCategory(String category){
+            this.category = category;
+            return this;
+        }
+        public RecipeBuilder withType(String type){
+            this.type = type;
+            return this;
+        }
+        public RecipeBuilder withNumberOfPerson(int nbrPerson){
+            this.nbrPerson = nbrPerson;
+            return this;
+        }
+        public RecipeBuilder withPreparation(String preparation){
+            this.preparation = preparation;
+            return this;
+        }
+        public RecipeBuilder isFavorite(boolean isFavorite){
+            this.isFavorite = isFavorite;
+            return this;
+        }
+
+        public Recipe build(){
+            Recipe recipe = new Recipe();
+            recipe.id = id;
+            recipe.name = name;
+            recipe.duration = duration;
+            recipe.category = category;
+            recipe.type = type;
+            recipe.nbrPerson = nbrPerson;
+            recipe.preparation = preparation;
+            recipe.isFavorite = isFavorite;
+            return recipe;
+        }
     }
 
-    public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation) {
-        this.id = id; this.name = name; this.duration = duration; this.category = category; this.type = type;
-        this.nbrPerson = nbrPerson;     this.preparation = preparation;
-    }
-
-    public Recipe (int id, String name, int duration, String category, String type, int nbrPerson, String preparation,Boolean isFavorite) {
-        this(id,name,duration,category,type,nbrPerson,preparation);
-        this.isFavorite = isFavorite;
-    }
-
-    public Recipe (String name, int duration, String category, String type, int nbrPerson, String preparation) {
-        this.name = name; this.duration = duration; this.category = category; this.type = type;
-        this.nbrPerson = nbrPerson;     this.preparation = preparation;
-    }
     public int getId() { return id;}
     public Boolean isFavorite() {return isFavorite;}
     public String getName() {
@@ -49,12 +89,10 @@ public class Recipe extends ProductHashSet {
     public String getType() { return type; }
     public int getNbrPerson() { return nbrPerson; }
     public String getPreparation() { return preparation;}
-
     public void setName(String name) { this.name = name;}
-    public void setDuration(int duration) { this.duration = duration;}
-    public void setCategory(String category) { this.category = category;}
+
+    public void setId(int id) {this.id = id;}
     public void setType(String type) { this.type = type;}
-    public void setNbrPerson(int nbrPerson) { this.nbrPerson = nbrPerson;}
     public void setPreparation(String preparation) { this.preparation = preparation;}
 
 
