@@ -29,7 +29,7 @@ public class PDFCreator {
             Font.BOLD);
     public  void createPDF(ShoppingList shoppingList) throws PDFException {
         Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
-        sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
+        sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
 
         nameFile = shoppingList.getName();
         Document document = new Document();
@@ -46,7 +46,7 @@ public class PDFCreator {
     }
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
-        String nameFamilyProduct = productList.get(0).getFamillyProduct();
+        String nameFamilyProduct = productList.get(0).getFamilyProduct();
 
         Anchor anchor = new Anchor("Liste de courses : " + nameFile, catFont); //catFont
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
@@ -54,8 +54,8 @@ public class PDFCreator {
         Section subCatPart = catPart.addSection(subPara);
 
         for (Product product : productList ){
-            if (!Objects.equals(product.getFamillyProduct(), nameFamilyProduct)){
-                nameFamilyProduct = product.getFamillyProduct();
+            if (!Objects.equals(product.getFamilyProduct(), nameFamilyProduct)){
+                nameFamilyProduct = product.getFamilyProduct();
                 subCatPart = catPart.addSection(new Paragraph(nameFamilyProduct, subFont));} //subFont
             subCatPart.add(new Paragraph(product.getName() + " " +product.getQuantity() + product.getNameUnity()));}
         document.add(catPart);

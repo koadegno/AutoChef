@@ -6,7 +6,6 @@ package ulb.infof307.g01.model;
 
 public class Recipe extends ProductHashSet {
 
-
     private int id;
     private String name;
     private int duration;
