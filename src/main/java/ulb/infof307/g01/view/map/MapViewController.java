@@ -57,8 +57,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     private MenuBar appMenuBar;
     @FXML
-    private Menu searchAddressMenu;
-    @FXML
     private Menu searchShopNameMenu;
 
     private Double currentCursorPosX;
@@ -120,7 +118,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
             currentCursorPosY = mouseEvent.getY();
 
 
-            // selectionner un point avec un simple clique droit
+            // selectionner un point avec un simple clique droit ? je suis sûre que tu as voulu dire "gauche " TODO:
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
                 listener.highlightGraphicPoint(currentCursorPosX,currentCursorPosY,mapView,shopGraphicsCircleOverlay);
@@ -219,7 +217,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void initReadOnlyMode() {
         appMenuBar.setVisible(false);
         searchShopNameMenu.setVisible(false);
-        //searchAddressMenu.setVisible(false);
     }
 
     public void helpMap() {

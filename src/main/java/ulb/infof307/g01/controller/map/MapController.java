@@ -65,7 +65,7 @@ public class MapController extends Controller implements MapViewController.Liste
         viewController.setListener(this);
         try {
             onInitializeMapShop();
-            viewController.start();
+            if(!readOnlyMode)viewController.start();
             routeService = new RouteService(viewController,this);
             locatorService = new LocatorService(viewController);
         } catch (SQLException e) {
