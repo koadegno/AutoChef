@@ -32,6 +32,7 @@ public class ShopsViewController extends ViewController<ShopsViewController.Shop
     }
 
     public void displayShops(List<String> shops) {
+        shopsTableView.getItems().clear();
         shopsTableView.getItems().addAll(shops);
     }
     public void onReturnButton() {

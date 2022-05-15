@@ -28,12 +28,16 @@ public class ShopController extends Controller implements ShopViewController.Lis
     private ShopViewController viewController;
     private Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
+    private ShopListener listener;
 
     public ShopController(boolean isModifying){
         this.isModifying = isModifying;
         shop = new Shop();
     }
 
+    public void setListener(ShopListener listener){
+        this.listener = listener;
+    }
     public void setShop(Shop shop){
         this.shop = shop;
     }
@@ -81,6 +85,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
             if (isModifying) {
                 Configuration.getCurrent().getShopDao().update(shop);
+                listener.update();
             }
             else {
                 Configuration.getCurrent().getShopDao().insert(shop);
@@ -145,6 +150,10 @@ public class ShopController extends Controller implements ShopViewController.Lis
         int numberOfImageHelp = 14;
         HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
         helpController.displayHelpShop();
+    }
+
+    public interface ShopListener{
+        void update();
     }
 
 }

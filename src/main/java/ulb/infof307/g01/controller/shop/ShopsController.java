@@ -1,6 +1,7 @@
 package ulb.infof307.g01.controller.shop;
 
 import javafx.fxml.FXMLLoader;
+import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Shop;
@@ -14,9 +15,10 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopsController extends Controller implements ShopsViewController.ShopsListener, ListenerBackPreviousWindow {
+public class ShopsController extends Controller implements ShopsViewController.ShopsListener, ListenerBackPreviousWindow, ShopController.ShopListener {
 
-    private ShopDao shopDao;
+    private final ShopDao shopDao;
+    private ShopsViewController shopsViewController;
 
 
     public ShopsController(ListenerBackPreviousWindow listenerBackPreviousWindow){
@@ -27,20 +29,25 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     public void displayShops(){
         FXMLLoader loader = loadFXML("Shops.fxml");
-        ShopsViewController viewController = loader.getController();
-        viewController.setListener(this);
+        shopsViewController = loader.getController();
+        shopsViewController.setListener(this);
         try {
-            List<Shop> allShop = shopDao.getShops();
-            List<String> allShopName = new ArrayList<>();
-            for(Shop shop: allShop){
-                allShopName.add(shop.getName()+"-"+shop.getAddress());
-            }
-            viewController.displayShops(allShopName);
+            List<String> allShopName = getShopsStringsList();
+            shopsViewController.displayShops(allShopName);
         } catch (SQLException e) {
             e.printStackTrace();
         }
     }
 
+    @NotNull
+    private List<String> getShopsStringsList() throws SQLException {
+        List<Shop> allShop = shopDao.getShops();
+        List<String> allShopName = new ArrayList<>();
+        for(Shop shop: allShop){
+            allShopName.add(shop.getName()+"-"+shop.getAddress());
+        }
+        return allShopName;
+    }
 
 
     @Override
@@ -60,11 +67,11 @@ public class ShopsController extends Controller implements ShopsViewController.S
     @Override
     public void onShopTableViewClicked(String shopName) {
         if(!shopName.isEmpty() && !shopName.isBlank()){
-
             try {
                 Shop shop = getShop(shopName);
                 ShopController shopController = new ShopController(true);
                 shopController.setShop(shop);
+                shopController.setListener(this);
                 shopController.displayShop();
             } catch (SQLException e) {
                 ViewController.showErrorSQL();
@@ -83,5 +90,16 @@ public class ShopsController extends Controller implements ShopsViewController.S
     @Override
     public void onReturn() {
         displayShops();
+    }
+
+    @Override
+    public void update() {
+        try {
+            List<String> shopList = getShopsStringsList();
+            shopsViewController.displayShops(shopList);
+        } catch (SQLException e) {
+            ViewController.showErrorSQL();
+        }
+
     }
 }
