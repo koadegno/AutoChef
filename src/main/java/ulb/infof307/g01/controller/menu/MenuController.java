@@ -35,6 +35,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     private Stage popup = null;
     private Scene currentScene;
     private boolean isModifying;
+    private int currentDay;
 
 
     public MenuController(Stage primaryStage){ this(primaryStage,null); }
@@ -58,8 +59,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     public void fillMenuTableView(Day day) {
         List<Recipe> valueList = menu.getRecipesfor(day);
-        for (Recipe products : valueList) {
-            createMenuViewController.getMenuTableView().getItems().add(products);
+        for (Recipe recipe : valueList) {
+            createMenuViewController.getMenuTableView().getItems().add(recipe);
         }
     }
 
@@ -122,6 +123,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onDaysComboBoxClicked(int dayIndex) {
+        currentDay = dayIndex;
         createMenuViewController.getMenuTableColumn().setText(daysName.get(dayIndex).toString());
         createMenuViewController.getMenuTableView().getItems().clear();
         fillMenuTableView(daysName.get(dayIndex));
@@ -168,6 +170,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
     @Override
     public void onAddRecipeClicked() {
         currentScene = currentStage.getScene();
+        System.out.println("le jour que tu veyx 2  : " + currentDay);
+
         SearchRecipeController searchRecipeController = new SearchRecipeController(currentStage,this);
         searchRecipeController.setListener(this);
         searchRecipeController.displaySearchRecipe();
@@ -175,8 +179,8 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onRecipeSelected(Recipe selectedRecipe) {
-        int selectedIndex = createMenuViewController.getDaysComboBox().getSelectionModel().getSelectedIndex();
-        Day day = daysName.get(selectedIndex);
+        System.out.println("le jour que tu veyx : " + currentDay);
+        Day day = daysName.get(currentDay);
         menu.addRecipeTo(day,selectedRecipe);
         createMenuViewController.refreshTableView();
     }
