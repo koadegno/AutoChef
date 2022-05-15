@@ -77,12 +77,9 @@ public class MenuDao extends Database implements Dao<Menu> {
                 INNER JOIN UtilisateurMenu ON R.MenuID = UtilisateurMenu.MenuID
                 WHERE UtilisateurMenu.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getId());
-        ResultSet queryAllName = sendQuery(query);
-        List<String> nameList = new ArrayList<>();
-        while(queryAllName.next()){
-            nameList.add(queryAllName.getString(1));}
-        return nameList;
+                """, getUserID());
+
+        return getListOfName(query);
     }
 
     @Override

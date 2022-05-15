@@ -69,8 +69,8 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
      */
     public void initElementToDataBaseForCombobox(){
         try {
-            ArrayList<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
-            ArrayList<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+            List<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            List<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
             createRecipeViewController.initCombobox(recipeCategoriesList, recipeTypesList);
 
         } catch (SQLException e) {

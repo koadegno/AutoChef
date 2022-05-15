@@ -37,8 +37,8 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
 
         try {
             ArrayList<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
-            ArrayList<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
-            ArrayList<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            List<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+            List<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
             searchRecipeViewController.initialize(dietsList, typesList, recipesList);
         } catch (SQLException e) {
             ViewController.showErrorSQL();

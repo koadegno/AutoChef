@@ -4,6 +4,7 @@ import ulb.infof307.g01.model.database.Database;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accès à la base de données pour les données concernant les familles d'aliments
@@ -20,8 +21,12 @@ public class ProductFamilyDao extends Database implements Dao<String> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("FamilleAliment",null);
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT Nom
+                FROM FamilleAliment
+                """);
+        return getListOfName(query);
     }
 
     @Override

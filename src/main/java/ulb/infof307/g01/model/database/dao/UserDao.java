@@ -30,7 +30,6 @@ public class UserDao extends Database implements Dao<User>{
 
 
     @Override
-    @Deprecated
     public List<String> getAllName() throws SQLException {
         return null;
     }

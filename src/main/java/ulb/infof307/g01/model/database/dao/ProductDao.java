@@ -7,6 +7,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accès à la base de données pour les données concernant les Ingredients
@@ -24,8 +25,13 @@ public class ProductDao extends Database implements Dao<Product> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("Ingredient","ORDER BY Nom ASC");
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT nom
+                FROM Ingredient 
+                ORDER BY Nom ASC
+                """);
+        return getListOfName(query);
     }
 
     @Override

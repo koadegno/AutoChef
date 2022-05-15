@@ -10,6 +10,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -40,7 +41,7 @@ class TestProductDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        ArrayList<String> products = Configuration.getCurrent().getProductDao().getAllName();
+        List<String> products = Configuration.getCurrent().getProductDao().getAllName();
         assertEquals(peach.getName(), products.get(0));
     }
 

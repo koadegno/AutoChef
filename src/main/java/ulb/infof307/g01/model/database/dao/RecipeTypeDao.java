@@ -3,7 +3,7 @@ package ulb.infof307.g01.model.database.dao;
 import ulb.infof307.g01.model.database.Database;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Classe d'accès à la base de données pour les données concernant les types de plats
@@ -20,8 +20,12 @@ public class RecipeTypeDao extends Database implements Dao<String> {
     }
 
     @Override
-    public ArrayList<String> getAllName() throws SQLException {
-        return getAllNameFromTable("TypePlat",null);
+    public List<String> getAllName() throws SQLException {
+        String query = String.format("""
+                SELECT Nom
+                FROM TypePlat
+                """, getUserID());
+        return getListOfName(query);
     }
 
     @Override

@@ -16,6 +16,7 @@ import ulb.infof307.g01.view.shop.ShopViewController;
 import java.io.IOException;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.List;
 
 
 /**
@@ -85,7 +86,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillComboBoxProduct(ComboBox<String> productComboBox) throws SQLException {
-        ArrayList<String> allProduct;
+        List<String> allProduct;
         allProduct = Configuration.getCurrent().getProductDao().getAllName();
         productComboBox.setItems(FXCollections.observableArrayList(allProduct));
     }

@@ -93,8 +93,8 @@ public abstract class ShoppingListController extends Controller implements Shopp
      */
     public void initInformationShoppingList(boolean isCreateUserShoppingListController){
         try {
-            ArrayList<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
-            ArrayList<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
+            List<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
+            List<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
             String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"}; //supprime les unités pour une recette
             allUnitName.removeAll(List.of(unitToRemove));
             List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();

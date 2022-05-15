@@ -54,7 +54,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
      * @param recipeCategoriesList une liste qui contient les noms des catégories de recettes
      * @param recipeTypesList une liste qui contient les noms des types de recettes
      */
-    public void initCombobox(ArrayList<String> recipeCategoriesList, ArrayList<String> recipeTypesList ){
+    public void initCombobox(List<String> recipeCategoriesList, List<String> recipeTypesList ){
         dietComboBox.setItems(FXCollections.observableArrayList(recipeCategoriesList));
         typeComboBox.setItems(FXCollections.observableArrayList(recipeTypesList));
     }
