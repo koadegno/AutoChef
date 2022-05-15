@@ -30,6 +30,8 @@ public class ModifyShoppingListController extends ShoppingListController {
         modifyShoppingListViewController.setListener(this);
         loadFXML(modifyShoppingListViewController, "ShoppingList.fxml");
         initInformationShoppingList(false);
+        modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(false);
+
 
     }
 

@@ -58,6 +58,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         btnAddNewProduct.setVisible(isVisible);
         btnExportShoppingList.setVisible(isVisible);
         btnSendMail.setVisible(isVisible);
+        btnSeeShoppingListOnMap.setVisible(isVisible);
     }
 
     protected void activeElementVisibility() {
@@ -65,7 +66,6 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         btnConfirm.setText("Enregistrer");
         btnSeeShoppingList.setVisible(true);
         btnSeeShoppingList.setOnAction(e-> seeMyShoppingListTableView());
-        btnSeeShoppingListOnMap.setVisible(true);
         btnSeeShoppingListOnMap.setOnAction(e-> viewShoppingListOnMap());
     }
 
