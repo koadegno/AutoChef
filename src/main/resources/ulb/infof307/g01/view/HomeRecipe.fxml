@@ -18,7 +18,7 @@
       </MenuBar>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" style="-fx-background-color: E9D9C6;">
             <children>
-                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="103.0" prefWidth="447.0" text="Recettes" textAlignment="CENTER" textFill="#383434" textOverrun="WORD_ELLIPSIS" underline="true">
+                <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="103.0" prefWidth="447.0" text="Recettes" textAlignment="CENTER" textFill="#383434" textOverrun="WORD_ELLIPSIS">
                <font>
                   <Font name="Yu Gothic Medium" size="48.0" />
                </font></Label>
@@ -26,15 +26,15 @@
         </HBox>
         <HBox alignment="CENTER" prefHeight="339.0" prefWidth="750.0" spacing="80.0" style="-fx-background-color: E9D9C6;">
             <children>
-                <Button mnemonicParsing="false" onAction="#onCreateRecipeButtonClick" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Nouvelle recette">
+                <Button mnemonicParsing="false" onAction="#onCreateRecipeButtonClick" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Nouvelle recette" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-                <Button mnemonicParsing="false" onAction="#onUserRecipesButtonClick" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Mes recettes">
+                <Button mnemonicParsing="false" onAction="#onUserRecipesButtonClick" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Mes recettes" textFill="WHITE">
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button mnemonicParsing="false" onAction="#onFavoriteRecipe" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Favoris">
+            <Button mnemonicParsing="false" onAction="#onFavoriteRecipe" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Favoris" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font></Button>
@@ -42,7 +42,7 @@
         </HBox>
         <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0" style="-fx-background-color: E9D9C6;">
          <children>
-                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour">
+                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="40.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font>

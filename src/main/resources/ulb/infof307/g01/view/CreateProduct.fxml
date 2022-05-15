@@ -56,10 +56,9 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0" style="-fx-background-color: E9D9C6;">
          <children>
-            <Button mnemonicParsing="false" onAction="#returnShopPage" style="-fx-background-color: #915F6D;"
-                    text="Retour" textFill="WHITE"/>
+            <Button mnemonicParsing="false" onAction="#returnShopPage" style="-fx-background-color: #915F6D;" text="Retour" textFill="WHITE" />
             <Button mnemonicParsing="false" onAction="#importProductJSONFile" style="-fx-background-color: #6C5562;" text="Importer un fichier JSON" textFill="WHITE" />
-            <Button mnemonicParsing="false" onAction="#confirmCreateProduct" style="-fx-background-color: YELLOWGREEN;" text="Confirmer" textFill="WHITE" />
+            <Button mnemonicParsing="false" onAction="#confirmCreateProduct" style="-fx-background-color: YELLOWGREEN;" text="Enregistrer" textFill="WHITE" />
          </children>
       </HBox>
    </children>
