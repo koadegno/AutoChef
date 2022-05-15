@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
@@ -10,34 +11,37 @@
          <children>
             <Label alignment="CENTER" prefHeight="65.0" prefWidth="409.0" text="S'enregistrer" textAlignment="CENTER">
                <font>
-                  <Font size="33.0" />
+                  <Font name="Yu Gothic Medium" size="40.0" />
                </font>
             </Label>
          </children>
       </HBox>
       <VBox prefHeight="432.0" prefWidth="750.0">
          <children>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="50.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
                <children>
-                  <TextField fx:id="pseudoTextField" alignment="CENTER" prefHeight="24.0" prefWidth="431.0" promptText="Choisissez un pseudo" />
+                  <TextField fx:id="pseudoTextField" prefHeight="26.0" prefWidth="200.0" promptText="Choisissez un pseudo">
+                     <HBox.margin>
+                        <Insets left="-140.0" />
+                     </HBox.margin></TextField>
                   <CheckBox fx:id="isProfessionalCheckBox" mnemonicParsing="false" text="Professionel" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="220.0">
                <children>
-                  <TextField fx:id="lastNameTextField" prefHeight="24.0" prefWidth="232.0" promptText="Nom" />
-                  <TextField fx:id="firstNameTextField" prefHeight="24.0" prefWidth="222.0" promptText="Prenom" />
+                  <TextField fx:id="lastNameTextField" prefHeight="26.0" prefWidth="200.0" promptText="Nom" />
+                  <TextField fx:id="firstNameTextField" prefHeight="24.0" prefWidth="200.0" promptText="Prénom" />
                </children>
             </HBox>
-            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="200.0">
+            <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="220.0">
                <children>
-                  <PasswordField fx:id="passwordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Mot de passe" />
-                  <PasswordField fx:id="confirmPasswordTextField" prefHeight="24.0" prefWidth="222.0" promptText="Confirmer mot de passe" />
+                  <PasswordField fx:id="passwordTextField" prefHeight="26.0" prefWidth="200.0" promptText="Mot de passe" />
+                  <PasswordField fx:id="confirmPasswordTextField" prefHeight="24.0" prefWidth="200.0" promptText="Confirmer mot de passe" />
                </children>
             </HBox>
             <HBox alignment="CENTER" prefHeight="170.0" prefWidth="750.0" spacing="20.0">
                <children>
-                  <TextField fx:id="countryTextField" prefHeight="24.0" prefWidth="188.0" promptText="Pays" />
+                  <TextField fx:id="countryTextField" prefHeight="24.0" prefWidth="200.0" promptText="Pays" />
                   <TextField fx:id="cityTextField" promptText="Ville" />
                   <TextField fx:id="streetNameTextField" promptText="Rue" />
                   <TextField fx:id="houseNumberTextField" prefHeight="24.0" prefWidth="62.0" promptText="N°" />
@@ -45,10 +49,16 @@
             </HBox>
          </children>
       </VBox>
-      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="750.0" spacing="50.0">
+      <HBox alignment="CENTER" prefHeight="43.0" prefWidth="750.0" spacing="500.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onCancelButton" prefHeight="43.0" prefWidth="205.0" text="Retour" />
-            <Button mnemonicParsing="false" onAction="#onSubmitButton" prefHeight="43.0" prefWidth="194.0" style="-fx-background-color: yellowgreen;" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#onCancelButton" prefHeight="43.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Button>
+            <Button mnemonicParsing="false" onAction="#onSubmitButton" prefHeight="43.0" prefWidth="120.0" style="-fx-background-color: yellowgreen;" text="Enregistrer" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Button>
          </children>
       </HBox>
    </children>

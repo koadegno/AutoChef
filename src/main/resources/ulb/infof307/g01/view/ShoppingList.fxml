@@ -24,9 +24,9 @@
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="573.0" spacing="20.0">
             <children>
                 <TextField fx:id="nameMyCreateShoppingList" promptText="Nom de la liste " visible="false" />
-                <ComboBox fx:id="comboBoxShoppingNameList" prefHeight="25.0" prefWidth="179.0" promptText="Nom de liste de courses" visible="false" />
-                <Button fx:id="btnSeeShoppingList" mnemonicParsing="false" text="Voir" visible="false" />
-                 <Button fx:id="btnSeeShoppingListOnMap" mnemonicParsing="false" text="Carte" visible="false" />
+                <ComboBox fx:id="comboBoxShoppingNameList" prefHeight="25.0" prefWidth="179.0" promptText="Nom de liste de courses" style="-fx-background-color: #9F667A;" visible="false" />
+                <Button fx:id="btnSeeShoppingList" mnemonicParsing="false" style="-fx-background-color: #9F667A;" text="Voir" visible="false" />
+                 <Button fx:id="btnSeeShoppingListOnMap" mnemonicParsing="false" style="-fx-background-color: #9F667A;" text="Carte" visible="false" />
             </children>
         </HBox>
         <TableView fx:id="tableViewDisplayProductList" prefHeight="299.0" prefWidth="750.0">
@@ -34,8 +34,11 @@
                 <TableColumn fx:id="columnProduct" prefWidth="394.6666361093521" resizable="false" style="-fx-background-color: #915F6D;" text="Produit" />
                 <TableColumn fx:id="columnQuantityOrNumber" prefWidth="74.00006103515625" style="-fx-background-color: #915F6D;" text="Quantité" />
                 <TableColumn fx:id="columnUnity" minWidth="0.0" prefWidth="97.99996948242188" style="-fx-background-color: #915F6D;" text="Unité" />
-                <TableColumn fx:id="columnDelete" maxWidth="221.33328247070312" prefWidth="121.99993896484375" style="-fx-background-color: #915F6D;" text="Supprimer" />
+                <TableColumn fx:id="columnDelete" maxWidth="221.33328247070312" prefWidth="181.60001220703123" style="-fx-background-color: #915F6D;" text="Supprimer" />
             </columns>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
         </TableView>
         <HBox fx:id="hBoxToCreateProduct" alignment="CENTER" minHeight="20.0" minWidth="10.0" prefHeight="80.0" prefWidth="750.0" spacing="30.0">
             <children>

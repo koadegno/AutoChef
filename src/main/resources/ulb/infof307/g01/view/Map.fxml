@@ -1,20 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.StackPane?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="750.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.map.MapViewController">
    <VBox prefHeight="77.0" prefWidth="750.0">
       <children>
-         <MenuBar fx:id="appMenuBar" prefHeight="26.0" prefWidth="750.0">
+         <MenuBar fx:id="appMenuBar" prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
             <menus>
                <Menu mnemonicParsing="false" text="Profil">
                   <items>
@@ -28,7 +20,7 @@
                </Menu>
             </menus>
          </MenuBar>
-          <MenuBar>
+          <MenuBar style="-fx-background-color: #9F667A;">
               <Menu fx:id="searchShopNameMenu" mnemonicParsing="false" text="Chercher un magasin">
                   <graphic>
                       <TextField fx:id="textFieldMenuBar" onAction="#onShopSearchBoxAction" promptText="Chercher un nom de magasin" />
