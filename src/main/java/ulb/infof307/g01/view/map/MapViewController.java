@@ -2,7 +2,6 @@ package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
 import com.esri.arcgisruntime.geometry.Point;
-import com.esri.arcgisruntime.geometry.SpatialReference;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
@@ -16,7 +15,6 @@ import javafx.scene.layout.Pane;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.*;
 
 /**
@@ -35,29 +33,25 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public Label timeFeetLabel;
     public Label timeBikeLabel;
     public Label lengthLabel;
-    private boolean isSearchDepartureActive = false;
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
     private MapView mapView;
-
     @FXML
     private Pane mapViewStackPane;
-
     @FXML
     private TextField textFieldMenuBar;
-
     @FXML
     private TextField searchBox;
     @FXML
     private MenuBar appMenuBar;
     @FXML
     private Menu searchShopNameMenu;
-
     private Double currentCursorPosX;
     private Double currentCursorPosY;
+
 
     private void initializeMap(){
         mapView = new MapView();
@@ -90,7 +84,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
     @FXML
     private void onAddressSearchBoxAction() {
         String address = searchBox.getText();
-        boolean isFound = listener.onSearchAddress(address, itineraryGraphicsCircleOverlay.getGraphics());
+        boolean isFound = listener.onSearchAddress(address, getItineraryGraphicsCircleList());
         setNodeColor(searchBox, !isFound);
     }
 
@@ -114,14 +108,52 @@ public class MapViewController extends ViewController<MapViewController.Listener
             currentCursorPosX = mouseEvent.getX();
             currentCursorPosY = mouseEvent.getY();
 
+            switchVisibilityContextMenu();
 
-            // selectionner un point avec un simple clique droit ? je suis sûre que tu as voulu dire "gauche " TODO:
+            // sélectionne un point avec un simple clique droit ? je suis sûre que tu as voulu dire "gauche " TODO:
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
                 listener.highlightGraphicPoint(currentCursorPosX,currentCursorPosY,mapView,shopGraphicsCircleOverlay);
             }
         });
     }
+
+    /**
+     * Modifie la visibilité du contextMenu
+     */
+    private void switchVisibilityContextMenu() {
+
+        List<Graphic> shopGraphicsCircleList = getShopGraphicsCircleList();
+
+        for (Graphic circlePointOnMap : shopGraphicsCircleList) {
+            // Affiche le bouton permettant de calculer un itinéraire seulement si le point d'arrivée est un magasin
+            if (circlePointOnMap.isSelected()) {
+                itineraryShopMenuItem.setVisible(true);
+                break;
+            } else {
+                // Si on choisit un point de départ, affiche quand même le bouton
+                itineraryShopMenuItem.setVisible(getItineraryGraphicsCircleList().size() == 1);
+            }
+        }
+
+        modifyItineraryShopMenuItemText();
+
+        // Ne rends pas visible le bouton delete, si aucun itinéraire n'est calculé
+        deleteItineraryItem.setVisible(!getItineraryGraphicsCircleList().isEmpty());
+
+        // Ne permets pas de calculer un itinéraire si un est déjà calculé
+        if (getItineraryGraphicsCircleList().size() > 2) itineraryShopMenuItem.setVisible(false);
+
+    }
+
+    /**
+     * Modifie le texte écrit sur le bouton
+     */
+    private void modifyItineraryShopMenuItemText() {
+        if (getItineraryGraphicsCircleList().size() == 1) itineraryShopMenuItem.setText("Point de départ");
+        else itineraryShopMenuItem.setText("Itinéraire");
+    }
+
 
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
@@ -133,7 +165,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         deleteItineraryItem.setVisible(false);
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView,getItineraryGraphicsCircleList(),getItineraryGraphicsTextList(), isSearchDepartureActive));
+        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView, getItineraryGraphicsCircleList(), getShopGraphicsCircleList(),  getShopGraphicsTextList()));
 
         // Supprime l'itinéraire
         deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked(getItineraryGraphicsCircleList(),getItineraryGraphicsTextList()));
@@ -151,39 +183,23 @@ public class MapViewController extends ViewController<MapViewController.Listener
         lengthLabel.setText("");
     }
 
+
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
 
-    public boolean getSearchDepartureActive() {return isSearchDepartureActive;}
-
-    public void setIfSearchDeparture() {
-        isSearchDepartureActive = !isSearchDepartureActive;}
-
-
-    public void modifyVisibilityDeleteShopMenuItem() {deleteItineraryItem.setVisible(getSearchDepartureActive());}
-
-
-    public void modifyVisibilityDeleteItinerary() { deleteItineraryItem.setVisible(getSearchDepartureActive());}
-
-    public void modifyItineraryShopMenuItemText() {
-        if (getSearchDepartureActive()) {itineraryShopMenuItem.setText("Point de départ");}
-        else {itineraryShopMenuItem.setText("Itinéraire");}
-    }
-
-    //TODO enlever ca et mettre en paramettre
-    public List<Graphic> getItineraryGraphicsCircleList(){
+    private List<Graphic> getItineraryGraphicsCircleList(){
         return itineraryGraphicsCircleOverlay.getGraphics();
     }
 
-    public List<Graphic> getItineraryGraphicsTextList(){
+    private List<Graphic> getItineraryGraphicsTextList(){
         return itineraryGraphicsTextOverlay.getGraphics();
     }
 
-    public List<Graphic> getShopGraphicsCircleList(){
+    private List<Graphic> getShopGraphicsCircleList(){
         return shopGraphicsCircleOverlay.getGraphics();
     }
 
-    public List<Graphic> getShopGraphicsTextList(){
+    private List<Graphic> getShopGraphicsTextList(){
         return shopGraphicsTextOverlay.getGraphics();
     }
 
@@ -199,24 +215,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     public void logout() { listener.logout(); }
 
-    public SpatialReference getSpatialReference() {
-        return mapView.getSpatialReference();
-    }
-
     public void setViewPointCenter(Point displayLocation) {
         mapView.setViewpointCenterAsync(displayLocation);
-    }
-
-    public void switchVisibilityContextMenu() {
-        // Rend invisible les boutons non nécessaires
-        modifyVisibilityDeleteShopMenuItem();
-        modifyVisibilityDeleteItinerary();
-
-        // Switch la variable ifSearchDeparture
-        setIfSearchDeparture();
-
-        // Modifie le texte du bouton itinéraire
-        modifyItineraryShopMenuItemText();
     }
 
     public void addShopGraphics(Graphic circlePoint,Graphic textPoint) {
@@ -225,27 +225,19 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public void addItineraryGraphics(Graphic circlePoint, Graphic textPoint) {
-        itineraryGraphicsCircleOverlay.getGraphics().add(circlePoint);
-        itineraryGraphicsTextOverlay.getGraphics().add(textPoint);
-    }
-
-    public void removeShopGraphics(Graphic circlePoint, Graphic textPoint) {
-        shopGraphicsCircleOverlay.getGraphics().remove(circlePoint);
-        shopGraphicsTextOverlay.getGraphics().remove(textPoint);
+        getItineraryGraphicsCircleList().add(circlePoint);
+        getItineraryGraphicsTextList().add(textPoint);
     }
 
     public interface Listener {
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();
-        void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryList, List<Graphic> itineraryTextList, boolean isDeparture);
+        void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList);
         void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList);
         void helpMapClicked();
         void logout();
         void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay);
     }
-
-
-
 }
 
