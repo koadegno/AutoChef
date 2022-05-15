@@ -29,7 +29,7 @@ public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeV
 
     public void OnRecipeTableView() {
         Recipe recipe = favoriteRecipeTableView.getSelectionModel().getSelectedItem();
-        listener.onFavoriteRecipesTableViewClicked(recipe);
+        if(recipe != null) listener.onFavoriteRecipesTableViewClicked(recipe);
     }
 
     public void displayFavoriteRecipe(List<Recipe> userFavoriteRecipe) {

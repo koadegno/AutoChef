@@ -23,6 +23,7 @@
       </MenuBar>
         <HBox alignment="CENTER" prefHeight="100.0" prefWidth="573.0" spacing="20.0">
             <children>
+                <Label fx:id="labelNameShoppingList" text="Nom de la liste : " visible="false" />
                 <TextField fx:id="nameMyCreateShoppingList" promptText="Nom de la liste " visible="false" />
                 <ComboBox fx:id="comboBoxShoppingNameList" prefHeight="25.0" prefWidth="179.0" promptText="Nom de liste de courses" style="-fx-background-color: #9F667A;" visible="false" />
                 <Button fx:id="btnSeeShoppingList" mnemonicParsing="false" style="-fx-background-color: #9F667A;" text="Voir" visible="false" />
@@ -50,15 +51,15 @@
         </HBox>
       <HBox prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-                <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#confirmMyCreateShoppingList" prefHeight="25.0" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Archiver" textFill="WHITE">
+                <Button fx:id="btnConfirm" mnemonicParsing="false" onAction="#confirmMyCreateShoppingList" prefHeight="25.0" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Archiver" textFill="WHITE" visible="false">
                <font>
                   <Font name="Yu Gothic Medium" size="16.0" />
                </font></Button>
-            <Button fx:id="btnExportShoppingList" mnemonicParsing="false" onAction="#exportShoppingList" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Exporter la liste de course" textFill="WHITE">
+            <Button fx:id="btnExportShoppingList" mnemonicParsing="false" onAction="#exportShoppingList" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Exporter la liste de course" textFill="WHITE" visible="false">
                <font>
                   <Font name="Yu Gothic Medium" size="16.0" />
                </font></Button>
-            <Button fx:id="btnSendMail" mnemonicParsing="false" onAction="#sendShoppingListByMail" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Envoyer par mail" textFill="WHITE">
+            <Button fx:id="btnSendMail" mnemonicParsing="false" onAction="#sendShoppingListByMail" prefWidth="400.0" style="-fx-background-color: #9F667A;" text="Envoyer par mail" textFill="WHITE" visible="false">
                <font>
                   <Font name="Yu Gothic Medium" size="16.0" />
                </font></Button>
