@@ -1,7 +1,10 @@
 package ulb.infof307.g01.model.export;
 
+import javafx.scene.control.Alert;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.exception.PDFException;
 import ulb.infof307.g01.model.export.PDFCreator;
+import ulb.infof307.g01.view.ViewController;
 
 import javax.activation.*;
 import javax.mail.*;
@@ -79,7 +82,11 @@ public class Mail {
         messageBody.addBodyPart(addText(mailTextBody));
 
         PDFCreator pdfCreator = new PDFCreator();
-        pdfCreator.createPDF(shoppingListToSend);
+        try {
+            pdfCreator.createPDF(shoppingListToSend);
+        } catch (PDFException e) {
+            ViewController.showAlert(Alert.AlertType.ERROR, "ERREUR", "Une erreur s'est produite lors de l'exportation en PDF.");
+        }
 
         messageBody.addBodyPart(addAttachment(System.getProperty("user.dir") + "\\" + shoppingListToSend.getName() + ".pdf"));
 

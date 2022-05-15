@@ -1,6 +1,7 @@
 package ulb.infof307.g01.model.export;
 
 
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.util.*;
 
@@ -14,6 +15,7 @@ import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfWriter;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.exception.PDFException;
 
 /**
  * Classe qui permet d'exporter une liste de course en PDF
@@ -25,20 +27,23 @@ public class PDFCreator {
             Font.BOLD);
     private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
             Font.BOLD);
-    public  void createPDF(ShoppingList shoppingList) {
-        try {
-            Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
-            sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
+    public  void createPDF(ShoppingList shoppingList) throws PDFException {
+        Vector<Product> sortedShoppingList = new Vector<>(shoppingList);
+        sortedShoppingList.sort(Comparator.comparing(Product::getFamillyProduct));
 
-            nameFile = shoppingList.getName();
-            Document document = new Document();
+        nameFile = shoppingList.getName();
+        Document document = new Document();
+        try {
             PdfWriter.getInstance(document, new FileOutputStream(nameFile +".pdf"));
             document.open();
             addContent(document, sortedShoppingList);
+        } catch (DocumentException | FileNotFoundException e) {
+            throw new PDFException();
+        }
+        finally {
             document.close();
-        } catch (Exception e) {
-            e.printStackTrace();
-        }}
+        }
+    }
 
     private static void addContent(Document document, Vector<Product> productList) throws DocumentException {
         String nameFamilyProduct = productList.get(0).getFamillyProduct();
