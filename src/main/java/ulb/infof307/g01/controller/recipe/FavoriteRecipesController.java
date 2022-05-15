@@ -2,12 +2,16 @@ package ulb.infof307.g01.controller.recipe;
 
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
+
+import java.sql.SQLException;
 import java.util.List;
 
 /**
@@ -30,9 +34,15 @@ public class FavoriteRecipesController extends Controller implements FavoriteRec
         FXMLLoader loader = this.loadFXML("FavoriteRecipe.fxml");
         favoriteRecipeViewController = loader.getController();
         favoriteRecipeViewController.setListener(this);
-        List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
-        favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
+        try {
+            List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
+            favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
+        } catch (SQLException e) {
+            listenerBackPreviousWindow.onReturn();
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur Recettes favorites", "La base de données a rencontré quelques soucis :(");
+        }
     }
+
     @Override
     public void onFavoriteRecipesTableViewClicked(Recipe recipe) {
         currentRecipe = recipe;
@@ -41,7 +51,6 @@ public class FavoriteRecipesController extends Controller implements FavoriteRec
         userRecipesController.displayUserRecipes();
         userRecipesController.initReadOnlyRecipeController();
     }
-
 
     @Override
     public void logout() {

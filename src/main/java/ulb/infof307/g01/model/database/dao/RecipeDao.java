@@ -197,14 +197,10 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         delete("Recette",List.of(constraint));
     }
 
-    public List<Recipe> getFavoriteRecipes() {
+    public List<Recipe> getFavoriteRecipes() throws SQLException {
         ArrayList<Recipe>   recipes;
         ArrayList<Recipe>   favoriteRecipes = new ArrayList<>();
-        try {
-            recipes = getRecipeWhere(null, null, 0);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+        recipes = getRecipeWhere(null, null, 0);
         for (Recipe recipe: recipes) {
             if(recipe.isFavorite()) favoriteRecipes.add(recipe);
         }
