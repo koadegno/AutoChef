@@ -11,6 +11,7 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
+import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
@@ -38,7 +39,7 @@ public class MapController extends Controller implements MapViewController.Liste
     private boolean isOnItineraryMode;
 
     private boolean readOnlyMode;
-    private ShoppingList productListToSearchInShops ;
+    private ShoppingList productListToSearchInShops;
 
     private RouteService routeService;
     private LocatorService locatorService;
@@ -64,17 +65,33 @@ public class MapController extends Controller implements MapViewController.Liste
      * Lance l'affichage de la carte
      */
     public void displayMap(){
-        FXMLLoader loader = this.loadFXML("Map.fxml");
-        viewController = loader.getController();
-        viewController.setListener(this);
+        launchFXML();
         mapShop = new MapShop(this);
         onInitializeMapShop();
         viewController.start();
         routeService = new RouteService(viewController,this);
     }
 
+    public void displayShopMap( List<Pair<Shop,Integer>> pairList){
+        launchFXML();
+        viewController.start();
+        routeService = new RouteService(viewController,this);
+        for(Pair<Shop,Integer> pairShopColor: pairList){
+            Shop shop = pairShopColor.getLeft();
+            int color = pairShopColor.getRight();
+            addCircle(color,shop.getName(),shop.getCoordinate(),true);
+        }
+
+    }
+
+    private void launchFXML() {
+        FXMLLoader loader = this.loadFXML("Map.fxml");
+        viewController = loader.getController();
+        viewController.setListener(this);
+    }
+
     public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
-        mapShop.setShoppingList(productListToSearchInShops);
+//        mapShop.setShoppingList(productListToSearchInShops);
     }
 
     /**
@@ -88,19 +105,8 @@ public class MapController extends Controller implements MapViewController.Liste
     @Override
     public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop) {
 
-        //crée un cercle
-        SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
-                SimpleMarkerSymbol.Style.CIRCLE,
-                color,
-                MapConstants.SIZE);
-        Graphic circlePoint = new Graphic(coordinate, circleSymbol);
-
-        // cree un texte attacher au point
-        TextSymbol pierTextSymbol =
-                new TextSymbol(
-                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
-                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-        Graphic textPoint   = new Graphic(coordinate, pierTextSymbol);
+        Graphic circlePoint = getCircleGraphic(color, coordinate);
+        Graphic textPoint = getTextGraphic(textCircle, coordinate);
         // rajoute les cercles créés au bon overlay
 
         if (isShop) {
@@ -111,15 +117,34 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
+    @NotNull
+    private Graphic getCircleGraphic(int color, Point coordinate) {
+        //crée un cercle
+        SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
+                SimpleMarkerSymbol.Style.CIRCLE,
+                color,
+                MapConstants.SIZE);
+        return new Graphic(coordinate, circleSymbol);
+    }
+
+    @NotNull
+    private Graphic getTextGraphic(String textCircle, Point coordinate) {
+        // cree un texte attacher au point
+        TextSymbol pierTextSymbol =
+                new TextSymbol(
+                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
+                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+        return new Graphic(coordinate, pierTextSymbol);
+    }
+
     /**
      * Initialise les magasins sur la carte
      */
-    public void onInitializeMapShop() {
+    private void onInitializeMapShop() {
 
         try {
             if(readOnlyMode){
                 viewController.initReadOnlyMode();
-                mapShop.displayShopsWithProductList();
             }
             else{
                 mapShop.initAllShops();

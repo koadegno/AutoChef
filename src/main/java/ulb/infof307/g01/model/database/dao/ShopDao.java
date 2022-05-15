@@ -210,7 +210,7 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
     public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
         String query = String.format("""
-                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
                                         FROM  Magasin as M
                                         INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                         INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
@@ -225,13 +225,13 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
         String query = String.format("""
-                SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
                             FROM
                             (
-                                SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
+                                SELECT sommes.MagasinID , sommes.Nom,  sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
                                 FROM
                                     (
-                                        SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
                                         FROM  Magasin as M
                                                   INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                                   INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
@@ -248,14 +248,14 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
         String query = String.format("""
-                        SELECT resultats.MagasinID , resultats.Nom, resultats.latitude, resultats.longitude
+                        SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
                         FROM
                         (
-                            SELECT sommes.MagasinID , sommes.Nom, sommes.latitude, sommes.longitude, MIN(sommes.distance)
+                            SELECT sommes.MagasinID , sommes.Nom, sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.distance)
                             FROM
                                 
                                 (
-                                    SELECT M.MagasinID, M.Nom, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
+                                    SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
                                     FROM  Magasin as M
                                               INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
                                               INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID

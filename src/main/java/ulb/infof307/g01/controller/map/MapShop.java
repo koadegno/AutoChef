@@ -3,25 +3,30 @@ package ulb.infof307.g01.controller.map;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.Graphic;
 import com.esri.arcgisruntime.symbology.TextSymbol;
-import ulb.infof307.g01.controller.shop.ShopController;
+import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.ShopDao;
 
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 
 public class MapShop {
     private final ShopDao shopDao;
-    private ShoppingList shoppingList ;
     private final MapShopListener listener;
 
     private Graphic currentGraphicCircleMapShop;
     private Graphic currentGraphicTextMapShop;
 
+    public MapShop() {
+        Configuration configuration = Configuration.getCurrent();
+        this.shopDao = configuration.getShopDao();
+        listener = null;
+    }
 
-    public MapShop(MapShopListener mapShopListener) {
+    public MapShop(MapShopListener mapShopListener) { //TODO SUP ca
         Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
         listener = mapShopListener;
@@ -34,21 +39,17 @@ public class MapShop {
         }
     }
 
-    public void displayShopsWithProductList() throws SQLException {
+
+    public List<Pair<Shop,Integer>> shopWithProductList(ShoppingList shoppingList) throws SQLException {
         List<Shop> shopListWithProducts = shopDao.getShopWithProductList(shoppingList);
         List<Shop> shopWithMinPriceForProductList =  shopDao.getShopWithMinPriceForProductList(shoppingList);
+        List<Pair<Shop,Integer>> pairShopColor = new ArrayList<>();
         for(Shop shop: shopListWithProducts){
-            String toDisplay = shop.getName() + ": " + shopDao.getShoppingListPriceInShop(shop, shoppingList) + " €";
             int color = MapConstants.COLOR_BLACK;
             if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
-            listener.addCircle(color, toDisplay, shop.getCoordinate(), true);
+            pairShopColor.add(new Pair<>(shop,color));
         }
-    }
-
-
-
-    public void setShoppingList(ShoppingList shoppingList) {
-        this.shoppingList = shoppingList;
+        return pairShopColor;
     }
 
 
