@@ -2,6 +2,7 @@ package ulb.infof307.g01.controller.shop;
 
 import javafx.collections.FXCollections;
 import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ComboBox;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
@@ -9,6 +10,7 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ShopViewController;
 
@@ -29,9 +31,12 @@ public class ShopController extends Controller implements ShopViewController.Lis
     private Shop shop;
     private final boolean isModifying; // POPUP pour la modification ou non
     private ShopListener listener;
+    private final ShopDao shopDao;
 
     public ShopController(boolean isModifying){
         this.isModifying = isModifying;
+        Configuration current = Configuration.getCurrent();
+        shopDao = current.getShopDao();
         shop = new Shop();
     }
 
@@ -84,11 +89,11 @@ public class ShopController extends Controller implements ShopViewController.Lis
             shop.setAddress(shopAddress);
 
             if (isModifying) {
-                Configuration.getCurrent().getShopDao().update(shop);
+                shopDao.update(shop);
                 listener.update();
             }
             else {
-                Configuration.getCurrent().getShopDao().insert(shop);
+                shopDao.insert(shop);
             }
         }
         catch (NullPointerException e) {
@@ -150,6 +155,23 @@ public class ShopController extends Controller implements ShopViewController.Lis
         int numberOfImageHelp = 14;
         HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
         helpController.displayHelpShop();
+    }
+
+    @Override
+    public boolean deleteShop() {
+        boolean isDelete = false;
+        ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
+        if (alertResult == ButtonType.OK ) {
+            try {
+                shopDao.delete(shop);
+                listener.update();
+                isDelete = true;
+
+            } catch (SQLException e) {
+                ViewController.showErrorSQL();
+            }
+        }
+        return isDelete;
     }
 
     public interface ShopListener{

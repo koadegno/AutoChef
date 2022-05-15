@@ -17,9 +17,6 @@ public class MapShop {
     private final ShopDao shopDao;
     private final MapShopListener listener;
 
-    private Graphic currentGraphicCircleMapShop;
-    private Graphic currentGraphicTextMapShop;
-
     public MapShop() {
         Configuration configuration = Configuration.getCurrent();
         this.shopDao = configuration.getShopDao();
@@ -52,20 +49,6 @@ public class MapShop {
         return pairShopColor;
     }
 
-
-    public void setSelectedShop(Graphic currentGraphicCircleMapShop, Graphic currentGraphicTextMapShop) {
-        this.currentGraphicTextMapShop = currentGraphicTextMapShop;
-        this.currentGraphicCircleMapShop = currentGraphicCircleMapShop;
-    }
-
-    public void deleteShop() throws SQLException {
-
-        String shopName = ((TextSymbol) currentGraphicTextMapShop.getSymbol()).getText();
-        Point shopPoint = (Point) currentGraphicTextMapShop.getGeometry();
-
-        Shop shopToDelete = shopDao.get(shopName, shopPoint);
-        shopDao.delete(shopToDelete);
-    }
 
     public interface MapShopListener{
         void addCircle(int color, String textCircle, Point coordinate, Boolean isShop);

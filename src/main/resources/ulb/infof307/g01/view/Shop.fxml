@@ -64,10 +64,14 @@
             <Button fx:id="buttonAdd" mnemonicParsing="false" onAction="#addProductToTableView" prefHeight="25.0" prefWidth="139.0" text="Ajouter" />
          </children>
       </HBox>
-      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
+      <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="20.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="216.0" text="Confirmer" />
+            <Button mnemonicParsing="false" onAction="#onDeleteShop" prefHeight="25.0" prefWidth="216.0" text="Supprimer magasin" />
+            <Button layoutX="209.0" layoutY="17.0" mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="216.0" text="Confirmer" />
          </children>
+         <VBox.margin>
+            <Insets />
+         </VBox.margin>
       </HBox>
    </children>
 </VBox>

@@ -1,6 +1,5 @@
 package ulb.infof307.g01.view.shop;
 
-import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -8,7 +7,6 @@ import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
@@ -49,8 +47,8 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tableViewShop.setEditable(false);
-        columnProduct.setCellValueFactory(new PropertyValueFactory<ProductWrapper, String>("productName"));
-        columnPrice.setCellValueFactory(new PropertyValueFactory<ProductWrapper, Double>("productPrice"));
+        columnProduct.setCellValueFactory(new PropertyValueFactory<>("productName"));
+        columnPrice.setCellValueFactory(new PropertyValueFactory<>("productPrice"));
     }
 
 
@@ -99,11 +97,24 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         try {
             boolean isSaved = listener.onSaveShopClicked(shopName,shopAddress);
             if(isSaved){
-                Stage stage = (Stage) vBox.getScene().getWindow();
-                stage.close();
+                closePopUp();
             }
         } catch (SQLException e) {
             showErrorSQL();
+        }
+
+    }
+
+    private void closePopUp() {
+        Stage stage = (Stage) vBox.getScene().getWindow();
+        stage.close();
+    }
+
+    @FXML
+    void onDeleteShop() {
+        boolean isDelete = listener.deleteShop();
+        if(isDelete){
+            closePopUp();
         }
 
     }
@@ -135,6 +146,8 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         void createNewProductClicked();
 
         void displayHelpShop();
+
+        boolean deleteShop();
     }
 
     public static class ProductWrapper {

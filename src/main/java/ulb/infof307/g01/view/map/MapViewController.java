@@ -30,7 +30,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public static final double MAP_SCALE = 4000000.638572;
     // TODO: CONTEXT MENU DANS FXML ?
     private final ContextMenu contextMenu = new ContextMenu();
-    private final MenuItem deleteShopMenuItem = new MenuItem("Supprimer magasin");
     private final MenuItem deleteItineraryItem = new MenuItem("Supprimer itinéraire");
     private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
     public Label timeFeetLabel;
@@ -131,15 +130,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
      */
     private void initializeContextMenu(){
 
-        contextMenu.getItems().addAll(deleteShopMenuItem, itineraryShopMenuItem, deleteItineraryItem);
+        contextMenu.getItems().addAll(itineraryShopMenuItem, deleteItineraryItem);
         mapView.setContextMenu(contextMenu);
         deleteItineraryItem.setVisible(false);
-
-        // contexte menu pour la suppression
-        deleteShopMenuItem.setOnAction(event -> {
-            listener.onDeleteShopClicked(); //
-
-        });
 
         // contexte menu pour le calcul d'itinéraire
         itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView,getItineraryGraphicsCircleList(),getItineraryGraphicsTextList(), isSearchDepartureActive));
@@ -245,7 +238,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
     }
 
     public interface Listener {
-        void onDeleteShopClicked();
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();

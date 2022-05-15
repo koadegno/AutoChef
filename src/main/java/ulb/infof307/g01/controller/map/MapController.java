@@ -36,25 +36,19 @@ public class MapController extends Controller implements MapViewController.Liste
 
     private MapViewController viewController;
 
-    private boolean isOnItineraryMode;
 
     private boolean readOnlyMode;
     private ShoppingList productListToSearchInShops;
 
     private RouteService routeService;
-    private LocatorService locatorService;
-    private ShopDao shopDao;
+    private final LocatorService locatorService;
+    private final ShopDao shopDao;
     private MapShop mapShop;
 
-    @Override
-    public void setOnItineraryMode(boolean onItineraryMode) {
-        isOnItineraryMode = onItineraryMode;
-    }
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
-        isOnItineraryMode = false;
         this.readOnlyMode = readOnlyMode;
         Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
@@ -88,10 +82,6 @@ public class MapController extends Controller implements MapViewController.Liste
         FXMLLoader loader = this.loadFXML("Map.fxml");
         viewController = loader.getController();
         viewController.setListener(this);
-    }
-
-    public void setProductListToSearchInShops(ShoppingList productListToSearchInShops){
-//        mapShop.setShoppingList(productListToSearchInShops);
     }
 
     /**
@@ -179,7 +169,9 @@ public class MapController extends Controller implements MapViewController.Liste
      */
     @Override
     public void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList) {
-        routeService.onDeleteItinerary(itineraryGraphicsCercleList, itineraryGraphicsTextList);
+        if(!itineraryGraphicsCercleList.isEmpty()){
+            routeService.onDeleteItinerary(itineraryGraphicsCercleList, itineraryGraphicsTextList);
+        }
     }
 
     /**
@@ -254,33 +246,6 @@ public class MapController extends Controller implements MapViewController.Liste
             viewController.setViewPointCenter(addressPosition);
         }
         return addressPosition != null;
-    }
-
-    /**
-     * Supprime le point sélectionné de l'overlay
-     */
-    @Override
-    public void onDeleteShopClicked() {
-        Pair<Graphic, Graphic> shopOverlay = getSelectedShop();
-        if(shopOverlay == null) return;
-        mapShop.setSelectedShop(shopOverlay.getLeft(),shopOverlay.getRight());
-        if(!isOnItineraryMode){
-
-            ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
-            if (alertResult == ButtonType.OK ) {
-                Graphic circlePointOnMap = shopOverlay.getLeft();
-                Graphic textPointOnMap = shopOverlay.getRight();
-                try {
-                    mapShop.deleteShop();
-                    viewController.removeShopGraphics(circlePointOnMap,textPointOnMap);
-                } catch (SQLException e) {
-                    ViewController.showErrorSQL();
-                }
-            }
-        }
-        else{
-            ViewController.showAlert(Alert.AlertType.INFORMATION, "Tu ne peux pas supprimer un magasin.\nSupprime d'abord l'itinéraire", "");
-        }
     }
 
     /**
