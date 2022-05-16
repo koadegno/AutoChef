@@ -5,13 +5,13 @@ import java.net.URL;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.view.ViewController;
 
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
@@ -26,13 +26,10 @@ import java.util.ResourceBundle;
  * */
 public class UserMenusViewController extends ViewController<UserMenusViewController.Listener> implements Initializable {
     @FXML
-    TextField menuName;
+    TableColumn<Menu, String> menuTableColumn;
     @FXML
-    TreeView<Menu> menuTreeView;
+    TableView<Menu> menuTableView;
 
-    public TreeView<Menu> getMenuTreeView() {
-        return menuTreeView;
-    }
 
     /**
      * Initialisation du controleur: initialise la liste de menus
@@ -44,46 +41,11 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
 
 
     /**
-     * Retourne le menu selectionné sur le
-     * TreeView menuTreeView et l'affiche dans le TextField menuName
-     * */
-    @FXML
-    public void selectedMenu(){
-        TreeItem<Menu> selectedItem = menuTreeView.getSelectionModel().getSelectedItem();
-        if (selectedItem != null){
-            menuName.setText(selectedItem.getValue().toString());
-            this.setNodeColor(menuName, false);
-        }
-    }
-
-
-    /**
-     * Lit le contenu introduit par l'utilisateur dans le
-     * TextField menuName et affiche dans le TreeView
-     * que les éléments qui commencent par le texte introduit.
-     * */
-    @FXML
-    public void keyTyped() {
-        boolean isBlank = listener.onKeyTapped(menuName.getText());
-        this.setNodeColor(menuName, isBlank);
-    }
-
-    /**
      * Affiche la page principale des menus*/
     public void backToMainMenuController() {
         listener.onBackButtonClicked();
     }
 
-    /**
-     * Affiche la page qui montre le menu selectionné. Il passe à la classe
-     * l'objet Menu, et la database.
-     * */
-    public void redirectToShowMenuController(MouseEvent mousePressed){
-        String name = menuName.getText();
-        boolean isNameBlank = listener.onShowMenuClicked(name);
-        setNodeColor(menuName, isNameBlank);
-
-    }
 
     public void helpUserMenus() {
         listener.onHelpUserMenusClicked();
@@ -93,9 +55,18 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
         listener.logout();
     }
 
+    public void onMenuTableViewClicked() {
+        Menu menuToDisplay = menuTableView.getSelectionModel().getSelectedItem();
+        if(menuToDisplay != null) listener.onShowMenuClicked(menuToDisplay.getName());
+    }
+
+    public void fillMenuTableView(ArrayList<Menu> menus) {
+        menuTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        menuTableView.getItems().addAll(menus);
+    }
+
     public interface Listener {
         boolean onShowMenuClicked(String menuName);
-        boolean onKeyTapped(String menuName);
         void onBackButtonClicked();
         void onHelpUserMenusClicked();
 
