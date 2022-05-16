@@ -25,7 +25,7 @@ class TestPDF {
     static public void createShoppingList() {
         shoppingList =  new ShoppingList("test/testShoppingList");
         Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
-        Product testProduct2 = new Product.ProductBuilder().withName("Carotte").withQuantity(7).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+        Product testProduct2 = new Product.ProductBuilder().withName("Carotte").withQuantity(7).withFamilyProduct(TestConstante.FOOD_CATEGORY_VEGE).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         shoppingList.add(testProduct);
         shoppingList.add(testProduct2);
     }
@@ -40,10 +40,10 @@ class TestPDF {
         }
         String text = """
                 1. Liste de courses : test/testShoppingList
-                1.1. Fruits
-                Banane 3kg
+                1.1. Fruit
+                Banane 1kg
                 1.2. Viande
-                Carotte 7g""";
+                Carotte 1g""";
 
         PdfReader reader = new PdfReader("test/testShoppingList.pdf");
         String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);  // pageNumber = 1
