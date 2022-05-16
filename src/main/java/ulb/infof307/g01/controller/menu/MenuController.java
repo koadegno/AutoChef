@@ -35,6 +35,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     private Stage popup = null;
     private boolean isModifying;
     private int currentDay;
+    Scene previousScene;
 
 
     public MenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
@@ -166,6 +167,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onAddRecipeClicked() {
+        previousScene = currentStage.getScene();
         currentDay = createMenuViewController.getSelectedIndex();
         SearchRecipeController searchRecipeController = new SearchRecipeController(currentStage,this);
         searchRecipeController.setListener(this);
@@ -182,5 +184,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     @Override
     public void onReturn() {
-        displayCreateMenu();}
+        currentStage.setScene(previousScene);
+    }
 }
