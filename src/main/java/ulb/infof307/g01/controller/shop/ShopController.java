@@ -86,7 +86,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
     public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
         boolean isSaved = true;
         try {
-            System.out.println(viewController.getTableViewShopItems());
             addAllWrappedProduct(viewController.getTableViewShopItems());
             shop.setName(shopName);
             shop.setAddress(shopAddress);
@@ -112,7 +111,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillTableViewShop() {
-        System.out.println(shop.toString());
         List<ShopViewController.ProductWrapper> productList = shop.stream().map(product -> new ShopViewController.ProductWrapper(product.getName(),product.getPrice())).toList();
         viewController.getTableViewShopItems().addAll(productList);
     }
