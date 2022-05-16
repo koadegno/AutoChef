@@ -21,7 +21,7 @@ public class FavoriteMailViewController extends ViewController<FavoriteMailViewC
     }
 
     /**
-     * Fonction relier à un bouton pour ajouter un nouveau mail favorie
+     * Fonction relier à un bouton pour ajouter un nouveau mail favorite
      */
     public void addFavoriteMail(){
         String newMail = newFavoriteMail.getText();

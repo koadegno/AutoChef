@@ -130,7 +130,10 @@ public class MailController extends Controller implements MailViewController.Lis
                     this.initComboboxFavoriteMail();
                 }
                 else{
-                    mailViewController.addMailToCombobox(newMail);
+                    List<String> mails = mailViewController.getMailInComboBox();
+                    if(!mails.contains(newMail)){
+                        mailViewController.addMailToCombobox(newMail);
+                    }
                 }
             } catch (SQLException e) {
                 MailViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Le mail enregistrée existe déjà dans vos favoris");

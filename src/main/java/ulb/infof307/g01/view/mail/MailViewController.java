@@ -48,6 +48,10 @@ public class MailViewController extends ViewController<MailViewController.Listen
         listener.createFavoriteMail();
     }
 
+    public List<String> getMailInComboBox(){
+        return mailReceiver.getItems();
+    }
+
     /**
      * Colorie en rouge la combobox qui contient la liste de mail
      * @param isError boolean qui affirme s'il y a une erreur
