@@ -52,7 +52,11 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
          <children>
-            <Button fx:id="magasinBtn" mnemonicParsing="false" onAction="#redirectToShop" prefHeight="50.0" prefWidth="170.0" text="Magasin" />
+            <Button fx:id="magasinBtn" style="-fx-background-color: #915F6D;" textFill="WHITE" mnemonicParsing="false" onAction="#redirectToShop" prefHeight="50.0" prefWidth="170.0" text="Magasin">
+            <font>
+               <Font name="Yu Gothic Medium" size="18.0"/>
+            </font>
+         </Button>
          </children>
       </HBox>
    </VBox>
