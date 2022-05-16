@@ -58,12 +58,16 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     public void displayShopMap( List<Pair<Shop,Integer>> pairList){
-        launchFXML();
-        viewController.start();
+        displayMap();
         for(Pair<Shop,Integer> pairShopColor: pairList){
             Shop shop = pairShopColor.getLeft();
             int color = pairShopColor.getRight();
-            viewController.addCircle(color,shop.getName(),shop.getCoordinate(),true);
+            try {
+                String toDisplay = shop.getName() + " : " + shopDao.getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
+                viewController.addCircle(color,toDisplay,shop.getCoordinate(),true);
+            } catch (SQLException e) {
+                throw new RuntimeException(e);
+            }
         }
 
     }
@@ -81,6 +85,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
         try {
             if(readOnlyMode){
+                System.out.println("here");
                 viewController.initReadOnlyMode();
             }
             else{
