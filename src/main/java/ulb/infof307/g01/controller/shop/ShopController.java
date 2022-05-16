@@ -160,7 +160,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void displayHelpShop() {
-        int numberOfImageHelp = 14;
+        int numberOfImageHelp = 8;
         HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
         helpController.displayHelpShop();
     }
