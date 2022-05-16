@@ -7,12 +7,16 @@ import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
 import com.esri.arcgisruntime.mapping.Viewpoint;
 import com.esri.arcgisruntime.mapping.view.*;
+import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
+import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import org.jetbrains.annotations.NotNull;
+import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
@@ -58,6 +62,8 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
     private Double currentCursorPosX;
     private Double currentCursorPosY;
+    static final int SIZE = 10;
+
 
     private void initializeMap(){
         mapView = new MapView();
@@ -98,6 +104,48 @@ public class MapViewController extends ViewController<MapViewController.Listener
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initializeMap();
         mapViewStackPane.getChildren().add(mapView);
+    }
+
+    /**
+     * Ajout d'un point avec son texte sur la map
+     *
+     * @param color        Couleur du cercle
+     * @param textCircle   Texte écrit à côté du cercle
+     * @param coordinate   Coordonnée du cercle
+     * @param isShop       Vrai si l'élément à ajouter est un magasin
+     */
+    public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop) {
+
+        Graphic circlePoint = getCircleGraphic(color, coordinate);
+        Graphic textPoint = getTextGraphic(textCircle, coordinate);
+        // rajoute les cercles créés au bon overlay
+
+        if (isShop) {
+            addShopGraphics(circlePoint,textPoint);
+        }
+        else {
+            addItineraryGraphics(circlePoint,textPoint);
+        }
+    }
+
+    @NotNull
+    private Graphic getTextGraphic(String textCircle, Point coordinate) {
+        // cree un texte attacher au point
+        TextSymbol pierTextSymbol =
+                new TextSymbol(
+                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
+                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
+        return new Graphic(coordinate, pierTextSymbol);
+    }
+
+    @NotNull
+    private Graphic getCircleGraphic(int color, Point coordinate) {
+        //crée un cercle
+        SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
+                SimpleMarkerSymbol.Style.CIRCLE,
+                color,
+                MapConstants.SIZE);
+        return new Graphic(coordinate, circleSymbol);
     }
 
     public void start(){

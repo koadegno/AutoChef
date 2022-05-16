@@ -83,49 +83,6 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Ajout d'un point avec son texte sur la map
-     *
-     * @param color        Couleur du cercle
-     * @param textCircle   Texte écrit à côté du cercle
-     * @param coordinate   Coordonnée du cercle
-     * @param isShop       Vrai si l'élément à ajouter est un magasin
-     */
-    @Override
-    public void addCircle(int color, String textCircle, Point coordinate, Boolean isShop) {
-
-        Graphic circlePoint = getCircleGraphic(color, coordinate);
-        Graphic textPoint = getTextGraphic(textCircle, coordinate);
-        // rajoute les cercles créés au bon overlay
-
-        if (isShop) {
-            viewController.addShopGraphics(circlePoint,textPoint);
-        }
-        else {
-            viewController.addItineraryGraphics(circlePoint,textPoint);
-        }
-    }
-
-    @NotNull
-    private Graphic getCircleGraphic(int color, Point coordinate) {
-        //crée un cercle
-        SimpleMarkerSymbol circleSymbol = new SimpleMarkerSymbol(
-                SimpleMarkerSymbol.Style.CIRCLE,
-                color,
-                MapConstants.SIZE);
-        return new Graphic(coordinate, circleSymbol);
-    }
-
-    @NotNull
-    private Graphic getTextGraphic(String textCircle, Point coordinate) {
-        // cree un texte attacher au point
-        TextSymbol pierTextSymbol =
-                new TextSymbol(
-                        MapConstants.SIZE, textCircle, MapConstants.COLOR_BLACK,
-                        TextSymbol.HorizontalAlignment.CENTER, TextSymbol.VerticalAlignment.BOTTOM);
-        return new Graphic(coordinate, pierTextSymbol);
-    }
-
-    /**
      * Initialise les magasins sur la carte
      */
     private void onInitializeMapShop() {
