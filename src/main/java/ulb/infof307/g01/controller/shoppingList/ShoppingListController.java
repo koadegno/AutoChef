@@ -6,7 +6,6 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.controller.map.MapController;
-import ulb.infof307.g01.controller.map.MapShop;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
@@ -158,7 +157,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
-        } 
+        }
     }
 
     private List<Pair<Shop,Integer>> shopWithProductList(ShoppingList shoppingList) throws SQLException {
