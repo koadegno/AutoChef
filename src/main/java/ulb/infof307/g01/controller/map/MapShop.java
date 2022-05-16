@@ -14,24 +14,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class MapShop {
-    private final ShopDao shopDao;
 
     public MapShop() {
-        Configuration configuration = Configuration.getCurrent();
-        this.shopDao = configuration.getShopDao();
+
     }
 
-    public List<Pair<Shop,Integer>> shopWithProductList(ShoppingList shoppingList) throws SQLException {
-        List<Shop> shopListWithProducts = shopDao.getShopWithProductList(shoppingList);
-        List<Shop> shopWithMinPriceForProductList =  shopDao.getShopWithMinPriceForProductList(shoppingList);
-        List<Pair<Shop,Integer>> pairShopColor = new ArrayList<>();
-        for(Shop shop: shopListWithProducts){
-            int color = MapConstants.COLOR_BLACK;
-            if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
-            pairShopColor.add(new Pair<>(shop,color));
-        }
-        return pairShopColor;
-    }
+
 
 
 }

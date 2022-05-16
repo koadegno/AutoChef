@@ -1,13 +1,20 @@
 package ulb.infof307.g01.controller.shoppingList;
 
 import javafx.scene.control.Alert;
+import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
+import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.map.MapShop;
 import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ProductDao;
+import ulb.infof307.g01.model.database.dao.ProductUnityDao;
+import ulb.infof307.g01.model.database.dao.ShopDao;
+import ulb.infof307.g01.model.database.dao.ShoppingListDao;
 import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
@@ -24,11 +31,26 @@ public abstract class ShoppingListController extends Controller implements Shopp
     protected ModifyShoppingListViewController modifyShoppingListViewController;
     protected CreateShoppingListViewController createShoppingListViewController;
     protected ShoppingList shoppingListToSend;
+    private final ShopDao shopDao;
+    private final boolean isProfessional;
+    private final ProductDao productDao;
+    private final ProductUnityDao productUnityDao;
+    private final ShoppingListDao shoppingListDao;
+
 
     //-------------------------CONSTRUCTEUR
 
     public ShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
+        Configuration configuration = Configuration.getCurrent();
+        this.shopDao = configuration.getShopDao();
+        isProfessional = configuration.getCurrentUser().isProfessional();
+        productDao = configuration.getProductDao();
+        productUnityDao = configuration.getProductUnityDao();
+        shoppingListDao = configuration.getShoppingListDao();
+
+
+
     }
 
     //Methode Listener de ShoppingListController
@@ -66,7 +88,6 @@ public abstract class ShoppingListController extends Controller implements Shopp
      * @return un boolean à Vrai si l'utilisateur peut rajouter le produit avec la quantité choisi
      */
     private boolean canAddQuantityOrNumberProduct(int quantityOrNumberChoose){
-        boolean isProfessional = Configuration.getCurrent().getCurrentUser().isProfessional();
         boolean canAddProduct = true;
         if(!isProfessional){
             int maxQuantityToNotProfessional = 100;
@@ -94,11 +115,11 @@ public abstract class ShoppingListController extends Controller implements Shopp
      */
     public void initInformationShoppingList(boolean isCreateUserShoppingListController){
         try {
-            List<String> allProduct = Configuration.getCurrent().getProductDao().getAllName();
-            List<String> allUnitName = Configuration.getCurrent().getProductUnityDao().getAllName();
+            List<String> allProduct = productDao.getAllName();
+            List<String> allUnitName = productUnityDao.getAllName();
             String[] unitToRemove = new String[]{"c.à.s", "c.à.c", "p"}; //supprime les unités pour une recette
             allUnitName.removeAll(List.of(unitToRemove));
-            List<String> allShoppingListName = Configuration.getCurrent().getShoppingListDao().getAllName();
+            List<String> allShoppingListName = shoppingListDao.getAllName();
 
             if(isCreateUserShoppingListController) createShoppingListViewController.initComboBox(allProduct, allUnitName);
             else modifyShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
@@ -126,22 +147,30 @@ public abstract class ShoppingListController extends Controller implements Shopp
 
     @Override
     public void viewShoppingListOnMap(Object nameUserShoppingList){
-        if(Objects.equals(nameUserShoppingList, null)){ //nom est null
-            return;
-        }
-        else { //Initialiser la MAP
+        if (!Objects.equals(nameUserShoppingList, null)) { //Initialiser la MAP
             String currentShoppingListName = (String) nameUserShoppingList;
             try {
-                ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+                ShoppingList shoppingList = shoppingListDao.get(currentShoppingListName);
                 Boolean readOnlyMode = true;
                 MapController mapController = new MapController(currentStage,listenerBackPreviousWindow,readOnlyMode );
-                MapShop mapShop = new MapShop();
                 mapController.setProductListToSearchInShops(shoppingList);
-                mapController.displayShopMap(mapShop.shopWithProductList(shoppingList));
+                mapController.displayShopMap(shopWithProductList(shoppingList));
             } catch (SQLException e) {
                 throw new RuntimeException(e);
             }
+        } 
+    }
+
+    private List<Pair<Shop,Integer>> shopWithProductList(ShoppingList shoppingList) throws SQLException {
+        List<Shop> shopListWithProducts = shopDao.getShopWithProductList(shoppingList);
+        List<Shop> shopWithMinPriceForProductList =  shopDao.getShopWithMinPriceForProductList(shoppingList);
+        List<Pair<Shop,Integer>> pairShopColor = new ArrayList<>();
+        for(Shop shop: shopListWithProducts){
+            int color = MapConstants.COLOR_BLACK;
+            if(shopWithMinPriceForProductList.contains(shop)) color = MapConstants.COLOR_RED;
+            pairShopColor.add(new Pair<>(shop,color));
         }
+        return pairShopColor;
     }
 
     //Fin Methode Listener de ShoppingListViewController
