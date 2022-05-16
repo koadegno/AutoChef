@@ -1,12 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox prefHeight="600.0" prefWidth="750.0" xmlns="http://javafx.com/javafx/11.0.14-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.shop.HomeShopViewController">
+<VBox prefHeight="600.0" prefWidth="750.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.shop.HomeShopViewController">
     <children>
-        <MenuBar prefHeight="26.0" prefWidth="750.0">
+        <MenuBar prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
             <menus>
                 <Menu mnemonicParsing="false" text="Profil">
                     <items>
@@ -19,19 +20,31 @@
             <children>
                 <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="103.0" prefWidth="447.0" text="Magasins" textAlignment="CENTER" textFill="#383434" textOverrun="WORD_ELLIPSIS">
                     <font>
-                        <Font size="25.0" />
+                        <Font name="Yu Gothic Medium" size="48.0" />
                     </font></Label>
             </children>
         </HBox>
-        <HBox alignment="CENTER" prefHeight="339.0" prefWidth="750.0" spacing="80.0">
+        <HBox alignment="CENTER" prefHeight="339.0" prefWidth="750.0" spacing="180.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#onAddShopClicked" prefHeight="50.0" prefWidth="170.0" text="Ajouter magasin" />
-                <Button mnemonicParsing="false" onAction="#onUpdateShopClicked" prefHeight="50.0" prefWidth="170.0" text="Modifier magasin" />
+                <Button mnemonicParsing="false" onAction="#onAddShopClicked" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Ajouter magasin" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Button>
+                <Button mnemonicParsing="false" onAction="#onUpdateShopClicked" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Modifier magasin" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Button>
             </children>
         </HBox>
         <HBox alignment="CENTER" prefHeight="133.0" prefWidth="600.0">
             <children>
-                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="50.0" prefWidth="294.0" text="Retour" />
+                <Button mnemonicParsing="false" onAction="#onBackButtonClick" prefHeight="50.0" prefWidth="100.0" style="-fx-background-color: #915F6D;" text="Retour" textFill="WHITE">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <HBox.margin>
+                  <Insets right="600.0" />
+               </HBox.margin></Button>
             </children>
         </HBox>
     </children>
