@@ -44,7 +44,6 @@ public class JSON {
                 String unity = (String) jsonObject2.get("Unite");
                 String familyAliment = (String) jsonObject2.get("FamilleAliment");
                 String name = (String) jsonObject2.get("Nom");
-                System.out.println(name +"  "+familyAliment+"   "+unity);
                 Product productToSend = new Product.ProductBuilder().withName(name).withFamilyProduct(familyAliment).withNameUnity(unity).build();
                 Configuration.getCurrent().getProductDao().insert(productToSend);
                 nameProductToAdd = name;

@@ -95,7 +95,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
                 listener.update();
             }
             else {
-                System.out.println(shopDao.get(shop.getName(), shop.getCoordinate()));
                 if(shopDao.get(shop.getName(), shop.getCoordinate()) == null){
                     shopDao.insert(shop);
                 }
