@@ -104,11 +104,6 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
 
     }
-    public void showErrors(){
-        setNodeColor(addressShopTextField, true);
-        setNodeColor(nameShopTextField, true);
-    }
-
 
     private void closePopUp() {
         Stage stage = (Stage) vBox.getScene().getWindow();
@@ -132,6 +127,11 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
     public void setNameProduct(String nameProduct){
         comboBoxProduct.getItems().add(nameProduct);
         comboBoxProduct.setValue(nameProduct);
+        try {
+            listener.fillComboBoxProduct(comboBoxProduct);
+        } catch (SQLException e) {
+            showErrorSQL();
+        }
     }
 
     public void helpShop(){

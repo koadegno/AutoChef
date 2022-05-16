@@ -96,20 +96,13 @@ public class ShopController extends Controller implements ShopViewController.Lis
                 listener.update();
             }
             else {
-                System.out.println(shopDao.get(shop.getName(), shop.getCoordinate()));
-                if(shopDao.get(shop.getName(), shop.getCoordinate()) == null){
-                    shopDao.insert(shop);
-                }
-                else {
-                    viewController.showErrors();
-                    isSaved = false;
-                }
+                shopDao.insert(shop);
             }
         }
         catch (NullPointerException e) {
             e.printStackTrace();
             ViewController.showAlert(Alert.AlertType.ERROR, "L'adresse entrer n'existe pas", "");
-            return false;
+            return !isSaved;
         }
         return isSaved;
     }
@@ -169,7 +162,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     @Override
     public boolean deleteShop() {
-        if(!isModifying)return false;
         boolean isDelete = false;
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
         if (alertResult == ButtonType.OK ) {

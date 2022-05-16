@@ -35,7 +35,7 @@ class TestJSON {
         Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
 
         Configuration.getCurrent().getProductFamilyDao().insert("soupes");
-        Configuration.getCurrent().getProductUnityDao().insert("ml");
+        Configuration.getCurrent().getProductUnityDao().insert("l");
     }
 
     @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
@@ -53,17 +53,17 @@ class TestJSON {
         fileJSON.flush();
     }
 
-    @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
-    static public void createJSONProduct() throws IOException {
-        JSONObject product = new JSONObject();
-        product.put("Nom", "testProduit");
-        product.put("FamilleAliment", "soupes");
-        product.put("Unite", "ml");
-
-        FileWriter fileJSON = new FileWriter(fileNameProduct);
-        fileJSON.write(product.toJSONString());
-        fileJSON.flush();
-    }
+//    @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
+//    static public void createJSONProduct() throws IOException {
+//        JSONObject product = new JSONObject();
+//        product.put("Nom", "testProduit");
+//        product.put("FamilleAliment", "soupes");
+//        product.put("Unite", "l");
+//
+//        FileWriter fileJSON = new FileWriter(fileNameProduct);
+//        fileJSON.write(product.toJSONString());
+//        fileJSON.flush();
+//    }
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
