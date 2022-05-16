@@ -7,6 +7,7 @@ import java.nio.file.Path;
 import java.sql.SQLException;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -15,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.model.export.JSON;
 
 /**
  * Test de la classe JSON
@@ -55,52 +55,31 @@ class TestJSON {
         fileJSON.flush();
     }
 
-@BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
- static public void createJSONProduct() throws IOException {
+    @BeforeAll
+     static public void createJSONProduct() throws IOException {
         JSONObject job = new JSONObject();
+        JSONArray jab = new JSONArray();
 
-    // LinkedHashMap is created for address data
-        Map m1 = new LinkedHashMap(4);
+        Map<String,String> m1 = new LinkedHashMap<>(4);
         m1.put("Unite", "l");
         m1.put("FamilleAliment", "soupes");
         m1.put("Nom", "miam2");
-
-    // adding address to the created JSON object
-        job.put("address1", m1);
-    // JSONArray is created to add the phone numbers
-        JSONArray jab = new JSONArray();
-        m1 = new LinkedHashMap(2);
-        m1.put("type1", "home1");
-        m1.put("no", "9738128018");
-    // adding map to list
         jab.add(m1);
-        m1 = new LinkedHashMap(2);
-        m1.put("type2", "fax1");
-        m1.put("no1", "6366182095");
-    // map is added to the list
+
+        m1 = new LinkedHashMap<>(4);
+        m1.put("Unite", "l");
+        m1.put("FamilleAliment", "soupes");
+        m1.put("Nom", "miam");
+
         jab.add(m1);
-    // adding phone numbers to the created JSON object
-        job.put("phoneNos", jab);
-    // the JSON data is written into the file
-        PrintWriter pwt = new PrintWriter("JSON.json");
-        pwt.write(job.toJSONString());
-        pwt.flush();
-        pwt.close();
-
-
+        job.put("Liste",jab);
 
         FileWriter fileJSON = new FileWriter(fileNameProduct);
-        fileJSON.write(product.toJSONString());
-       fileJSON.flush();
-    {"Unite":"l","FamilleAliment":"soupes","Nom":"testProduit"}
+        fileJSON.write(job.toJSONString());
+        fileJSON.flush();
+        fileJSON.close();
 
-    {"Liste" : [
-        {"Unite":"l","FamilleAliment":"soupes","Nom":"miam2"},
-        {"Unite":"l","FamilleAliment":"soupes","Nom":"miam"}
-        ]
     }
-
-}
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
