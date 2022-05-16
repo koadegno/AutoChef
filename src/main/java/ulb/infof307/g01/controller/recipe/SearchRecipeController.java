@@ -137,8 +137,8 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
         listenerBackPreviousWindow.onReturn();
     }
 
+    @FunctionalInterface
     public interface SearchRecipeListener{
-
         void onRecipeSelected(Recipe selectedRecipe);
     }
 

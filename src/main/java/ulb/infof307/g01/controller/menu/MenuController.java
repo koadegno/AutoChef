@@ -31,7 +31,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     public static final int DAY_ONE = 0;
     private CreateMenuViewController createMenuViewController;
     private Menu menu;
-    protected ArrayList<Day> daysName;
+    private final List<Day> daysName;
     private Stage popup = null;
     private boolean isModifying;
     private int currentDay;
@@ -46,7 +46,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     }
 
 
-    public void start(){
+    private void start(){
         createMenuViewController.getDaysComboBox().setItems(FXCollections.observableArrayList(daysName));
         createMenuViewController.getMenuTableColumn().setText(daysName.get(DAY_ONE).toString());
         fillMenuTableView(daysName.get(DAY_ONE));
@@ -54,7 +54,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
 
     }
 
-    public void fillMenuTableView(Day day) {
+    private void fillMenuTableView(Day day) {
         List<Recipe> valueList = menu.getRecipesfor(day);
         for (Recipe recipe : valueList) {
             createMenuViewController.getMenuTableView().getItems().add(recipe);

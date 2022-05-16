@@ -7,6 +7,7 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.export.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.mail.FavoriteMailViewController;
 import ulb.infof307.g01.view.mail.MailViewController;
 
@@ -31,6 +32,7 @@ public class MailController extends Controller implements MailViewController.Lis
     public MailController(ShoppingList shoppingList){
         this.shoppingList = shoppingList;
         createMailViewController();
+        initMailView();
     }
 
     /**
@@ -76,10 +78,11 @@ public class MailController extends Controller implements MailViewController.Lis
     public void createFavoriteMail(){
         this.favoriteMailViewController = new FavoriteMailViewController();
         favoriteMailViewController.setListener(this);
+        String filename = "FavoriteMail.fxml";
         try {
-             this.popupFavoriteMail = popupFXML("FavoriteMail.fxml", favoriteMailViewController);
+            this.popupFavoriteMail = popupFXML(filename, favoriteMailViewController);
         } catch (IOException e) {
-            e.printStackTrace();
+            ViewController.showErrorFXMLMissing(filename);
         }
     }
 
@@ -97,7 +100,7 @@ public class MailController extends Controller implements MailViewController.Lis
         helpController.displayHelpShop();
     }
 
-    public void initComboboxFavoriteMail(){
+    private void initComboboxFavoriteMail(){
         try {
             List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
             mailViewController.initComboboxFavoriteMail(allMail);
@@ -106,7 +109,7 @@ public class MailController extends Controller implements MailViewController.Lis
         }
     }
 
-    public void initMailView(){
+    private void initMailView(){
         mailViewController.showNameShoppingListToMail(shoppingList);
         initComboboxFavoriteMail();
     }
@@ -146,7 +149,7 @@ public class MailController extends Controller implements MailViewController.Lis
      * @param email adresse e-mail du destinataire du mail.
      * @return boolean qui indique si c'est une adresse e-mail valide
      */
-    public boolean isValidEmailAddress(String email) {
+    private boolean isValidEmailAddress(String email) {
         boolean result = true;
         try {
             InternetAddress addressEmail = new InternetAddress(email);

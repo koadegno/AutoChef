@@ -52,8 +52,7 @@ public class GenerateMenuViewController extends ViewController<GenerateMenuViewC
             try {
                 listener.addValuesToGenerateMenu(nbVegetarianDishes, nbMeatDishes, nbFishDishes);
             } catch (SQLException e) {
-                //TODO gerer l'erreur
-                e.printStackTrace();
+                showErrorSQL();
             }
         });
 

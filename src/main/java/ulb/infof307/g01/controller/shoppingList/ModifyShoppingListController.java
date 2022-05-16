@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
 
@@ -54,7 +55,8 @@ public class ModifyShoppingListController extends ShoppingListController {
                 modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
                 modifyShoppingListViewController.setCurrentShoppingListName(currentShoppingListName);
             } catch (SQLException e) {
-                e.printStackTrace();
+                ViewController.showErrorSQL();
+
             }
         }
     }
@@ -78,7 +80,7 @@ public class ModifyShoppingListController extends ShoppingListController {
 
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
     }
 
@@ -126,10 +128,10 @@ public class ModifyShoppingListController extends ShoppingListController {
         try {
             shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
-        MailController mailController = new MailController(shoppingList);
-        mailController.initMailView();
+        new MailController(shoppingList);
+
     }
 
     public void helpModifyShoppingList(){
