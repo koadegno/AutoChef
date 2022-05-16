@@ -4,59 +4,50 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.*?>
 
-<VBox alignment="TOP_CENTER" prefHeight="577.0" prefWidth="750.0" spacing="75.0" style="-fx-background-color: E9D9C6;"
-      xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1"
-      fx:controller="ulb.infof307.g01.view.HomePageViewController">
+<VBox alignment="TOP_CENTER" prefHeight="577.0" prefWidth="750.0" spacing="75.0" style="-fx-background-color: E9D9C6;" xmlns="http://javafx.com/javafx/16" xmlns:fx="http://javafx.com/fxml/1" fx:controller="ulb.infof307.g01.view.HomePageViewController">
    <MenuBar prefHeight="26.0" prefWidth="750.0" style="-fx-background-color: #6C5562;">
       <Menu mnemonicParsing="false" text="Profil">
-         <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter"/>
+         <MenuItem mnemonicParsing="false" onAction="#logout" text="Se déconnecter" />
       </Menu>
    </MenuBar>
    <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0">
-      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="516.0"
-             text="Bienvenue dans Autochef" textAlignment="CENTER">
+      <Label alignment="CENTER" contentDisplay="CENTER" prefHeight="55.0" prefWidth="516.0" text="Bienvenue dans Autochef" textAlignment="CENTER">
          <font>
-            <Font name="Yu Gothic Medium" size="40.0"/>
+            <Font name="Yu Gothic Medium" size="40.0" />
          </font>
       </Label>
    </HBox>
    <VBox prefHeight="489.0" prefWidth="750.0">
       <HBox alignment="CENTER" prefHeight="170.0" prefWidth="750.0" spacing="100.0">
-         <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList"
-                 prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;"
-                 text="Liste de courses" textFill="WHITE">
+         <Button fx:id="shoppingListBtn" mnemonicParsing="false" onAction="#redirectToShoppingList" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Liste de courses" textFill="WHITE">
             <font>
-               <Font name="Yu Gothic Medium" size="18.0"/>
+               <Font name="Yu Gothic Medium" size="18.0" />
             </font>
          </Button>
-         <Button mnemonicParsing="false" onAction="#redirectToRecipe" prefHeight="50.0" prefWidth="170.0"
-                 style="-fx-background-color: #915F6D;" text="Recettes" textFill="WHITE">
+         <Button mnemonicParsing="false" onAction="#redirectToRecipe" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Recettes" textFill="WHITE">
             <font>
-               <Font name="Yu Gothic Medium" size="18.0"/>
+               <Font name="Yu Gothic Medium" size="18.0" />
             </font>
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
-         <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0"
-                 prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Menus" textFill="WHITE">
+         <Button fx:id="menuBtn" mnemonicParsing="false" onAction="#redirectToMenu" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Menus" textFill="WHITE">
             <font>
-               <Font name="Yu Gothic Medium" size="18.0"/>
+               <Font name="Yu Gothic Medium" size="18.0" />
             </font>
          </Button>
-         <Button fx:id="mapBtn" mnemonicParsing="false" onAction="#redirectToMap" prefHeight="50.0"
-                 prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Carte" textFill="WHITE">
+         <Button fx:id="mapBtn" mnemonicParsing="false" onAction="#redirectToMap" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Carte" textFill="WHITE">
             <font>
-               <Font name="Yu Gothic Medium" size="18.0"/>
+               <Font name="Yu Gothic Medium" size="18.0" />
             </font>
          </Button>
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="100.0">
          <children>
-            <Button fx:id="magasinBtn" style="-fx-background-color: #915F6D;" textFill="WHITE" mnemonicParsing="false" onAction="#redirectToShop" prefHeight="50.0" prefWidth="170.0" text="Magasin">
-            <font>
-               <Font name="Yu Gothic Medium" size="18.0"/>
-            </font>
-         </Button>
+            <Button fx:id="magasinBtn" mnemonicParsing="false" onAction="#redirectToShop" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #915F6D;" text="Magasin" textFill="WHITE">
+               <font>
+                  <Font name="Yu Gothic Medium" size="18.0" />
+               </font></Button>
          </children>
       </HBox>
    </VBox>

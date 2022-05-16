@@ -50,10 +50,7 @@
       </HBox>
       <HBox alignment="CENTER" prefHeight="100.0" prefWidth="200.0" spacing="90.0">
          <children>
-            <Button mnemonicParsing="false" onAction="#onDeleteShop" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: red; -fx-text-fill: white;" text="Supprimer magasin" >
-            <font>
-               <Font name="Yu Gothic Medium" size="16.0" />
-            </font></Button>
+            <Button mnemonicParsing="false" onAction="#onDeleteShop" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: red; -fx-text-fill: white;" text="Supprimer magasin" />
             <Button mnemonicParsing="false" onAction="#saveNewShop" prefHeight="25.0" prefWidth="200.0" style="-fx-background-color: yellowgreen; -fx-text-fill: white;" text="Confirmer">
                <font>
                   <Font name="Yu Gothic Medium" size="16.0" />
