@@ -10,10 +10,12 @@ import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Point2D;
 import javafx.scene.Cursor;
 import javafx.scene.control.*;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.Pane;
+import org.apache.jena.atlas.lib.Pair;
 import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.map.MapConstants;
 import ulb.infof307.g01.view.ViewController;
@@ -213,10 +215,47 @@ public class MapViewController extends ViewController<MapViewController.Listener
         deleteItineraryItem.setVisible(false);
 
         // contexte menu pour le calcul d'itinéraire
-        itineraryShopMenuItem.setOnAction(event -> listener.onItineraryClicked(currentCursorPosX,currentCursorPosY, mapView, getItineraryGraphicsCircleList(), getShopGraphicsCircleList(),  getShopGraphicsTextList()));
+        itineraryShopMenuItem.setOnAction(event -> {
+            setItinerary();
+            listener.onItineraryClicked(getItineraryGraphicsCircleList());
+        });
 
         // Supprime l'itinéraire
-        deleteItineraryItem.setOnAction(event -> listener.onDeleteItineraryClicked(getItineraryGraphicsCircleList(),getItineraryGraphicsTextList()));
+        deleteItineraryItem.setOnAction(event -> {
+
+            listener.onDeleteItineraryClicked(getItineraryGraphicsCircleList(),getItineraryGraphicsTextList());
+            if(getItineraryGraphicsCircleList().isEmpty()){
+                deleteItineraryInformation();
+
+            }
+        });
+    }
+
+    /**
+     * Ajoute sur la carte un point associé à l'itinéraire
+     */
+    private void setItinerary() {
+        boolean isDeparture = getItineraryGraphicsCircleList().size() == 1;
+        Point mapPoint = cursorPoint(mapView,currentCursorPosX,currentCursorPosY);
+        String text = "";
+        if (isDeparture) {text = "Départ";}
+        else { mapPoint = (Point) Objects.requireNonNull(getSelectedShop()).getGeometry();}
+        addCircle(MapConstants.COLOR_BLUE, text, mapPoint, false);
+    }
+
+    /**
+     * Cherche le magasin sélectionné par l'utilisateur et
+     * renvoie la paire d'objet graphique associé aux coordonnées cliquer
+     * @return le cercle sélectionné
+     */
+    private Graphic getSelectedShop(){
+        List<Graphic> shopGraphicsCircleList = getShopGraphicsCircleList();
+        for (Graphic circlePointOnMap : shopGraphicsCircleList) {
+            if (circlePointOnMap.isSelected()) {
+                return circlePointOnMap;
+            }
+        }
+        return null;
     }
 
     public void itineraryInformation(double timeFeet, double timeBike, double length){
@@ -225,7 +264,17 @@ public class MapViewController extends ViewController<MapViewController.Listener
         lengthLabel.setText(length + " m");
     }
 
-    public void deleteItineraryInformation(){
+    /**
+     * récupère la coordonnée géographique associé au curseur
+     * @param mapView la mapView contient la fonction de calcul
+     * @return une coordonnée géographique correspondant a la position du curseur et la position de la map
+     */
+    private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
+        Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
+        return mapView.screenToLocation(cursorPoint2D);
+    }
+
+    private void deleteItineraryInformation(){
         timeBikeLabel.setText("");
         timeFeetLabel.setText("");
         lengthLabel.setText("");
@@ -281,7 +330,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
         void onBackButtonClicked();
-        void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList);
+        void onItineraryClicked(List<Graphic> itineraryCircleList);
         void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList);
         void helpMapClicked();
         void logout();

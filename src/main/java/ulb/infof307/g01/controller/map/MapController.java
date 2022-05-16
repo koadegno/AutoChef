@@ -3,14 +3,12 @@ package ulb.infof307.g01.controller.map;
 import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.*;
-import com.esri.arcgisruntime.symbology.SimpleMarkerSymbol;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
-import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
@@ -30,12 +28,12 @@ import java.util.concurrent.ExecutionException;
  * Permet d'afficher une carte avec des magasins créés par l'utilisateur. + créé le plus cours
  * chemin d'un point A à un point B
  */
-public class MapController extends Controller implements MapViewController.Listener, RouteService.Listener {
+public class MapController extends Controller implements MapViewController.Listener {
 
     private MapViewController viewController;
     private boolean readOnlyMode;
     private ShoppingList productListToSearchInShops;
-    private RouteService routeService;
+    private final RouteService routeService;
     private final LocatorService locatorService;
     private final ShopDao shopDao;
 
@@ -47,6 +45,7 @@ public class MapController extends Controller implements MapViewController.Liste
         Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
         locatorService = new LocatorService();
+        routeService = new RouteService();
     }
 
     /**
@@ -56,17 +55,15 @@ public class MapController extends Controller implements MapViewController.Liste
         launchFXML();
         onInitializeMapShop();
         viewController.start();
-        routeService = new RouteService(viewController,this);
     }
 
     public void displayShopMap( List<Pair<Shop,Integer>> pairList){
         launchFXML();
         viewController.start();
-        routeService = new RouteService(viewController,this);
         for(Pair<Shop,Integer> pairShopColor: pairList){
             Shop shop = pairShopColor.getLeft();
             int color = pairShopColor.getRight();
-            addCircle(color,shop.getName(),shop.getCoordinate(),true);
+            viewController.addCircle(color,shop.getName(),shop.getCoordinate(),true);
         }
 
     }
@@ -89,22 +86,12 @@ public class MapController extends Controller implements MapViewController.Liste
             else{
                 List<Shop> allShopList  = shopDao.getShops();
                 for(Shop shop: allShopList){
-                    addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
+                    viewController.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
                 }
             }
         } catch (SQLException e) {
             ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
         }
-    }
-
-    /**
-     * récupère la coordonnée géographique associé au curseur
-     * @param mapView la mapView contient la fonction de calcul
-     * @return une coordonnée géographique correspondant a la position du curseur et la position de la map
-     */
-    private Point cursorPoint(MapView mapView, Double cursorX, Double cursorY) {
-        Point2D cursorPoint2D = new Point2D(cursorX, cursorY);
-        return mapView.screenToLocation(cursorPoint2D);
     }
 
     /**
@@ -128,21 +115,13 @@ public class MapController extends Controller implements MapViewController.Liste
     }
 
     /**
-     * Lance l'itinéraire quand la position de départ et d'arrivée sont disponibles
-     * @param posX position du curseur en X
-     * @param posY position du curseur en Y
+     * Lance l'itinéraire dès qu'un point de départ et d'arrivée se trouve dans itineraryCircleList
      * @param itineraryCircleList la liste des objets graphique present sur l'écran pour l'itinéraire (cercle)
      */
     @Override
-    public void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList) {
-        Pair<Graphic, Graphic> selectedShop= getSelectedShop(shopGraphicsCircleList,  shopGraphicsTextList);
+    public void onItineraryClicked(  List<Graphic> itineraryCircleList ) {
 
-        int readyToCalculRoute = 2;
-        boolean isDeparture = itineraryCircleList.size() == 1;
-
-        routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY), isDeparture);
-
-        if (itineraryCircleList.size() == readyToCalculRoute) {
+        if (itineraryCircleList.size() == MapConstants.READY_TO_CALCUL_ROUTE) {
             boolean isRouteFound = routeService.calculateRoute(itineraryCircleList);
             if(!isRouteFound) ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
             else{
@@ -187,7 +166,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 List<Shop> nearestShopWithProductList =  shopDao.getNearestShopsWithProductList(productListToSearchInShops,addressPosition);
                 for(Shop shop: nearestShopWithProductList){
                     String toDisplay = shop.getName() + ": " + shopDao.getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
-                    addCircle(MapConstants.COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
+                    viewController.addCircle(MapConstants.COLOR_BLUE, toDisplay, shop.getCoordinate(), true);
 
                 }
             } catch (SQLException e) {
@@ -200,23 +179,7 @@ public class MapController extends Controller implements MapViewController.Liste
         return addressPosition != null;
     }
 
-    /**
-     * Cherche le magasin sélectionné par l'utilisateur et
-     * renvoie la paire d'objet graphique associé aux coordonnées cliquer
-     * @return paire d'objet graphique
-     */
-    private Pair<Graphic, Graphic> getSelectedShop(List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList){
 
-        for (int i = 0; i < shopGraphicsCircleList.size(); i++) {
-            Graphic circlePointOnMap = shopGraphicsCircleList.get(i);
-            Graphic textPointOnMap = shopGraphicsTextList.get(i); // le symbole texte associer au point aussi
-
-            if (circlePointOnMap.isSelected()) {
-                return new Pair<>(circlePointOnMap, textPointOnMap);
-            }
-        }
-        return null;
-    }
 
     /**
      * Cherche un magasin parmi les magasins enregistrer dans la carte

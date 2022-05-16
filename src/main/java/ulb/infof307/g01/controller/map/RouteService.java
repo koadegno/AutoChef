@@ -7,9 +7,7 @@ import com.esri.arcgisruntime.symbology.SimpleLineSymbol;
 import com.esri.arcgisruntime.tasks.networkanalysis.*;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import org.apache.jena.atlas.lib.Pair;
 import ulb.infof307.g01.view.ViewController;
-import ulb.infof307.g01.view.map.MapViewController;
 
 import java.util.List;
 import java.util.concurrent.ExecutionException;
@@ -21,8 +19,6 @@ import java.util.stream.Collectors;
  */
 public class RouteService{
     public static final String ROUTE_TASK_URL = "https://route-api.arcgis.com/arcgis/rest/services/World/Route/NAServer/Route_World";
-    private final MapViewController mapViewController;
-    private final Listener listener;
     public static final int WALKING = 4;
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
@@ -34,9 +30,7 @@ public class RouteService{
     private long totalLength;
 
 
-    public RouteService(MapViewController mapViewController,Listener listener){
-        this.mapViewController = mapViewController;
-        this.listener = listener;
+    public RouteService( ){
         routeTask = new RouteTask(ROUTE_TASK_URL);
     }
 
@@ -50,28 +44,6 @@ public class RouteService{
 
     public long getTotalLength() {
         return totalLength;
-    }
-
-    /**
-     * Dessine un point bleu pour chaque point de depart et lance le calcule de la route quand c'est
-     * prêt
-     * @param selectedShop le magasin sélectionné par l'utilisateur
-     * @param mapPoint un point sur la map sélectionné par l'utilisateur
-     * @param isDeparture Vrai si c'est le départ qui doit être fait
-     */
-    public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint, boolean isDeparture) {
-
-        // Affiche le texte en fonction de ce qui est recherché
-        String text = "";
-        if (isDeparture) {text = "Départ";}
-        else {
-            assert selectedShop != null;
-            Graphic shop = selectedShop.getLeft();
-            mapPoint = (Point) shop.getGeometry();
-        }
-
-        // Dessine sur la map
-        listener.addCircle(MapConstants.COLOR_BLUE, text, mapPoint, false);
     }
 
     /**
@@ -99,7 +71,6 @@ public class RouteService{
 
             itineraryGraphicsCercleList.remove(ARRIVAL);
             itineraryGraphicsTextList.remove(ARRIVAL);
-            mapViewController.deleteItineraryInformation();
         }
     }
 
@@ -176,20 +147,13 @@ public class RouteService{
                         hasFoundRoute.set(true);
 
                     } catch (InterruptedException | ExecutionException e) {
-                        e.printStackTrace();
                         hasFoundRoute.set(false);
                     }
                 });
             } catch (InterruptedException | ExecutionException e) {
-                e.printStackTrace();
                 hasFoundRoute.set(false);
             }
 
         });
-    }
-
-
-    public interface Listener{
-        void addCircle(int color, String textCircle, Point coordinate, Boolean shop);
     }
 }
