@@ -80,7 +80,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
      * @param shopName le nom du magasin
      * @param shopAddress l'adresse du magasin
      * @throws SQLException erreur au niveau de la base de donnée
-     * @return Vrai si le magasin a été ajouté
+     * @return Vrai si lFe magasin a été ajouté
      */
     @Override
     public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {

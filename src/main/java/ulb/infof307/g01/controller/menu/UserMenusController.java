@@ -14,7 +14,6 @@ import ulb.infof307.g01.view.ViewController;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Classe qui contrôle l'affichage de tous les menus existants de l'utilisateur
@@ -59,7 +58,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
             e.printStackTrace();
         }
 
-        fillMenuTreeView();
+        fillMenuTableView();
     }
 
     /**
@@ -101,39 +100,8 @@ public class UserMenusController extends Controller implements UserMenusViewCont
         return isNameBlank;
     }
 
-    /**
-     * Lit le contenu introduit par l'utilisateur dans le
-     * TextField menuName et affiche dans le TreeView
-     * que les éléments qui commencent par le texte introduit.
-     * */
-    @Override
-    public boolean onKeyTapped(String menuName) {
-        if (Objects.equals(menuName, "")){
-            viewController.getMenuTreeView().setRoot(null);
-            fillMenuTreeView();
-        }else {
-            ArrayList<Menu> matchingMenus = new ArrayList<>();
-            menus.forEach(menu -> {
-                if (menu.getName().startsWith(menuName)){matchingMenus.add(menu);}
-            });
-            viewController.getMenuTreeView().setRoot(null);
-            fillMenuTreeView(matchingMenus);
-        }
-        return menuName.isEmpty() || menuName.isBlank();
-    }
-
-    private void fillMenuTreeView(){
-        fillMenuTreeView(menus);
-    }
-
-    private void fillMenuTreeView(List<Menu> menuList){
-
-        TreeItem<Menu> rootItem =  new TreeItem<>();
-        menuList.forEach(menu -> {
-            TreeItem<Menu> menuName = new TreeItem<>(menu);
-            rootItem.getChildren().add(menuName);
-        });
-        viewController.getMenuTreeView().setRoot(rootItem);
+    private void fillMenuTableView(){
+        viewController.fillMenuTableView(menus);
     }
 
 

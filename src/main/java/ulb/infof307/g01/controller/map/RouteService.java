@@ -23,16 +23,11 @@ public class RouteService{
     public static final int AVERAGE_TIME_PEDESTRIAN = 5;
     public static final int AVERAGE_TIME_BIKE = 15;
     public static final int TIME_BY_BIKE = AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
-    private final RouteTask routeTask;
-    
+    private RouteTask routeTask;
     private double totalTime;
     private double totalTimeBike;
     private long totalLength;
 
-
-    public RouteService( ){
-        routeTask = new RouteTask(ROUTE_TASK_URL);
-    }
 
     public double getTotalTime() {
         return totalTime;
@@ -87,6 +82,7 @@ public class RouteService{
         routeGraphic.setSymbol(new SimpleLineSymbol(SimpleLineSymbol.Style.SOLID, MapConstants.COLOR_BLUE, MapConstants.WIDTH));
         itineraryCircleList.add(routeGraphic);
 
+        routeTask = new RouteTask(ROUTE_TASK_URL);
         ListenableFuture<RouteParameters> routeParametersFuture = routeTask.createDefaultParametersAsync();
 
         // Récupère les positions de départ et d'arrivée

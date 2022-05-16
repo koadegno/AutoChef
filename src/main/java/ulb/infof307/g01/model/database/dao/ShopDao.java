@@ -270,7 +270,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 """, shoppingList.getId(), shop.getID());
         try (ResultSet querySelectShop = sendQuery(query)){
             if(querySelectShop.next()) {
-                totalPrice = querySelectShop.getDouble(indexSum);
+                totalPrice = Math.round(querySelectShop.getDouble(indexSum));
             }
 
         }
