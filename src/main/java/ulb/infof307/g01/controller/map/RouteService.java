@@ -24,15 +24,10 @@ public class RouteService{
     public static final int AVERAGE_TIME_BIKE = 15;
     public static final int TIME_BY_BIKE = AVERAGE_TIME_BIKE / AVERAGE_TIME_PEDESTRIAN;
     private RouteTask routeTask;
-    
     private double totalTime;
     private double totalTimeBike;
     private long totalLength;
 
-
-    public RouteService( ){
-        routeTask = new RouteTask(ROUTE_TASK_URL);
-    }
 
     public double getTotalTime() {
         return totalTime;
