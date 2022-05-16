@@ -122,6 +122,7 @@ public class ProductController extends Controller implements ProductViewControll
                 String messageError = "Le contenu du JSON est incorrecte ou \nle produit existe deja";
                 ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
                }
+
             createProductStage.close();
         }
         else{

@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.export;
 
+import org.json.simple.JSONArray;
 import org.json.simple.JSONObject;
 import org.json.simple.parser.JSONParser;
 import org.json.simple.parser.ParseException;
@@ -11,6 +12,7 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.Iterator;
 
 /**
  * classe d'exportation d'une recette en JSON
@@ -31,13 +33,25 @@ public class JSON {
 
             JSONObject product = (JSONObject) obj;
 
-            nameProductToAdd = (String) product.get("Nom");
-            String familleAliment = (String) product.get("FamilleAliment");
-            String unite = (String) product.get("Unite");
+            JSONArray liste = (JSONArray) product.get("Liste");
+            Iterator i = liste.iterator();
+
+            while(i.hasNext()){
+
+                Object temp = i.next();
+                JSONObject jsonObject2 = (JSONObject) temp;
+
+                String unity = (String) jsonObject2.get("Unite");
+                String familyAliment = (String) jsonObject2.get("FamilleAliment");
+                String name = (String) jsonObject2.get("Nom");
+                System.out.println(name +"  "+familyAliment+"   "+unity);
+                Product productToSend = new Product.ProductBuilder().withName(name).withFamilyProduct(familyAliment).withNameUnity(unity).build();
+                Configuration.getCurrent().getProductDao().insert(productToSend);
+                nameProductToAdd = name;
+            }
 
             //Envoyer recette à la base de donnee
-            Product productToSend = new Product.ProductBuilder().withName(nameProductToAdd).withFamilyProduct(familleAliment).withNameUnity(unite).build();
-            Configuration.getCurrent().getProductDao().insert(productToSend);
+
 
 
         } catch (IOException | ParseException e) {

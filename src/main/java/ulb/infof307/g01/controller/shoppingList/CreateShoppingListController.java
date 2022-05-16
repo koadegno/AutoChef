@@ -19,7 +19,7 @@ import java.util.Vector;
  */
 public class CreateShoppingListController extends ShoppingListController {
 
-    public static final int NUMBER_OF_IMAGE_HELP = 8;
+    public static final int NUMBER_OF_IMAGE_HELP = 7;
 
     public CreateShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
         super(listenerBackPreviousWindow);
