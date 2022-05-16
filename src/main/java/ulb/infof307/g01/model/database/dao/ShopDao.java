@@ -134,7 +134,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             while (querySelectProductList != null && querySelectProductList.next()) {
                 String productName = querySelectProductList.getString("Nom");
                 double productPrice = querySelectProductList.getDouble("prix");
-                shop.add(new Product(productName, productPrice));
+                shop.add(new Product.ProductBuilder().withName(productName).withPrice(productPrice).build());
             }
         }
     }
@@ -279,8 +279,8 @@ public class ShopDao extends Database implements Dao<Shop> {
 
 
     @NotNull
-    private ArrayList<Shop> getShopsList(String query) throws SQLException {
-        ArrayList<Shop> shopsList;
+    private List<Shop> getShopsList(String query) throws SQLException {
+        List<Shop> shopsList;
         try (ResultSet querySelectShop = sendQuery(query)){
             shopsList = new ArrayList<>();
             while (querySelectShop.next()) {

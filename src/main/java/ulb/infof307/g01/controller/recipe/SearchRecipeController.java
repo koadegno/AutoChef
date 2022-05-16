@@ -36,7 +36,7 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
         searchRecipeViewController.setListener(this);
 
         try {
-            ArrayList<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
+            List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
             List<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
             List<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
             searchRecipeViewController.initialize(dietsList, typesList, recipesList);

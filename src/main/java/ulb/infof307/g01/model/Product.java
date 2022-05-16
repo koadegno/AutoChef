@@ -6,54 +6,59 @@ package ulb.infof307.g01.model;
 public class Product {
 
     private String name;
-    private int quantity = 1;
-    private double price = 0;
-    private String nameUnity = "Unité";
-    private String famillyProduct = "Famille";
-
-    public Product(String productName) {
-        name = productName;
-    }
-
-    public Product(String productName, int quantity) {
-        this(productName);
-        this.quantity = quantity;
-    }
+    private int quantity;
+    private double price;
+    private String nameUnity;
+    private String familyProduct;
 
     /**
-     * @param productName Nom du produit
-     * @param quantity Quantité du produit
-     * @param nameUnity Unité de la quantité du produit
+     * Builder pour construire des produits
      */
-    public Product(String productName, int quantity, String nameUnity) {
-        name = productName;
-        this.quantity = quantity;
-        this.nameUnity = nameUnity;
-    }
+    public static class ProductBuilder {
+        private String name;
+        private int quantity = 1;
+        private double price = 0;
+        private String nameUnity = "Unité";
+        private String familyProduct = "Famille";
 
-    public Product(String productName, double price) {
-        name = productName;
-        this.price = price;
-    }
+        public ProductBuilder withName(String name){
+            this.name = name;
+            return this;
+        }
 
-    public Product(String productName, int quantity, String nameUnity,String famillyProduct, double price) {
-        this(productName,quantity,nameUnity,famillyProduct);
-        this.price = price;
-    }
+        public ProductBuilder withQuantity(int quantity){
+            this.quantity = quantity;
+            return this;
+        }
 
-    public Product(String productName, int quantity, String nameUnity,String famillyProduct) {
-        this(productName,nameUnity,famillyProduct);
-        this.quantity = quantity;
-    }
+        public ProductBuilder withNameUnity(String nameUnity){
+            this.nameUnity = nameUnity;
+            return this;
+        }
 
-    public Product(String productName,  String nameUnity,String famillyProduct) {
-        name = productName;
-        this.nameUnity = nameUnity;
-        this.famillyProduct = famillyProduct;
-    }
+        public ProductBuilder withFamilyProduct(String familyProduct){
+            this.familyProduct = familyProduct;
+            return this;
+        }
 
-    public Product(Product other) {
-        this(other.name,other.quantity,other.nameUnity,other.famillyProduct, other.price);
+        public ProductBuilder withPrice(double price){
+            this.price = price;
+            return this;
+        }
+
+        public Product clone(Product other){
+            return new Product.ProductBuilder().withFamilyProduct(other.familyProduct).withName(other.name).withNameUnity(other.nameUnity).withQuantity(other.quantity).withPrice(other.price).build();
+        }
+
+        public Product build(){
+            Product product = new Product();
+            product.name = name;
+            product.nameUnity = nameUnity;
+            product.familyProduct = familyProduct;
+            product.quantity = quantity;
+            product.price = price;
+            return product;
+        }
     }
 
     @Override
@@ -91,10 +96,8 @@ public class Product {
      * Modifie la quantité avec {@code newQuantity}, si la valeur est inférieure à 1, la quantité est mise à 1
      */
     public void setQuantity(int newQuantity) {
-        if (newQuantity > 0)
-            quantity = newQuantity;
-        else
-            quantity = 1;
+        if (newQuantity > 0) quantity = newQuantity;
+        else quantity = 1;
     }
 
     public int getQuantity() {
@@ -105,7 +108,7 @@ public class Product {
         return name;
     }
 
-    public String getFamillyProduct() { return famillyProduct; }
+    public String getFamilyProduct() { return familyProduct; }
 
     public String getNameUnity(){return nameUnity;}
 
@@ -117,23 +120,14 @@ public class Product {
     @Override
     public boolean equals(Object other) {
 
-        if (this == other)
-            return true;
-
-        if (other == null || this.getClass() != other.getClass())
-            return false;
-
+        if (this == other) return true;
+        if (other == null || this.getClass() != other.getClass()) return false;
         Product product = (Product)other;
 
         return this.getName().equals(product.getName());
     }
 
-    public Product clone() {
-        return new Product(name, quantity, nameUnity, famillyProduct, price);
-    }
-    public void setNameUnity(String nameUnity) {
-        this.nameUnity = nameUnity;
-    }
+
 
     @Override
     public String toString(){

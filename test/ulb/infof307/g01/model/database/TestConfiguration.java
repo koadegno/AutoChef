@@ -17,15 +17,13 @@ import java.util.List;
  * Test du singleton Configuration
  */
 class TestConfiguration {
-    static private final Product peach = new Product("peche", 1,"g", "Fruit");
-
-
+    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct("Fruit").withNameUnity("g").build();
     @BeforeAll
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
 
-        Configuration.getCurrent().getProductFamilyDao().insert(peach.getFamillyProduct());
+        Configuration.getCurrent().getProductFamilyDao().insert(peach.getFamilyProduct());
         Configuration.getCurrent().getProductUnityDao().insert(peach.getNameUnity());
         Configuration.getCurrent().getProductDao().insert(peach);
     }
@@ -39,7 +37,7 @@ class TestConfiguration {
     @Test
     void testGetProductFamilyDao() throws SQLException {
         List<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(peach.getFamillyProduct(), families.get(0));
+        assertEquals(peach.getFamilyProduct(), families.get(0));
     }
 
     @Test
@@ -55,6 +53,6 @@ class TestConfiguration {
         assertEquals(peach.getName(), product.getName());
         assertEquals(peach.getQuantity(), product.getQuantity());
         assertEquals(peach.getNameUnity(),product.getNameUnity());
-        assertEquals(peach.getFamillyProduct(), product.getFamillyProduct());
+        assertEquals(peach.getFamilyProduct(), product.getFamilyProduct());
     }
 }

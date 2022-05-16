@@ -35,9 +35,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         int nbPersons = result.getInt(4);
         String type = result.getString(5);
         String category = result.getString(6);
-        String method = result.getString(7);
-        Boolean isFavorite = result.getBoolean(8);
-        return new Recipe(recipeID, name, duration, category, type, nbPersons, method,isFavorite);
+        String preparations = result.getString(7);
+        boolean isFavorite = result.getBoolean(8);
+        return new Recipe.RecipeBuilder().withId(recipeID).withName(name).withDuration(duration).withCategory(category).withType(type).withNumberOfPerson(nbPersons).withPreparation(preparations).isFavorite(isFavorite).build();
     }
 
     /**
@@ -45,8 +45,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      * @param result ResultSet qui contient le resultat de la requete
      * @return ArrayList d'objets Recipes correctement remplis
      */
-    private ArrayList<Recipe> fillRecipes(ResultSet result) throws SQLException {
-        ArrayList<Recipe> recipes = new ArrayList<>();
+    private List<Recipe> fillRecipes(ResultSet result) throws SQLException {
+        List<Recipe> recipes = new ArrayList<>();
         while (result.next()){
             Recipe recipe = fillRecipe(result);
             recipes.add(recipe);
@@ -62,9 +62,10 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      * @param nameCategory contrainte pour le nom de la categorie
      * @param nameType contrainte pour le nom du type
      * @param nbPerson contrainte pour le nombre de personne
+     * @return La liste des recettes qui correspondent au critère
      */
-    public ArrayList<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
-        ArrayList<String> valuesOfPreparedStatement;
+    public List<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
+        List<String> valuesOfPreparedStatement;
         ArrayList<String> constraint = new ArrayList<>();
         constraint.add(String.format("UtilisateurRecette.UtilisateurID = %d",
                 Configuration.getCurrent().getCurrentUser().getId()));
@@ -197,14 +198,10 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         delete("Recette",List.of(constraint));
     }
 
-    public List<Recipe> getFavoriteRecipes() {
-        ArrayList<Recipe>   recipes;
-        ArrayList<Recipe>   favoriteRecipes = new ArrayList<>();
-        try {
-            recipes = getRecipeWhere(null, null, 0);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
+    public List<Recipe> getFavoriteRecipes() throws SQLException {
+        List<Recipe>   recipes;
+        List<Recipe>   favoriteRecipes = new ArrayList<>();
+        recipes = getRecipeWhere(null, null, 0);
         for (Recipe recipe: recipes) {
             if(recipe.isFavorite()) favoriteRecipes.add(recipe);
         }

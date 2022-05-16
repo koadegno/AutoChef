@@ -27,7 +27,7 @@ public class AutoCompletion {
         for (int remainingRecipes = 0; remainingRecipes < nbRecipes; remainingRecipes++) {
 
             String categoryMax = null;
-            ArrayList<Recipe> recipes =  new ArrayList<>();
+            List<Recipe> recipes =  new ArrayList<>();
 
             while (recipes.size() == 0) {
                 categoryMax = findMax(categoriesWanted);

@@ -19,12 +19,9 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  * test du DAO de la liste de course
  */
 class TestShoppingListDao {
-    static private final String fruit = "Fruit";
-    static private final String gram = "g";
 
-    static private final Product peach = new Product("peche", 1, gram, fruit);
-    static private final Product strawberry = new Product( "fraise", 1, gram, fruit);
-
+    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product strawberry = new Product.ProductBuilder().withName("fraise").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
     static private final ShoppingList halloween = new ShoppingList("Halloween");
     static private final ShoppingList christmas = new ShoppingList("Noël");
     static private final ShoppingList easter = new ShoppingList("Pâques");
@@ -39,8 +36,8 @@ class TestShoppingListDao {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getProductUnityDao().insert(gram);
-        Configuration.getCurrent().getProductFamilyDao().insert(fruit);
+        Configuration.getCurrent().getProductUnityDao().insert(TestConstante.GRAM);
+        Configuration.getCurrent().getProductFamilyDao().insert(TestConstante.FRUIT);
 
         Configuration.getCurrent().getProductDao().insert(peach);
         Configuration.getCurrent().getProductDao().insert(strawberry);

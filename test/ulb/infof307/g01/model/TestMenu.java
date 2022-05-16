@@ -3,6 +3,7 @@ package ulb.infof307.g01.model;
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -42,29 +43,27 @@ class TestMenu {
         recipes  = new Recipe [7];
         products = new Product[2];
 
+        products[0] = new Product.ProductBuilder().withName("Abricot").build();
+        products[1] =  new Product.ProductBuilder().withName("Fraise").build();
 
 
-        products[0] = new Product("Abricot");
-        products[1] = new Product("Fraise");
-
-        recipes[0] = new Recipe(4, "test1", 3, "Vegan", "Test", 2, "Avant le code");
+        recipes[0] = new Recipe.RecipeBuilder().withId(4).withName("test1").withDuration(3).withCategory(TestConstante.FOOD_CATEGORY_VEGAN).withType(TestConstante.FOOD_TYPE_DESSERT).withPreparation("Avant le code").build();
         recipes[0].add(products[0]);
         recipes[0].add(products[0]);
 
         RECIPE_PRODUCT_QUANTITY[0][0] = 2;
 
-        recipes[1] = new Recipe(5, "test2", 5, "Vegan", "Test", 2, "Avant le code");
+        recipes[1] = new Recipe.RecipeBuilder().withId(5).withName("test2").withDuration(5).withCategory(TestConstante.FOOD_CATEGORY_VEGAN).withType(TestConstante.FOOD_TYPE_DESSERT).withPreparation("Avant le code").build();
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
 
         RECIPE_PRODUCT_QUANTITY[1][0] = 1;
         RECIPE_PRODUCT_QUANTITY[1][1] = 1;
 
-        recipes[2]  = new Recipe(1, "Bolognaise", 60, "Viande", "Mijoté",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-        recipes[3]  = new Recipe(2, "Carbonara", 60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
-        recipes[4]  = new Recipe(3, "Pesto", 20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
-        recipes[5]  = new Recipe(6, "test1", 3, "Vegan", "Test", 2, "Avant le code");
-        recipes[6]  = new Recipe(7, "test2", 5, "Vegan", "Test", 2, "Avant le code");
+        recipes[2]  = TestConstante.BOLO_RECIPE;
+        recipes[3]  = TestConstante.CARBO_RECIPE;
+        recipes[4]  = TestConstante.PESTO_RECIPE;
+        recipes[5]  = TestConstante.TIRAMISU_RECIPE;
 
         createDB();
     }
@@ -77,17 +76,16 @@ class TestMenu {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
 
-        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
-        Configuration.getCurrent().getRecipeTypeDao().insert("Mijoté");
-        Configuration.getCurrent().getRecipeTypeDao().insert("Test");
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
 
         Configuration.getCurrent().getRecipeDao().insert(recipes[5]);
-        Configuration.getCurrent().getRecipeDao().insert(recipes[6]);
         Configuration.getCurrent().getRecipeDao().insert(recipes[2]);
         Configuration.getCurrent().getRecipeDao().insert(recipes[3]);
         Configuration.getCurrent().getRecipeDao().insert(recipes[4]);

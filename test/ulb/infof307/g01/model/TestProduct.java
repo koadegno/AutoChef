@@ -14,7 +14,7 @@ public class TestProduct {
 
     @BeforeEach
     private void createProduct() {
-        productTest = new Product("Produit Test");
+        productTest =  new Product.ProductBuilder().withName("Produit Test").build();
     }
 
     @Test
@@ -61,7 +61,7 @@ public class TestProduct {
 
     @Test
     public void testEquals() {
-        Product productTestCopy = new Product(productTest.getName());
+        Product productTestCopy =  new Product.ProductBuilder().withName(productTest.getName()).build();
 
         assertEquals(productTest, productTestCopy, "Echec du test de comparaison valide");
 

@@ -57,81 +57,52 @@ public class RouteService{
      * prêt
      * @param selectedShop le magasin sélectionné par l'utilisateur
      * @param mapPoint un point sur la map sélectionné par l'utilisateur
-     * @param itineraryCircleList La liste des objets cercle graphique associés à l'itinéraire
-     * @param itineraryTextList La liste des objets texte graphique associés à l'itinéraire
      * @param isDeparture Vrai si c'est le départ qui doit être fait
      */
-    public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint, List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList, boolean isDeparture) {
-
-        if(selectedShop == null && itineraryCircleList.isEmpty()) return;
-
-        // Si un itinéraire est déjà calculé, demande à supprimé le précédent
-        boolean isDelete = deleteOldRoute(itineraryCircleList,itineraryTextList);
+    public void itinerary(Pair<Graphic, Graphic> selectedShop, Point mapPoint, boolean isDeparture) {
 
         // Affiche le texte en fonction de ce qui est recherché
-        if(isDelete){
-            String text = "";
-            if (isDeparture) {text = "Départ";}
-            else {
-                assert selectedShop != null;
-                Graphic shop = selectedShop.getLeft();
-                mapPoint = (Point) shop.getGeometry();
-            }
-            listener.addCircle(MapConstants.COLOR_BLUE, text, mapPoint, false);
+        String text = "";
+        if (isDeparture) {text = "Départ";}
+        else {
+            assert selectedShop != null;
+            Graphic shop = selectedShop.getLeft();
+            mapPoint = (Point) shop.getGeometry();
         }
+
+        // Dessine sur la map
+        listener.addCircle(MapConstants.COLOR_BLUE, text, mapPoint, false);
     }
 
     /**
      *  Supprime l'itinéraire
-     * @return Vrai si l'itinéraire est supprimé
      * @param itineraryGraphicsCercleList La liste des objets cercle graphique associés à l'itinéraire
      * @param itineraryGraphicsTextList La liste des objets texte graphique associés à l'itinéraire
      */
-    public boolean onDeleteItinerary(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList) {
-        int itineraryIndex = 2;
-        int departureIndex = 1;
-        int arrival = 0;
+    public void onDeleteItinerary(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList) {
 
-        if (itineraryGraphicsCercleList.isEmpty()) {return true;}
+        final int ITINERARY_INDEX = 2;
+        final int DEPARTURE_INDEX = 1;
+        final int ARRIVAL = 0;
 
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer itinéraire ?", "Etes vous sur de vouloir supprimer l'itinéraire actuel ? ");
         if (alertResult == ButtonType.OK) {
 
-            if (itineraryGraphicsCercleList.size() > itineraryIndex) {
-                itineraryGraphicsCercleList.remove(itineraryIndex);
+            if (itineraryGraphicsCercleList.size() > ITINERARY_INDEX) {
+                itineraryGraphicsCercleList.remove(ITINERARY_INDEX);
             }
 
-            if (itineraryGraphicsCercleList.size() > departureIndex) {
-                itineraryGraphicsCercleList.remove(departureIndex);
-                itineraryGraphicsTextList.remove(departureIndex);
+            if (itineraryGraphicsCercleList.size() > DEPARTURE_INDEX) {
+                itineraryGraphicsCercleList.remove(DEPARTURE_INDEX);
+                itineraryGraphicsTextList.remove(DEPARTURE_INDEX);
             }
 
-            else { mapViewController.switchVisibilityContextMenu();} //TODO ne devrait pas etre la
-
-            itineraryGraphicsCercleList.remove(arrival);
-            itineraryGraphicsTextList.remove(arrival);
-
-            return true;
+            itineraryGraphicsCercleList.remove(ARRIVAL);
+            itineraryGraphicsTextList.remove(ARRIVAL);
+            mapViewController.deleteItineraryInformation();
         }
-
-        return false;
-
-
-
     }
 
-    /**
-     * supprime l'ancien itinéraire s'il existe
-     * @return Vrai si l'itinéraire est supprimé
-     * @param itineraryCircleList La liste des objets cercle graphique associés à l'itinéraire
-     * @param itineraryTextList La liste des objets texte graphique associés à l'itinéraire
-     */
-    private boolean deleteOldRoute(List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList) {
-        int itineraryAlreadyExist = 1;
-        boolean isDelete = true;
-        if (itineraryCircleList.size() > itineraryAlreadyExist) { isDelete = onDeleteItinerary(itineraryCircleList,itineraryTextList);}
-        return isDelete;
-    }
 
     /**
      * Calcule et affiche l'itinéraire
@@ -202,7 +173,6 @@ public class RouteService{
                         totalTime = Math.round(route.getTotalTime());
                         totalTimeBike = Math.round(route.getTotalTime() / TIME_BY_BIKE);
                         totalLength = Math.round(route.getTotalLength());
-                        System.out.println("moi j'ai fini");
                         hasFoundRoute.set(true);
 
                     } catch (InterruptedException | ExecutionException e) {
@@ -217,7 +187,6 @@ public class RouteService{
 
         });
     }
-
 
 
     public interface Listener{

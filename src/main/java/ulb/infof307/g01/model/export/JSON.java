@@ -36,12 +36,12 @@ public class JSON {
             String unite = (String) product.get("Unite");
 
             //Envoyer recette à la base de donnee
-            Product productToSend = new Product(nameProductToAdd, unite, familleAliment);
+            Product productToSend = new Product.ProductBuilder().withName(nameProductToAdd).withFamilyProduct(familleAliment).withNameUnity(unite).build();
             Configuration.getCurrent().getProductDao().insert(productToSend);
 
 
         } catch (IOException | ParseException e) {
-            e.printStackTrace();
+            throw new SQLException(e);
         }
 
     }
@@ -49,15 +49,10 @@ public class JSON {
         //JSON parser object to parse read file
         JSONParser jsonParser = new JSONParser();
 
-        FileReader reader = null;
-        JSONObject recipe = null;
-        try {
-            reader = new FileReader(fileName);
-
+        JSONObject recipe;
+        try (FileReader reader = new FileReader(fileName)) {
             //Read JSON file
-            Object obj = jsonParser.parse(reader);
-            recipe = (JSONObject) obj;
-
+            recipe = (JSONObject) jsonParser.parse(reader);
         } catch (IOException e) {
             throw new IOException(e);
         }
@@ -71,7 +66,8 @@ public class JSON {
             String preparation = (String) recipe.get("Preparation");
 
             //Envoyer recette à la base de donnee
-            Recipe recipeToSend = new Recipe(nameRecipeToAdd, Math.toIntExact(duration), category, type, Math.toIntExact(nbrPerson), preparation);
+
+            Recipe recipeToSend = new Recipe.RecipeBuilder().withName(nameRecipeToAdd).withDuration(Math.toIntExact(duration)).withCategory(category).withType(type).withNumberOfPerson(Math.toIntExact(nbrPerson)).withPreparation(preparation).build();
             Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
 
         }

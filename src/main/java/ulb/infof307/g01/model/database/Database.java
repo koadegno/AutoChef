@@ -2,7 +2,7 @@ package ulb.infof307.g01.model.database;
 import ulb.infof307.g01.model.*;
 
 import java.io.File;
-import java.io.IOException;
+import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
@@ -23,23 +23,30 @@ public class Database {
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
+     * Le programme s'arrête si aucune connexion ne peut être établie avec une base de données.
      * @param nameDB nom de la base de données que l'ont veut charger/créer.
      */
     public Database(String nameDB) {
         String dbName = "jdbc:sqlite:" + nameDB;
         File file = new File(nameDB);
         boolean fileExist = file.exists();
+
+        if(connection != null && request != null){
+            return;
+        }
         try {
-            if(connection != null && request != null){
-                return; //TODO changer ca un jour
-            }
             connection = DriverManager.getConnection(dbName);
             request = connection.createStatement();
             if(! fileExist ) {
                 createDB();
             }
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur
+        } catch (SQLException | FileNotFoundException e) {
+            try {
+                request.close();
+                connection.close();
+                file.delete();
+            } catch (SQLException ignored) {}
+            System.exit(1);
         }
     }
 
@@ -48,22 +55,22 @@ public class Database {
     }
 
     /**
-     * Méthode de création de la base de données qui lit et execute
+     * Méthode de création d'une base de données qui lit et execute
      * ligne par ligne le fichier DDLDatabase.txt qui représente le ddl.
+     * Si le fichier DDLDatabase.txt n'existe pas, la création est impossible
      */
-    private void createDB(){
-        try{
-            InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
-            if(fileDb == null) throw new IOException();
-            Scanner scanner =new Scanner(fileDb);
-            while(scanner.hasNextLine()){
-                sendRequest(scanner.nextLine());
+    private void createDB() throws FileNotFoundException, SQLException {
+        InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
+        if (fileDb != null) {
+            try (Scanner scanner =new Scanner(fileDb); ){
+                while(scanner.hasNextLine()){
+                    sendRequest(scanner.nextLine());
+                }
+            }catch (SQLException e){
+                throw new SQLException(e);
             }
-            scanner.close();
         }
-        catch(IOException e) {
-            e.printStackTrace(); //TODO lancer une erreur
-        }
+        else throw new FileNotFoundException();
     }
 
     public void closeConnection() throws SQLException {
@@ -79,13 +86,8 @@ public class Database {
      * Requete de la base de données uniquement pour la creation de table
      * @param query requete sql
      */
-    public void sendRequest(String query) {
-        try {
-            request.execute(query);
-        } catch (SQLException e) {
-            //TODO lancer une erreur
-            e.printStackTrace();
-        }
+    public void sendRequest(String query) throws SQLException {
+        request.execute(query);
     }
 
     /**
@@ -93,25 +95,12 @@ public class Database {
      * @param statement requete sql
      * @return resultat de la requete, ou null si la requete echoue
      */
-    protected ResultSet sendQuery(PreparedStatement statement) {
-        ResultSet res = null;
-        try {
-            res =  statement.executeQuery();
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur;
-
-        }
-        return res;
+    protected ResultSet sendQuery(PreparedStatement statement) throws SQLException {
+        return statement.executeQuery();
     }
 
-    protected ResultSet sendQuery(String query) { //to delete
-        ResultSet res = null;
-        try {
-            res =  request.executeQuery(query);
-        } catch (SQLException e) {
-            e.printStackTrace(); //TODO lancer une erreur
-        }
-        return res;
+    protected ResultSet sendQuery(String query) throws SQLException { //to delete
+        return request.executeQuery(query);
     }
 
     /**
@@ -125,15 +114,10 @@ public class Database {
     /**
      * @return un id généré par la base de données, null si l'id n'est pas créé
      */
-    protected Integer getGeneratedID(){
-        try {
-            ResultSet getID = request.getGeneratedKeys();
-            getID.next();
-            return getID.getInt(1);
-        }catch (SQLException e){
-            e.printStackTrace(); //TODO lancer une erreur;
-        }
-        return null;
+    protected Integer getGeneratedID() throws SQLException {
+        ResultSet getID = request.getGeneratedKeys();
+        getID.next();
+        return getID.getInt(1);
     }
 
     /**
@@ -148,11 +132,11 @@ public class Database {
             query.append("?").append(",");
         }
         query.deleteCharAt(query.length()-1).append(");");
-        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
-        ArrayList<String> columnValues = new ArrayList<>(Arrays.asList(values));
-        fillPreparedStatementValues(statement, columnValues);
-        sendQueryUpdate(statement);
-        statement.close();
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            List<String> columnValues = new ArrayList<>(Arrays.asList(values));
+            fillPreparedStatementValues(statement, columnValues);
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
@@ -163,7 +147,7 @@ public class Database {
     protected PreparedStatement select(String nameTable, List<String> constraintToAppend, String orderBy) throws SQLException {
         String stringQuery;
         StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s ", nameTable));
-        ArrayList<String> valueOfPreparedStatement;
+        List<String> valueOfPreparedStatement;
         if (!constraintToAppend.isEmpty()) {
             query.append(" WHERE ");
         }
@@ -187,7 +171,7 @@ public class Database {
      * @param statement le PreparedStatement à remplir
      * @param valueOfPreparedStatement les types à déterminer
      */
-    protected void fillPreparedStatementValues(PreparedStatement statement, ArrayList<String> valueOfPreparedStatement) throws SQLException {
+    protected void fillPreparedStatementValues(PreparedStatement statement, List<String> valueOfPreparedStatement) throws SQLException {
         if (valueOfPreparedStatement ==null) return;
         for(int i = 1; i < valueOfPreparedStatement.size() +1; i++){
             String columnValue = valueOfPreparedStatement.get(i-1);
@@ -213,7 +197,7 @@ public class Database {
 
     protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        ArrayList<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
         query.append(";");
         String stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);
@@ -227,11 +211,11 @@ public class Database {
      * @param constraintToAppend contraintes à ajouter à requête
      * @return requete avec contrainte
      */
-    protected ArrayList<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
-        ArrayList<String> columnValues = new ArrayList<>();
+    protected List<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
+        List<String> columnValues = new ArrayList<>();
         if (!constraintToAppend.isEmpty()) {
             for (String s : constraintToAppend) {
-                ArrayList<String> columnAndValue = splitOnCharacter(s);
+                List<String> columnAndValue = splitOnCharacter(s);
                 query.append(columnAndValue.get(0)).append(columnAndValue.get(2)).append(" ?").append(" AND ");
                 columnValues.add(columnAndValue.get(1));
             }
@@ -243,7 +227,7 @@ public class Database {
     protected void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable, nameToUpdate));
         //nameTable,nameToUpdate
-        ArrayList<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
 
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
@@ -257,7 +241,7 @@ public class Database {
      * @return Nom correspondant à l'ID
      */
     protected String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
+        List<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s=%d",nameIDColumn,id));
         PreparedStatement statement = select(table,constraint,null);
         ResultSet res = sendQuery(statement);
@@ -270,31 +254,19 @@ public class Database {
      */
     protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
 
-        ArrayList<String> constraint = new ArrayList<>();
+        List<String> constraint = new ArrayList<>();
         constraint.add(String.format("%s='%s'","Nom",name));
         PreparedStatement statement =  select(table,constraint,null);
 
         ResultSet res = sendQuery(statement);
 
-        res.next();//TODO lancer une erreur
+        if(!res.next()){
+            throw new SQLException();
+        }
 
         return res.getInt(nameIDColumn);
     }
 
-    /**
-     *
-     * @param orderBy si non nul, ajoute la contrainte de triée par
-     */
-    protected ArrayList<String> getAllNameFromTable(String table, String orderBy) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        PreparedStatement statement =  select(table, constraint,orderBy);
-        ResultSet queryAllTableName = sendQuery(statement);
-        ArrayList<String> allProductName = new ArrayList<>();
-        while(queryAllTableName.next()){
-            allProductName.add(queryAllTableName.getString("Nom"));
-        }
-        return allProductName;
-    }
 
     protected void fillRecipeWithProducts(Recipe recipe) throws SQLException {
         ResultSet querySelectProduct = sendQuery(String.format("""
@@ -311,7 +283,7 @@ public class Database {
             String unityName = querySelectProduct.getString(3);
             int quantity = querySelectProduct.getInt(4);
 
-            Product product = new Product(productName, quantity, unityName,familyName);
+            Product product = new Product.ProductBuilder().withName(productName).withQuantity(quantity).withNameUnity(unityName).withFamilyProduct(familyName).build();
             recipe.add(product);
         }
     }
@@ -321,8 +293,8 @@ public class Database {
      * @param s string a split
      * @return list de 3 strings
      */
-    protected ArrayList<String> splitOnCharacter(String s){
-        ArrayList<String> parts = null;
+    protected List<String> splitOnCharacter(String s){
+        List<String> parts = null;
         if(s.contains(">=")){
             //split sur base de >=
             parts = new ArrayList<>(Arrays.asList(s.split(">=")));

@@ -63,10 +63,14 @@ public class ShopController extends Controller implements ShopViewController.Lis
             ViewController.showErrorFXMLMissing(SHOW_SHOP_FXML);
         }
     }
+
+    /**
+     * ajoutes les products du wrappeur dans le modèle produit
+     * @param productsWrapper une collection de produit dans un Wrapper
+     */
     private void addAllWrappedProduct(Collection<ShopViewController.ProductWrapper> productsWrapper){
         for(ShopViewController.ProductWrapper productWrapper: productsWrapper){
-            shop.add(new Product(productWrapper.getProductName(),productWrapper.getProductPrice()));
-
+            shop.add(new Product.ProductBuilder().withName(productWrapper.getProductName()).withPrice(productWrapper.getProductPrice()).build());
         }
     }
 

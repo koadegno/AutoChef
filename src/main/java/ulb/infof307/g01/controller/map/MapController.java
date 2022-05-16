@@ -8,14 +8,12 @@ import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
-import javafx.scene.control.ButtonType;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
 import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
-import ulb.infof307.g01.controller.shop.ShopController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -35,11 +33,8 @@ import java.util.concurrent.ExecutionException;
 public class MapController extends Controller implements MapViewController.Listener, RouteService.Listener {
 
     private MapViewController viewController;
-
-
     private boolean readOnlyMode;
     private ShoppingList productListToSearchInShops;
-
     private RouteService routeService;
     private final LocatorService locatorService;
     private final ShopDao shopDao;
@@ -137,29 +132,24 @@ public class MapController extends Controller implements MapViewController.Liste
      * @param posX position du curseur en X
      * @param posY position du curseur en Y
      * @param itineraryCircleList la liste des objets graphique present sur l'écran pour l'itinéraire (cercle)
-     * @param itineraryTextList la liste des objets graphique present sur l'écran pour l'itinéraire (texte)
-     * @param isDeparture Vrai si on place le point associer au depart
      */
     @Override
-    public void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> itineraryTextList, boolean isDeparture) {
-        Pair<Graphic, Graphic> selectedShop= getSelectedShop();
-        if(selectedShop != null){
-            int readyToCalculRoute = 2;
+    public void onItineraryClicked(Double posX, Double posY, MapView mapView, List<Graphic> itineraryCircleList, List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList) {
+        Pair<Graphic, Graphic> selectedShop= getSelectedShop(shopGraphicsCircleList,  shopGraphicsTextList);
 
-            routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY), itineraryCircleList,itineraryTextList,isDeparture );
-            viewController.switchVisibilityContextMenu();
+        int readyToCalculRoute = 2;
+        boolean isDeparture = itineraryCircleList.size() == 1;
 
-            if (itineraryCircleList.size() == readyToCalculRoute) {
-                boolean isRouteFound = routeService.calculateRoute(itineraryCircleList);
-                System.out.println("la route a ete trouvé : " + isRouteFound);
-                if(! isRouteFound) ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
-                else{
-                    viewController.itineraryInformation(routeService.getTotalTime(),
-                            routeService.getTotalTimeBike(),
-                            routeService.getTotalLength());
-                }
+        routeService.itinerary(selectedShop,cursorPoint(mapView,posX,posY), isDeparture);
+
+        if (itineraryCircleList.size() == readyToCalculRoute) {
+            boolean isRouteFound = routeService.calculateRoute(itineraryCircleList);
+            if(!isRouteFound) ViewController.showAlert(Alert.AlertType.ERROR, "Error", "Itinéraire impossible");
+            else{
+                viewController.itineraryInformation(routeService.getTotalTime(),
+                        routeService.getTotalTimeBike(),
+                        routeService.getTotalLength());
             }
-
         }
     }
 
@@ -215,9 +205,7 @@ public class MapController extends Controller implements MapViewController.Liste
      * renvoie la paire d'objet graphique associé aux coordonnées cliquer
      * @return paire d'objet graphique
      */
-    private Pair<Graphic, Graphic> getSelectedShop(){
-        List<Graphic> shopGraphicsCircleList = viewController.getShopGraphicsCircleList();//TODO changer ca
-        List<Graphic> shopGraphicsTextList = viewController.getShopGraphicsTextList();
+    private Pair<Graphic, Graphic> getSelectedShop(List<Graphic> shopGraphicsCircleList,  List<Graphic> shopGraphicsTextList){
 
         for (int i = 0; i < shopGraphicsCircleList.size(); i++) {
             Graphic circlePointOnMap = shopGraphicsCircleList.get(i);

@@ -7,6 +7,7 @@ import ulb.infof307.g01.model.AutoCompletion;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -23,12 +24,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestAutoCompletion {
 
-    static private final Recipe bolo     = new Recipe(1, "Bolognaise",60, "Viande", "Plat",4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-    static private final Recipe carbo    = new Recipe(2, "Carbonara",60, "Poisson", "Plat",5, "Cuire des pâtes, poisson");
-    static private final Recipe pesto    = new Recipe(3, "Pesto",    20, "Poisson", "Plat",3, "Cuire des pâtes, poisson");
-    static private final Recipe tiramisu = new Recipe(4, "Tiramisu", 20, "Végétarien", "Dessert",3, "Preparer la mascarpone");
-
-
     @BeforeAll
     static public void createDB() throws SQLException {
         String databaseName = "test.sqlite";
@@ -38,18 +33,19 @@ class TestAutoCompletion {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Poisson");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Végétarien");
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Vegan");
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
 
-        Configuration.getCurrent().getRecipeTypeDao().insert("Plat");
-        Configuration.getCurrent().getRecipeTypeDao().insert("Dessert");
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
 
-        Configuration.getCurrent().getRecipeDao().insert(bolo);
-        Configuration.getCurrent().getRecipeDao().insert(carbo);
-        Configuration.getCurrent().getRecipeDao().insert(pesto);
-        Configuration.getCurrent().getRecipeDao().insert(tiramisu);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.BOLO_RECIPE);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.CARBO_RECIPE);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.PESTO_RECIPE);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.TIRAMISU_RECIPE);
     }
 
 
@@ -127,16 +123,16 @@ class TestAutoCompletion {
         ArrayList<Recipe> recipesAllReadyUsed = new ArrayList<>();
         ArrayList<Recipe> empty               = new ArrayList<>();
 
-        recipes.add(bolo);
-        recipes.add(tiramisu);
-        recipes.add(carbo);
-        recipes.add(pesto);
-        recipesAllReadyUsed.add(bolo);
-        recipesAllReadyUsed.add(tiramisu);
-        recipesAllReadyUsed.add(carbo);
+        recipes.add(TestConstante.BOLO_RECIPE);
+        recipes.add(TestConstante.TIRAMISU_RECIPE);
+        recipes.add(TestConstante.CARBO_RECIPE);
+        recipes.add(TestConstante.PESTO_RECIPE);
+        recipesAllReadyUsed.add(TestConstante.BOLO_RECIPE);
+        recipesAllReadyUsed.add(TestConstante.TIRAMISU_RECIPE);
+        recipesAllReadyUsed.add(TestConstante.CARBO_RECIPE);
 
         AutoCompletion autoCompletion = new AutoCompletion();
         assertNull(autoCompletion.choiceRecipe(empty, recipesAllReadyUsed),            "Test si choix de recette vide");
-        assertEquals(pesto, autoCompletion.choiceRecipe(recipes, recipesAllReadyUsed), "Test si choix de la bonne recette");
+        assertEquals(TestConstante.PESTO_RECIPE, autoCompletion.choiceRecipe(recipes, recipesAllReadyUsed), "Test si choix de la bonne recette");
     }
 }

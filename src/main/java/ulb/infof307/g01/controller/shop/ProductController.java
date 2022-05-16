@@ -22,7 +22,7 @@ import java.util.Objects;
  */
 public class ProductController extends Controller implements ProductViewController.Listener {
     private ProductViewController productViewController;
-    private ShopViewController shopViewController;
+    private final ShopViewController shopViewController;
     private Stage createProductStage;
 
     public ProductController(ShopViewController shopViewController){
@@ -79,7 +79,8 @@ public class ProductController extends Controller implements ProductViewControll
         if(isNameProduct){
             if(isNameProductFamily){
                 if(isNameProductUnity){
-                    userProduct = new Product(nameProduct, nameProductUnity ,nameProductFamily);
+
+                    userProduct = new Product.ProductBuilder().withName(nameProduct).withNameUnity(nameProductUnity).withFamilyProduct(nameProductFamily).build();
                     try {
                         Configuration.getCurrent().getProductDao().insert(userProduct);
                         shopViewController.setNameProduct(nameProduct);

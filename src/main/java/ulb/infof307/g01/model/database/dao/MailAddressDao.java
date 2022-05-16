@@ -55,21 +55,16 @@ public class MailAddressDao extends Database implements Dao<String> {
      * @param userID l'id de l'utilisateur
      * @throws SQLException exception lié à la base de donnée
      */
-    public void insert(String mailAddressName,int userID) throws SQLException {
-
+    public void insert(String mailAddressName,int userID) throws SQLException{
         int mailID;
         try{
-            insert(mailAddressName); // faire un try catch pour recup l'erreur
+            insert(mailAddressName);
             mailID = getGeneratedID();
-            insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
 
         } catch (SQLException e) {// cas ou adresse mail multiple dans la db
             mailID = Integer.parseInt(get(mailAddressName));
-            if(mailID == 0) throw new SQLException(e); // mailID == null TODO comment faire quand c'est null
-            insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
-
         }
-
+        insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
     }
 
     @Override

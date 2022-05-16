@@ -19,18 +19,6 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestMenuDao {
 
-    static private final String meat = "Viande";
-    static private final String fish = "Poisson";
-    static private final String simmered = "Mijoté";
-    static private final String meal = "Plat";
-
-    static private final Menu menu = new Menu("Menu Test");
-    static private final Menu menu2 = new Menu("Menu Test2");
-
-    static private final Recipe bolo = new Recipe("Bolognaise", 60, meat, simmered,4, "Cuire des pâtes, oignons, tomates, ail, basilic");
-    static private final Recipe carbo = new Recipe("Carbonara", 60, fish, meal,5, "Cuire des pâtes, poisson");
-    static private final Recipe pesto = new Recipe("Pesto", 20, fish, meal,3, "Cuire des pâtes, poisson");
-
 
     @BeforeAll
     static public void initConfig() throws SQLException {
@@ -41,27 +29,17 @@ class TestMenuDao {
         testUser.setId(1);
         Configuration.getCurrent().setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert(fish);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(meat);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
+        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
 
-        Configuration.getCurrent().getRecipeTypeDao().insert(meal);
-        Configuration.getCurrent().getRecipeTypeDao().insert(simmered);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
+        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
 
-        Configuration.getCurrent().getRecipeDao().insert(bolo);
-        Configuration.getCurrent().getRecipeDao().insert(carbo);
-        Configuration.getCurrent().getRecipeDao().insert(pesto);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.BOLO_RECIPE);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.CARBO_RECIPE);
+        Configuration.getCurrent().getRecipeDao().insert(TestConstante.PESTO_RECIPE);
 
-        menu.addRecipeTo(Day.Monday, bolo);
-        menu.addRecipeTo(Day.Wednesday, carbo);
-        menu.addRecipeTo(Day.Monday,bolo);
-        menu.addRecipeTo(Day.Friday, pesto);
-
-        menu2.addRecipeTo(Day.Monday, carbo);
-        menu2.addRecipeTo(Day.Wednesday, pesto);
-        menu2.addRecipeTo(Day.Monday,pesto);
-        menu2.addRecipeTo(Day.Friday, bolo);
-
-        Configuration.getCurrent().getMenuDao().insert(menu2);
+        Configuration.getCurrent().getMenuDao().insert(TestConstante.MENU_TEST_2);
     }
 
     @AfterAll
@@ -78,11 +56,11 @@ class TestMenuDao {
 
     @Test
     void testInsert() throws SQLException {
-        Configuration.getCurrent().getMenuDao().insert(menu);
+        Configuration.getCurrent().getMenuDao().insert(TestConstante.MENU_TEST_1);
         Menu newMenu = Configuration.getCurrent().getMenuDao().get("Menu Test");
         for(Day day : Day.values()){
             List<Recipe> recipeFromNewMenu = newMenu.getRecipesfor(day);
-            List<Recipe> recipeFromMenu = menu.getRecipesfor(day);
+            List<Recipe> recipeFromMenu = TestConstante.MENU_TEST_1.getRecipesfor(day);
             for(int i = 0; i < recipeFromMenu.size(); i++){
                 assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
                 assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
@@ -99,7 +77,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
@@ -108,7 +86,8 @@ class TestMenuDao {
 
     @Test
     void testUpdate() throws SQLException {
-        menu2.removeRecipeFrom(Day.Friday,bolo);
+        Menu menu2 = TestConstante.MENU_TEST_2;
+        menu2.removeRecipeFrom(Day.Friday,TestConstante.BOLO_RECIPE);
         Configuration.getCurrent().getMenuDao().update(menu2);
         Menu newMenu = Configuration.getCurrent().getMenuDao().get("Menu Test2");
         for(Day day : Day.values()){
@@ -131,7 +110,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }
@@ -143,7 +122,7 @@ class TestMenuDao {
         Menu newMenu = Configuration.getCurrent().getMenuDao().get("Menu Test2");
         for(Day day : Day.values()){
             List<Recipe> recipeFromNewMenu = newMenu.getRecipesfor(day);
-            List<Recipe> recipeFromMenu = menu2.getRecipesfor(day);
+            List<Recipe> recipeFromMenu = TestConstante.MENU_TEST_2.getRecipesfor(day);
             for(int i = 0; i < recipeFromMenu.size(); i++){
                 assertEquals(recipeFromMenu.get(i).getName(),recipeFromNewMenu.get(i).getName());
                 assertEquals(recipeFromMenu.get(i).getDuration(),recipeFromNewMenu.get(i).getDuration());
@@ -160,7 +139,7 @@ class TestMenuDao {
 
                     assertEquals(nextRecipeFromMenuProduct.getName(), nextRecipeFromNewMenuProduct.getName());
                     assertEquals(nextRecipeFromMenuProduct.getNameUnity(), nextRecipeFromNewMenuProduct.getNameUnity());
-                    assertEquals(nextRecipeFromMenuProduct.getFamillyProduct(), nextRecipeFromNewMenuProduct.getFamillyProduct());
+                    assertEquals(nextRecipeFromMenuProduct.getFamilyProduct(), nextRecipeFromNewMenuProduct.getFamilyProduct());
                     assertEquals(nextRecipeFromMenuProduct.getQuantity(), nextRecipeFromNewMenuProduct.getQuantity());
                 }
             }

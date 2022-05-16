@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,10 +26,10 @@ class TestODTCreator {
     @BeforeAll
     static public void createShoppingList() {
         shoppingList =  new ShoppingList(NAME_SHOPPING_LIST);
-        Product testProduct = new Product("Banane", 3, "kg", "Fruits");
-        Product testProduct2 = new Product("Boeuf", 7, "g", "Viande");
-        Product testProduct3 = new Product("Mouton", 7, "g", "Viande");
-        Product testProduct4 = new Product("Dorade", 1, "kg", "Poison");
+        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
+        Product testProduct2 = new Product.ProductBuilder().withName("Boeuf").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+        Product testProduct3 = new Product.ProductBuilder().withName("Mouton").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+        Product testProduct4 = new Product.ProductBuilder().withName("Dorade").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_FISH).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         shoppingList.add(testProduct);
         shoppingList.add(testProduct2);
         shoppingList.add(testProduct3);
@@ -49,17 +50,17 @@ class TestODTCreator {
         ShoppingList shoppingListRead =  odtCreator.readODT(odtReader);
         ArrayList<Product> ShoppingListReadVector = new ArrayList<>(shoppingListRead);
         ArrayList<Product> ShoppingListVector = new ArrayList<>(shoppingList);
-        ShoppingListVector.sort(Comparator.comparing(Product::getFamillyProduct));
-        ShoppingListReadVector.sort(Comparator.comparing(Product::getFamillyProduct));
+        ShoppingListVector.sort(Comparator.comparing(Product::getFamilyProduct));
+        ShoppingListReadVector.sort(Comparator.comparing(Product::getFamilyProduct));
 
 
 
         assertEquals(ShoppingListVector.get(0).getName(),ShoppingListReadVector.get(0).getName());
-        assertEquals(ShoppingListVector.get(0).getFamillyProduct(),
-                ShoppingListReadVector.get(0).getFamillyProduct());
+        assertEquals(ShoppingListVector.get(0).getFamilyProduct(),
+                ShoppingListReadVector.get(0).getFamilyProduct());
         assertEquals(ShoppingListVector.get(1).getName(),ShoppingListReadVector.get(1).getName());
-        assertEquals(ShoppingListVector.get(1).getFamillyProduct(),
-                ShoppingListReadVector.get(1).getFamillyProduct());
+        assertEquals(ShoppingListVector.get(1).getFamilyProduct(),
+                ShoppingListReadVector.get(1).getFamilyProduct());
         odtReader.close();
     }
 }
