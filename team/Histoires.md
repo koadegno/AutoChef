@@ -181,3 +181,42 @@ produit.
  | 9      | 	Ajout et suppresion de recette favoris ui + BD                    |
  | /      | 	Interface : Recettes favoris de l utilisateur                     |
  | 9      | 	Empecher l'user non profe d'entrer plus de quantité qu'il ne peut |
+
+
+### Iteration 4
+
+| /     | BUG quand on modifie un menu (si je veux rajouter un menu a Jeudi ça rajoute a Lundi)                    |
+| ----- | -------------------------------------------------------------------------------------------------------- |
+| 6     | prix d'une liste de course dans un magasin: BDD                                                          |
+| 6     | Consulter la liste des magasins qui contiennent un ensemble de produit sur la map avec prix: UI          |
+| 6     | liste de magasin qui ont les ingredients d'une liste de course : BDD                                     |
+| 6     | Trouver le magasin qui contient une liste de courses au prix le plus bas : BDD                           |
+| 6     | Trouver le magasin le plus proche d'un point de départ qui contient une liste de courses :BDD            |
+| 6     | Mettre en évidence sur la carte le magasin le plus proche qui contient la liste de course : UI           |
+| 6     | Mettre en évidence sur la carte le magasin qui contient la liste de course au prix le plus bas prix : UI |
+| /     | Ergonomie create recipe                                                                                  |
+| /     | Ergonomie en générale 10 faits, reste 13 ( update il reste 7 ( reste 5                                   |
+| /     | Ergonomie home recipe                                                                                    |
+| /     | Ergonomie section d'aide recipe                                                                          |
+| /     | Ergonomie favorite recipe                                                                                |
+| /     | Ergonomie Crée Liste de courses                                                                          |
+| /     | Ergonomie Section aide Liste de courses                                                                  |
+| /     | Ergonomie voir ses Liste de courses                                                                      |
+| /     | Ergonomie Crée Menu                                                                                      |
+| /     | Ergonomie Voir ses Menu                                                                                  |
+| /     | Ergonomie Popup Magasin sur la Map                                                                       |
+| /     | Supprimer les boutons inutiles dans map                                                                  |
+| /     | Ergonomie Map                                                                                            |
+| /     | Ergonomie Section d'aide Map                                                                             |
+| /     | Ergonomie Sign in                                                                                        |
+| /     | Ergonomie Sign up                                                                                        |
+| /     | Refactoring : Map Controller Route                                                                       |
+| /     | Refactoring : Map Controller Location                                                                    |
+| /     | faire un menu pour l'ajout et la modif de magasin                                                        |
+| /     | Refactoring: Map View Controller                                                                         |
+| /     | Refactoring : Create Recipe controller                                                                   |
+| /     | Refactoring : Favorite Recipe controller                                                                 |
+| /     | Qualité de Code: Utiliser Design Pattern du Builder pour Recipe ?                                        |
+| /     | Qualité de Code: Utiliser Design Pattern du Builder pour Product ?                                       |
+| /     | fix bugs                                                                                                 |
+| /<br> | bug message d'erreur                                                                                     |
