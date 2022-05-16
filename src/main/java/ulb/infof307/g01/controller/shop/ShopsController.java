@@ -66,7 +66,7 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     @Override
     public void onShopTableViewClicked(String shopName) {
-        if(!shopName.isEmpty() && !shopName.isBlank()){
+        if(shopName != null && !shopName.isEmpty() && !shopName.isBlank()){
             try {
                 Shop shop = getShop(shopName);
                 ShopController shopController = new ShopController(true);
