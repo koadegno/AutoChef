@@ -136,7 +136,7 @@ public class RouteService{
                         routeGraphic.setGeometry(route.getRouteGeometry());
 
                         // Affiche la durée et la distance de l'itinéraire calculé
-                        // calcul du temps en vélo
+                        // calcul du temps à vélo
                         totalTime = Math.round(route.getTotalTime());
                         totalTimeBike = Math.round(route.getTotalTime() / TIME_BY_BIKE);
                         totalLength = Math.round(route.getTotalLength());

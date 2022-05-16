@@ -1,6 +1,7 @@
 package ulb.infof307.g01.view.map;
 
 import com.esri.arcgisruntime.ArcGISRuntimeEnvironment;
+import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.ArcGISMap;
 import com.esri.arcgisruntime.mapping.BasemapStyle;
@@ -22,28 +23,28 @@ import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
+
+import static ulb.infof307.g01.controller.map.MapConstants.*;
 
 /**
  * La classe gère la vue pour l'affichage de la carte
  */
 
 public class MapViewController extends ViewController<MapViewController.Listener> implements Initializable  {
-
-    public static final double LATITUDE_BRUSSELS = 50.85045;
-    public static final double LONGITUDE_BRUSSELS = 5.34878;
-    public static final double MAP_SCALE = 4000000.638572;
-    // TODO: CONTEXT MENU DANS FXML ?
     private final ContextMenu contextMenu = new ContextMenu();
     private final MenuItem deleteItineraryItem = new MenuItem("Supprimer itinéraire");
     private final MenuItem itineraryShopMenuItem = new MenuItem("Itinéraire");
-    public Label timeFeetLabel;
-    public Label timeBikeLabel;
-    public Label lengthLabel;
+
     private final GraphicsOverlay shopGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay shopGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsTextOverlay = new GraphicsOverlay();
     private final GraphicsOverlay itineraryGraphicsCircleOverlay = new GraphicsOverlay();
     private final GraphicsOverlay addressGraphicsOverlay = new GraphicsOverlay();
+
+    public Label timeFeetLabel;
+    public Label timeBikeLabel;
+    public Label lengthLabel;
     private MapView mapView;
     @FXML
     private Pane mapViewStackPane;
@@ -55,17 +56,13 @@ public class MapViewController extends ViewController<MapViewController.Listener
     private MenuBar appMenuBar;
     @FXML
     private Menu searchShopNameMenu;
+
     private Double currentCursorPosX;
     private Double currentCursorPosY;
-    static final int SIZE = 10;
-
-
 
     private void initializeMap(){
         mapView = new MapView();
-        //TODO trouver un meilleur moyen de mettre la clé
-        String yourApiKey = "AAPK7d69dbea614548bdb8b6096b100ce4ddBX61AYZWAVLJ-RF_EEw68FrqS-y9ngET8KMzms5ZERiMTtShQeDALmWawO0LcM1S";
-        ArcGISRuntimeEnvironment.setApiKey(yourApiKey);
+        ArcGISRuntimeEnvironment.setApiKey(MapConstants.API_KEY);
         ArcGISMap map = new ArcGISMap(BasemapStyle.ARCGIS_NAVIGATION);
         mapView.setMap(map);
         mapView.setViewpoint(new Viewpoint(LATITUDE_BRUSSELS, LONGITUDE_BRUSSELS, MAP_SCALE));
@@ -76,6 +73,19 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.getGraphicsOverlays().add(itineraryGraphicsTextOverlay);
     }
 
+    private List<Graphic> getItineraryGraphicsCircleList(){ return itineraryGraphicsCircleOverlay.getGraphics();}
+
+    private List<Graphic> getItineraryGraphicsTextList(){
+        return itineraryGraphicsTextOverlay.getGraphics();
+    }
+
+    private List<Graphic> getShopGraphicsCircleList(){
+        return shopGraphicsCircleOverlay.getGraphics();
+    }
+
+    private List<Graphic> getShopGraphicsTextList(){
+        return shopGraphicsTextOverlay.getGraphics();
+    }
 
     /**
      * Cherche les magasins sur la carte avec le bon nom entré
@@ -117,10 +127,12 @@ public class MapViewController extends ViewController<MapViewController.Listener
         // rajoute les cercles créés au bon overlay
 
         if (isShop) {
-            addShopGraphics(circlePoint,textPoint);
+            shopGraphicsCircleOverlay.getGraphics().add(circlePoint);
+            shopGraphicsTextOverlay.getGraphics().add(textPoint);
         }
         else {
-            addItineraryGraphics(circlePoint,textPoint);
+            getItineraryGraphicsCircleList().add(circlePoint);
+            getItineraryGraphicsTextList().add(textPoint);
         }
     }
 
@@ -160,10 +172,10 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
             switchVisibilityContextMenu();
 
-            // sélectionne un point avec un simple clique droit ? je suis sûre que tu as voulu dire "gauche " TODO:
+            // sélectionne un point avec un simple clique droit ? je suis sûre que tu as voulu dire "gauche "
             if (mouseEvent.getButton() == MouseButton.PRIMARY) {
                 shopGraphicsCircleOverlay.clearSelection();
-                listener.highlightGraphicPoint(currentCursorPosX,currentCursorPosY,mapView,shopGraphicsCircleOverlay);
+                highlightGraphicPoint();
             }
         });
     }
@@ -204,7 +216,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
         else itineraryShopMenuItem.setText("Itinéraire");
     }
 
-
     /**
      * Initialisation du Contexte menu et action possible sur celui ci
      */
@@ -225,7 +236,9 @@ public class MapViewController extends ViewController<MapViewController.Listener
 
             listener.onDeleteItineraryClicked(getItineraryGraphicsCircleList(),getItineraryGraphicsTextList());
             if(getItineraryGraphicsCircleList().isEmpty()){
-                deleteItineraryInformation();
+                timeBikeLabel.setText("");
+                timeFeetLabel.setText("");
+                lengthLabel.setText("");
 
             }
         });
@@ -249,8 +262,7 @@ public class MapViewController extends ViewController<MapViewController.Listener
      * @return le cercle sélectionné
      */
     private Graphic getSelectedShop(){
-        List<Graphic> shopGraphicsCircleList = getShopGraphicsCircleList();
-        for (Graphic circlePointOnMap : shopGraphicsCircleList) {
+        for (Graphic circlePointOnMap : getShopGraphicsCircleList()) {
             if (circlePointOnMap.isSelected()) {
                 return circlePointOnMap;
             }
@@ -274,31 +286,30 @@ public class MapViewController extends ViewController<MapViewController.Listener
         return mapView.screenToLocation(cursorPoint2D);
     }
 
-    private void deleteItineraryInformation(){
-        timeBikeLabel.setText("");
-        timeFeetLabel.setText("");
-        lengthLabel.setText("");
-    }
+    /**
+     * Met en evidence un point sur la carte
+     */
+    public void highlightGraphicPoint() {
+        Point2D mapViewPoint = new Point2D(currentCursorPosX, currentCursorPosY);
+        ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = mapView.identifyGraphicsOverlayAsync(
+                shopGraphicsCircleOverlay,
+                mapViewPoint, MapConstants.SIZE, false, MapConstants.MAX_RESULT);
 
+        graphicsOverlayAsyncIdentified.addDoneListener(() -> {
+            try {
+                // récupère la liste d'objet graphic retournée par graphicsOverlayAsyncIdentified
+                List<Graphic> identifiedGraphics = graphicsOverlayAsyncIdentified.get().getGraphics();
+                if (!identifiedGraphics.isEmpty()) {
+                    identifiedGraphics.get(0).setSelected(true);
+                }
+            } catch (InterruptedException | ExecutionException ex) {
+                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
+            }
+        });
+    }
 
     @FXML
     public void returnMainMenu() {listener.onBackButtonClicked();}
-
-    private List<Graphic> getItineraryGraphicsCircleList(){
-        return itineraryGraphicsCircleOverlay.getGraphics();
-    }
-
-    private List<Graphic> getItineraryGraphicsTextList(){
-        return itineraryGraphicsTextOverlay.getGraphics();
-    }
-
-    private List<Graphic> getShopGraphicsCircleList(){
-        return shopGraphicsCircleOverlay.getGraphics();
-    }
-
-    private List<Graphic> getShopGraphicsTextList(){
-        return shopGraphicsTextOverlay.getGraphics();
-    }
 
     @FXML
     public void initReadOnlyMode() {
@@ -316,16 +327,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
         mapView.setViewpointCenterAsync(displayLocation);
     }
 
-    public void addShopGraphics(Graphic circlePoint,Graphic textPoint) {
-        shopGraphicsCircleOverlay.getGraphics().add(circlePoint);
-        shopGraphicsTextOverlay.getGraphics().add(textPoint);
-    }
-
-    public void addItineraryGraphics(Graphic circlePoint, Graphic textPoint) {
-        getItineraryGraphicsCircleList().add(circlePoint);
-        getItineraryGraphicsTextList().add(textPoint);
-    }
-
     public interface Listener {
         void onSearchShop(String shopName, List<Graphic> mapTextGraphics, List<Graphic> mapCercleGraphics);
         boolean onSearchAddress(String address, List<Graphic> addressGraphicsOverlay);
@@ -334,7 +335,6 @@ public class MapViewController extends ViewController<MapViewController.Listener
         void onDeleteItineraryClicked(List<Graphic> itineraryGraphicsCercleList, List<Graphic> itineraryGraphicsTextList);
         void helpMapClicked();
         void logout();
-        void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay);
     }
 }
 

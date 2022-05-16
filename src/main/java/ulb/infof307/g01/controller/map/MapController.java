@@ -204,31 +204,7 @@ public class MapController extends Controller implements MapViewController.Liste
         }
     }
 
-    /**
-     * Met en evidence un point sur la carte
-     *
-     * @param mouseX La position en X de la souris
-     * @param mouseY La position en Y de la souris
-     */
-    @Override
-    public void highlightGraphicPoint(double mouseX, double mouseY, MapView mapView, GraphicsOverlay shopGraphicOverlay) {
-        Point2D mapViewPoint = new Point2D(mouseX, mouseY);
-        ListenableFuture<IdentifyGraphicsOverlayResult> graphicsOverlayAsyncIdentified = mapView.identifyGraphicsOverlayAsync(
-                shopGraphicOverlay,
-                mapViewPoint, MapConstants.SIZE, false, 1);
 
-        graphicsOverlayAsyncIdentified.addDoneListener(() -> {
-            try {
-                // récupère la liste d'objet graphic retournée par graphicsOverlayAsyncIdentified
-                List<Graphic> identifiedGraphics = graphicsOverlayAsyncIdentified.get().getGraphics();
-                if (!identifiedGraphics.isEmpty()) {
-                    identifiedGraphics.get(0).setSelected(true);
-                }
-            } catch (InterruptedException | ExecutionException ex) {
-                ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
-            }
-        });
-    }
 
     /**
      * Recherche les coordonnées et les infos complètes qui correspond le mieux à l'adresse
