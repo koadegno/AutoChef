@@ -32,8 +32,11 @@
       <children>
          <TableView fx:id="menuTableView"  onMouseClicked="#onMenuTableViewClicked" prefHeight="278.0" prefWidth="548.0">
            <columns>
-             <TableColumn fx:id="menuTableColumn" prefWidth="547.0" text="Mes menus" />
+             <TableColumn fx:id="menuTableColumn" prefWidth="547.0" text="Mes menus" style="-fx-background-color: #915F6D;" />
            </columns>
+            <columnResizePolicy>
+               <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+            </columnResizePolicy>
          </TableView>
       </children>
    </HBox>

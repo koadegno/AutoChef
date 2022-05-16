@@ -37,6 +37,8 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
      * */
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        menuTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+
     }
 
 
@@ -61,7 +63,6 @@ public class UserMenusViewController extends ViewController<UserMenusViewControl
     }
 
     public void fillMenuTableView(ArrayList<Menu> menus) {
-        menuTableColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         menuTableView.getItems().addAll(menus);
     }
 
