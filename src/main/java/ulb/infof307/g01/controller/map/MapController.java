@@ -85,7 +85,6 @@ public class MapController extends Controller implements MapViewController.Liste
 
         try {
             if(readOnlyMode){
-                System.out.println("here");
                 viewController.initReadOnlyMode();
             }
             else{

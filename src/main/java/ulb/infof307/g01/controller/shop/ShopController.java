@@ -86,7 +86,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
     public boolean onSaveShopClicked(String shopName, String shopAddress) throws SQLException {
         boolean isSaved = true;
         try {
-            System.out.println(viewController.getTableViewShopItems());
             addAllWrappedProduct(viewController.getTableViewShopItems());
             shop.setName(shopName);
             shop.setAddress(shopAddress);
@@ -96,13 +95,19 @@ public class ShopController extends Controller implements ShopViewController.Lis
                 listener.update();
             }
             else {
-                shopDao.insert(shop);
+                if(shopDao.get(shop.getName(), shop.getCoordinate()) == null){
+                    shopDao.insert(shop);
+                }
+                else {
+                    viewController.showErrors();
+                    isSaved = false;
+                }
             }
         }
         catch (NullPointerException e) {
             e.printStackTrace();
             ViewController.showAlert(Alert.AlertType.ERROR, "L'adresse entrer n'existe pas", "");
-            return !isSaved;
+            return false;
         }
         return isSaved;
     }
@@ -112,7 +117,6 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void fillTableViewShop() {
-        System.out.println(shop.toString());
         List<ShopViewController.ProductWrapper> productList = shop.stream().map(product -> new ShopViewController.ProductWrapper(product.getName(),product.getPrice())).toList();
         viewController.getTableViewShopItems().addAll(productList);
     }
@@ -155,13 +159,14 @@ public class ShopController extends Controller implements ShopViewController.Lis
      */
     @Override
     public void displayHelpShop() {
-        int numberOfImageHelp = 14;
+        int numberOfImageHelp = 8;
         HelpController helpController = new HelpController("helpShop/", numberOfImageHelp);
         helpController.displayHelpShop();
     }
 
     @Override
     public boolean deleteShop() {
+        if(!isModifying)return false;
         boolean isDelete = false;
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer magasin ?", "Etes vous sur de vouloir supprimer ce magasin");
         if (alertResult == ButtonType.OK ) {

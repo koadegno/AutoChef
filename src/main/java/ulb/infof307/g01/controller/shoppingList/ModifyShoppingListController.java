@@ -135,7 +135,7 @@ public class ModifyShoppingListController extends ShoppingListController {
     }
 
     public void helpModifyShoppingList(){
-    int numberOfImageHelp = 12;
+    int numberOfImageHelp = 9;
     String directory = "helpModifyShoppingList/";
 
     HelpController helpController = new HelpController(directory, numberOfImageHelp);

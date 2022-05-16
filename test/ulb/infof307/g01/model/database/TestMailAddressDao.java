@@ -66,7 +66,6 @@ class TestMailAddressDao {
     void insertForUserDuplicateAddress() throws SQLException {
         Configuration.getCurrent().getMailAddressDao().insert(mail1,USER_ID);
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-        System.out.println(favorisMail);
         assertEquals(++numberFavoriteMail,favorisMail.size());
         assertEquals(mail1,favorisMail.get(0));
     }

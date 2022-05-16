@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+import org.json.simple.JSONArray;
 
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
@@ -13,7 +16,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.model.export.JSON;
 
 /**
  * Test de la classe JSON
@@ -53,17 +55,31 @@ class TestJSON {
         fileJSON.flush();
     }
 
-//    @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
-//    static public void createJSONProduct() throws IOException {
-//        JSONObject product = new JSONObject();
-//        product.put("Nom", "testProduit");
-//        product.put("FamilleAliment", "soupes");
-//        product.put("Unite", "l");
-//
-//        FileWriter fileJSON = new FileWriter(fileNameProduct);
-//        fileJSON.write(product.toJSONString());
-//        fileJSON.flush();
-//    }
+    @BeforeAll
+     static public void createJSONProduct() throws IOException {
+        JSONObject job = new JSONObject();
+        JSONArray jab = new JSONArray();
+
+        Map<String,String> m1 = new LinkedHashMap<>(4);
+        m1.put("Unite", "l");
+        m1.put("FamilleAliment", "soupes");
+        m1.put("Nom", "miam2");
+        jab.add(m1);
+
+        m1 = new LinkedHashMap<>(4);
+        m1.put("Unite", "l");
+        m1.put("FamilleAliment", "soupes");
+        m1.put("Nom", "miam");
+
+        jab.add(m1);
+        job.put("Liste",jab);
+
+        FileWriter fileJSON = new FileWriter(fileNameProduct);
+        fileJSON.write(job.toJSONString());
+        fileJSON.flush();
+        fileJSON.close();
+
+    }
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {

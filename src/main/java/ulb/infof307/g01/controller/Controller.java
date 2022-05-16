@@ -69,12 +69,10 @@ public abstract class Controller {
     protected Stage popupFXML(String filename, ViewController controller) throws IOException {
         Stage popup = new Stage();
         popup.initModality(Modality.APPLICATION_MODAL);
-        System.out.println("Mon erreur : " + ViewController.class.getResource(filename));
         FXMLLoader loader= new FXMLLoader(Objects.requireNonNull(ViewController.class.getResource(filename)));
         loader.setController(controller);
         popup.setScene(new Scene(loader.load()));
         popup.show();
-
         return popup;
     }
 
