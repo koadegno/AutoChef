@@ -70,7 +70,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
 
     @Override
     public void onHelpUserMenusClicked() {
-        int numberOfImageHelp = 6;
+        int numberOfImageHelp = 3;
         HelpController helpController = new HelpController("helpUserMenu/", numberOfImageHelp);
         helpController.displayHelpShop();
     }
