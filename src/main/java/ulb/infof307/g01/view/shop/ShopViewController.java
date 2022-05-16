@@ -104,6 +104,11 @@ public class ShopViewController extends ViewController<ShopViewController.Listen
         }
 
     }
+    public void showErrors(){
+        setNodeColor(addressShopTextField, true);
+        setNodeColor(nameShopTextField, true);
+    }
+
 
     private void closePopUp() {
         Stage stage = (Stage) vBox.getScene().getWindow();
