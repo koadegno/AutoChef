@@ -11,6 +11,7 @@ ulb.infof307.g01.controller.shoppingList
 ulb.infof307.g01.model
 ulb.infof307.g01.model.database
 ulb.infof307.g01.model.database.dao
+ulb.infof307.g01.model.exception
 ulb.infof307.g01.model.export
 ulb.infof307.g01.view
 ulb.infof307.g01.view.connexion
