@@ -76,9 +76,6 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
 
 
     public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
-        comboBoxShoppingNameList.setVisible(false);
-        btnSeeShoppingList.setVisible(false);
-        btnSeeShoppingListOnMap.setVisible(false);
         Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);
@@ -89,6 +86,9 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         });
 
 
+        comboBoxShoppingNameList.setVisible(false);
+        btnSeeShoppingList.setVisible(false);
+        btnSeeShoppingListOnMap.setVisible(false);
         btnExportShoppingList.setVisible(false);
         btnSendMail.setVisible(false);
         helpMenuShoppingList.setVisible(false);
