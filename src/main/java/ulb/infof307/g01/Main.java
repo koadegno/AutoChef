@@ -12,7 +12,7 @@ public class Main  {
     public static void main(String[] args) {
 
         String path = Main.class.getProtectionDomain().getCodeSource().getLocation().getPath();
-        path = path.replace("g01-iteration-3.jar", "jniLibs/");
+        path = path.replace("g01-iteration-4.jar", "jniLibs/");
 
         ArcGISRuntimeEnvironment.setInstallDirectory(path);
         Autochef app = new Autochef();

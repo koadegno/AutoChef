@@ -145,6 +145,6 @@ tasks.withType(JavaCompile) {
 
 tasks.withType(Jar) {
     destinationDirectory.set(file("$rootDir/dist"))
-    archivesBaseName = 'g01-iteration-3'
+    archivesBaseName = 'g01-iteration-4'
     archiveClassifier = ''
 }
