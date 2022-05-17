@@ -3,7 +3,6 @@ package ulb.infof307.g01.model.export;
 import javafx.scene.control.Alert;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.exception.PDFException;
-import ulb.infof307.g01.model.export.PDFCreator;
 import ulb.infof307.g01.view.ViewController;
 
 import javax.activation.*;
@@ -15,8 +14,8 @@ import java.util.Properties;
  * Classe permettant d'envoyer la liste de course en PDF par Mail, utilise la librairie {@link javax.mail}.
  */
 public class Mail {
-    private final static String defaultAddress = "autochef@outlook.fr";
-    private final static String defaultAddressPassword = "43fZ5LD4gEJk74B";
+    private final static String DEFAULT_ADDRESS = "autochef@outlook.fr";
+    private final static String DEFAULT_ADDRESS_PASSWORD = "43fZ5LD4gEJk74B";
 
     private final static String SMTP_SERVER = "smtp-mail.outlook.com";
     private final static int SMTP_PORT = 587;
@@ -56,7 +55,7 @@ public class Mail {
         session = Session.getDefaultInstance(properties, new Authenticator() {
             @Override
             protected PasswordAuthentication getPasswordAuthentication() {
-                return new PasswordAuthentication(defaultAddress, defaultAddressPassword);
+                return new PasswordAuthentication(DEFAULT_ADDRESS, DEFAULT_ADDRESS_PASSWORD);
             }
         });
     }
@@ -72,7 +71,7 @@ public class Mail {
     private Message composeMessage(String recipientAddress, ShoppingList shoppingListToSend, String subject, String mailTextBody) throws AddressException, MessagingException {
         Message message = new MimeMessage(session);
 
-        message.setFrom(new InternetAddress(defaultAddress));
+        message.setFrom(new InternetAddress(DEFAULT_ADDRESS));
         message.addRecipient(Message.RecipientType.TO, new InternetAddress(recipientAddress));
 
         message.setSubject(subject);

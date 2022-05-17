@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.export;
 
+import org.jetbrains.annotations.NotNull;
 import org.odftoolkit.odfdom.doc.OdfTextDocument;
 import org.odftoolkit.odfdom.dom.element.office.OfficeTextElement;
 import org.w3c.dom.Node;
@@ -14,6 +15,8 @@ import java.util.*;
  */
 public class ODTCreator {
 
+    public static final String LISTE_DE_COURSE_TITLE = "Liste de course : ";
+
     /**
      * Crée un fichier ODT à partir d'une liste de course
      * @param shoppingList la liste de course
@@ -25,7 +28,7 @@ public class ODTCreator {
         List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
         sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
         String nameFamilyProduct = sortedShoppingList.get(0).getFamilyProduct();
-        writeODT(odt,"Liste de course : "+shoppingList.getName()+"\n");
+        writeODT(odt, LISTE_DE_COURSE_TITLE +shoppingList.getName()+"\n");
         writeODT(odt, nameFamilyProduct+" : ");
 
         for (Product product : sortedShoppingList) {
@@ -40,7 +43,7 @@ public class ODTCreator {
         odt.close();
     }
 
-    private static void writeODT(OdfTextDocument odt, String string) throws Exception {
+    private static void writeODT(@NotNull OdfTextDocument odt,@NotNull  String string) throws Exception {
         String stringToWrite = String.format("%s", string);
         odt.newParagraph().addContentWhitespace(stringToWrite);
     }
@@ -49,11 +52,10 @@ public class ODTCreator {
      * Parcours les enfants du fichier XML lié au fichier ODT et récupère les zones de text
      * @param odtDocument le fichier ODT
      * @return ShoppingList est une liste de course
-     * @throws Exception erreur ?
+     * @throws Exception si l'ouverture du fichier XML n'a pas pu se faire
      */
-    ShoppingList readODT(OdfTextDocument odtDocument) throws Exception {
+    ShoppingList readODT(@NotNull OdfTextDocument odtDocument) throws Exception {
         ShoppingList shoppingList = new ShoppingList(odtDocument.getDocumentPath());
-
         OfficeTextElement contentRoot = odtDocument.getContentRoot();
         NodeList nodes = contentRoot.getChildNodes();
         String familyProduct= null;
@@ -73,24 +75,33 @@ public class ODTCreator {
                     // corresponds a une ligne de texte avec la famille
                     else if(nodeList.item(j).getNodeName().equals("#text")){
                         familyProduct = nodeList.item(j).getNodeValue();
-                        if(familyProduct.contains("Liste de course")){
+                        if(familyProduct.contains(LISTE_DE_COURSE_TITLE)){ // on est sur le titre de la page
                             continue;
                         }
                         familyProduct = familyProduct.replace(":","").strip();
-                  }
+                    }
                     if(createProduct){ // permet de savoir quand cree un produit
-                        String[] productElementArray = productElements.split(" ");
-                        String nameUnity = productElementArray[2];
-                        int quantity = Integer.parseInt(productElementArray[1]);
-                        String name = productElementArray[0];
-                        shoppingList.add(new Product.ProductBuilder().withName(name).withQuantity(quantity).withNameUnity(nameUnity).withFamilyProduct(familyProduct).build());
+                        addProduct(shoppingList, familyProduct, productElements);
                         createProduct = false;
                     }
-
                 }
             }
         }
 
         return shoppingList;
+    }
+
+    /**
+     * ajoute un produit à la liste de course
+     * @param shoppingList une liste de course
+     * @param familyProduct la famille du produit
+     * @param productElements l'élément XML qui contient le nom du produit
+     */
+    private void addProduct(@NotNull ShoppingList shoppingList, String familyProduct, @NotNull String productElements) {
+        String[] productElementArray = productElements.split(" ");
+        String nameUnity = productElementArray[2];
+        int quantity = Integer.parseInt(productElementArray[1]);
+        String name = productElementArray[0];
+        shoppingList.add(new Product.ProductBuilder().withName(name).withQuantity(quantity).withNameUnity(nameUnity).withFamilyProduct(familyProduct).build());
     }
 }
