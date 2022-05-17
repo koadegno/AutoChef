@@ -84,7 +84,7 @@ public class MenuDao extends Database implements Dao<Menu> {
 
     @Override
     public void insert(Menu menu) throws SQLException {
-        String[] values = {"null",String.format("'%s'",menu.getName()),String.format("%d",menu.getNbOfdays())};
+        String[] values = {"null",String.format("'%s'",menu.getName()),String.format("%d",Menu.NB_OF_DAYS)};
         insert(MENU_TABLE_NAME,values);
         int id = getGeneratedID();
         insertRecipesInMenu(menu, id);

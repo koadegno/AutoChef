@@ -10,7 +10,7 @@ import java.util.*;
 public class Menu {
 
     private String name;
-    private static final int NB_OF_DAYS = 7;
+    public static final int NB_OF_DAYS = 7;
     private List<List<Recipe>> menu = new ArrayList<>(NB_OF_DAYS);
 
     public Menu(String name) {
@@ -44,7 +44,6 @@ public class Menu {
         return size;
     }
 
-    public int getNbOfdays() { return NB_OF_DAYS;}
 
     /** @see Day
      * @see Recipe
@@ -171,16 +170,17 @@ public class Menu {
     @Override
     public String toString(){return name;}
 
-    public String toStringTest(){
-        StringBuilder toReturn = new StringBuilder(this.name + ": \n");
-        for(List<Recipe> vector : menu){
-            toReturn.append("\t");
-            for(Recipe recipe: vector){
-                toReturn.append(recipe.getName()).append(" - ");
-            }
-            toReturn.append("\n");
-        }
-
-        return toReturn.toString();
-        }
+    // Utilisé dans les tests et lors des bug
+//    public String toStringTest(){
+//        StringBuilder toReturn = new StringBuilder(this.name + ": \n");
+//        for(List<Recipe> vector : menu){
+//            toReturn.append("\t");
+//            for(Recipe recipe: vector){
+//                toReturn.append(recipe.getName()).append(" - ");
+//            }
+//            toReturn.append("\n");
+//        }
+//
+//        return toReturn.toString();
+//        }
 }
