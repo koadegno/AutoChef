@@ -171,7 +171,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                ViewController.showErrorSQL();
             }
         }
         else if (addressPosition != null){
