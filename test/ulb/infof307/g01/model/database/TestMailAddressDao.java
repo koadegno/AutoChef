@@ -31,12 +31,12 @@ class TestMailAddressDao {
 
     @BeforeAll
     static public void setUp() throws SQLException {
+        Configuration.getCurrent().setCurrentUser(basicUser);
         Configuration.getCurrent().setDatabase(databaseName);
         Configuration.getCurrent().getUserDao().insert(basicUser);
         Configuration.getCurrent().getMailAddressDao().insert(mail1);
         Configuration.getCurrent().getMailAddressDao().insert(mail2);
-        Configuration.getCurrent().getMailAddressDao().insert(FAVORIS_MAIL,USER_ID);
-        Configuration.getCurrent().setCurrentUser(basicUser);
+        Configuration.getCurrent().getMailAddressDao().insertUserMail(FAVORIS_MAIL);
     }
 
     @AfterAll
@@ -55,7 +55,7 @@ class TestMailAddressDao {
 
     @Test
     void insertForUser() throws SQLException {
-        Configuration.getCurrent().getMailAddressDao().insert(FAVORIS_MAIL2,USER_ID);
+        Configuration.getCurrent().getMailAddressDao().insertUserMail(FAVORIS_MAIL2);
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
         assertEquals(++numberFavoriteMail ,favorisMail.size());
         assertEquals(FAVORIS_MAIL,favorisMail.get(0));
@@ -64,7 +64,7 @@ class TestMailAddressDao {
 
     @Test
     void insertForUserDuplicateAddress() throws SQLException {
-        Configuration.getCurrent().getMailAddressDao().insert(mail1,USER_ID);
+        Configuration.getCurrent().getMailAddressDao().insertUserMail(mail1);
         List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
         assertEquals(++numberFavoriteMail,favorisMail.size());
         assertEquals(mail1,favorisMail.get(0));

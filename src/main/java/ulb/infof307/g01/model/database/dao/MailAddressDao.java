@@ -16,7 +16,7 @@ public class MailAddressDao extends Database implements Dao<String> {
     public static final String TABLE_USER_MAIL_ADDRESS = "UtilisateurMailFavoris";
 
 
-    //TODO MODIFIER STRING Pour mettre une classe Adresse mail ! si besoin
+    //TODO: MODIFIER STRING Pour mettre une classe Adresse mail ! si besoin
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -40,22 +40,29 @@ public class MailAddressDao extends Database implements Dao<String> {
     }
 
     /**
-     * insert une adresse mail dans la base de donnée
+     * insertUserMail une adresse mail dans la base de donnée
      * @param mailAddressName l'adresse mail a inséré
      * @throws SQLException erreur liée à de la requête
      */
     @Override
     public void insert(String mailAddressName) throws SQLException {
-        insert(TABLE_MAIL_ADDRESS, new String[]{"null",String.format("'%s'",mailAddressName)});
+        int mailIndexInPreparedStatement = 1;
+        String query = String.format("""
+            INSERT INTO %s values (null, ?);
+            """,TABLE_MAIL_ADDRESS);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(mailIndexInPreparedStatement,mailAddressName);
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
      * Insert une adresse mail pour un utilisateur spécifique
+     *
      * @param mailAddressName l'addresse mail a inséré
-     * @param userID l'id de l'utilisateur
      * @throws SQLException exception lié à la base de donnée
      */
-    public void insert(String mailAddressName,int userID) throws SQLException{
+    public void insertUserMail(String mailAddressName) throws SQLException{
         int mailID;
         try{
             insert(mailAddressName);
@@ -64,7 +71,13 @@ public class MailAddressDao extends Database implements Dao<String> {
         } catch (SQLException e) {// cas ou adresse mail multiple dans la db
             mailID = Integer.parseInt(get(mailAddressName));
         }
-        insert(TABLE_USER_MAIL_ADDRESS, new String[]{String.valueOf(userID),String.valueOf(mailID)});
+        String query = String.format("""
+            INSERT INTO %s values (%s, %s);
+            """,TABLE_USER_MAIL_ADDRESS,getUserID(),mailID);
+        System.out.println(query);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            sendQueryUpdate(statement);
+        }
     }
 
     @Override

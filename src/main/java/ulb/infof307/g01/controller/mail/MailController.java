@@ -126,7 +126,7 @@ public class MailController extends Controller implements MailViewController.Lis
             try {
                 if(isSave){ //Enregistre le mail favorite dans la bdd
                     int userID = Configuration.getCurrent().getCurrentUser().getId();
-                    Configuration.getCurrent().getMailAddressDao().insert(newMail, userID);
+                    Configuration.getCurrent().getMailAddressDao().insertUserMail(newMail);
                     this.initComboboxFavoriteMail();
                 }
                 else{

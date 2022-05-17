@@ -6,6 +6,7 @@ import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -17,7 +18,8 @@ import java.util.List;
 public class MenuDao extends Database implements Dao<Menu> {
 
     public static final String MENU_TABLE_NAME = "Menu";
-    public static int UserID = 0;
+    public static final String  MENU_RECIPE_TABLE_NAME = "MenuRecette";
+    public static final String  MENU_USER_TABLE_NAME = "UtilisateurMenu";
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -34,8 +36,12 @@ public class MenuDao extends Database implements Dao<Menu> {
             List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int recipeID = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
-                String[] values = {String.format("%d",menuID),String.format("%d",day.getIndex()),String.format("%d",hour),String.format("%d",recipeID)};
-                insert("MenuRecette",values);
+                String query = String.format("""
+                    INSERT INTO %s values (%s,%s,%s,%s);
+                """,MENU_RECIPE_TABLE_NAME, menuID,day.getIndex(),hour,recipeID);
+                try (PreparedStatement statement = connection.prepareStatement(query)) {
+                    sendQueryUpdate(statement);
+                }
             }
         }
     }
@@ -84,14 +90,30 @@ public class MenuDao extends Database implements Dao<Menu> {
 
     @Override
     public void insert(Menu menu) throws SQLException {
-        String[] values = {"null",String.format("'%s'",menu.getName()),String.format("%d",menu.getNbOfdays())};
-        insert(MENU_TABLE_NAME,values);
-        int id = getGeneratedID();
-        insertRecipesInMenu(menu, id);
-        String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getId()), String.valueOf(id)};
-        insert("UtilisateurMenu", userValues);
+        insertMenu(menu);
+        int menuID = getGeneratedID();
+        insertRecipesInMenu(menu, menuID);
+        insertUserMenu(menuID);
+    }
 
+    private void insertUserMenu(int menuID) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (%s,%s);
+            """,MENU_USER_TABLE_NAME, getUserID(), menuID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            sendQueryUpdate(statement);
+        }
+    }
 
+    private void insertMenu(Menu menu) throws SQLException {
+        int nameIndexInPrepared = 1;
+        String query = String.format("""
+            INSERT INTO %s values (null, ?,%s);
+            """,MENU_TABLE_NAME, menu.getNbOfdays());
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPrepared, menu.getName()); //le nom est entrée par l utilisateur
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
@@ -110,8 +132,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         }
         else {
             insertRecipesInMenu(menu, menuID);
-            String[] userValues = {String.valueOf(Configuration.getCurrent().getCurrentUser().getId()), String.valueOf(menuID)};
-            insert("UtilisateurMenu", userValues);
+            insertUserMenu(menuID);
         }
     }
 

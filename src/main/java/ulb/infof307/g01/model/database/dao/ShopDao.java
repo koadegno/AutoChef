@@ -19,7 +19,6 @@ import java.util.List;
  * Classe d'accès à la base de données pour les données concernant les magasins
  */
 public class ShopDao extends Database implements Dao<Shop> {
-
     public static final int SHOP_ID_INDEX = 1;
     public static final int SHOP_NAME_INDEX = 2;
     public static final int SHOP_ADDRESS_INDEX = 3;
@@ -74,7 +73,6 @@ public class ShopDao extends Database implements Dao<Shop> {
         }
     }
 
-
     /**
      * Methode rustique de mise a jour supprimer l'ancienne valeur et
      * ajout la nouvelle modifié
@@ -86,7 +84,6 @@ public class ShopDao extends Database implements Dao<Shop> {
         delete(shop);
         insert(shop);
     }
-
 
     /**
      * récupérer tous les magasins
@@ -146,7 +143,6 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     }
 
-
     /**
      * Rêquete pour avoir les magasins possendant toutes les ingredients d'une liste de course
      * @param shoppingList
@@ -164,9 +160,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         GROUP BY MI.MagasinID
                                         HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
                                         """, shoppingListID, shoppingListID);
-
         return fillAllShopsWithProducts(getShopsList(query));
-
     }
 
     /**
@@ -254,10 +248,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         return totalPrice;
     }
 
-
     // TOOLS
-
-
     @NotNull
     private List<Shop> fillAllShopsWithProducts(List<Shop> shops) throws SQLException {
         for(Shop shop: shops){
@@ -341,7 +332,6 @@ public class ShopDao extends Database implements Dao<Shop> {
             }
         }
     }
-
 
     /**
      * Insert un magasin dans la table magasin

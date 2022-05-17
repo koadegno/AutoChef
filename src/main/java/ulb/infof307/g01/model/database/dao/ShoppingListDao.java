@@ -45,7 +45,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     }
 
     /**
-     * insert une liste de course dans la base de donnée
+     * insertUserMail une liste de course dans la base de donnée
      * @param shoppingList liste de course à insérer
      * @throws SQLException erreur liée à la base de donnée
      */

@@ -119,7 +119,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     }
 
     /**
-     * insert la recette dans la basse de donnée
+     * insertUserMail la recette dans la basse de donnée
      * @param recipe la recette a insérer
      * @throws SQLException erreur liée à la base de donnée
      */
