@@ -92,7 +92,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
 
         query.append(" Where ");
-        valuesOfPreparedStatement = appendValuesToWhere(query,constraint);
+        valuesOfPreparedStatement = appendValuesToWherePreparedStatement(query,constraint);
 
         stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);

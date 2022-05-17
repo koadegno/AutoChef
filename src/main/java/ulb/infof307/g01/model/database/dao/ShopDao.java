@@ -9,6 +9,7 @@ import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -62,27 +63,17 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     @Override
     public void insert(Shop shop) throws SQLException {
-        String name = String.format("'%s'", shop.getName());
-        String address = String.format("'%s'", shop.getAddress());
-        String latitude = String.valueOf(shop.getCoordinateX());
-        String longitude = String.valueOf(shop.getCoordinateY());
-
-        String[] values = {"null", name,address, longitude,latitude};
-        insert(MAGASIN_TABLE_NAME, values);
-
+        insertShop(shop);
         String shopID = String.valueOf(getGeneratedID());
-
-        for (Product product: shop) {
-            String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
-            String price =  String.valueOf(product.getPrice());
-            String[] productValues = {shopID,productID,price};
-            insert(TABLE_SHOP_PRODUCT, productValues);
+        insertShopProducts(shop, shopID);
+        String query = String.format("""
+            INSERT INTO %s values (%s, %s);
+            """,TABLE_USER_MAGASIN,getUserID(),shopID);
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            sendQueryUpdate(statement);
         }
-        // ajout dans la table utilisateur
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
-        String[] userShopValues = {userID,shopID};
-        insert("UtilisateurMagasin", userShopValues);
     }
+
 
     /**
      * Methode rustique de mise a jour supprimer l'ancienne valeur et
@@ -96,15 +87,176 @@ public class ShopDao extends Database implements Dao<Shop> {
         insert(shop);
     }
 
+
     /**
-     * tous les magasins stocker
+     * récupérer tous les magasins
      * @return la liste de tous les magasins
+     * @throws SQLException erreur au niveau de la requête SQL
+     */
+    public List<Shop> getAllShops() throws SQLException {
+        String query = String.format("""
+                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
+                        FROM Magasin as M
+                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+                        WHERE UtilisateurMagasin.UtilisateurID = %d""",
+                Configuration.getCurrent().getCurrentUser().getId());
+        return fillAllShopsWithProducts(getShopsList(query));
+    }
+
+    @Override
+    public Shop get(String name)throws IllegalCallerException{
+        throw new IllegalCallerException("Cette methode n'est pas implementé");
+    }
+
+    /**
+     * Recupère un magasin en fonction de son nom et de ces coordonnées
+     * @param name le nom du magasin
+     * @param coordinates les coordonnées du magasin
+     * @return le magasin qui correspond
      * @throws SQLException erreur avec la requête SQL
      */
-    public List<Shop> getShops() throws SQLException {
-        List<Shop> shops = getAllShops();
-        return fillAllShopsWithProducts(shops);
+    public Shop get(String name, Point coordinates) throws SQLException {
+        int shopIndex = 0;
+        int nameIndexInPreparedStatement = 1;
+        String query = String.format("""
+                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
+                        FROM Magasin as M
+                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
+                        WHERE M.Nom = ? AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
+                coordinates.getX(), coordinates.getY(), getUserID());
+
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            statement.setString(nameIndexInPreparedStatement,name);
+            List<Shop> shopsList = getShopsList(statement);
+            if(shopsList.isEmpty())return null;
+            return fillAllShopsWithProducts(shopsList).get(shopIndex);
+        }
     }
+
+    /**
+     * Supprime un magasin de la base de donnée
+     * @param shop le magasin a supprimé
+     * @throws SQLException erreur liée à la base de donnée
+     */
+    public void delete(Shop shop) throws SQLException {
+        String[] constraint = {"MagasinID = "+ shop.getID()};
+        delete2(TABLE_SHOP_PRODUCT, List.of(constraint));
+        delete2(TABLE_USER_MAGASIN, List.of(constraint));
+        delete2(MAGASIN_TABLE_NAME,List.of(constraint));
+
+    }
+
+
+    /**
+     * Rêquete pour avoir les magasins possendant toutes les ingredients d'une liste de course
+     * @param shoppingList
+     * @return Liste des magasion qui ont les ingredient de la liste de course
+     * @throws SQLException
+     */
+    public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
+        int shoppingListID = shoppingList.getId();
+        String query = String.format("""
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
+                                        FROM  Magasin as M
+                                        INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                        INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                        WHERE LCI.ListeCourseID = %d
+                                        GROUP BY MI.MagasinID
+                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                        """, shoppingListID, shoppingListID);
+
+        return fillAllShopsWithProducts(getShopsList(query));
+
+    }
+
+    /**
+     *
+     * @param shoppingList
+     * @return Une liste de magasins contenant les ingredients de la liste de course au prix le plus bas
+     * @throws SQLException
+     */
+    public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
+        int shoppingListID = shoppingList.getId();
+        String query = String.format("""
+                SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
+                            FROM
+                            (
+                                SELECT sommes.MagasinID , sommes.Nom,  sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
+                                FROM
+                                    (
+                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
+                                        FROM  Magasin as M
+                                                  INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                                  INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                        WHERE LCI.ListeCourseID = %d
+                                        GROUP BY MI.MagasinID
+                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                    ) sommes
+                            ) resultats
+                                        """, shoppingListID, shoppingListID);
+
+        return fillAllShopsWithProducts(getShopsList(query));
+
+    }
+
+    /**
+     *
+     * @param shoppingList
+     * @param position : la position de départ
+     * @return Liste des magasins les plus proches contenant les ingredients d'une liste de courses
+     * @throws SQLException
+     */
+    public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
+        int shoppingListID = shoppingList.getId();
+        String query = String.format("""
+                        SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
+                        FROM
+                        (
+                            SELECT sommes.MagasinID , sommes.Nom, sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.distance)
+                            FROM
+                                
+                                (
+                                    SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
+                                    FROM  Magasin as M
+                                              INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
+                                              INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                                    WHERE LCI.ListeCourseID = %d
+                                    GROUP BY MI.MagasinID
+                                    HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
+                                ) sommes
+                        ) resultats
+                """, position.getX(),position.getY(),shoppingListID, shoppingListID);
+        return fillAllShopsWithProducts(getShopsList(query));
+    }
+
+    /**
+     *
+     * @param shop : le magasins pour lequel on souhaite connaitre le prix d'une liste de produitss
+     * @param shoppingList
+     * @return Le prix totale d'une liste d'ingredient dans un magasin
+     * @throws SQLException
+     */
+    public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
+        double totalPrice = -1; //error value
+        final int indexSum = 1;
+        String query = String.format("""
+                SELECT SUM(MI.prix)
+                FROM  MagasinIngredient as MI
+                INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
+                WHERE LCI.ListeCourseID = %d and MI.MagasinID = %d
+                """, shoppingList.getId(), shop.getID());
+        try (ResultSet querySelectShop = sendQuery(query)){
+            if(querySelectShop.next()) {
+                totalPrice = Math.round(querySelectShop.getDouble(indexSum));
+            }
+
+        }
+        return totalPrice;
+    }
+
+
+    // TOOLS
+
 
     @NotNull
     private List<Shop> fillAllShopsWithProducts(List<Shop> shops) throws SQLException {
@@ -139,161 +291,78 @@ public class ShopDao extends Database implements Dao<Shop> {
         }
     }
 
-    /**
-     * récupérer tous les magasins
-     * @return la liste de tous les magasins
-     * @throws SQLException erreur au niveau de la requête SQL
-     */
-    private List<Shop> getAllShops() throws SQLException {
-        String query = String.format("""
-                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
-                        FROM Magasin as M
-                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
-                        WHERE UtilisateurMagasin.UtilisateurID = %d""",
-                Configuration.getCurrent().getCurrentUser().getId());
-        return getShopsList(query);
-    }
-
-    @Override
-    public Shop get(String name)throws IllegalCallerException{
-        throw new IllegalCallerException("Cette methode n'est pas implementé");
-    }
-
-    /**
-     * Recupère un magasin en fonction de son nom et de ces coordonnées
-     * @param name le nom du magasin
-     * @param coordinates les coordonnées du magasin
-     * @return le magasin qui correspond
-     * @throws SQLException erreur avec la requête SQL
-     */
-    public Shop get(String name, Point coordinates) throws SQLException {
-
-        try (ResultSet querySelectShop = sendQuery(String.format("""
-                        SELECT M.MagasinID,M.Nom, M.adresse
-                        FROM Magasin as M
-                        INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
-                        WHERE M.Nom = '%s' AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
-                name, String.valueOf(coordinates.getX()), String.valueOf(coordinates.getY()), Configuration.getCurrent().getCurrentUser().getId()))) {
-
-            if (querySelectShop.next()) {
-                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
-                Shop shop = new Shop(shopID, name,shopAddress, coordinates);
-                fillShopWithProducts(shop);
-                return shop;
-            }
-        }
-
-        return null;
-    }
-
-    /**
-     * Supprime un magasin de la base de donnée
-     * @param shop le magasin a supprimé
-     * @throws SQLException erreur liée à la base de donnée
-     */
-    public void delete(Shop shop) throws SQLException {
-        String[] constraint = {"MagasinID = "+ shop.getID()};
-        delete(TABLE_SHOP_PRODUCT, List.of(constraint));
-        delete(TABLE_USER_MAGASIN, List.of(constraint));
-        delete(MAGASIN_TABLE_NAME,List.of(constraint));
-
-    }
-    public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
-        String query = String.format("""
-                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude
-                                        FROM  Magasin as M
-                                        INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
-                                        INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
-                                        WHERE LCI.ListeCourseID = %d
-                                        GROUP BY MI.MagasinID
-                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
-                                        """, shoppingList.getId(), shoppingList.getId());
-
-        return fillAllShopsWithProducts(getShopsList(query));
-
-    }
-
-    public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
-        String query = String.format("""
-                SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
-                            FROM
-                            (
-                                SELECT sommes.MagasinID , sommes.Nom,  sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.PrixTotal)
-                                FROM
-                                    (
-                                        SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SUM(MI.prix) as PrixTotal
-                                        FROM  Magasin as M
-                                                  INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
-                                                  INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
-                                        WHERE LCI.ListeCourseID = %d
-                                        GROUP BY MI.MagasinID
-                                        HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
-                                    ) sommes
-                            ) resultats
-                                        """, shoppingList.getId(), shoppingList.getId());
-
-        return fillAllShopsWithProducts(getShopsList(query));
-
-    }
-
-    public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
-        String query = String.format("""
-                        SELECT resultats.MagasinID , resultats.Nom, resultats.adresse, resultats.latitude, resultats.longitude
-                        FROM
-                        (
-                            SELECT sommes.MagasinID , sommes.Nom, sommes.adresse, sommes.latitude, sommes.longitude, MIN(sommes.distance)
-                            FROM
-                                
-                                (
-                                    SELECT M.MagasinID, M.Nom, M.adresse, M.latitude, M.longitude, SQRT(POWER(M.latitude-%s, 2) + POWER(M.longitude-%s,2)) as distance
-                                    FROM  Magasin as M
-                                              INNER JOIN MagasinIngredient MI on MI.MagasinID = M.MagasinID
-                                              INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
-                                    WHERE LCI.ListeCourseID = %d
-                                    GROUP BY MI.MagasinID
-                                    HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
-                                ) sommes
-                        ) resultats
-                """, position.getX(),position.getY(),shoppingList.getId(), shoppingList.getId());
-        return fillAllShopsWithProducts(getShopsList(query));
-    }
-
-    public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
-        double totalPrice = -1; //error value
-        final int indexSum = 1;
-        String query = String.format("""
-                SELECT SUM(MI.prix)
-                FROM  MagasinIngredient as MI
-                INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
-                WHERE LCI.ListeCourseID = %d and MI.MagasinID = %d
-                """, shoppingList.getId(), shop.getID());
-        try (ResultSet querySelectShop = sendQuery(query)){
-            if(querySelectShop.next()) {
-                totalPrice = Math.round(querySelectShop.getDouble(indexSum));
-            }
-
-        }
-        return totalPrice;
-    }
-
-
-    @NotNull
-    private List<Shop> getShopsList(String query) throws SQLException {
-        List<Shop> shopsList;
-        try (ResultSet querySelectShop = sendQuery(query)){
-            shopsList = new ArrayList<>();
-            while (querySelectShop.next()) {
-                int shopID = querySelectShop.getInt(SHOP_ID_INDEX);
-                String shopName = querySelectShop.getString(SHOP_NAME_INDEX);
-                String shopAddress = querySelectShop.getString(SHOP_ADDRESS_INDEX);
-                double shopX = querySelectShop.getDouble(SHOP_LATITUDE_INDEX);
-                double shopY = querySelectShop.getDouble(SHOP_LONGITUDE_INDEX);
+    private List<Shop> getShopsList(ResultSet resultSet ){
+        List<Shop> shopsList =  new ArrayList<>();
+        try {
+            while (resultSet.next()) {
+                int shopID = resultSet.getInt(SHOP_ID_INDEX);
+                String shopName = resultSet.getString(SHOP_NAME_INDEX);
+                String shopAddress = resultSet.getString(SHOP_ADDRESS_INDEX);
+                double shopX = resultSet.getDouble(SHOP_LATITUDE_INDEX);
+                double shopY = resultSet.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
                 Shop shop =  new Shop(shopID, shopName,shopAddress, shopPoint);
                 shopsList.add(shop);
             }
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
         }
+
         return shopsList;
+    }
+    @NotNull
+    private List<Shop> getShopsList(String query) throws SQLException {
+        try (ResultSet querySelectShop = sendQuery(query)){
+            return getShopsList(querySelectShop);
+        }
+    }
+    @NotNull
+    private List<Shop> getShopsList(PreparedStatement statement) throws SQLException {
+        try (ResultSet querySelectShop = sendQuery(statement)){
+            return getShopsList(querySelectShop);
+        }
+    }
+
+    /**
+     * Insert les produits d'un magasin dans la table MagasinIngredient
+     * @param shop
+     * @param shopID
+     * @throws SQLException
+     */
+    private void insertShopProducts(Shop shop, String shopID) throws SQLException {
+        for (Product product: shop) { //Tous les produits ont déja été vérifié à l'insertion
+            String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
+            String price =  String.valueOf(product.getPrice());
+            String query = String.format("""
+            INSERT INTO %s values (%s, %s,%s);
+            """,TABLE_SHOP_PRODUCT,shopID,productID,price);
+            try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+                sendQueryUpdate(statement);
+            }
+        }
+    }
+
+
+    /**
+     * Insert un magasin dans la table magasin
+     * @param shop
+     * @throws SQLException
+     */
+    private void insertShop(Shop shop) throws SQLException {
+        int nameIndexInPreparedStatement = 1;
+        String name =  shop.getName();
+        String address = shop.getAddress();
+        String latitude = String.valueOf(shop.getCoordinateX());
+        String longitude = String.valueOf(shop.getCoordinateY());
+
+        String query = String.format("""
+            INSERT INTO %s values (null,?,'%s',%s,%s );
+        """,MAGASIN_TABLE_NAME, address,longitude,latitude); //Seulement le nom vient de l'utilisateur
+
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            statement.setString(nameIndexInPreparedStatement, name);
+            System.out.println(statement);
+            sendQueryUpdate(statement);
+        }
     }
 }

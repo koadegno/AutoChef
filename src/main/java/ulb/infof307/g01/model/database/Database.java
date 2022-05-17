@@ -50,9 +50,6 @@ public class Database {
         }
     }
 
-    protected static int getUserID() {
-        return Configuration.getCurrent().getCurrentUser().getId();
-    }
 
     /**
      * Méthode de création d'une base de données qui lit et execute
@@ -64,7 +61,7 @@ public class Database {
         if (fileDb != null) {
             try (Scanner scanner =new Scanner(fileDb); ){
                 while(scanner.hasNextLine()){
-                    sendRequest(scanner.nextLine());
+                    request.execute(scanner.nextLine());
                 }
             }catch (SQLException e){
                 throw new SQLException(e);
@@ -82,13 +79,6 @@ public class Database {
         }
     }
 
-    /**
-     * Requete de la base de données uniquement pour la creation de table
-     * @param query requete sql
-     */
-    public void sendRequest(String query) throws SQLException {
-        request.execute(query);
-    }
 
     /**
      * Requete d'accès en lecture de la base de données
@@ -99,7 +89,7 @@ public class Database {
         return statement.executeQuery();
     }
 
-    protected ResultSet sendQuery(String query) throws SQLException { //to delete
+    protected ResultSet sendQuery(String query) throws SQLException { //to delete after uniformisation
         return request.executeQuery(query);
     }
 
@@ -151,7 +141,7 @@ public class Database {
         if (!constraintToAppend.isEmpty()) {
             query.append(" WHERE ");
         }
-        valueOfPreparedStatement =  appendValuesToWhere(query,constraintToAppend);
+        valueOfPreparedStatement =  appendValuesToWherePreparedStatement(query,constraintToAppend);
         if(orderBy != null){
             query.append(orderBy);
         }
@@ -195,14 +185,21 @@ public class Database {
         }
     }
 
-    protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
+    protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException { //TODO: TO DELETE
         StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        List<String> valueOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String> valueOfPreparedStatement = appendValuesToWherePreparedStatement(query, constraintToAppend);
         query.append(";");
         String stringQuery = String.valueOf(query);
         PreparedStatement statement = connection.prepareStatement(stringQuery);
         fillPreparedStatementValues(statement, valueOfPreparedStatement);
         sendQueryUpdate(statement);
+    }
+
+    protected void delete2(String nameTable, List<String> constraintToAppend) throws SQLException {
+        StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
+        try (PreparedStatement statement = connection.prepareStatement(appendValuesToWhere(query, constraintToAppend))) {
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
@@ -211,7 +208,7 @@ public class Database {
      * @param constraintToAppend contraintes à ajouter à requête
      * @return requete avec contrainte
      */
-    protected List<String> appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
+    protected List<String> appendValuesToWherePreparedStatement(StringBuilder query, List<String> constraintToAppend) {
         List<String> columnValues = new ArrayList<>();
         if (!constraintToAppend.isEmpty()) {
             for (String s : constraintToAppend) {
@@ -224,10 +221,20 @@ public class Database {
         return columnValues;
     }
 
+    protected String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
+        for (int i = 0; i < constraintToAppend.size(); i++) {
+            String constraint = constraintToAppend.get(i);
+            query.append(constraint);
+            if(i != constraintToAppend.size()-1)query.append(" AND ");
+
+        }
+        return String.valueOf(query);
+    }
+
     protected void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable, nameToUpdate));
         //nameTable,nameToUpdate
-        List<String>  valuesOfPreparedStatement = appendValuesToWhere(query, constraintToAppend);
+        List<String>  valuesOfPreparedStatement = appendValuesToWherePreparedStatement(query, constraintToAppend);
         PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
 
         fillPreparedStatementValues(statement, valuesOfPreparedStatement);
@@ -331,5 +338,10 @@ public class Database {
         }
         return nameList;
     }
+
+    protected static int getUserID() {
+        return Configuration.getCurrent().getCurrentUser().getId();
+    }
+
 
 }

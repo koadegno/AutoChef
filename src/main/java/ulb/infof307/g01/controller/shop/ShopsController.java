@@ -41,7 +41,7 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     @NotNull
     private List<String> getShopsStringsList() throws SQLException {
-        List<Shop> allShop = shopDao.getShops();
+        List<Shop> allShop = shopDao.getAllShops();
         List<String> allShopName = new ArrayList<>();
         for(Shop shop: allShop){
             allShopName.add(shop.getName()+"-"+shop.getAddress());

@@ -1,11 +1,9 @@
 package ulb.infof307.g01.controller.map;
 
-import com.esri.arcgisruntime.concurrent.ListenableFuture;
 import com.esri.arcgisruntime.geometry.Point;
 import com.esri.arcgisruntime.mapping.view.*;
 import com.esri.arcgisruntime.symbology.TextSymbol;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Point2D;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import org.apache.jena.atlas.lib.Pair;
@@ -21,7 +19,6 @@ import ulb.infof307.g01.view.map.MapViewController;
 
 import java.sql.SQLException;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
 
 /**
  * Classe qui contrôle les fonctionnalités de la map
@@ -88,7 +85,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 viewController.initReadOnlyMode();
             }
             else{
-                List<Shop> allShopList  = shopDao.getShops();
+                List<Shop> allShopList  = shopDao.getAllShops();
                 for(Shop shop: allShopList){
                     viewController.addCircle(MapConstants.COLOR_RED, shop.getName(), shop.getCoordinate(), true);
                 }

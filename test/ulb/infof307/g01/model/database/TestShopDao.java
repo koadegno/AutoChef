@@ -10,9 +10,7 @@ import ulb.infof307.g01.model.User;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.security.ProtectionDomain;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.*;
@@ -27,12 +25,12 @@ class TestShopDao {
     static private final Product MANGO = new Product.ProductBuilder().withName("mango").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
     static private final Product MELON =  new Product.ProductBuilder().withName("melon").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
 
-    static private final Shop ALDI_SHOP = new Shop("1 aldi",new Point(0,0));
-    static private final Shop LIDL_SHOP = new Shop("aldi Namur",new Point(0,1));
-    static private final Shop ALDI_SHOP2 = new Shop("Namur2",new Point(0,3));
-    static private final Shop CARREFOUR_ANVERS2 = new Shop("Carrefour Anvers2",new Point(0,17));
-    static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve",new Point(0,2));
-    static private final Shop CARREFOUR_ANVERS = new Shop(3,"Carrefour Anvers","TOTO", new Point(50,30));
+    static private final Shop ALDI_SHOP = new Shop("1 aldi","Gent");
+    static private final Shop LIDL_SHOP = new Shop("aldi Namur","Bruxelles");
+    static private final Shop ALDI_SHOP2 = new Shop("Namur2","Anderlecht");
+    static private final Shop CARREFOUR_ANVERS2 = new Shop("Carrefour Anvers2","Molenbeek");
+    static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve", "Belgique, Ixelles");
+    static private final Shop CARREFOUR_ANVERS = new Shop("Carrefour Anvers","Anvers");
 
     static private final String DATABASE_NAME = "test.sqlite";
     static ShoppingList myShoppingList;
@@ -82,8 +80,8 @@ class TestShopDao {
     @Test
     void testDelete() throws SQLException{
 
-        Configuration.getCurrent().getShopDao().delete(CARREFOUR_ANVERS);
-        List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
+        Configuration.getCurrent().getShopDao().delete( Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS.getName(), CARREFOUR_ANVERS.getCoordinate()));
+        List<Shop> shopList = Configuration.getCurrent().getShopDao().getAllShops();
         assertNotEquals(shopList.get(shopList.size()-1), CARREFOUR_ANVERS);
     }
 
@@ -113,7 +111,7 @@ class TestShopDao {
     @Test
     void testGetShops() throws SQLException {
 
-        List<Shop> shopList = Configuration.getCurrent().getShopDao().getShops();
+        List<Shop> shopList = Configuration.getCurrent().getShopDao().getAllShops();
         assertEquals(shopList.get(0), ALDI_SHOP);
         assertEquals(shopList.get(1), ALDI_RUE_NEUVE);
 
