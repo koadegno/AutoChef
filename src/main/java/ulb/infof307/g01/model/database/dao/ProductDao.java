@@ -13,7 +13,7 @@ import java.util.List;
  * Classe d'accès à la base de données pour les données concernant les Ingredients
  */
 public class ProductDao extends Database implements Dao<Product> {
-
+    private static final String TABLE_NAME= "Ingredient";
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.
@@ -36,13 +36,16 @@ public class ProductDao extends Database implements Dao<Product> {
 
     @Override
     public void insert(Product product) throws SQLException {
+        int nameIndexInPreparedStatement = 1;
         int familyID = getIDFromName("FamilleAliment",product.getFamilyProduct(),"FamilleAlimentID");
         int unityID = getIDFromName("Unite",product.getNameUnity(),"UniteID");
-        String stringFamilyID = String.format("%d", familyID);
-        String stringUnityID = String.format("%d",unityID);
-        String stringName = String.format("'%s'",product.getName());
-        String[] values = {"null",stringName, stringFamilyID,stringUnityID};
-        insert("Ingredient",values);
+        String query = String.format("""
+            INSERT INTO %s values (null,?, %s, %s);
+            """,TABLE_NAME, familyID, unityID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPreparedStatement,product.getName());
+            sendQueryUpdate(statement);
+        }
     }
 
     @Override
