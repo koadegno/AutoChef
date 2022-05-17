@@ -185,17 +185,8 @@ public class Database {
         }
     }
 
-    protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException { //TODO: TO DELETE
-        StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        List<String> valueOfPreparedStatement = appendValuesToWherePreparedStatement(query, constraintToAppend);
-        query.append(";");
-        String stringQuery = String.valueOf(query);
-        PreparedStatement statement = connection.prepareStatement(stringQuery);
-        fillPreparedStatementValues(statement, valueOfPreparedStatement);
-        sendQueryUpdate(statement);
-    }
 
-    protected void delete2(String nameTable, List<String> constraintToAppend) throws SQLException {
+    protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
         StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
         try (PreparedStatement statement = connection.prepareStatement(appendValuesToWhere(query, constraintToAppend))) {
             sendQueryUpdate(statement);

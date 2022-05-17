@@ -140,9 +140,9 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     public void delete(Shop shop) throws SQLException {
         String[] constraint = {"MagasinID = "+ shop.getID()};
-        delete2(TABLE_SHOP_PRODUCT, List.of(constraint));
-        delete2(TABLE_USER_MAGASIN, List.of(constraint));
-        delete2(MAGASIN_TABLE_NAME,List.of(constraint));
+        delete(TABLE_SHOP_PRODUCT, List.of(constraint));
+        delete(TABLE_USER_MAGASIN, List.of(constraint));
+        delete(MAGASIN_TABLE_NAME,List.of(constraint));
 
     }
 

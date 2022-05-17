@@ -84,13 +84,4 @@ class TestMailAddressDao {
         assertEquals(mail1ID,mailID);
     }
 
-    @Test
-    void delete() throws SQLException {
-        String mail4 = "mail9@ulb.com";
-        Configuration.getCurrent().getMailAddressDao().insert(mail4);
-        Configuration.getCurrent().getMailAddressDao().delete(mail4);
-        List<String> allMailAddresses = Configuration.getCurrent().getMailAddressDao().getAllName();
-        assertNotEquals(mail4,allMailAddresses.get(allMailAddresses.size()-1));
-
-    }
 }

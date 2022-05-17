@@ -112,10 +112,4 @@ public class MailAddressDao extends Database implements Dao<String> {
         return querySelectProduct.getString(tableName);
     }
 
-
-    public void delete(String mailAddressName) throws SQLException {
-        String[] constraint = {String.format("Nom = '%s'",mailAddressName)};
-        super.delete(TABLE_MAIL_ADDRESS, List.of(constraint));
-    }
-
 }
