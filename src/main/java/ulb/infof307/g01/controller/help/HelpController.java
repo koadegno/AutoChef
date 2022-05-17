@@ -1,9 +1,7 @@
 package ulb.infof307.g01.controller.help;
 
-import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
-import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.help.HelpViewController;
 
 import java.io.IOException;
@@ -14,11 +12,11 @@ import java.io.IOException;
  * fonctionne l'interface actuellement affichée
  */
 public class HelpController extends Controller implements HelpViewController.Listener {
-    private HelpViewController helpViewController;
+    private final HelpViewController helpViewController;
     private Stage helpShopPopup;
     private int numberImageInformation = 1;
-    private int lastNumberImageInformation;
-    private String directoryImageInformation;
+    private final int lastNumberImageInformation;
+    private final String directoryImageInformation;
 
     /**
      * Permet d'init les attributs et de créer la View de help
@@ -35,16 +33,15 @@ public class HelpController extends Controller implements HelpViewController.Lis
      * Affiche la popup d'aide avec la première image d'information
      */
     public void displayHelpShop(){
-        String filename = "Help.fxml";
         try {
-            helpShopPopup = this.popupFXML(filename, helpViewController);
+            helpShopPopup = this.popupFXML("Help.fxml", helpViewController);
             helpShopPopup.setResizable(false);
             helpViewController.setListener(this);
             createFilePathImageInformation();
         } catch (IOException e) {
             e.printStackTrace();
-            ViewController.showErrorFXMLMissing(filename);
         }
+
     }
 
     /**

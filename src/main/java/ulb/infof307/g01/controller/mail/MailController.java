@@ -41,11 +41,10 @@ public class MailController extends Controller implements MailViewController.Lis
     private void createMailViewController() {
         this.mailViewController = new MailViewController();
         mailViewController.setListener(this);
-        String filename = "CreateMail.fxml";
         try {
-            this.popupStageMail = popupFXML(filename, mailViewController);
+            this.popupStageMail = popupFXML("CreateMail.fxml", mailViewController);
         } catch (IOException e) {
-            ViewController.showErrorFXMLMissing(filename);
+            ViewController.showErrorFXMLMissing("CreateMail.fxml");
         }
     }
 
@@ -106,7 +105,7 @@ public class MailController extends Controller implements MailViewController.Lis
             List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
             mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
-            ViewController.showErrorSQL();
+            e.printStackTrace();
         }
     }
 

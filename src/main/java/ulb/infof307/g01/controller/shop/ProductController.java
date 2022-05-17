@@ -119,7 +119,7 @@ public class ProductController extends Controller implements ProductViewControll
                 String nameProduct = json.getNameProduct();
                 shopViewController.setNameProduct(nameProduct);
             } catch (SQLException e) {
-                String messageError = "Le contenu du JSON est incorrect ou \nle produit existe deja";
+                String messageError = "Le contenu du JSON est incorrecte ou \nle produit existe deja";
                 ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
                }
 

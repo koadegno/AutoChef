@@ -31,7 +31,7 @@ import java.util.concurrent.ExecutionException;
 public class MapController extends Controller implements MapViewController.Listener {
 
     private MapViewController viewController;
-    private boolean readOnlyMode;
+    private final boolean readOnlyMode;
     private ShoppingList productListToSearchInShops;
     private final RouteService routeService;
     private final LocatorService locatorService;
@@ -66,7 +66,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 String toDisplay = shop.getName() + " : " + shopDao.getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
                 viewController.addCircle(color,toDisplay,shop.getCoordinate(),true);
             } catch (SQLException e) {
-                ViewController.showErrorSQL();
+                throw new RuntimeException(e);
             }
         }
 
@@ -94,7 +94,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 }
             }
         } catch (SQLException e) {
-            ViewController.showErrorSQL();
+            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
         }
     }
 
@@ -174,7 +174,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
                 }
             } catch (SQLException e) {
-                ViewController.showErrorSQL();
+                throw new RuntimeException(e);
             }
         }
         else if (addressPosition != null){
