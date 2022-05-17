@@ -52,7 +52,7 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
         try {
             this.menu = Configuration.getCurrent().getMenuDao().get(menu.getName());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ShowMenuViewController.showErrorSQL();
         }
         ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, menu.getNbOfdays()));
         displayMenuInfo();

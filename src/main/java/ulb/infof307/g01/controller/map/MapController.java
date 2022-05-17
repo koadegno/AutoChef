@@ -66,7 +66,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 String toDisplay = shop.getName() + " : " + shopDao.getShoppingListPriceInShop(shop, productListToSearchInShops) + " €";
                 viewController.addCircle(color,toDisplay,shop.getCoordinate(),true);
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                ViewController.showErrorSQL();
             }
         }
 
@@ -94,7 +94,7 @@ public class MapController extends Controller implements MapViewController.Liste
                 }
             }
         } catch (SQLException e) {
-            ViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Contactez un responsable");
+            ViewController.showErrorSQL();
         }
     }
 
@@ -174,7 +174,7 @@ public class MapController extends Controller implements MapViewController.Liste
 
                 }
             } catch (SQLException e) {
-                throw new RuntimeException(e);
+                ViewController.showErrorSQL();
             }
         }
         else if (addressPosition != null){

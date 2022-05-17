@@ -56,6 +56,7 @@ public class SignUpController extends Controller implements SignUpViewController
                 displayHome();
             }
         } catch (SQLException e) {
+            e.printStackTrace();
             SignUpViewController.showErrorSQL();
         }
     }

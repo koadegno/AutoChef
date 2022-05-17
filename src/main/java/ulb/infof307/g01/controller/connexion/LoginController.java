@@ -42,7 +42,7 @@ public class LoginController extends Controller implements LoginViewController.L
     }
 
     /**
-     * Verifie si le connexion peut avoir lieu, si oui redirection vers la homePage.
+     * Verifie si la connexion peut avoir lieu, si oui redirection vers la homePage.
      */
     @Override
     public void onLoginButtonClick(String pseudo,String password) {
