@@ -47,7 +47,7 @@ public class UserDao extends Database implements Dao<User>{
                 ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
         userID = String.valueOf(getGeneratedID());
-        insertUserAddress(userID,user.getAdress());
+        insertUserAddress(userID,user.getAddress());
     }
 
     private void insertUserAddress(String userID, Address address) throws SQLException {

@@ -9,12 +9,11 @@ public class User {
     private String name;
     private String familyName;
     private String pseudo;
-    private String password;
+    private final String password;
     private Boolean isProfessional = false; // Est ce un paticulier ou un professionel?
 
 
     //constructors
-
     public User(int id, String lastName, String firstName, String pseudo, String password, Address address, Boolean pro) {
         this(pseudo, password,pro);
         this.id = id;
@@ -27,10 +26,6 @@ public class User {
         this.password = password;
         this.isProfessional = isProfessional;
     }
-
-    public User() {}
-
-    //setter and getter TODO: supprimer celles qui ne sont pas utilisées
 
     public Boolean isProfessional(){return isProfessional;}
     public String getName() {
@@ -52,7 +47,7 @@ public class User {
     public int getId() {
         return this.id;
     }
-    public Address getAdress() {
+    public Address getAddress() {
         return address;
     }
     public String getFamilyName() {
