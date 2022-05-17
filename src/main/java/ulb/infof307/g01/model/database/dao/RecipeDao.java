@@ -16,7 +16,10 @@ import java.util.List;
  */
 public class RecipeDao extends Database implements Dao<Recipe> {
 
-    public static final String IS_NOT_FAVORITE = "0";
+    private static final String IS_NOT_FAVORITE = "0";
+    private static final String RECIPE_TABLE_NAME = "Recette";
+    private static final String RECIPE_PRODUCT_TABLE_NAME = "RecetteIngredient";
+    private static final String RECIPE_USER_TABLE_NAME = "UtilisateurRecette";
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -125,29 +128,46 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      */
     @Override
     public void insert(Recipe recipe) throws SQLException {
-        String name = String.format("'%s'", recipe.getName());
-        String duration = String.format("%d", recipe.getDuration());
-        String nbPerson = String.format("%d", recipe.getNbrPerson());
-        String type = String.format("%d", getIDFromName("TypePlat", recipe.getType(), "TypePlatID") );
-        String category = String.format("%d", getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
-        String preparation = String.format("'%s'", recipe.getPreparation());
         String isFavorite = String.format("%d", recipe.isFavorite() ? 1: 0);
-
-        String[] values = {"null", name, duration, nbPerson, type, category, preparation};
-        insert("Recette", values);
+        insertRecipe(recipe);
         String recipeID = String.format("%d", getGeneratedID());
+        insertRecipeProducts(recipe, recipeID);
+        insertUserRecipe(isFavorite, recipeID);
+    }
 
+    private void insertUserRecipe(String isFavorite, String recipeID) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (%s, %s, %s);
+            """,RECIPE_USER_TABLE_NAME, getUserID() , recipeID, isFavorite);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            sendQueryUpdate(statement);
+        }
+    }
+
+    private void insertRecipeProducts(Recipe recipe, String recipeID) throws SQLException {
         for (Product p: recipe) { // ajout des produits lié a la recette
             String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
             String quantity =  String.format("%d", p.getQuantity());
-            String[] productValues = {recipeID, productID, quantity};
-            insert("RecetteIngredient", productValues);
+            String query = String.format("""
+            INSERT INTO %s values (%s, %s, %s);
+            """,RECIPE_PRODUCT_TABLE_NAME, recipeID,productID, quantity);
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                sendQueryUpdate(statement);
+            }
         }
-        // ajout dans la table des recettes correspondant a l'utilisateur
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
-        String[] userRecipeValues = {userID, recipeID, isFavorite};
-        insert("UtilisateurRecette",userRecipeValues);
+    }
 
+    private void insertRecipe(Recipe recipe) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (null,?,?,?,%s,%s,?);
+            """,RECIPE_TABLE_NAME, getIDFromName("TypePlat", recipe.getType(), "TypePlatID"),getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, recipe.getName());
+            statement.setInt(2, recipe.getDuration());
+            statement.setInt(3, recipe.getNbrPerson());
+            statement.setString(4, recipe.getPreparation());
+            sendQueryUpdate(statement);
+        }
     }
 
     /**
