@@ -38,7 +38,7 @@ public class MenuDao extends Database implements Dao<Menu> {
                 int recipeID = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
                 String query = String.format("""
                     INSERT INTO %s values (%s,%s,%s,%s);
-                """,MENU_RECIPE_TABLE_NAME, menuID,day.getIndex(),hour,recipeID);
+                """,MENU_RECIPE_TABLE_NAME, menuID,day.ordinal(),hour,recipeID);
                 try (PreparedStatement statement = connection.prepareStatement(query)) {
                     sendQueryUpdate(statement);
                 }
@@ -108,7 +108,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         int nameIndexInPrepared = 1;
         String query = String.format("""
             INSERT INTO %s values (null, ?,%s);
-            """,MENU_TABLE_NAME, menu.getNbOfdays());
+            """,MENU_TABLE_NAME, Menu.NB_OF_DAYS);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(nameIndexInPrepared, menu.getName()); //le nom est entrée par l utilisateur
             sendQueryUpdate(statement);
