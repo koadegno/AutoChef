@@ -47,7 +47,7 @@ public class UserDao extends Database implements Dao<User>{
                 ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
         insert(USER_TABLE_NAME,values);
         userID = String.valueOf(getGeneratedID());
-        insertUserAddress(userID,user.getAdress());
+        insertUserAddress(userID,user.getAddress());
     }
 
     private void insertUserAddress(String userID, Address address) throws SQLException {
@@ -61,18 +61,8 @@ public class UserDao extends Database implements Dao<User>{
     }
 
     @Override
-    @Deprecated
     public void update(User user) throws SQLException {
-
-    }
-
-    public void update(String[] columnValues, String userID){
-        //TODO doit on faire un truc de modification ?
-        /*
-        exemple de mofication :
-            update AdresseMail set Nom = "jesuis@modifier.com"
-            where ID = 2
-         */
+        throw new IllegalCallerException("Cette methode n'est pas implémenté");
     }
 
     @Override

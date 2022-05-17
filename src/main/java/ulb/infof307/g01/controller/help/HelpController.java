@@ -12,11 +12,11 @@ import java.io.IOException;
  * fonctionne l'interface actuellement affichée
  */
 public class HelpController extends Controller implements HelpViewController.Listener {
-    private HelpViewController helpViewController;
+    private final HelpViewController helpViewController;
     private Stage helpShopPopup;
     private int numberImageInformation = 1;
-    private int lastNumberImageInformation;
-    private String directoryImageInformation;
+    private final int lastNumberImageInformation;
+    private final String directoryImageInformation;
 
     /**
      * Permet d'init les attributs et de créer la View de help

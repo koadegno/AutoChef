@@ -1,20 +1,24 @@
 package ulb.infof307.g01.model;
 
-/** Enumeration représentant les jours de la semaine
-*/
+/**
+ * Enumeration représentant les jours de la semaine
+ */
 public enum Day {
-    Monday(0)    {@Override public String toString() {return "Lundi";}},
-    Tuesday(1)   {@Override public String toString() {return "Mardi";}},
-    Wednesday(2) {@Override public String toString() {return "Mercredi";}},
-    Thursday(3)  {@Override public String toString() {return "Jeudi";}},
-    Friday(4)    {@Override public String toString() {return "Vendredi";}},
-    Saturday(5)  {@Override public String toString() {return "Samedi";}},
-    Sunday(6)    {@Override public String toString() {return "Dimanche";}};
+    Monday(0,"Lundi") ,
+    Tuesday(1,"Mardi") ,
+    Wednesday(2,"Mercredi"),
+    Thursday(3,"Jeudi") ,
+    Friday(4,"Vendredi") ,
+    Saturday(5,"Samedi") ,
+    Sunday(6,"Dimanche")    ;
 
     final int index;
+    final String dayName;
 
-    Day(int index) {
+    Day(int index,String dayName) {
         this.index = index;
+        this.dayName = dayName;
     }
-    public int getIndex(){return index;}
+
+    public String toString() {return dayName;}
 }

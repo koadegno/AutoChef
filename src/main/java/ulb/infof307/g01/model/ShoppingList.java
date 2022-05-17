@@ -10,17 +10,11 @@ public class ShoppingList extends ProductHashSet {
 
     private int id;
     private String name;
-    private Date creationDate;
-    private final boolean isArchived = false;
 
     public ShoppingList(String name) {this.name = name;}
     public ShoppingList(String name, int id) {
         this(name);
         this.id = id;
-    }
-    public ShoppingList(String name, int id, Date date) {
-        this(name, id);
-        this.creationDate = date;
     }
 
     public int getId() {return id;}

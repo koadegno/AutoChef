@@ -1,7 +1,7 @@
 package ulb.infof307.g01.model;
 
 /**
- * Model représentant l'adresse d'un utilisateur
+ * Modèle représentant l'adresse d'un utilisateur
  */
 public class Address {
     String country;

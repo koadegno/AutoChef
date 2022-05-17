@@ -28,7 +28,7 @@ import java.util.List;
 public class MapController extends Controller implements MapViewController.Listener {
 
     private MapViewController viewController;
-    private boolean readOnlyMode;
+    private final boolean readOnlyMode;
     private ShoppingList productListToSearchInShops;
     private final RouteService routeService;
     private final LocatorService locatorService;

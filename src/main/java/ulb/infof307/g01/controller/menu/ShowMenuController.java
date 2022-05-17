@@ -30,9 +30,6 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     private Menu menu;
     private ShowMenuViewController viewController;
 
-
-    public ShowMenuController(Stage primaryStage, String menuName) { this(primaryStage, menuName,null); }
-
     public ShowMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
@@ -54,14 +51,14 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
-        ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, menu.getNbOfdays()));
+        ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, Menu.NB_OF_DAYS));
         displayMenuInfo();
         displayMenuTable(days);
     }
 
     private void displayMenuInfo(){
         viewController.getMenuNameLabel().setText(menu.getName());
-        viewController.getNbOfDayLabel().setText("Durée : "+ menu.getNbOfdays() +"jours");
+        viewController.getNbOfDayLabel().setText("Durée : "+ Menu.NB_OF_DAYS +"jours");
     }
 
     /**
