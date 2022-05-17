@@ -34,7 +34,7 @@ public class MenuDao extends Database implements Dao<Menu> {
             List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
                 int recipeID = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
-                String[] values = {String.format("%d",menuID),String.format("%d",day.getIndex()),String.format("%d",hour),String.format("%d",recipeID)};
+                String[] values = {String.format("%d",menuID),String.format("%d",day.ordinal()),String.format("%d",hour),String.format("%d",recipeID)};
                 insert("MenuRecette",values);
             }
         }
