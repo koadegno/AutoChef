@@ -8,17 +8,15 @@ import java.util.*;
 /**
  * Classe static permettant de générer une liste de recettes
  */
-
 public class AutoCompletion {
 
     /**
-     *  Méthode static permettant générer une liste de recette à partir d'une base de donnée
+     *  Méthode permettant générer une liste de recette à partir d'une base de donnée
      * @param recipesAlreadyUsed Liste contenant les recettes déjà utilisées
      * @param categoriesWanted   HashMap contenant les categories souhaitées et en quelle quantité
      * @param nbRecipes          int indiquant le nombre de recettes souhaitées
      * @param type               String indiquant le type (dessert, boisson, etc.) de recette souhaitée
      */
-
     public List<Recipe> generateRecipesList(List<Recipe> recipesAlreadyUsed, Map<String, Integer> categoriesWanted, int nbRecipes, String type) throws SQLException {
 
         ArrayList<Recipe> menu = new ArrayList<>();
