@@ -30,9 +30,6 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     private Menu menu;
     private ShowMenuViewController viewController;
 
-
-    public ShowMenuController(Stage primaryStage, String menuName) { this(primaryStage, menuName,null); }
-
     public ShowMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);

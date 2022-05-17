@@ -55,7 +55,6 @@ public class MenuDao extends Database implements Dao<Menu> {
         Menu menu = new Menu(nameMenu);
         while(querySelectMenu.next()){
             int menuDay = querySelectMenu.getInt(1);
-            int menuHour = querySelectMenu.getInt(2);
             int recipeID = querySelectMenu.getInt(3);
             String recipeName = querySelectMenu.getString(4);
             int recipeDuration = querySelectMenu.getInt(5);
