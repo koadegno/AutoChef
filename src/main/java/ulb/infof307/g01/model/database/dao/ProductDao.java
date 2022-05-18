@@ -36,16 +36,12 @@ public class ProductDao extends Database implements Dao<Product> {
 
     @Override
     public void insert(Product product) throws SQLException {
-        int nameIndexInPreparedStatement = 1;
         int familyID = getIDFromName("FamilleAliment",product.getFamilyProduct(),"FamilleAlimentID");
         int unityID = getIDFromName("Unite",product.getNameUnity(),"UniteID");
         String query = String.format("""
             INSERT INTO %s values (null,?, %s, %s);
             """,TABLE_NAME, familyID, unityID);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(nameIndexInPreparedStatement,product.getName());
-            sendQueryUpdate(statement);
-        }
+        sendInsertNameQueryWithPreparedStatement(product.getName(), query);
     }
 
     @Override

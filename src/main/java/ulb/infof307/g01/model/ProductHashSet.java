@@ -7,7 +7,7 @@ import java.util.HashSet;
  * Classe Abstraite représentant un Vecteur de {@code Product}, dans laquelle il n'y a pas de doublon possible
  * @see Product
  */
-abstract class ProductHashSet extends HashSet<Product> {
+public abstract class ProductHashSet extends HashSet<Product> {
 
     /**
      *  Ajoute le {@link Product} p à la liste, si p est déjà dans la liste, le {@link Product} n'est pas ajouté en double,

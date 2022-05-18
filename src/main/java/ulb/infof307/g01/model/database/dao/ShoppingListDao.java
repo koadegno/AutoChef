@@ -5,6 +5,7 @@ import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -16,6 +17,8 @@ import java.util.List;
 public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
     public static final String LISTE_COURSE_TABLE_NAME = "ListeCourse";
+    public static final String LISTE_COURSE_INGREDIENT_TABLE_NAME = "ListeCourseIngredient";
+    public static final String LISTE_COURSE_USER_TABLE_NAME = "UtilisateurListeCourse";
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -28,8 +31,14 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     }
 
     private void insertIngredientInShoppingList(int shoppingListId, int ingredientId, int quantity) throws SQLException {
-        String[] values = {String.format("%d",shoppingListId),String.format("%d",ingredientId),String.format("%d",quantity)};
-        insert("ListeCourseIngredient",values);
+        int quantityIndexInPreparedStatement = 1;
+        String query = String.format("""
+            INSERT INTO %s values (%s,%s,?);
+            """,LISTE_COURSE_INGREDIENT_TABLE_NAME, shoppingListId,ingredientId);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setInt(quantityIndexInPreparedStatement, quantity);
+            sendQueryUpdate(statement);
+        }
     }
 
     @Override
@@ -51,16 +60,19 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
      */
     @Override
     public void insert(ShoppingList shoppingList) throws SQLException {
-        String[] values = {"null",String.format("'%s'",shoppingList.getName())};
-        insert(LISTE_COURSE_TABLE_NAME,values);
+        insertNameWithPreparedStatement(shoppingList.getName(), LISTE_COURSE_TABLE_NAME);
         int shoppingListID = getGeneratedID();
-        for(Product product : shoppingList){
-            int productID = getIDFromName("Ingredient", product.getName(),"IngredientID");
-            insertIngredientInShoppingList(shoppingListID,productID, product.getQuantity());
+        insertListOfProducts(shoppingList, shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME );
+        insertUserShoppingList(shoppingListID);
+    }
+
+    private void insertUserShoppingList(int shoppingListID) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (%s, %s);
+            """,LISTE_COURSE_USER_TABLE_NAME, getUserID() , shoppingListID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            sendQueryUpdate(statement);
         }
-        String userID = String.valueOf(Configuration.getCurrent().getCurrentUser().getId());
-        String[] userShoppingListValues = {userID, String.valueOf(shoppingListID)};
-        insert("UtilisateurListeCourse",userShoppingListValues);
     }
 
     /**

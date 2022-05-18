@@ -4,6 +4,7 @@ import ulb.infof307.g01.model.Address;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Database;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
@@ -38,26 +39,36 @@ public class UserDao extends Database implements Dao<User>{
     @Override
     public void insert(User user) throws SQLException {
         String userID  = (user.getId() == -1) ? "null": String.valueOf(user.getId());
-        String format = "'%s'";
-        String[] values = {userID
-                ,String.format(format,user.getName())
-                ,String.format(format,user.getFamilyName())
-                ,String.format(format,user.getPseudo())
-                ,String.format(format,user.getPassword())
-                ,String.format("%d", (user.isProfessional())? TRUE : FALSE)};
-        insert(USER_TABLE_NAME,values);
+        insertUser(user, userID);
         userID = String.valueOf(getGeneratedID());
         insertUserAddress(userID,user.getAddress());
     }
 
+    private void insertUser(User user, String userID) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (%s,?,?,?,?,%S);
+            """,USER_TABLE_NAME, userID,(user.isProfessional()? TRUE : FALSE) );
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, user.getName());
+            statement.setString(2, user.getFamilyName());
+            statement.setString(3, user.getPseudo());
+            statement.setString(4, user.getPassword());
+            sendQueryUpdate(statement);
+        }
+    }
+
     private void insertUserAddress(String userID, Address address) throws SQLException {
-        String[] values = {String.format("%s",userID)
-                ,String.format("'%s'", address.getCountry())
-                ,String.format("'%s'", address.getCity())
-                ,String.format("%d", address.getPostalCode())
-                ,String.format("'%s'", address.getStreetName())
-                ,String.format("%d", address.getHouseNumber())};
-        insert(ADDRESS_TABLE_NAME,values);
+        String query = String.format("""
+            INSERT INTO %s values (%s,?,?,?,?,?);
+            """,ADDRESS_TABLE_NAME, userID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(1, address.getCountry());
+            statement.setString(2, address.getCity());
+            statement.setInt(3, address.getPostalCode());
+            statement.setString(4, address.getStreetName());
+            statement.setInt(5, address.getHouseNumber());
+            sendQueryUpdate(statement);
+        }
     }
 
     @Override

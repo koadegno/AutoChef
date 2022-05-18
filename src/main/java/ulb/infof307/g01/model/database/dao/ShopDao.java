@@ -339,20 +339,13 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException
      */
     private void insertShop(Shop shop) throws SQLException {
-        int nameIndexInPreparedStatement = 1;
         String name =  shop.getName();
         String address = shop.getAddress();
-        String latitude = String.valueOf(shop.getCoordinateX());
-        String longitude = String.valueOf(shop.getCoordinateY());
-
+        double latitude = shop.getCoordinateX();
+        double longitude = shop.getCoordinateY();
         String query = String.format("""
             INSERT INTO %s values (null,?,'%s',%s,%s );
         """,MAGASIN_TABLE_NAME, address,longitude,latitude); //Seulement le nom vient de l'utilisateur
-
-        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
-            statement.setString(nameIndexInPreparedStatement, name);
-            System.out.println(statement);
-            sendQueryUpdate(statement);
-        }
+        sendInsertNameQueryWithPreparedStatement(name,query);
     }
 }

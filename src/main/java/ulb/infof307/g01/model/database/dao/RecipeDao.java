@@ -130,30 +130,17 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     public void insert(Recipe recipe) throws SQLException {
         String isFavorite = String.format("%d", recipe.isFavorite() ? 1: 0);
         insertRecipe(recipe);
-        String recipeID = String.format("%d", getGeneratedID());
-        insertRecipeProducts(recipe, recipeID);
+        int recipeID = getGeneratedID();
+        insertListOfProducts(recipe, recipeID,RECIPE_PRODUCT_TABLE_NAME );
         insertUserRecipe(isFavorite, recipeID);
     }
 
-    private void insertUserRecipe(String isFavorite, String recipeID) throws SQLException {
+    private void insertUserRecipe(String isFavorite, int recipeID) throws SQLException {
         String query = String.format("""
             INSERT INTO %s values (%s, %s, %s);
             """,RECIPE_USER_TABLE_NAME, getUserID() , recipeID, isFavorite);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             sendQueryUpdate(statement);
-        }
-    }
-
-    private void insertRecipeProducts(Recipe recipe, String recipeID) throws SQLException {
-        for (Product p: recipe) { // ajout des produits lié a la recette
-            String productID = String.format("%d", getIDFromName("Ingredient", p.getName(), "IngredientID"));
-            String quantity =  String.format("%d", p.getQuantity());
-            String query = String.format("""
-            INSERT INTO %s values (%s, %s, %s);
-            """,RECIPE_PRODUCT_TABLE_NAME, recipeID,productID, quantity);
-            try (PreparedStatement statement = connection.prepareStatement(query)) {
-                sendQueryUpdate(statement);
-            }
         }
     }
 

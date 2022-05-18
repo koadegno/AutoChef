@@ -111,25 +111,6 @@ public class Database {
     }
 
     /**
-     * Les valeurs doivent etre encodees sous la forme : "'exemple'", pour les strings
-     * Reste doit etre encode sous la forme : "exemple"
-     * @param nameTable Le nom de la table dans laquelle inserer
-     * @param values Les differentes valeurs a inserer dans l'ordre des colonnes
-     */
-    protected void insert(String nameTable,String[] values) throws SQLException {
-        StringBuilder query = new StringBuilder(String.format("INSERT INTO %s values (", nameTable));
-        for (int i = 0; i < values.length ; i++) {
-            query.append("?").append(",");
-        }
-        query.deleteCharAt(query.length()-1).append(");");
-        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
-            List<String> columnValues = new ArrayList<>(Arrays.asList(values));
-            fillPreparedStatementValues(statement, columnValues);
-            sendQueryUpdate(statement);
-        }
-    }
-
-    /**
      * @param nameTable La table pour laquel il faut faire un select
      * @param constraintToAppend liste de toute les contraintes à ajouter
      * @return prepared statement
@@ -317,7 +298,6 @@ public class Database {
         return parts;
     }
 
-    //TOOLS FOR ALL DAO
     protected List<String> getListOfName(String query) throws SQLException {
         List<String> nameList;
         int columnIndex = 1;
@@ -334,5 +314,34 @@ public class Database {
         return Configuration.getCurrent().getCurrentUser().getId();
     }
 
+    protected void insertNameWithPreparedStatement(String name, String table) throws SQLException {
+        String query = String.format("""
+            INSERT INTO %s values (null,?);
+            """,table);
+        sendInsertNameQueryWithPreparedStatement(name, query);
+    }
+
+    protected void sendInsertNameQueryWithPreparedStatement(String name, String query) throws SQLException {
+        int nameIndexInPreparedStatement = 1;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPreparedStatement, name);
+            sendQueryUpdate(statement);
+        }
+    }
+
+    protected  <T extends ProductHashSet> void insertListOfProducts(T vectorOfProduct, int objectId, String table) throws SQLException {
+        int quantityIndexInPreparedStatement = 1;
+        for (Product p: vectorOfProduct) { // ajout des produits lié a la recette
+            int productID = getIDFromName("Ingredient", p.getName(), "IngredientID");
+            int quantity = p.getQuantity();
+            String query = String.format("""
+            INSERT INTO %s values (%s, %s, ?);
+            """,table, objectId,productID);
+            try (PreparedStatement statement = connection.prepareStatement(query)) {
+                statement.setInt(quantityIndexInPreparedStatement, quantity);
+                sendQueryUpdate(statement);
+            }
+        }
+    }
 
 }

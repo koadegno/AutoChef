@@ -34,14 +34,7 @@ public class RecipeCategoryDao extends Database implements Dao<String> {
 
     @Override
     public void insert(String name) throws SQLException {
-        int nameIndexInPreparedStatement = 1;
-        String query = String.format("""
-            INSERT INTO %s values (null,?);
-            """,TABLE_NAME);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(nameIndexInPreparedStatement,name);
-            sendQueryUpdate(statement);
-        }
+        insertNameWithPreparedStatement(name, TABLE_NAME);
     }
 
     @Override
