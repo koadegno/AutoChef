@@ -93,7 +93,6 @@ public abstract class Controller {
         }
         catch (IOException e) {
             URL missingFXMLFile = loader.getLocation();
-            e.printStackTrace();
             ViewController.showErrorFXMLMissing(missingFXMLFile);
         }
 

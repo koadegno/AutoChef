@@ -16,6 +16,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.exception.JSONException;
 
 /**
  * Test de la classe JSON
@@ -95,10 +96,9 @@ class TestJSON {
     }
 
     @Test
-    public void testJsonProduct() throws SQLException {
+    public void testJsonProduct() throws JSONException {
         JSON json = new JSON();
         json.importProduct(fileNameProduct);
         //get recipe from database to check if it's created
     }
-
 }

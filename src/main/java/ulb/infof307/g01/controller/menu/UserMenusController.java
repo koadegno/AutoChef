@@ -54,8 +54,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
                 menus.add(Configuration.getCurrent().getMenuDao().get(name));
             }
         } catch (SQLException e) {
-            //TODO gerer l'erreur
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
 
         fillMenuTableView();

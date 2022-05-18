@@ -14,6 +14,7 @@ import ulb.infof307.g01.model.database.dao.ProductDao;
 import ulb.infof307.g01.model.database.dao.ProductUnityDao;
 import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.model.database.dao.ShoppingListDao;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
@@ -124,7 +125,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
             else modifyShoppingListViewController.initComboBox(allProduct, allUnitName, allShoppingListName);
 
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
     }
 

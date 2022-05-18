@@ -33,7 +33,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
         try {
             this.shoppingList =  Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
 
         this.displayExportShoppingList();
@@ -43,10 +43,11 @@ public class ExportShoppingListController extends Controller implements ExportSh
      * Affiche la popup pour pouvoir exporter en PDF ou ODT une liste de courses
      */
     public void displayExportShoppingList(){
+        String filename = "ExportShoppingList.fxml";
         try {
-            this.popupExportShoppingList = popupFXML("ExportShoppingList.fxml", exportShoppingListViewController);
+            this.popupExportShoppingList = popupFXML(filename, exportShoppingListViewController);
         } catch (IOException e) {
-            e.printStackTrace();
+            ViewController.showErrorFXMLMissing(filename);
         }
     }
 
@@ -71,7 +72,6 @@ public class ExportShoppingListController extends Controller implements ExportSh
         try {
             odtCreator.createODT(shoppingList);
         } catch (Exception e) {
-            e.printStackTrace();
             ViewController.showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur c'est produit avec le fichier ODT, contacté le service d'assistance.");
         }
         popupExportShoppingList.close();

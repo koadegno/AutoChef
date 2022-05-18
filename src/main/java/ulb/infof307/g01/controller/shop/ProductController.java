@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.exception.JSONException;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ProductViewController;
@@ -55,8 +56,7 @@ public class ProductController extends Controller implements ProductViewControll
             nameProductUnity = Configuration.getCurrent().getProductUnityDao().getAllName();
 
         } catch (SQLException e) {
-            //TODO: régler cette erreur
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
         productViewController.initComboboxInformation(nameProductFamily,nameProductUnity);
     }
@@ -118,10 +118,10 @@ public class ProductController extends Controller implements ProductViewControll
                 json.importProduct(jsonProduct.getAbsolutePath());
                 String nameProduct = json.getNameProduct();
                 shopViewController.setNameProduct(nameProduct);
-            } catch (SQLException e) {
-                String messageError = "Le contenu du JSON est incorrecte ou \nle produit existe deja";
+            } catch (JSONException e) {
+                String messageError = "Le contenu du JSON est incorrect ou \nle produit existe deja";
                 ProductViewController.showAlert(Alert.AlertType.ERROR, "Erreur", messageError);
-               }
+            }
 
             createProductStage.close();
         }
