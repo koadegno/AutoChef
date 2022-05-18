@@ -14,32 +14,52 @@ public class Shop extends HashSet<Product> {
     private Point coordinate;
     private String address;
     private int id = -1;
-    private final LocatorService locatorService;
+    private LocatorService locatorService;
+    public static class ShopBuilder{
+        private String name = "";
+        private Point coordinate = null;
+        private String address = "";
+        private int id = -1;
 
-    public Shop(){
-        this.coordinate = null;
-        this.name = this.address = "";
-        this.locatorService = new LocatorService();
+
+
+        public ShopBuilder withName(String name){
+            this.name = name;
+            return this;
+        }
+
+        public ShopBuilder withAddress(String address){
+            this.address = address;
+            return this;
+        }
+
+        public ShopBuilder withCoordinate(Point coordinate){
+            this.coordinate = coordinate;
+            return this;
+        }
+
+        public ShopBuilder withID(int id){
+            this.id = id;
+            return this;
+        }
+
+        public Shop build(){
+            Shop shop = new Shop();
+            shop.locatorService = new LocatorService();
+            shop.id = id;
+            shop.address = address;
+            shop.name =name;
+            if((!address.isBlank() || !address.isEmpty()) && coordinate == null){
+                shop.coordinate = shop.locatorService.convertAddressToPoint(address);
+            }
+            else{
+                shop.coordinate = coordinate;
+            }
+            return shop;
+        }
     }
 
-    public Shop(int id,String name,String address, Point coordinate){
-        this(name,coordinate);
-        this.id = id;
-        this.address = address;
-
-    }
-    public Shop(String name, Point coordinate){
-        this.name = name;
-        this.coordinate = coordinate;
-        this.locatorService = new LocatorService();
-
-    }
-
-    public Shop(String name, String address) {
-        this(name, (Point) null);
-        this.address = address;
-        coordinate = locatorService.convertAddressToPoint(address);
-    }
+    public Shop(){}
 
     public void setName(String shopName){
         name = shopName;

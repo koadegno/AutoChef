@@ -20,17 +20,18 @@ import static org.junit.jupiter.api.Assertions.*;
  */
 class TestShopDao {
     static  private final String MY_SHOPPING_LIST_FOR_TEST = "myShoppingForTest";
-    static private final Product PEACH = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
-    static private final Product STRAWBERRY = new Product.ProductBuilder().withName("fraise").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
-    static private final Product MANGO = new Product.ProductBuilder().withName("mango").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
-    static private final Product MELON =  new Product.ProductBuilder().withName("melon").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    private static final Product.ProductBuilder productBuilder = new Product.ProductBuilder();
+    static private final Product PEACH = productBuilder.withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product STRAWBERRY = productBuilder.withName("fraise").build();
+    static private final Product MANGO = productBuilder.withName("mango").build();
+    static private final Product MELON =  productBuilder.withName("melon").withQuantity(1).build();
 
-    static private final Shop ALDI_SHOP = new Shop("1 aldi","Gent");
-    static private final Shop LIDL_SHOP = new Shop("aldi Namur","Bruxelles");
-    static private final Shop ALDI_SHOP2 = new Shop("Namur2","Anderlecht");
-    static private final Shop CARREFOUR_ANVERS2 = new Shop("Carrefour Anvers2","Molenbeek");
-    static private final Shop ALDI_RUE_NEUVE = new Shop("1 aldi Rue neuve", "Belgique, Ixelles");
-    static private final Shop CARREFOUR_ANVERS = new Shop("Carrefour Anvers","Anvers");
+    static private final Shop ALDI_SHOP = new Shop.ShopBuilder().withName("1 aldi").withAddress("Gent").build();
+    static private final Shop LIDL_SHOP = new Shop.ShopBuilder().withName("aldi Namur").withAddress("Bruxelles").build();
+    static private final Shop ALDI_SHOP2 = new Shop.ShopBuilder().withName("Namur2").withAddress("Anderlecht").build();
+    static private final Shop CARREFOUR_ANVERS2 = new Shop.ShopBuilder().withName("Carrefour Anvers2").withAddress("Molenbeek").build();
+    static private final Shop ALDI_RUE_NEUVE = new Shop.ShopBuilder().withName("1 aldi Rue neuve").withAddress("Belgique, Ixelles").build();
+    static private final Shop CARREFOUR_ANVERS = new Shop.ShopBuilder().withName("Carrefour Anvers").withAddress("Anvers").build();
 
     static private final String DATABASE_NAME = "test.sqlite";
     static ShoppingList myShoppingList;
@@ -98,9 +99,9 @@ class TestShopDao {
     @Test
     void testUpdate() throws SQLException {
         Point coordinate = new Point(1,1);
-        Shop aldiBruxellesShop = new Shop(2,"aldi Bruxelles","TITI",coordinate);
+        Shop aldiBruxellesShop = new Shop.ShopBuilder().withID(2).withName("aldi Bruxelles").withCoordinate(coordinate).build();
         Configuration.getCurrent().getShopDao().insert(aldiBruxellesShop);
-        aldiBruxellesShop = new Shop(2,"aldi Zaventem","TATA",coordinate);
+        aldiBruxellesShop = new Shop.ShopBuilder().withID(2).withName("aldi Zaventem").withCoordinate(coordinate).build();
         Configuration.getCurrent().getShopDao().update(aldiBruxellesShop);
         Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
 

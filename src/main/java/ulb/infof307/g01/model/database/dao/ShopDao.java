@@ -68,6 +68,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         String query = String.format("""
             INSERT INTO %s values (%s, %s);
             """,TABLE_USER_MAGASIN,getUserID(),shopID);
+        System.out.println("Ma requete : "+query);
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
             sendQueryUpdate(statement);
         }
@@ -292,7 +293,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 double shopX = resultSet.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = resultSet.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                Shop shop =  new Shop(shopID, shopName,shopAddress, shopPoint);
+                Shop shop = new Shop.ShopBuilder().withID(shopID).withName(shopName).withAddress(shopAddress).build();
                 shopsList.add(shop);
             }
         } catch (SQLException e) {
@@ -348,7 +349,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         String query = String.format("""
             INSERT INTO %s values (null,?,'%s',%s,%s );
         """,MAGASIN_TABLE_NAME, address,longitude,latitude); //Seulement le nom vient de l'utilisateur
-
+        System.out.println("ma req 2"+query);
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
             statement.setString(nameIndexInPreparedStatement, name);
             System.out.println(statement);
