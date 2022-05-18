@@ -322,7 +322,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     private void insertShopProducts(Shop shop, String shopID) throws SQLException {
         for (Product product: shop) { //Tous les produits ont déja été vérifié à l'insertion
-            String productID = String.format("%d", getIDFromName("Ingredient", product.getName(), "IngredientID"));
+            String productID = String.format("%d", getIDFromName("Ingredient", product.getName()));
             String price =  String.valueOf(product.getPrice());
             String query = String.format("""
             INSERT INTO %s values (%s, %s,%s);

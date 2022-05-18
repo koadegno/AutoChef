@@ -2,7 +2,6 @@ package ulb.infof307.g01.model.database.dao;
 
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
-import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 
 import java.sql.PreparedStatement;
@@ -68,11 +67,6 @@ public class RecipeDao extends Database implements Dao<Recipe> {
      * @return La liste des recettes qui correspondent au critère
      */
     public List<Recipe> getRecipeWhere(String nameCategory, String nameType, int nbPerson) throws SQLException {
-        List<String> valuesOfPreparedStatement;
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("UtilisateurRecette.UtilisateurID = %d",
-                Configuration.getCurrent().getCurrentUser().getId()));
-        String stringQuery;
         StringBuilder query = new StringBuilder("""
                 SELECT R.RecetteID,R.Nom,R.Duree,R.NbPersonnes,TypePlat.Nom,Categorie.Nom,R.Preparation,UtilisateurRecette.estFavoris
                 FROM Recette as R
@@ -80,28 +74,26 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
                 """);
-
-        
+        //ajout des contraintes
+        query.append(String.format(" WHERE UtilisateurRecette.UtilisateurID = %d", getUserID()));
         if (nameCategory != null){
-            int categoryID = getIDFromName("Categorie",nameCategory,"CategorieID");
-            constraint.add(String.format("R.CategorieID = %d", categoryID));
+            int categoryID = getIDFromName("Categorie",nameCategory);
+            query.append(String.format(" AND R.CategorieID = %d", categoryID));
         }
         if (nameType != null){
-            int typeID = getIDFromName("TypePlat",nameType,"TypePlatID");
-            constraint.add(String.format("R.TypePlatID = %d", typeID));
+            int typeID = getIDFromName("TypePlat",nameType);
+            query.append(String.format(" AND R.TypePlatID = %d", typeID));
         }
         if (nbPerson > 0){
-            constraint.add(String.format("R.NbPersonnes = %d", nbPerson));
+            query.append(" AND R.NbPersonnes = ?"); //nbPersonnes peut venir d'un JSON
         }
 
-        query.append(" Where ");
-        valuesOfPreparedStatement = appendValuesToWherePreparedStatement(query,constraint);
-
-        stringQuery = String.valueOf(query);
-        PreparedStatement statement = connection.prepareStatement(stringQuery);
-        fillPreparedStatementValues(statement, valuesOfPreparedStatement);
-        ResultSet result = sendQuery(statement);
-        return fillRecipes(result);
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
+            int nbPersonnIndexInPreparedStatement = 1;
+            if (nbPerson > 0) statement.setInt(nbPersonnIndexInPreparedStatement, nbPerson);
+            ResultSet resultSet =  sendQuery(statement);
+            return fillRecipes(resultSet);
+        }
     }
 
     /**
@@ -147,7 +139,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     private void insertRecipe(Recipe recipe) throws SQLException {
         String query = String.format("""
             INSERT INTO %s values (null,?,?,?,%s,%s,?);
-            """,RECIPE_TABLE_NAME, getIDFromName("TypePlat", recipe.getType(), "TypePlatID"),getIDFromName("Categorie", recipe.getCategory(), "CategorieID") );
+            """,RECIPE_TABLE_NAME, getIDFromName("TypePlat", recipe.getType()),getIDFromName("Categorie", recipe.getCategory()) );
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, recipe.getName());
             statement.setInt(2, recipe.getDuration());

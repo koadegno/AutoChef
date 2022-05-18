@@ -81,17 +81,24 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     @Override
     public void update(ShoppingList shoppingList) throws SQLException {
         ArrayList<String> constraint = new ArrayList<>();
-        int id = getIDFromName(LISTE_COURSE_TABLE_NAME, shoppingList.getName(), "ListeCourseID");
+        int id = getIDFromName(LISTE_COURSE_TABLE_NAME, shoppingList.getName());
         constraint.add(String.format("%s = %d","ListeCourseID", id));
         delete("ListeCourseIngredient",constraint);
-        updateName(LISTE_COURSE_TABLE_NAME, shoppingList.getName(),constraint );
+
+        String query = String.format("""
+                        UPDATE %s SET Nom = ?
+                        WHERE ListeCourseID = %s
+                """, LISTE_COURSE_TABLE_NAME,id);
+        sendInsertNameQueryWithPreparedStatement(shoppingList.getName(),query); //update query
+
+
         if(shoppingList.size() == 0){
             delete(LISTE_COURSE_TABLE_NAME,constraint);
-            // TODO est ce que ca delete en cascade ?
+            // TODO: est ce que ca delete en cascade ?
         }
         else{
             for (Product product : shoppingList) {
-                int productID = getIDFromName("Ingredient", product.getName(), "IngredientID");
+                int productID = getIDFromName("Ingredient", product.getName());
                 insertIngredientInShoppingList(id, productID, product.getQuantity());
             }
         }
@@ -100,7 +107,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     @Override
     public ShoppingList get(String name) throws SQLException {
         int userID = Configuration.getCurrent().getCurrentUser().getId();
-        int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name,"ListeCourseID");
+        int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name);
         ResultSet querySelectShoppingList = sendQuery(String.format("""
                 SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom
                 FROM ListeCourseIngredient as S

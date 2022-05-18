@@ -1,12 +1,12 @@
 package ulb.infof307.g01.model.database.dao;
 
+import org.jetbrains.annotations.Nullable;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Product;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -36,8 +36,8 @@ public class ProductDao extends Database implements Dao<Product> {
 
     @Override
     public void insert(Product product) throws SQLException {
-        int familyID = getIDFromName("FamilleAliment",product.getFamilyProduct(),"FamilleAlimentID");
-        int unityID = getIDFromName("Unite",product.getNameUnity(),"UniteID");
+        int familyID = getIDFromName("FamilleAliment",product.getFamilyProduct());
+        int unityID = getIDFromName("Unite",product.getNameUnity());
         String query = String.format("""
             INSERT INTO %s values (null,?, %s, %s);
             """,TABLE_NAME, familyID, unityID);
@@ -53,19 +53,26 @@ public class ProductDao extends Database implements Dao<Product> {
      */
     @Override
     public Product get(String name) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = '%s'","Nom",name));
-        PreparedStatement statement  = select("Ingredient",constraint,null);
-        ResultSet querySelectProduct = sendQuery(statement);
-        if(!querySelectProduct.next())return null;
+        String query = String.format("""
+                        SELECT * FROM %s
+                        WHERE nom = ?
+                """, TABLE_NAME);
+        int nameIndexInPreparedStatement = 1;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPreparedStatement, name);
+            ResultSet querySelectProduct =  sendQuery(statement);
+            return getProductInformationInResultSet(querySelectProduct);
+        }
+    }
 
-
+    @Nullable
+    private Product getProductInformationInResultSet(ResultSet querySelectProduct) throws SQLException {
+        if(!querySelectProduct.next()) return null;
         String nameProduct = querySelectProduct.getString("Nom");
         int familyProductID = querySelectProduct.getInt("FamilleAlimentID");
         int unityProductID = querySelectProduct.getInt("UniteID");
         String familyProduct = getNameFromID("FamilleAliment", familyProductID,"FamilleAlimentID");
         String unityProduct = getNameFromID("Unite", unityProductID,"UniteID");
-
         return new Product.ProductBuilder().withName(nameProduct).withQuantity(1).withFamilyProduct(familyProduct).withNameUnity(unityProduct).build();
     }
 }

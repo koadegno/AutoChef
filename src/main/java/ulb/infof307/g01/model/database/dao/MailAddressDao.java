@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model.database.dao;
 
+import org.jetbrains.annotations.Nullable;
 import ulb.infof307.g01.model.database.Database;
 
 import java.sql.PreparedStatement;
@@ -46,14 +47,7 @@ public class MailAddressDao extends Database implements Dao<String> {
      */
     @Override
     public void insert(String mailAddressName) throws SQLException {
-        int mailIndexInPreparedStatement = 1;
-        String query = String.format("""
-            INSERT INTO %s values (null, ?);
-            """,TABLE_MAIL_ADDRESS);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setString(mailIndexInPreparedStatement,mailAddressName);
-            sendQueryUpdate(statement);
-        }
+        insertNameWithPreparedStatement(mailAddressName, TABLE_MAIL_ADDRESS);
     }
 
     /**
@@ -74,7 +68,6 @@ public class MailAddressDao extends Database implements Dao<String> {
         String query = String.format("""
             INSERT INTO %s values (%s, %s);
             """,TABLE_USER_MAIL_ADDRESS,getUserID(),mailID);
-        System.out.println(query);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             sendQueryUpdate(statement);
         }
@@ -93,8 +86,22 @@ public class MailAddressDao extends Database implements Dao<String> {
      */
     @Override
     public String get(String mailAddressName) throws SQLException {
-        return get(String.format("%s = '%s'", "Nom", mailAddressName), "AdresseMailID");
+        String query = String.format("""
+                        SELECT AdresseMailID FROM %s
+                        WHERE nom = ?
+                """, TABLE_MAIL_ADDRESS);
+        return sendGetQuery(query, mailAddressName); //mailAddressName peut provenir de l'utilisateur
+    }
 
+    @Nullable
+    private String sendGetQuery(String query, String stringForPreparedStatement) throws SQLException {
+        int columnIndexToRetrieve = 1;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            if(stringForPreparedStatement != null)statement.setString(columnIndexToRetrieve, stringForPreparedStatement);
+            ResultSet querySelectProduct =  sendQuery(statement);
+            if(!querySelectProduct.next()) return null;
+            return querySelectProduct.getString(columnIndexToRetrieve);
+        }
     }
 
     /**
@@ -104,25 +111,11 @@ public class MailAddressDao extends Database implements Dao<String> {
      * @throws SQLException erreur liée à la base de donnée
      */
     public String get(int mailID) throws SQLException {
-        return get(String.format("%s = %d", "AdresseMailID", mailID), "Nom");
+        String query = String.format("""
+                        SELECT Nom FROM %s
+                        WHERE AdresseMailID = %s
+                """, TABLE_MAIL_ADDRESS, mailID);
+        return sendGetQuery(query,null); //mailID provient pas de l'utilisateur
 
     }
-
-    /**
-     * Generique get qui permet de recupere une infotmation en fonction d'une contrainte et
-     * d'une column specifique
-     * @param constraint la containte sur laquelle on va chercher
-     * @param tableName la colonne sur la quelle on va recupere l'information
-     * @return l'information voulue ou null si elle n'existe pas
-     * @throws SQLException erreur liée à la requête
-     */
-    private String get(String constraint, String tableName) throws SQLException {
-        ArrayList<String> constraints = new ArrayList<>();
-        constraints.add(constraint);
-        PreparedStatement statement = select(TABLE_MAIL_ADDRESS,constraints,null);
-        ResultSet querySelectProduct = sendQuery(statement);
-        if(!querySelectProduct.next()) return null;
-        return querySelectProduct.getString(tableName);
-    }
-
 }

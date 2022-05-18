@@ -35,7 +35,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         for(Day day : Day.values()){
             List<Recipe> recipeOfDay = menu.getRecipesfor(day);
             for (int hour = 0; hour < recipeOfDay.size(); hour++) {
-                int recipeID = getIDFromName("Recette", recipeOfDay.get(hour).getName(), "RecetteID");
+                int recipeID = getIDFromName("Recette", recipeOfDay.get(hour).getName());
                 String query = String.format("""
                     INSERT INTO %s values (%s,%s,%s,%s);
                 """,MENU_RECIPE_TABLE_NAME, menuID,day.ordinal(),hour,recipeID);
@@ -48,7 +48,7 @@ public class MenuDao extends Database implements Dao<Menu> {
 
 
     private Menu fillMenuWithRecipes(String nameMenu) throws SQLException {
-        int nameID = getIDFromName(MENU_TABLE_NAME,nameMenu,"MenuID");
+        int nameID = getIDFromName(MENU_TABLE_NAME,nameMenu);
         ResultSet querySelectMenu = sendQuery(String.format("""
                 SELECT M.Jour,M.Heure,R.RecetteID, R.Nom, R.Duree, R.NbPersonnes, R.Preparation, Categorie.Nom, TypePlat.Nom
                 FROM MenuRecette as M
@@ -120,19 +120,25 @@ public class MenuDao extends Database implements Dao<Menu> {
      */
     @Override
     public void update(Menu menu) throws SQLException {
+        int menuID = getIDFromName(MENU_TABLE_NAME,menu.getName());
+        int isEmpty = 0;
         ArrayList<String> constraint = new ArrayList<>();
-        int menuID = getIDFromName(MENU_TABLE_NAME,menu.getName(),"MenuID");
         constraint.add(String.format("%s = %d","MenuID",menuID));
         delete("MenuRecette",constraint);
         delete("UtilisateurMenu",constraint);
-        updateName(MENU_TABLE_NAME, menu.getName(),constraint);
-        if(menu.size() == 0){
-            delete(MENU_TABLE_NAME,constraint);
+        if(menu.size() == isEmpty) {
+            delete(MENU_TABLE_NAME, constraint);
+            return;
         }
-        else {
-            insertRecipesInMenu(menu, menuID);
-            insertUserMenu(menuID);
-        }
+
+        String query = String.format("""
+                        UPDATE %s SET Nom = ?
+                        WHERE MenuID = %s
+                """, MENU_TABLE_NAME,menuID);
+        sendInsertNameQueryWithPreparedStatement(menu.getName(),query); //update query
+        insertRecipesInMenu(menu, menuID);
+        insertUserMenu(menuID);
+
     }
 
     @Override

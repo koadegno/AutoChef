@@ -111,32 +111,6 @@ public class Database {
     }
 
     /**
-     * @param nameTable La table pour laquel il faut faire un select
-     * @param constraintToAppend liste de toute les contraintes à ajouter
-     * @return prepared statement
-     */
-    protected PreparedStatement select(String nameTable, List<String> constraintToAppend, String orderBy) throws SQLException {
-        String stringQuery;
-        StringBuilder query = new StringBuilder(String.format("SELECT * FROM %s ", nameTable));
-        List<String> valueOfPreparedStatement;
-        if (!constraintToAppend.isEmpty()) {
-            query.append(" WHERE ");
-        }
-        valueOfPreparedStatement =  appendValuesToWherePreparedStatement(query,constraintToAppend);
-        if(orderBy != null){
-            query.append(orderBy);
-        }
-        query.append(';');
-        stringQuery = String.valueOf(query);
-        PreparedStatement statement = connection.prepareStatement(stringQuery);
-        fillPreparedStatementValues(statement, valueOfPreparedStatement);
-
-        return statement;
-    }
-
-
-
-    /**
      * Permet d'analyser le contenu de la requête en fonction des types
      * des valeurs et de les placer dans le PreparedStatement
      * @param statement le PreparedStatement à remplir
@@ -174,24 +148,6 @@ public class Database {
         }
     }
 
-    /**
-     * Remplissage automatique d'une requête avec des contraintes
-     * @param query requete à contraindre
-     * @param constraintToAppend contraintes à ajouter à requête
-     * @return requete avec contrainte
-     */
-    protected List<String> appendValuesToWherePreparedStatement(StringBuilder query, List<String> constraintToAppend) {
-        List<String> columnValues = new ArrayList<>();
-        if (!constraintToAppend.isEmpty()) {
-            for (String s : constraintToAppend) {
-                List<String> columnAndValue = splitOnCharacter(s);
-                query.append(columnAndValue.get(0)).append(columnAndValue.get(2)).append(" ?").append(" AND ");
-                columnValues.add(columnAndValue.get(1));
-            }
-            query.delete(query.length() - 4, query.length());
-        }
-        return columnValues;
-    }
 
     protected String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
         for (int i = 0; i < constraintToAppend.size(); i++) {
@@ -203,15 +159,6 @@ public class Database {
         return String.valueOf(query);
     }
 
-    protected void updateName(String nameTable, String nameToUpdate, List<String> constraintToAppend) throws SQLException {
-        StringBuilder query = new StringBuilder(String.format("Update %s SET Nom = '%s' WHERE ", nameTable, nameToUpdate));
-        //nameTable,nameToUpdate
-        List<String>  valuesOfPreparedStatement = appendValuesToWherePreparedStatement(query, constraintToAppend);
-        PreparedStatement statement = connection.prepareStatement(String.valueOf(query));
-
-        fillPreparedStatementValues(statement, valuesOfPreparedStatement);
-        sendQueryUpdate(statement);
-    }
 
     /**
      * @param table Table dans laquelle on cherche le nom
@@ -220,30 +167,33 @@ public class Database {
      * @return Nom correspondant à l'ID
      */
     protected String getNameFromID(String table, int id, String nameIDColumn) throws SQLException {
-        List<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s=%d",nameIDColumn,id));
-        PreparedStatement statement = select(table,constraint,null);
-        ResultSet res = sendQuery(statement);
-        res.next();
-        return res.getString("Nom");
+        int columnIndexToRetrieve = 1;
+        String query = String.format("""
+                        SELECT Nom FROM %s
+                        WHERE %s = %s
+                """, table,nameIDColumn, id);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet =  sendQuery(statement);
+            if(!resultSet.next())throw new SQLException();
+            return resultSet.getString(columnIndexToRetrieve);
+        }
     }
 
     /**
      * Methode inverse de getNameFromID
      */
-    protected int getIDFromName(String table, String name, String nameIDColumn) throws SQLException {
-
-        List<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s='%s'","Nom",name));
-        PreparedStatement statement =  select(table,constraint,null);
-
-        ResultSet res = sendQuery(statement);
-
-        if(!res.next()){
-            throw new SQLException();
+    protected int getIDFromName(String table, String name) throws SQLException {
+        int columnIndexToRetrieve = 1;
+        String query = String.format("""
+                        SELECT * FROM %s
+                        WHERE Nom = ?
+                """, table);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(columnIndexToRetrieve, name);
+            ResultSet resultSet =  sendQuery(statement);
+            if(!resultSet.next())throw new SQLException();
+            return resultSet.getInt(columnIndexToRetrieve);
         }
-
-        return res.getInt(nameIDColumn);
     }
 
 
@@ -265,37 +215,6 @@ public class Database {
             Product product = new Product.ProductBuilder().withName(productName).withQuantity(quantity).withNameUnity(unityName).withFamilyProduct(familyName).build();
             recipe.add(product);
         }
-    }
-
-    /**
-     * Découpe chaque contrainte d'une requête sous forme de String en un ArrayList de 3 Strings
-     * @param s string a split
-     * @return list de 3 strings
-     */
-    protected List<String> splitOnCharacter(String s){
-        List<String> parts = null;
-        if(s.contains(">=")){
-            //split sur base de >=
-            parts = new ArrayList<>(Arrays.asList(s.split(">=")));
-            parts.add(">=");
-        }
-        else if(s.contains("<=")){
-            parts = new ArrayList<>(Arrays.asList(s.split("<=")));
-            parts.add("<=");
-        }
-        else if(s.contains("<")){
-            parts = new ArrayList<>(Arrays.asList(s.split("<")));
-            parts.add("<");
-        }
-        else if(s.contains(">")){
-            parts = new ArrayList<>(Arrays.asList(s.split(">")));
-            parts.add(">");
-        }
-        else if(s.contains("=")){
-            parts = new ArrayList<>(Arrays.asList(s.split("=")));
-            parts.add("=");
-        }
-        return parts;
     }
 
     protected List<String> getListOfName(String query) throws SQLException {
@@ -332,7 +251,7 @@ public class Database {
     protected  <T extends ProductHashSet> void insertListOfProducts(T vectorOfProduct, int objectId, String table) throws SQLException {
         int quantityIndexInPreparedStatement = 1;
         for (Product p: vectorOfProduct) { // ajout des produits lié a la recette
-            int productID = getIDFromName("Ingredient", p.getName(), "IngredientID");
+            int productID = getIDFromName("Ingredient", p.getName());
             int quantity = p.getQuantity();
             String query = String.format("""
             INSERT INTO %s values (%s, %s, ?);
