@@ -144,10 +144,10 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     /**
-     * Rêquete pour avoir les magasins possendant toutes les ingredients d'une liste de course
-     * @param shoppingList
-     * @return Liste des magasion qui ont les ingredient de la liste de course
-     * @throws SQLException
+     * Rêquete pour avoir les magasins possédant toutes les ingredients d'une liste de course
+     * @param shoppingList la liste de course
+     * @return Liste des magasins qui ont les ingredient de la liste de course
+     * @throws SQLException erreur avec la requête
      */
     public List<Shop>  getShopWithProductList(ShoppingList shoppingList) throws SQLException {
         int shoppingListID = shoppingList.getId();
@@ -164,10 +164,10 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     /**
-     *
-     * @param shoppingList
+     * Récupère les magasins possèdent la liste de course avec le prix minimum
+     * @param shoppingList la liste de course
      * @return Une liste de magasins contenant les ingredients de la liste de course au prix le plus bas
-     * @throws SQLException
+     * @throws SQLException erreur avec la requête
      */
     public List<Shop>  getShopWithMinPriceForProductList(ShoppingList shoppingList) throws SQLException {
         int shoppingListID = shoppingList.getId();
@@ -194,11 +194,11 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     /**
-     *
-     * @param shoppingList
+     * Trouve les magasins le plus proche contenant la liste de course
+     * @param shoppingList la liste de course
      * @param position : la position de départ
      * @return Liste des magasins les plus proches contenant les ingredients d'une liste de courses
-     * @throws SQLException
+     * @throws SQLException erreur avec la requête
      */
     public List<Shop>  getNearestShopsWithProductList(ShoppingList shoppingList, Point position) throws SQLException {
         int shoppingListID = shoppingList.getId();
@@ -224,11 +224,11 @@ public class ShopDao extends Database implements Dao<Shop> {
     }
 
     /**
-     *
-     * @param shop : le magasins pour lequel on souhaite connaitre le prix d'une liste de produitss
-     * @param shoppingList
-     * @return Le prix totale d'une liste d'ingredient dans un magasin
-     * @throws SQLException
+     * Retourne le prix de la liste de course pour un magasin donné
+     * @param shop : le magasin pour lequel on souhaite connaitre le prix d'une liste de produit
+     * @param shoppingList la liste de course
+     * @return Le prix total d'une liste d'ingrédient dans un magasin
+     * @throws SQLException erreur avec la requête
      */
     public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
         double totalPrice = -1; //error value
@@ -292,7 +292,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 double shopX = resultSet.getDouble(SHOP_LATITUDE_INDEX);
                 double shopY = resultSet.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
-                Shop shop =  new Shop(shopID, shopName,shopAddress, shopPoint);
+                Shop shop = new Shop.ShopBuilder().withID(shopID).withName(shopName).withAddress(shopAddress).withCoordinate(shopPoint).build();
                 shopsList.add(shop);
             }
         } catch (SQLException e) {
@@ -316,9 +316,9 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     /**
      * Insert les produits d'un magasin dans la table MagasinIngredient
-     * @param shop
-     * @param shopID
-     * @throws SQLException
+     * @param shop le magasin
+     * @param shopID l'id du magasin
+     * @throws SQLException erreur avec la requête
      */
     private void insertShopProducts(Shop shop, String shopID) throws SQLException {
         for (Product product: shop) { //Tous les produits ont déja été vérifié à l'insertion
@@ -327,7 +327,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             String query = String.format("""
             INSERT INTO %s values (%s, %s,%s);
             """,TABLE_SHOP_PRODUCT,shopID,productID,price);
-            try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
                 sendQueryUpdate(statement);
             }
         }
@@ -335,8 +335,8 @@ public class ShopDao extends Database implements Dao<Shop> {
 
     /**
      * Insert un magasin dans la table magasin
-     * @param shop
-     * @throws SQLException
+     * @param shop le magasin
+     * @throws SQLException erreur avec la requête
      */
     private void insertShop(Shop shop) throws SQLException {
         String name =  shop.getName();

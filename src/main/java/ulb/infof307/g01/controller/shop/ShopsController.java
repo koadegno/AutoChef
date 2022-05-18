@@ -80,9 +80,11 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     }
 
-    private Shop getShop(String shopName) throws SQLException {
-        String[] shopNameSplit = shopName.split("-"); // 0 =  le nom , 1 = l'adresse
-        Shop shop = new Shop(shopNameSplit[0],shopNameSplit[1]);
+    private Shop getShop(String shopNameAddress) throws SQLException {
+        String[] shopNameSplit = shopNameAddress.split("-"); // 0 =  le nom , 1 = l'adresse
+        String shopName = shopNameSplit[0];
+        String shopAddress = shopNameSplit[1];
+        Shop shop = new Shop.ShopBuilder().withName(shopName).withAddress(shopAddress).build();
         shop = shopDao.get(shop.getName(),shop.getCoordinate());
         return shop ;
     }
