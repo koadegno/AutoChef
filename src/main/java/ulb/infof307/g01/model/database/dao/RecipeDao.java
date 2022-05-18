@@ -174,19 +174,16 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN TypePlat ON R.TypePlatID = TypePlat.TypePlatID
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
-                WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", Configuration.getCurrent().getCurrentUser().getId());
-
-        ArrayList<String> valuesOfPreparedStatement = new ArrayList<>();
-        name = "'" + name + "'"; // quotes to recognize it as string and request need it
-        valuesOfPreparedStatement.add(name);
-        PreparedStatement statement = connection.prepareStatement(query);
-        fillPreparedStatementValues(statement, valuesOfPreparedStatement);
-        ResultSet result = sendQuery(statement);
-        if(!result.next()) return null;
-
-        Recipe recipe = fillRecipe(result);
-        fillRecipeWithProducts(recipe);
-        return recipe;
+                WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", getUserID());
+        int nameIndexInPreparedStatement = 1;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPreparedStatement, name);
+            ResultSet resultSet = sendQuery(statement);
+            if(!resultSet.next()) return null;
+            Recipe recipe = fillRecipe(resultSet);
+            fillRecipeWithProducts(recipe);
+            return recipe;
+        }
     }
 
     public void delete(Recipe displayedRecipe) throws SQLException {

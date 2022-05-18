@@ -6,7 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 import java.util.Scanner;
 
@@ -108,36 +107,6 @@ public class Database {
         ResultSet getID = request.getGeneratedKeys();
         getID.next();
         return getID.getInt(1);
-    }
-
-    /**
-     * Permet d'analyser le contenu de la requête en fonction des types
-     * des valeurs et de les placer dans le PreparedStatement
-     * @param statement le PreparedStatement à remplir
-     * @param valueOfPreparedStatement les types à déterminer
-     */
-    protected void fillPreparedStatementValues(PreparedStatement statement, List<String> valueOfPreparedStatement) throws SQLException {
-        if (valueOfPreparedStatement ==null) return;
-        for(int i = 1; i < valueOfPreparedStatement.size() +1; i++){
-            String columnValue = valueOfPreparedStatement.get(i-1);
-            if(columnValue.contains("'")){//string value
-                StringBuilder removeQuotes = new StringBuilder(columnValue.strip());
-                removeQuotes.deleteCharAt(0);
-                removeQuotes.deleteCharAt(removeQuotes.length() - 1);
-
-                statement.setString(i, String.valueOf(removeQuotes));
-            }
-            else if(columnValue.contains(".")){ //double
-                statement.setDouble(i, Double.parseDouble(columnValue));
-            }
-            else if(columnValue.equals(("null"))){
-                statement.setNull(i, Types.NULL);
-            }
-            else{ //int value
-                int val =  Integer.parseInt(columnValue.strip());
-                statement.setInt(i,val);
-            }
-        }
     }
 
 
