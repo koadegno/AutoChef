@@ -13,6 +13,7 @@ import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
@@ -45,11 +46,10 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
     }
 
     private void startMenu() {
-
         try {
             this.menu = Configuration.getCurrent().getMenuDao().get(menu.getName());
         } catch (SQLException e) {
-            throw new RuntimeException(e);
+            ViewController.showErrorSQL();
         }
         ArrayList<Day> days = new ArrayList<>(Arrays.asList(Day.values()).subList(0, Menu.NB_OF_DAYS));
         displayMenuInfo();

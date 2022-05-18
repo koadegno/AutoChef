@@ -105,7 +105,7 @@ public class MailController extends Controller implements MailViewController.Lis
             List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
             mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
     }
 

@@ -35,7 +35,7 @@ public class ShopsController extends Controller implements ShopsViewController.S
             List<String> allShopName = getShopsStringsList();
             shopsViewController.displayShops(allShopName);
         } catch (SQLException e) {
-            e.printStackTrace();
+            ViewController.showErrorSQL();
         }
     }
 
