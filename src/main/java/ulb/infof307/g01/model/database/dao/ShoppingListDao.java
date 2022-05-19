@@ -82,7 +82,6 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
 
         if(shoppingList.size() == 0){
             delete(LISTE_COURSE_TABLE_NAME,constraint);
-            // TODO: est ce que ca delete en cascade ?
         }
         else{
             insertListOfProducts(shoppingList,id,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
