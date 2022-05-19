@@ -1,8 +1,6 @@
 package ulb.infof307.g01.model.database.dao;
 
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
-import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
 import java.sql.PreparedStatement;
@@ -30,16 +28,6 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
         super(nameDB);
     }
 
-    private void insertIngredientInShoppingList(int shoppingListId, int ingredientId, int quantity) throws SQLException {
-        int quantityIndexInPreparedStatement = 1;
-        String query = String.format("""
-            INSERT INTO %s values (%s,%s,?);
-            """,LISTE_COURSE_INGREDIENT_TABLE_NAME, shoppingListId,ingredientId);
-        try (PreparedStatement statement = connection.prepareStatement(query)) {
-            statement.setInt(quantityIndexInPreparedStatement, quantity);
-            sendQueryUpdate(statement);
-        }
-    }
 
     @Override
     public List<String> getAllName() throws SQLException {
@@ -62,7 +50,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
     public void insert(ShoppingList shoppingList) throws SQLException {
         insertNameWithPreparedStatement(shoppingList.getName(), LISTE_COURSE_TABLE_NAME);
         int shoppingListID = getGeneratedID();
-        insertListOfProducts(shoppingList, shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME );
+        insertListOfProducts(shoppingList, shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
         insertUserShoppingList(shoppingListID);
     }
 
@@ -97,34 +85,28 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
             // TODO: est ce que ca delete en cascade ?
         }
         else{
-            for (Product product : shoppingList) {
-                int productID = getIDFromName("Ingredient", product.getName());
-                insertIngredientInShoppingList(id, productID, product.getQuantity());
-            }
+            insertListOfProducts(shoppingList,id,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
         }
     }
 
     @Override
     public ShoppingList get(String name) throws SQLException {
-        int userID = Configuration.getCurrent().getCurrentUser().getId();
-        int nameID = getIDFromName(LISTE_COURSE_TABLE_NAME,name);
-        ResultSet querySelectShoppingList = sendQuery(String.format("""
-                SELECT S.Quantite,Ingredient.Nom,Unite.Nom,F.Nom
-                FROM ListeCourseIngredient as S
-                INNER JOIN Ingredient ON S.IngredientID = Ingredient.IngredientID
-                INNER JOIN Unite ON Ingredient.UniteID = Unite.UniteID\s
-                INNER JOIN FamilleAliment as F ON Ingredient.FamilleAlimentID = F.FamilleAlimentID
+        int userID = getUserID();
+        String query = String.format("""
+                SELECT  S.ListeCourseID
+                FROM ListeCourse as S
                 INNER JOIN UtilisateurListeCourse ON UtilisateurListeCourse.ListeCourseID = S.ListeCourseID
-                WHERE S.ListeCourseID = %d AND UtilisateurListeCourse.UtilisateurID = %d""", nameID,userID));
-        ShoppingList shoppingList = new ShoppingList(name,nameID);
-        while(querySelectShoppingList.next()){
-            int productQuantity = querySelectShoppingList.getInt(1);
-            String productName = querySelectShoppingList.getString(2);
-            String productUnity = querySelectShoppingList.getString(3);
-            String productFamily = querySelectShoppingList.getString(4);
-
-            shoppingList.add(new Product.ProductBuilder().withName(productName).withQuantity(productQuantity).withFamilyProduct(productFamily).withNameUnity(productUnity).build());
+                WHERE UtilisateurListeCourse.UtilisateurID = %s AND s.Nom = ?""",userID); //verifie si la liste de course appartien à l'utilisateur
+        int nameIndexInPreparedStatement = 1;
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            statement.setString(nameIndexInPreparedStatement, name);
+            ResultSet resultSet = sendQuery(statement);
+            if(!resultSet.next()) return null;
+            int shoppingListID = resultSet.getInt(nameIndexInPreparedStatement);
+            ShoppingList shoppingList = new ShoppingList(name,shoppingListID);
+            String idColumnName = "ListeCourseID";
+            fillProductHashset(shoppingList, shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME,idColumnName, false );
+            return shoppingList;
         }
-        return shoppingList;
     }
 }

@@ -9,7 +9,7 @@ import static org.junit.jupiter.api.Assertions.*;
 /**
  * test de la classe recipe
  */
-public class TestRecipe {
+public class TestRecipe { //TODO : SAMAD t'abuse un peu ? C'est vide là non? On teste quoi?
 
     private Recipe recipeTest;
 

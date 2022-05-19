@@ -110,7 +110,7 @@ public class Recipe extends ProductHashSet {
         if (other == null || this.getClass() != other.getClass())
             return false;
 
-        return this.getName().equals(((Recipe) other).getName());
+        return this.getName().equals(((Recipe) other).getName()) && super.equals(other);
     }
 
     public void setFavorite(Boolean isChecked) {

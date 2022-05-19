@@ -1,6 +1,5 @@
 package ulb.infof307.g01.model.database.dao;
 
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
 import ulb.infof307.g01.model.Recipe;
 
@@ -15,7 +14,6 @@ import java.util.List;
  */
 public class RecipeDao extends Database implements Dao<Recipe> {
 
-    private static final String IS_NOT_FAVORITE = "0";
     private static final String RECIPE_TABLE_NAME = "Recette";
     private static final String RECIPE_PRODUCT_TABLE_NAME = "RecetteIngredient";
     private static final String RECIPE_USER_TABLE_NAME = "UtilisateurRecette";
@@ -51,10 +49,9 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         List<Recipe> recipes = new ArrayList<>();
         while (result.next()){
             Recipe recipe = fillRecipe(result);
+            String idColumnName = "RecetteID";
+            fillProductHashset(recipe, recipe.getId(),RECIPE_PRODUCT_TABLE_NAME,idColumnName, false );
             recipes.add(recipe);
-        }
-        for(Recipe products: recipes){
-            fillRecipeWithProducts(products);
         }
         return recipes;
     }
@@ -123,7 +120,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         String isFavorite = String.format("%d", recipe.isFavorite() ? 1: 0);
         insertRecipe(recipe);
         int recipeID = getGeneratedID();
-        insertListOfProducts(recipe, recipeID,RECIPE_PRODUCT_TABLE_NAME );
+        insertListOfProducts(recipe, recipeID,RECIPE_PRODUCT_TABLE_NAME , false);
         insertUserRecipe(isFavorite, recipeID);
     }
 
@@ -181,7 +178,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
             ResultSet resultSet = sendQuery(statement);
             if(!resultSet.next()) return null;
             Recipe recipe = fillRecipe(resultSet);
-            fillRecipeWithProducts(recipe);
+            String idColumnName = "RecetteID";
+            fillProductHashset(recipe, recipe.getId(),RECIPE_PRODUCT_TABLE_NAME,idColumnName, false );
             return recipe;
         }
     }

@@ -62,7 +62,7 @@ class TestRecipeDao {
     }
 
     @Test
-    public void testGetRecipeWhereCategory() throws SQLException {
+    public void testGetRecipeWhereCategory() throws SQLException { //TODO : peut etre vaudrait il mieux mettre tout cela dans le equals de RECIPE ?
         List<Recipe> recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(TestConstante.FOOD_CATEGORY_MEAT,null,0);
         assertEquals(bolo.getName(), recipes.get(0).getName(),"Test nom de cette recette");
         assertEquals(bolo.getDuration(), recipes.get(0).getDuration(),"Test la duree de la preparation");
@@ -70,6 +70,7 @@ class TestRecipeDao {
         assertEquals(bolo.getType(), recipes.get(0).getType(),"Test Type de la recette");
         assertEquals(bolo.getNbrPerson(), recipes.get(0).getNbrPerson(),"test le nombre de personne");
         assertEquals(bolo.getPreparation(), recipes.get(0).getPreparation(),"Test la preparation");
+        assertEquals(recipes.get(0), bolo);
     }
 
     @Test
@@ -81,6 +82,7 @@ class TestRecipeDao {
         assertEquals(pesto.getType(), recipes.get(0).getType(),"Test Type de la recette");
         assertEquals(pesto.getNbrPerson(), recipes.get(0).getNbrPerson(),"test le nombre de personne");
         assertEquals(pesto.getPreparation(), recipes.get(0).getPreparation(),"Test la preparation");
+        assertEquals(recipes.get(0), pesto);
     }
 
     @Test
@@ -92,6 +94,7 @@ class TestRecipeDao {
         assertEquals(pesto.getType(), recipes.get(0).getType(),"Test Type de la recette");
         assertEquals(pesto.getNbrPerson(), recipes.get(0).getNbrPerson(),"test le nombre de personne");
         assertEquals(pesto.getPreparation(), recipes.get(0).getPreparation(),"Test la preparation");
+        assertEquals(recipes.get(0), pesto);
     }
 
     @Test
@@ -103,6 +106,7 @@ class TestRecipeDao {
         assertEquals(bolo.getType(), recipes.get(0).getType(),"Test Type de la recette");
         assertEquals(bolo.getNbrPerson(), recipes.get(0).getNbrPerson(),"test le nombre de personne");
         assertEquals(bolo.getPreparation(), recipes.get(0).getPreparation(),"Test la preparation");
+        assertEquals(recipes.get(0), bolo);
     }
 
     @Test
@@ -163,7 +167,5 @@ class TestRecipeDao {
         Configuration.getCurrent().getRecipeDao().delete(tomateCrevette);
         Recipe tomateCrevetteInserted = Configuration.getCurrent().getRecipeDao().get(tomateCrevette.getName());
         assertNull(tomateCrevetteInserted);
-
-
     }
 }

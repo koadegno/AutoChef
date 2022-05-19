@@ -147,7 +147,9 @@ public class MenuDao extends Database implements Dao<Menu> {
         for(Day day : Day.values()){
             List<Recipe> recipesFromMenu = menu.getRecipesfor(day);
             for(Recipe recipe : recipesFromMenu){
-                fillRecipeWithProducts(recipe);
+                String idColumnName = "RecetteID";
+                String recipeProductTableName = "RecetteIngredient";
+                fillProductHashset(recipe, recipe.getId(),recipeProductTableName,idColumnName,false);
             }
         }
         menu.setName(name);

@@ -8,7 +8,7 @@ import java.util.HashSet;
 /**
  * Classe représentant un magasin
  */
-public class Shop extends HashSet<Product> {
+public class Shop extends ProductHashSet{
 
     private String name;
     private Point coordinate;

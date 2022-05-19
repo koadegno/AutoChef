@@ -6,7 +6,6 @@ import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.Database;
-import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 
 import java.sql.PreparedStatement;
@@ -63,8 +62,8 @@ public class ShopDao extends Database implements Dao<Shop> {
     @Override
     public void insert(Shop shop) throws SQLException {
         insertShop(shop);
-        String shopID = String.valueOf(getGeneratedID());
-        insertShopProducts(shop, shopID);
+        int shopID =getGeneratedID();
+        insertListOfProducts(shop, shopID, TABLE_SHOP_PRODUCT, true);
         String query = String.format("""
             INSERT INTO %s values (%s, %s);
             """,TABLE_USER_MAGASIN,getUserID(),shopID);
@@ -263,23 +262,8 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur au niveau de la requête SQL
      */
     private void fillShopWithProducts(Shop shop) throws SQLException {
-        String query = String.format("""
-                SELECT Ingredient.Nom,MI.prix
-                FROM MagasinIngredient as MI
-                INNER JOIN Magasin ON MI.MagasinID = Magasin.MagasinID
-                INNER JOIN Ingredient ON MI.IngredientID = Ingredient.IngredientID
-                INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = MI.MagasinID
-                WHERE MI.MagasinID = %d AND UtilisateurMagasin.UtilisateurID = %d""",
-                shop.getID(),
-                Configuration.getCurrent().getCurrentUser().getId());
-
-        try (ResultSet querySelectProductList = sendQuery(query)) {
-            while (querySelectProductList != null && querySelectProductList.next()) {
-                String productName = querySelectProductList.getString("Nom");
-                double productPrice = querySelectProductList.getDouble("prix");
-                shop.add(new Product.ProductBuilder().withName(productName).withPrice(productPrice).build());
-            }
-        }
+        String idColumnName = "MagasinID";
+        fillProductHashset(shop, shop.getID(), TABLE_SHOP_PRODUCT,idColumnName, true );
     }
 
     private List<Shop> getShopsList(ResultSet resultSet ){
@@ -314,24 +298,6 @@ public class ShopDao extends Database implements Dao<Shop> {
         }
     }
 
-    /**
-     * Insert les produits d'un magasin dans la table MagasinIngredient
-     * @param shop le magasin
-     * @param shopID l'id du magasin
-     * @throws SQLException erreur avec la requête
-     */
-    private void insertShopProducts(Shop shop, String shopID) throws SQLException {
-        for (Product product: shop) { //Tous les produits ont déja été vérifié à l'insertion
-            String productID = String.format("%d", getIDFromName("Ingredient", product.getName()));
-            String price =  String.valueOf(product.getPrice());
-            String query = String.format("""
-            INSERT INTO %s values (%s, %s,%s);
-            """,TABLE_SHOP_PRODUCT,shopID,productID,price);
-            try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
-                sendQueryUpdate(statement);
-            }
-        }
-    }
 
     /**
      * Insert un magasin dans la table magasin
