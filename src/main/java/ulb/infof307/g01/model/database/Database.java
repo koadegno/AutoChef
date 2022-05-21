@@ -117,6 +117,16 @@ public class Database {
         }
     }
 
+    protected void deleteByID(int objectID, String tableName, String idColumnName) throws SQLException {
+        String query = String.format("""
+                    DELETE FROM %s  
+                    WHERE %s = %s
+                 """,tableName , idColumnName, objectID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            sendQueryUpdate(statement);
+        }
+    }
+
 
     protected String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
         for (int i = 0; i < constraintToAppend.size(); i++) {

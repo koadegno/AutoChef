@@ -122,12 +122,11 @@ public class MenuDao extends Database implements Dao<Menu> {
     public void update(Menu menu) throws SQLException {
         int menuID = getIDFromName(MENU_TABLE_NAME,menu.getName());
         int isEmpty = 0;
-        ArrayList<String> constraint = new ArrayList<>();
-        constraint.add(String.format("%s = %d","MenuID",menuID));
-        delete("MenuRecette",constraint);
-        delete("UtilisateurMenu",constraint);
+        String idColumnName = "MenuID";
+        deleteByID(menuID, MENU_RECIPE_TABLE_NAME, idColumnName);
+        deleteByID(menuID, MENU_USER_TABLE_NAME, idColumnName);
         if(menu.size() == isEmpty) {
-            delete(MENU_TABLE_NAME, constraint);
+            deleteByID(menuID, MENU_TABLE_NAME, idColumnName);
             return;
         }
 
@@ -140,6 +139,8 @@ public class MenuDao extends Database implements Dao<Menu> {
         insertUserMenu(menuID);
 
     }
+
+
 
     @Override
     public Menu get(String name) throws SQLException {
