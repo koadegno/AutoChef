@@ -184,12 +184,12 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
     }
 
-    public void delete(Recipe displayedRecipe) throws SQLException {
-        String[] constraint = {"RecetteID = "+ displayedRecipe.getId()};
-        delete("UtilisateurRecette", List.of(constraint));
-        delete("RecetteIngredient", List.of(constraint));
-        delete("MenuRecette",List.of(constraint));
-        delete("Recette",List.of(constraint));
+    public void delete(Recipe recipe) throws SQLException {
+        int recipeID = recipe.getId();
+        String idColumnName = "RecetteID";
+        deleteByID(recipeID, RECIPE_USER_TABLE_NAME, idColumnName);
+        deleteByID(recipeID, RECIPE_PRODUCT_TABLE_NAME, idColumnName);
+        deleteByID(recipeID, RECIPE_TABLE_NAME, idColumnName);
     }
 
     public List<Recipe> getFavoriteRecipes() throws SQLException {
