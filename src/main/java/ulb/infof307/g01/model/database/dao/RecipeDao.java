@@ -172,8 +172,8 @@ public class RecipeDao extends Database implements Dao<Recipe> {
                 INNER JOIN Categorie ON R.CategorieID = Categorie.CategorieID
                 INNER JOIN UtilisateurRecette ON R.RecetteID = UtilisateurRecette.RecetteID
                 WHERE R.Nom = ? and UtilisateurRecette.UtilisateurID = %d""", getUserID());
-        int nameIndexInPreparedStatement = 1;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
+            int nameIndexInPreparedStatement = 1;
             statement.setString(nameIndexInPreparedStatement, name);
             ResultSet resultSet = sendQuery(statement);
             if(!resultSet.next()) return null;

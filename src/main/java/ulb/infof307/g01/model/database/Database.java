@@ -109,6 +109,13 @@ public class Database {
         return getID.getInt(1);
     }
 
+    /**
+     *  Supprime toute les lignes de la table ayant ojectID comme ID
+     * @param objectID l'id de la ligne à supprimer
+     * @param tableName le nom de la table sur laquelle faire les suppression
+     * @param idColumnName le nom de la column ayant les id dans la table
+     * @throws SQLException
+     */
     protected void deleteByID(int objectID, String tableName, String idColumnName) throws SQLException {
         String query = String.format("""
                     DELETE FROM %s  
@@ -171,24 +178,28 @@ public class Database {
      * @param <T>
      * @throws SQLException
      */
-    protected <T extends ProductHashSet> void fillProductHashset(T vectorOfProduct, int objectID, String table, String idColumnName, boolean hasPrice) throws SQLException { //TODO : centraliser avec la methode fillshoppinglist et fillShop dans les DAO
+    protected <T extends ProductHashSet> void fillProductHashset(T vectorOfProduct, int objectID, String table, String idColumnName, boolean hasPrice) throws SQLException {
         String columName = hasPrice ? "prix" : "Quantite";
-        ResultSet querySelectProduct = sendQuery(String.format("""
+        String query = String.format("""
                 SELECT I.Nom, F.Nom, U.Nom, R.%s  
                 FROM %s as R
                 INNER JOIN Ingredient as I ON R.IngredientID = I.IngredientID\s
                 INNER JOIN FamilleAliment as F ON F.FamilleAlimentID = I.FamilleAlimentID
                 INNER JOIN Unite as U ON U.UniteID = I.UniteID
-                WHERE R.%s = %d""", columName, table, idColumnName, objectID));
-        while(querySelectProduct.next()){
-            String productName = querySelectProduct.getString(1);
-            String familyName = querySelectProduct.getString(2);
-            String unityName = querySelectProduct.getString(3);
-            Product product;
-            if(hasPrice) product = new Product.ProductBuilder().withName(productName).withPrice(querySelectProduct.getDouble(4)).build();
-            else product = new Product.ProductBuilder().withName(productName).withQuantity(querySelectProduct.getInt(4)).withNameUnity(unityName).withFamilyProduct(familyName).build();
-            vectorOfProduct.add(product);
+                WHERE R.%s = %d""", columName, table, idColumnName, objectID);
+        try (PreparedStatement statement = connection.prepareStatement(query)) {
+            ResultSet resultSet =  sendQuery(statement);
+            while(resultSet.next()){
+                String productName = resultSet.getString(1);
+                String familyName = resultSet.getString(2);
+                String unityName = resultSet.getString(3);
+                Product product;
+                if(hasPrice) product = new Product.ProductBuilder().withName(productName).withPrice(resultSet.getDouble(4)).build();
+                else product = new Product.ProductBuilder().withName(productName).withQuantity(resultSet.getInt(4)).withNameUnity(unityName).withFamilyProduct(familyName).build();
+                vectorOfProduct.add(product);
+            }
         }
+
     }
 
     /**
@@ -201,13 +212,14 @@ public class Database {
     protected List<String> getListOfName(String query) throws SQLException {
         List<String> nameList;
         int columnIndex = 1;
-        try (ResultSet queryAllName = sendQuery(query)) {
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            ResultSet resultSet = sendQuery(statement);
             nameList = new ArrayList<>();
-            while (queryAllName.next()) {
-                nameList.add(queryAllName.getString(columnIndex));
+            while (resultSet.next()) {
+                nameList.add(resultSet.getString(columnIndex));
             }
+            return nameList;
         }
-        return nameList;
     }
 
     protected static int getUserID() {

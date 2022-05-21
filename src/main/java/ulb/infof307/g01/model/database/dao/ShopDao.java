@@ -50,7 +50,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 INNER JOIN UtilisateurMagasin ON R.MagasinID = UtilisateurMagasin.MagasinID
                 WHERE UtilisateurMagasin.UtilisateurID = %d
                 ORDER BY Nom ASC
-                """, Configuration.getCurrent().getCurrentUser().getId());
+                """,getUserID());
         return getListOfName(query);
     }
 
@@ -95,8 +95,12 @@ public class ShopDao extends Database implements Dao<Shop> {
                         FROM Magasin as M
                         INNER JOIN UtilisateurMagasin ON UtilisateurMagasin.MagasinID = M.MagasinID
                         WHERE UtilisateurMagasin.UtilisateurID = %d""",
-                Configuration.getCurrent().getCurrentUser().getId());
-        return fillAllShopsWithProducts(getShopsList(query));
+                getUserID());
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
+            ResultSet resultSet = sendQuery(statement);
+            return fillAllShopsWithProducts(getShopsList(resultSet));
+        }
+
     }
 
     @Override
@@ -121,9 +125,10 @@ public class ShopDao extends Database implements Dao<Shop> {
                         WHERE M.Nom = ? AND M.latitude = %s AND M.longitude = %s AND UtilisateurMagasin.UtilisateurID = %d""",
                 coordinates.getX(), coordinates.getY(), getUserID());
 
-        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
             statement.setString(nameIndexInPreparedStatement,name);
-            List<Shop> shopsList = getShopsList(statement);
+            ResultSet resultSet = sendQuery(statement);
+            List<Shop> shopsList = getShopsList(resultSet);
             if(shopsList.isEmpty())return null;
             return fillAllShopsWithProducts(shopsList).get(shopIndex);
         }
@@ -159,7 +164,11 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         GROUP BY MI.MagasinID
                                         HAVING count(*) = (SELECT Count(*) FROM ListeCourseIngredient LCI2 WHERE LCI2.ListeCourseID = %d)
                                         """, shoppingListID, shoppingListID);
-        return fillAllShopsWithProducts(getShopsList(query));
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
+            ResultSet resultSet = sendQuery(statement);
+            return fillAllShopsWithProducts(getShopsList(resultSet));
+        }
+
     }
 
     /**
@@ -187,8 +196,11 @@ public class ShopDao extends Database implements Dao<Shop> {
                                     ) sommes
                             ) resultats
                                         """, shoppingListID, shoppingListID);
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            ResultSet resultSet = sendQuery(statement);
+            return fillAllShopsWithProducts(getShopsList(resultSet));
+        }
 
-        return fillAllShopsWithProducts(getShopsList(query));
 
     }
 
@@ -219,7 +231,10 @@ public class ShopDao extends Database implements Dao<Shop> {
                                 ) sommes
                         ) resultats
                 """, position.getX(),position.getY(),shoppingListID, shoppingListID);
-        return fillAllShopsWithProducts(getShopsList(query));
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
+            ResultSet resultSet = sendQuery(statement);
+            return fillAllShopsWithProducts(getShopsList(resultSet));
+        }
     }
 
     /**
@@ -230,7 +245,6 @@ public class ShopDao extends Database implements Dao<Shop> {
      * @throws SQLException erreur avec la requête
      */
     public double getShoppingListPriceInShop(Shop shop, ShoppingList shoppingList)throws SQLException{
-        double totalPrice = -1; //error value
         final int indexSum = 1;
         String query = String.format("""
                 SELECT SUM(MI.prix)
@@ -238,13 +252,14 @@ public class ShopDao extends Database implements Dao<Shop> {
                 INNER JOIN ListeCourseIngredient LCI on MI.IngredientID = LCI.IngredientID
                 WHERE LCI.ListeCourseID = %d and MI.MagasinID = %d
                 """, shoppingList.getId(), shop.getID());
-        try (ResultSet querySelectShop = sendQuery(query)){
-            if(querySelectShop.next()) {
-                totalPrice = Math.round(querySelectShop.getDouble(indexSum));
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
+            ResultSet resultSet = sendQuery(statement);
+            double totalPrice = -1; //error value
+            if(resultSet.next()) {
+                totalPrice = Math.round(resultSet.getDouble(indexSum));
             }
-
+            return totalPrice;
         }
-        return totalPrice;
     }
 
     // TOOLS
@@ -291,12 +306,7 @@ public class ShopDao extends Database implements Dao<Shop> {
             return getShopsList(querySelectShop);
         }
     }
-    @NotNull
-    private List<Shop> getShopsList(PreparedStatement statement) throws SQLException {
-        try (ResultSet querySelectShop = sendQuery(statement)){
-            return getShopsList(querySelectShop);
-        }
-    }
+
 
 
     /**
