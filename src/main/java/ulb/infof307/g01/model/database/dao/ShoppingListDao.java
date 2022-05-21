@@ -68,23 +68,22 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
      */
     @Override
     public void update(ShoppingList shoppingList) throws SQLException {
-        ArrayList<String> constraint = new ArrayList<>();
-        int id = getIDFromName(LISTE_COURSE_TABLE_NAME, shoppingList.getName());
-        constraint.add(String.format("%s = %d","ListeCourseID", id));
-        delete("ListeCourseIngredient",constraint);
+        int shoppingListID = getIDFromName(LISTE_COURSE_TABLE_NAME, shoppingList.getName());
+        String idColumnName = "ListeCourseID";
+        deleteByID(shoppingListID, LISTE_COURSE_INGREDIENT_TABLE_NAME, idColumnName);
 
         String query = String.format("""
                         UPDATE %s SET Nom = ?
                         WHERE ListeCourseID = %s
-                """, LISTE_COURSE_TABLE_NAME,id);
+                """, LISTE_COURSE_TABLE_NAME,shoppingListID);
         sendInsertNameQueryWithPreparedStatement(shoppingList.getName(),query); //update query
 
 
         if(shoppingList.size() == 0){
-            delete(LISTE_COURSE_TABLE_NAME,constraint);
+            deleteByID(shoppingListID, LISTE_COURSE_TABLE_NAME, idColumnName);
         }
         else{
-            insertListOfProducts(shoppingList,id,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
+            insertListOfProducts(shoppingList,shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
         }
     }
 

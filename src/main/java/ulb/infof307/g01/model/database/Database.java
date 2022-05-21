@@ -109,14 +109,6 @@ public class Database {
         return getID.getInt(1);
     }
 
-
-    protected void delete(String nameTable, List<String> constraintToAppend) throws SQLException {
-        StringBuilder query = new StringBuilder(String.format("DELETE FROM %s WHERE ", nameTable));
-        try (PreparedStatement statement = connection.prepareStatement(appendValuesToWhere(query, constraintToAppend))) {
-            sendQueryUpdate(statement);
-        }
-    }
-
     protected void deleteByID(int objectID, String tableName, String idColumnName) throws SQLException {
         String query = String.format("""
                     DELETE FROM %s  
@@ -125,17 +117,6 @@ public class Database {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             sendQueryUpdate(statement);
         }
-    }
-
-
-    protected String appendValuesToWhere(StringBuilder query, List<String> constraintToAppend) {
-        for (int i = 0; i < constraintToAppend.size(); i++) {
-            String constraint = constraintToAppend.get(i);
-            query.append(constraint);
-            if(i != constraintToAppend.size()-1)query.append(" AND ");
-
-        }
-        return String.valueOf(query);
     }
 
 
