@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.model.exception.DuplicatedKeyException;
 import ulb.infof307.g01.model.export.Mail;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
@@ -125,8 +126,7 @@ public class MailController extends Controller implements MailViewController.Lis
         if(isValidEmailAddress(newMail)){
             try {
                 if(isSave){ //Enregistre le mail favorite dans la bdd
-                    int userID = Configuration.getCurrent().getCurrentUser().getId();
-                    Configuration.getCurrent().getMailAddressDao().insertUserMail(newMail);
+                    Configuration.getCurrent().getMailAddressDao().insert(newMail);
                     this.initComboboxFavoriteMail();
                 }
                 else{
@@ -135,7 +135,7 @@ public class MailController extends Controller implements MailViewController.Lis
                         mailViewController.addMailToCombobox(newMail);
                     }
                 }
-            } catch (SQLException e) {
+            } catch (SQLException | DuplicatedKeyException e) {
                 MailViewController.showAlert(Alert.AlertType.ERROR, "Erreur", "Le mail enregistrée existe déjà dans vos favoris");
             }
 

@@ -48,8 +48,7 @@ public class ShoppingListDao extends Database implements Dao<ShoppingList> {
      */
     @Override
     public void insert(ShoppingList shoppingList) throws SQLException {
-        insertNameWithPreparedStatement(shoppingList.getName(), LISTE_COURSE_TABLE_NAME);
-        int shoppingListID = getGeneratedID();
+        int shoppingListID = insertNameWithPreparedStatement(shoppingList.getName(), LISTE_COURSE_TABLE_NAME);
         insertListOfProducts(shoppingList, shoppingListID,LISTE_COURSE_INGREDIENT_TABLE_NAME, false );
         insertUserShoppingList(shoppingListID);
     }

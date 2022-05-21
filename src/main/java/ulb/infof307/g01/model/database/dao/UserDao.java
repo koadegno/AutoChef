@@ -38,26 +38,25 @@ public class UserDao extends Database implements Dao<User>{
 
     @Override
     public void insert(User user) throws SQLException {
-        String userID  = (user.getId() == -1) ? "null": String.valueOf(user.getId());
-        insertUser(user, userID);
-        userID = String.valueOf(getGeneratedID());
+        int userID = insertUser(user);
         insertUserAddress(userID,user.getAddress());
     }
 
-    private void insertUser(User user, String userID) throws SQLException {
+    private int insertUser(User user) throws SQLException {
         String query = String.format("""
-            INSERT INTO %s values (%s,?,?,?,?,%S);
-            """,USER_TABLE_NAME, userID,(user.isProfessional()? TRUE : FALSE) );
+            INSERT INTO %s values (null,?,?,?,?,%S);
+            """,USER_TABLE_NAME,(user.isProfessional()? TRUE : FALSE) );
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(1, user.getName());
             statement.setString(2, user.getFamilyName());
             statement.setString(3, user.getPseudo());
             statement.setString(4, user.getPassword());
             sendQueryUpdate(statement);
+            return getGeneratedID(statement);
         }
     }
 
-    private void insertUserAddress(String userID, Address address) throws SQLException {
+    private void insertUserAddress(int userID, Address address) throws SQLException {
         String query = String.format("""
             INSERT INTO %s values (%s,?,?,?,?,?);
             """,ADDRESS_TABLE_NAME, userID);
@@ -79,16 +78,18 @@ public class UserDao extends Database implements Dao<User>{
     @Override
     public User get(String userPseudo) throws SQLException {
         User user = null;
-        ResultSet querySelectUser = sendQuery(String.format("""
+       String query = String.format("""
                 SELECT U.UtilisateurID, U.Prenom, U.Nom, U.MotDePasse, U.estProfessionnel, UtilisateurAdresse.Pays, UtilisateurAdresse.Ville, UtilisateurAdresse.CodePostal, UtilisateurAdresse.RueNom, UtilisateurAdresse.RueNumero
                 FROM Utilisateur as U
                 LEFT JOIN UtilisateurAdresse ON U.UtilisateurID = UtilisateurAdresse.UtilisateurID
-                WHERE U.Pseudo = '%s'""", userPseudo));
+                WHERE U.Pseudo = '%s'""", userPseudo);
 
-        if(querySelectUser.next()){
-            user = ExtractUserFromQuery(userPseudo, querySelectUser);
+        try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
+            ResultSet resultSet = sendQuery(statement);
+            if(resultSet.next())user = ExtractUserFromQuery(userPseudo, resultSet);
+            return user;
         }
-        return user;
+
     }
 
     /**

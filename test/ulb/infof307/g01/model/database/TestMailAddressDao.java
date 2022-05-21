@@ -3,6 +3,7 @@ package ulb.infof307.g01.model.database;
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.Address;
 import ulb.infof307.g01.model.User;
+import ulb.infof307.g01.model.exception.DuplicatedKeyException;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,23 +21,21 @@ class TestMailAddressDao {
     static private final String mail1ID = "1";
     static private final String mail2 = "mail2@ulb.ac.be";
     static private final String mail3 = "mail3@google.be";
-    static private final String FAVORIS_MAIL = "xenon@google.be";
-    static private final String FAVORIS_MAIL2 = "xenon2@google.be";
+    static private final String mail4 = "xenon@google.be";
+    static private final String mail5 = "xenon2@google.be";
     static private final String databaseName = "test.sqlite";
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
-    private static final int USER_ID = 22;
-    private static final User basicUser = new User(USER_ID,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
-    private static int numberFavoriteMail = 1;
+    private static final User basicUser = new User(-1,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
 
 
     @BeforeAll
-    static public void setUp() throws SQLException {
-        Configuration.getCurrent().setCurrentUser(basicUser);
+    static public void setUp() throws SQLException, DuplicatedKeyException {
         Configuration.getCurrent().setDatabase(databaseName);
+        Configuration.getCurrent().setCurrentUser(basicUser);
         Configuration.getCurrent().getUserDao().insert(basicUser);
         Configuration.getCurrent().getMailAddressDao().insert(mail1);
         Configuration.getCurrent().getMailAddressDao().insert(mail2);
-        Configuration.getCurrent().getMailAddressDao().insertUserMail(FAVORIS_MAIL);
+        Configuration.getCurrent().getMailAddressDao().insert(mail4);
     }
 
     @AfterAll
@@ -47,31 +46,33 @@ class TestMailAddressDao {
 
     @Test
     void getAllName() throws SQLException {
-        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-        assertEquals(numberFavoriteMail,favorisMail.size());
-        assertTrue(favorisMail.contains(FAVORIS_MAIL));
+        List<String> userMails = Configuration.getCurrent().getMailAddressDao().getAllName();
+        assertTrue(userMails.contains(mail4));
+        assertTrue(userMails.contains(mail1));
+        assertTrue(userMails.contains(mail2));
     }
 
 
     @Test
-    void insertForUser() throws SQLException {
-        Configuration.getCurrent().getMailAddressDao().insertUserMail(FAVORIS_MAIL2);
-        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-        assertEquals(++numberFavoriteMail ,favorisMail.size());
-        assertEquals(FAVORIS_MAIL,favorisMail.get(0));
-        assertEquals(FAVORIS_MAIL2,favorisMail.get(1));
+    void insertForUser() throws SQLException, DuplicatedKeyException {
+        Configuration.getCurrent().getMailAddressDao().insert(mail5);
+        List<String> allMails = Configuration.getCurrent().getMailAddressDao().getAllName();
+        assertTrue(allMails.contains(mail4));
+        assertTrue(allMails.contains(mail5));
     }
 
     @Test
     void insertForUserDuplicateAddress() throws SQLException {
-        Configuration.getCurrent().getMailAddressDao().insertUserMail(mail1);
-        List<String> favorisMail = Configuration.getCurrent().getMailAddressDao().getAllName();
-        assertEquals(++numberFavoriteMail,favorisMail.size());
-        assertEquals(mail1,favorisMail.get(0));
+        try {
+            Configuration.getCurrent().getMailAddressDao().insert(mail1);
+        } catch (DuplicatedKeyException e) {
+        }
+        List<String> allMails = Configuration.getCurrent().getMailAddressDao().getAllName();
+        assertTrue(allMails.contains(mail1));
     }
 
     @Test
-    void insert() throws SQLException {
+    void insert() throws SQLException, DuplicatedKeyException {
         Configuration.getCurrent().getMailAddressDao().insert(mail3);
         int mailInsertedID = Integer.parseInt(Configuration.getCurrent().getMailAddressDao().get(mail3));
         String mailInserted = Configuration.getCurrent().getMailAddressDao().get(mailInsertedID);

@@ -17,7 +17,6 @@ import java.util.Scanner;
 public class Database {
 
     protected static Connection connection=null;
-    protected static Statement request=null;
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -30,18 +29,16 @@ public class Database {
         File file = new File(nameDB);
         boolean fileExist = file.exists();
 
-        if(connection != null && request != null){
+        if(connection != null){
             return;
         }
         try {
             connection = DriverManager.getConnection(dbName);
-            request = connection.createStatement();
             if(! fileExist ) {
                 createDB();
             }
         } catch (SQLException | FileNotFoundException e) {
             try {
-                request.close();
                 connection.close();
                 file.delete();
             } catch (SQLException ignored) {}
@@ -58,7 +55,7 @@ public class Database {
     private void createDB() throws FileNotFoundException, SQLException {
         InputStream fileDb = getClass().getClassLoader().getResourceAsStream("ulb/infof307/g01/model/database/DDLDatabase.txt");
         if (fileDb != null) {
-            try (Scanner scanner =new Scanner(fileDb); ){
+            try (Scanner scanner =new Scanner(fileDb); Statement request = connection.createStatement(); ){
                 while(scanner.hasNextLine()){
                     request.execute(scanner.nextLine());
                 }
@@ -70,10 +67,8 @@ public class Database {
     }
 
     public void closeConnection() throws SQLException {
-        if((request != null) && (connection != null) && (!request.isClosed() && !connection.isClosed())) {
-            request.close();
+        if((connection != null) && (!connection.isClosed())) {
             connection.close();
-            request = null;
             connection = null;
         }
     }
@@ -87,11 +82,6 @@ public class Database {
     protected ResultSet sendQuery(PreparedStatement statement) throws SQLException {
         return statement.executeQuery();
     }
-
-    protected ResultSet sendQuery(String query) throws SQLException { //to delete after uniformisation
-        return request.executeQuery(query);
-    }
-
     /**
      * Requete d'accès en écriture de la base de données
      * @param statement requete sql
@@ -100,11 +90,9 @@ public class Database {
         statement.executeUpdate();
     }
 
-    /**
-     * @return un id généré par la base de données, null si l'id n'est pas créé
-     */
-    protected Integer getGeneratedID() throws SQLException {
-        ResultSet getID = request.getGeneratedKeys();
+
+    protected Integer getGeneratedID(PreparedStatement statement) throws SQLException {
+        ResultSet getID = statement.getGeneratedKeys();
         getID.next();
         return getID.getInt(1);
     }
@@ -235,11 +223,11 @@ public class Database {
      * @param table la table dans laquelle elle doit re inserer
      * @throws SQLException
      */
-    protected void insertNameWithPreparedStatement(String name, String table) throws SQLException {
+    protected int  insertNameWithPreparedStatement(String name, String table) throws SQLException {
         String query = String.format("""
             INSERT INTO %s values (null,?);
             """,table);
-        sendInsertNameQueryWithPreparedStatement(name, query);
+        return sendInsertNameQueryWithPreparedStatement(name, query);
     }
 
     /**
@@ -249,11 +237,12 @@ public class Database {
      * @throws SQLException
      */
 
-    protected void sendInsertNameQueryWithPreparedStatement(String name, String query) throws SQLException {
+    protected int sendInsertNameQueryWithPreparedStatement(String name, String query) throws SQLException {
         int nameIndexInPreparedStatement = 1;
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(nameIndexInPreparedStatement, name);
             sendQueryUpdate(statement);
+            return getGeneratedID(statement);
         }
     }
 

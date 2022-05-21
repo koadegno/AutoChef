@@ -80,8 +80,8 @@ public class MenuDao extends Database implements Dao<Menu> {
 
     @Override
     public void insert(Menu menu) throws SQLException {
-        insertMenu(menu);
-        int menuID = getGeneratedID();
+        int menuID = insertMenu(menu);
+        //int menuID = getGeneratedID();
         insertRecipesInMenu(menu, menuID);
         insertUserMenu(menuID);
     }
@@ -95,7 +95,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         }
     }
 
-    private void insertMenu(Menu menu) throws SQLException {
+    private int insertMenu(Menu menu) throws SQLException {
         int nameIndexInPrepared = 1;
         String query = String.format("""
             INSERT INTO %s values (null, ?,%s);
@@ -103,6 +103,7 @@ public class MenuDao extends Database implements Dao<Menu> {
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             statement.setString(nameIndexInPrepared, menu.getName()); //le nom est entrée par l utilisateur
             sendQueryUpdate(statement);
+            return getGeneratedID(statement);
         }
     }
 

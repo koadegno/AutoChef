@@ -2,6 +2,7 @@ package ulb.infof307.g01.model.database.dao;
 
 import org.jetbrains.annotations.Nullable;
 import ulb.infof307.g01.model.database.Database;
+import ulb.infof307.g01.model.exception.DuplicatedKeyException;
 
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -40,15 +41,6 @@ public class MailAddressDao extends Database implements Dao<String> {
         return getListOfName(query);
     }
 
-    /**
-     * insertUserMail une adresse mail dans la base de donnée
-     * @param mailAddressName l'adresse mail a inséré
-     * @throws SQLException erreur liée à de la requête
-     */
-    @Override
-    public void insert(String mailAddressName) throws SQLException {
-        insertNameWithPreparedStatement(mailAddressName, TABLE_MAIL_ADDRESS);
-    }
 
     /**
      * Insert une adresse mail pour un utilisateur spécifique
@@ -56,20 +48,19 @@ public class MailAddressDao extends Database implements Dao<String> {
      * @param mailAddressName l'addresse mail a inséré
      * @throws SQLException exception lié à la base de donnée
      */
-    public void insertUserMail(String mailAddressName) throws SQLException{
+    @Override
+    public void insert(String mailAddressName) throws SQLException, DuplicatedKeyException {
+        String id = get(mailAddressName);
         int mailID;
-        try{
-            insert(mailAddressName);
-            mailID = getGeneratedID();
-
-        } catch (SQLException e) {// cas ou adresse mail multiple dans la db
-            mailID = Integer.parseInt(get(mailAddressName));
-        }
+        if(id == null) mailID = insertNameWithPreparedStatement(mailAddressName, TABLE_MAIL_ADDRESS);
+        else mailID = Integer.parseInt(id);
         String query = String.format("""
             INSERT INTO %s values (%s, %s);
             """,TABLE_USER_MAIL_ADDRESS,getUserID(),mailID);
         try (PreparedStatement statement = connection.prepareStatement(query)) {
             sendQueryUpdate(statement);
+        } catch (SQLException e) {
+            throw new DuplicatedKeyException("L'adresse mail existe déja dans la base de donnée");
         }
     }
 

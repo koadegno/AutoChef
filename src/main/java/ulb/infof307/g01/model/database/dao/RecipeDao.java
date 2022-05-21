@@ -118,8 +118,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
     @Override
     public void insert(Recipe recipe) throws SQLException {
         String isFavorite = String.format("%d", recipe.isFavorite() ? 1: 0);
-        insertRecipe(recipe);
-        int recipeID = getGeneratedID();
+        int recipeID = insertRecipe(recipe);
         insertListOfProducts(recipe, recipeID,RECIPE_PRODUCT_TABLE_NAME , false);
         insertUserRecipe(isFavorite, recipeID);
     }
@@ -133,7 +132,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
         }
     }
 
-    private void insertRecipe(Recipe recipe) throws SQLException {
+    private int insertRecipe(Recipe recipe) throws SQLException {
         String query = String.format("""
             INSERT INTO %s values (null,?,?,?,%s,%s,?);
             """,RECIPE_TABLE_NAME, getIDFromName("TypePlat", recipe.getType()),getIDFromName("Categorie", recipe.getCategory()) );
@@ -143,6 +142,7 @@ public class RecipeDao extends Database implements Dao<Recipe> {
             statement.setInt(3, recipe.getNbrPerson());
             statement.setString(4, recipe.getPreparation());
             sendQueryUpdate(statement);
+            return getGeneratedID(statement);
         }
     }
 

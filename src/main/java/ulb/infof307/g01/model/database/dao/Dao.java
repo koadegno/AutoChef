@@ -1,5 +1,7 @@
 package ulb.infof307.g01.model.database.dao;
 
+import ulb.infof307.g01.model.exception.DuplicatedKeyException;
+
 import java.sql.SQLException;
 import java.util.List;
 
@@ -17,7 +19,7 @@ public interface Dao<T> {
      *          une table de la base de donnée
      * @throws SQLException erreur avec la base de donnée
      */
-    void insert(T t) throws SQLException;
+    void insert(T t) throws SQLException, DuplicatedKeyException;
 
     /**
      * mettre a jour l'objet de type T dans la base de donnée

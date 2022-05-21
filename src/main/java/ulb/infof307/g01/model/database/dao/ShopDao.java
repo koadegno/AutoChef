@@ -61,8 +61,7 @@ public class ShopDao extends Database implements Dao<Shop> {
      */
     @Override
     public void insert(Shop shop) throws SQLException {
-        insertShop(shop);
-        int shopID =getGeneratedID();
+        int shopID = insertShop(shop);
         insertListOfProducts(shop, shopID, TABLE_SHOP_PRODUCT, true);
         String query = String.format("""
             INSERT INTO %s values (%s, %s);
@@ -98,7 +97,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 getUserID());
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
             ResultSet resultSet = sendQuery(statement);
-            return fillAllShopsWithProducts(getShopsList(resultSet));
+            return getShopsList(resultSet);
         }
 
     }
@@ -128,9 +127,7 @@ public class ShopDao extends Database implements Dao<Shop> {
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
             statement.setString(nameIndexInPreparedStatement,name);
             ResultSet resultSet = sendQuery(statement);
-            List<Shop> shopsList = getShopsList(resultSet);
-            if(shopsList.isEmpty())return null;
-            return fillAllShopsWithProducts(shopsList).get(shopIndex);
+            return getShopsList(resultSet).get(shopIndex);
         }
     }
 
@@ -166,7 +163,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         """, shoppingListID, shoppingListID);
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
             ResultSet resultSet = sendQuery(statement);
-            return fillAllShopsWithProducts(getShopsList(resultSet));
+            return getShopsList(resultSet);
         }
 
     }
@@ -198,7 +195,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                                         """, shoppingListID, shoppingListID);
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query));) {
             ResultSet resultSet = sendQuery(statement);
-            return fillAllShopsWithProducts(getShopsList(resultSet));
+            return getShopsList(resultSet);
         }
 
 
@@ -233,7 +230,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 """, position.getX(),position.getY(),shoppingListID, shoppingListID);
         try (PreparedStatement statement = connection.prepareStatement(String.valueOf(query))) {
             ResultSet resultSet = sendQuery(statement);
-            return fillAllShopsWithProducts(getShopsList(resultSet));
+            return getShopsList(resultSet);
         }
     }
 
@@ -262,14 +259,6 @@ public class ShopDao extends Database implements Dao<Shop> {
         }
     }
 
-    // TOOLS
-    @NotNull
-    private List<Shop> fillAllShopsWithProducts(List<Shop> shops) throws SQLException {
-        for(Shop shop: shops){
-            fillShopWithProducts(shop);
-        }
-        return shops;
-    }
 
     /**
      * Remplie un magasin avec les produits qui lui sont associés
@@ -292,6 +281,7 @@ public class ShopDao extends Database implements Dao<Shop> {
                 double shopY = resultSet.getDouble(SHOP_LONGITUDE_INDEX);
                 Point shopPoint = new Point(shopX, shopY, SpatialReferences.getWebMercator());
                 Shop shop = new Shop.ShopBuilder().withID(shopID).withName(shopName).withAddress(shopAddress).withCoordinate(shopPoint).build();
+                fillShopWithProducts(shop);
                 shopsList.add(shop);
             }
         } catch (SQLException e) {
@@ -300,21 +290,13 @@ public class ShopDao extends Database implements Dao<Shop> {
 
         return shopsList;
     }
-    @NotNull
-    private List<Shop> getShopsList(String query) throws SQLException {
-        try (ResultSet querySelectShop = sendQuery(query)){
-            return getShopsList(querySelectShop);
-        }
-    }
-
-
 
     /**
      * Insert un magasin dans la table magasin
      * @param shop le magasin
      * @throws SQLException erreur avec la requête
      */
-    private void insertShop(Shop shop) throws SQLException {
+    private int insertShop(Shop shop) throws SQLException {
         String name =  shop.getName();
         String address = shop.getAddress();
         double latitude = shop.getCoordinateX();
@@ -322,6 +304,6 @@ public class ShopDao extends Database implements Dao<Shop> {
         String query = String.format("""
             INSERT INTO %s values (null,?,'%s',%s,%s );
         """,MAGASIN_TABLE_NAME, address,longitude,latitude); //Seulement le nom vient de l'utilisateur
-        sendInsertNameQueryWithPreparedStatement(name,query);
+        return sendInsertNameQueryWithPreparedStatement(name,query);
     }
 }
