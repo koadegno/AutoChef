@@ -3,11 +3,11 @@ package ulb.infof307.g01.model;
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
-import ulb.infof307.g01.model.AutoCompletion;
-import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.TestConstante;
+import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
+import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -17,41 +17,48 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNull;
 
 /**
  * Test de l'auto-completion
  */
 class TestAutoCompletion {
 
+    private static Configuration configuration;
+
     @BeforeAll
     static public void createDB() throws SQLException {
         String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
+        configuration = Configuration.getCurrent();
+        configuration.setDatabase(databaseName);
+        RecipeCategoryDao recipeCategoryDao = configuration.getRecipeCategoryDao();
+        RecipeTypeDao recipeTypeDao = configuration.getRecipeTypeDao();
+        RecipeDao recipeDao = configuration.getRecipeDao();
 
         User testUser = new User("admin","admin",true);
         testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
+        configuration.setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
+        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_FISH);
+        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_MEAT);
+        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_VEGE);
+        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_VEGAN);
 
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
+        recipeTypeDao.insert(TestConstante.FOOD_TYPE_MEAL);
+        recipeTypeDao.insert(TestConstante.FOOD_TYPE_SIMMERED);
+        recipeTypeDao.insert(TestConstante.FOOD_TYPE_DESSERT);
 
-        Configuration.getCurrent().getRecipeDao().insert(TestConstante.BOLO_RECIPE);
-        Configuration.getCurrent().getRecipeDao().insert(TestConstante.CARBO_RECIPE);
-        Configuration.getCurrent().getRecipeDao().insert(TestConstante.PESTO_RECIPE);
-        Configuration.getCurrent().getRecipeDao().insert(TestConstante.TIRAMISU_RECIPE);
+        recipeDao.insert(TestConstante.BOLO_RECIPE);
+        recipeDao.insert(TestConstante.CARBO_RECIPE);
+        recipeDao.insert(TestConstante.PESTO_RECIPE);
+        recipeDao.insert(TestConstante.TIRAMISU_RECIPE);
     }
 
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 

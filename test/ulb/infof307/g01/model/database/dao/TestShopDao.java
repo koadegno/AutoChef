@@ -1,11 +1,15 @@
-package ulb.infof307.g01.model.database;
+package ulb.infof307.g01.model.database.dao;
 
 import com.esri.arcgisruntime.geometry.Point;
-import org.junit.jupiter.api.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.User;
+import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;

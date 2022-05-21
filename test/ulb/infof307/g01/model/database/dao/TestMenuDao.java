@@ -1,9 +1,11 @@
-package ulb.infof307.g01.model.database;
+package ulb.infof307.g01.model.database.dao;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.*;
+import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -12,7 +14,7 @@ import java.sql.SQLException;
 import java.util.Iterator;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * test du DAO menu
