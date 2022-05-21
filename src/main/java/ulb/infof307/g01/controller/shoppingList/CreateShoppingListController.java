@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShoppingListDao;
 import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
 import java.sql.SQLException;
@@ -58,7 +59,8 @@ public class CreateShoppingListController extends ShoppingListController {
             this.shoppingListToSend = new ShoppingList(shoppingListName);
             createShoppingListViewController.fillShoppingListToSend();
             try {
-                Configuration.getCurrent().getShoppingListDao().insert(shoppingListToSend);
+                ShoppingListDao shoppingListDao = configuration.getShoppingListDao();
+                shoppingListDao.insert(shoppingListToSend);
             }
             catch (SQLiteException e) { //Erreur de doublon
                 createShoppingListViewController.showNameUserCreateShoppingListError();

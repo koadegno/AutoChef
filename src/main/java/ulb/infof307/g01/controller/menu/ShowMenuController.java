@@ -13,6 +13,7 @@ import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.MenuDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
 import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
@@ -47,7 +48,8 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
 
     private void startMenu() {
         try {
-            this.menu = Configuration.getCurrent().getMenuDao().get(menu.getName());
+            MenuDao menuDao = configuration.getMenuDao();
+            this.menu = menuDao.get(menu.getName());
         } catch (SQLException e) {
             ViewController.showErrorSQL();
         }

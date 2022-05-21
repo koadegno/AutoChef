@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
 
@@ -35,7 +36,8 @@ public class FavoriteRecipesController extends Controller implements FavoriteRec
         favoriteRecipeViewController = loader.getController();
         favoriteRecipeViewController.setListener(this);
         try {
-            List<Recipe> userFavoriteRecipe = Configuration.getCurrent().getRecipeDao().getFavoriteRecipes();
+            RecipeDao recipeDao = configuration.getRecipeDao();
+            List<Recipe> userFavoriteRecipe = recipeDao.getFavoriteRecipes();
             favoriteRecipeViewController.displayFavoriteRecipe(userFavoriteRecipe);
         } catch (SQLException e) {
             listenerBackPreviousWindow.onReturn();

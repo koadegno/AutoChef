@@ -23,7 +23,6 @@ public class ShopsController extends Controller implements ShopsViewController.S
 
     public ShopsController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
     }
 

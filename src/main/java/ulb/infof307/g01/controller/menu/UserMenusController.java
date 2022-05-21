@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.MenuDao;
 import ulb.infof307.g01.view.menu.UserMenusViewController;
 import ulb.infof307.g01.view.ViewController;
 
@@ -49,9 +50,10 @@ public class UserMenusController extends Controller implements UserMenusViewCont
     private void start(){
         this.menus = new ArrayList<>();
         try {
-            allMenusNames = Configuration.getCurrent().getMenuDao().getAllName();
+            MenuDao menuDao = configuration.getMenuDao();
+            allMenusNames = menuDao.getAllName();
             for (String name : allMenusNames){
-                menus.add(Configuration.getCurrent().getMenuDao().get(name));
+                menus.add(menuDao.get(name));
             }
         } catch (SQLException e) {
             ViewController.showErrorSQL();
@@ -88,7 +90,8 @@ public class UserMenusController extends Controller implements UserMenusViewCont
 
         if (!isNameBlank) {
             try {
-                Menu menu = Configuration.getCurrent().getMenuDao().get(menuName);
+                MenuDao menuDao = configuration.getMenuDao();
+                Menu menu = menuDao.get(menuName);
                 ShowMenuController showMenuController = new ShowMenuController(currentStage,menu.getName(),this);
                 showMenuController.displayMenu();
 

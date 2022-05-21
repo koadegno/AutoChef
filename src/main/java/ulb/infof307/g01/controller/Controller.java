@@ -25,11 +25,13 @@ public abstract class Controller {
     protected static final String dataBaseName = "autochef.sqlite";
 
     protected ListenerBackPreviousWindow listenerBackPreviousWindow;
+    protected Configuration configuration;
 
     protected Controller(){ this(null); }
 
     protected Controller(ListenerBackPreviousWindow listenerBackPreviousWindow){
-        Configuration.getCurrent().setDatabase(dataBaseName);
+        configuration = Configuration.getCurrent();
+        configuration.setDatabase(dataBaseName);
         this.listenerBackPreviousWindow = listenerBackPreviousWindow;
     }
 
@@ -124,7 +126,7 @@ public abstract class Controller {
      * Déconnecte l'utilisateur
      */
     protected void userLogout() {
-        Configuration.getCurrent().setCurrentUser(null);
+        configuration.setCurrentUser(null);
         LoginController loginController = new LoginController(currentStage);
         loginController.displayHomeLogin();
     }

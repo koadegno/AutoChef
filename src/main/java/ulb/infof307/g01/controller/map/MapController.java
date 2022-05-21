@@ -39,7 +39,6 @@ public class MapController extends Controller implements MapViewController.Liste
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
         this.readOnlyMode = readOnlyMode;
-        Configuration configuration = Configuration.getCurrent();
         shopDao = configuration.getShopDao();
         locatorService = new LocatorService();
         routeService = new RouteService();

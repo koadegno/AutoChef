@@ -12,6 +12,7 @@ import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.MenuDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
 import ulb.infof307.g01.view.menu.GenerateMenuViewController;
@@ -101,11 +102,12 @@ public class MenuController extends Controller implements CreateMenuViewControll
                 createMenuViewController.showTableViewMenuError(!isError);
                 return;
             } else {
+                MenuDao menuDao = configuration.getMenuDao();
                 if(!isModifying){
                     menu.setName(menuName);
-                    Configuration.getCurrent().getMenuDao().insert(menu);
+                    menuDao.insert(menu);
                 }
-                else Configuration.getCurrent().getMenuDao().update(menu);
+                else menuDao.update(menu);
 
                 createMenuViewController.showTableViewMenuError(isError);
                 createMenuViewController.showNameMenuError(isError);

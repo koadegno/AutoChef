@@ -5,6 +5,8 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ProductFamilyDao;
+import ulb.infof307.g01.model.database.dao.ProductUnityDao;
 import ulb.infof307.g01.model.exception.JSONException;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
@@ -52,8 +54,9 @@ public class ProductController extends Controller implements ProductViewControll
         List<String> nameProductFamily = null;
         List<String> nameProductUnity = null;
         try {
-            nameProductFamily = Configuration.getCurrent().getProductFamilyDao().getAllName();
-            nameProductUnity = Configuration.getCurrent().getProductUnityDao().getAllName();
+            ProductFamilyDao productFamilyDao = configuration.getProductFamilyDao();
+            nameProductFamily = productFamilyDao.getAllName();
+            nameProductUnity = configuration.getProductUnityDao().getAllName();
 
         } catch (SQLException e) {
             ViewController.showErrorSQL();
@@ -82,7 +85,7 @@ public class ProductController extends Controller implements ProductViewControll
 
                     userProduct = new Product.ProductBuilder().withName(nameProduct).withNameUnity(nameProductUnity).withFamilyProduct(nameProductFamily).build();
                     try {
-                        Configuration.getCurrent().getProductDao().insert(userProduct);
+                        configuration.getProductDao().insert(userProduct);
                         shopViewController.setNameProduct(nameProduct);
                         createProductStage.close();
                     } catch (SQLException e) {

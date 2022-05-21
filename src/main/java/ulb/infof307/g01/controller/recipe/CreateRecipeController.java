@@ -13,6 +13,8 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
+import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 
@@ -69,8 +71,10 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
      */
     public void initElementToDataBaseForCombobox(){
         try {
-            List<String> recipeCategoriesList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
-            List<String> recipeTypesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+            RecipeCategoryDao recipeCategoryDao = configuration.getRecipeCategoryDao();
+            List<String> recipeCategoriesList = recipeCategoryDao.getAllName();
+            RecipeTypeDao recipeTypeDao = configuration.getRecipeTypeDao();
+            List<String> recipeTypesList = recipeTypeDao.getAllName();
             createRecipeViewController.initCombobox(recipeCategoriesList, recipeTypesList);
 
         } catch (SQLException e) {
@@ -109,10 +113,10 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
                 if (isWaitingModification) {
                     currentRecipe.setId(idRecipe);
                     currentRecipe.setFavorite(favoris);
-                    Configuration.getCurrent().getRecipeDao().update(currentRecipe);
+                    configuration.getRecipeDao().update(currentRecipe);
                     isWaitingModification = false;
                 } else
-                    Configuration.getCurrent().getRecipeDao().insert(currentRecipe);
+                    configuration.getRecipeDao().insert(currentRecipe);
             } catch (SQLException e) {
                 ViewController.showErrorSQL();
             }

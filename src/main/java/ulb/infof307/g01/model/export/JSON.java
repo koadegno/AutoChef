@@ -7,6 +7,8 @@ import org.json.simple.parser.ParseException;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ProductDao;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.model.exception.JSONException;
 
 import java.io.FileNotFoundException;
@@ -20,6 +22,7 @@ import java.util.Iterator;
  */
 public class JSON {
 
+    private final Configuration configuration = Configuration.getCurrent();
     private String nameRecipeToAdd;
     private String nameProductToAdd;
 
@@ -46,7 +49,8 @@ public class JSON {
                 String name = (String) jsonObject2.get("Nom");
                 Product productToSend = new Product.ProductBuilder().withName(name).withFamilyProduct(familyAliment).withNameUnity(unity).build();
                 //Envoyer recette à la base de donnee
-                Configuration.getCurrent().getProductDao().insert(productToSend);
+                ProductDao productDao = configuration.getProductDao();
+                productDao.insert(productToSend);
                 nameProductToAdd = name;
             }
         } catch (IOException | ParseException | SQLException e) {
@@ -70,7 +74,8 @@ public class JSON {
         Recipe recipeToSend = new Recipe.RecipeBuilder().withName(nameRecipeToAdd).withDuration(Math.toIntExact(duration)).withCategory(category).withType(type).withNumberOfPerson(Math.toIntExact(nbrPerson)).withPreparation(preparation).build();
 
         //Envoyer recette à la base de donnee
-        Configuration.getCurrent().getRecipeDao().insert(recipeToSend);
+        RecipeDao recipeDao = configuration.getRecipeDao();
+        recipeDao.insert(recipeToSend);
     }
     public String getNameRecipe(){return this.nameRecipeToAdd;}
     public String getNameProduct(){return this.nameProductToAdd;}

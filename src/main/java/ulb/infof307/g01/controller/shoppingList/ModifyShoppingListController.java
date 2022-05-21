@@ -8,6 +8,7 @@ import ulb.infof307.g01.controller.menu.UserMenusController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ShoppingListDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 import ulb.infof307.g01.view.shoppingList.ShoppingListViewController;
@@ -20,6 +21,8 @@ import java.util.Vector;
  * Contrôleur de la page de Modification de la liste de course
  */
 public class ModifyShoppingListController extends ShoppingListController {
+
+    private ShoppingListDao shoppingListDao;
 
     public ModifyShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
         super(listenerBackPreviousWindow);
@@ -49,7 +52,7 @@ public class ModifyShoppingListController extends ShoppingListController {
             String currentShoppingListName = (String) nameUserShoppingList;
             try {
                 // afficher les produits de la liste de course dans la table
-                ShoppingList shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+                ShoppingList shoppingList = shoppingListDao.get(currentShoppingListName);
                 Vector<Product> productOfShoppingList =  new Vector<>(shoppingList);
                 modifyShoppingListViewController.addProductListToTableView(productOfShoppingList);
                 modifyShoppingListViewController.isVisibleElementToModifyMyShoppingList(true);
@@ -68,12 +71,12 @@ public class ModifyShoppingListController extends ShoppingListController {
     public void confirmUserModifyShoppingList(String currentShoppingListName){
         try {
             //Recupere liste de courses chez la bdd
-            ShoppingList shoppingListInDataBase = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+            ShoppingList shoppingListInDataBase = shoppingListDao.get(currentShoppingListName);
             this.shoppingListToSend = new ShoppingList(shoppingListInDataBase.getName(), shoppingListInDataBase.getId());
 
             //Renvoie liste de courses chez la bdd
             modifyShoppingListViewController.fillShoppingListToSend();
-            Configuration.getCurrent().getShoppingListDao().update(shoppingListToSend);
+            shoppingListDao.update(shoppingListToSend);
 
             //Popup : confirmer que la liste de courses est enregistrée
             displayPopupMessageInformation();
@@ -126,7 +129,7 @@ public class ModifyShoppingListController extends ShoppingListController {
     public void sendShoppingListByMail(String currentShoppingListName){
         ShoppingList shoppingList = null;
         try {
-            shoppingList = Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+            shoppingList = shoppingListDao.get(currentShoppingListName);
         } catch (SQLException e) {
             ViewController.showErrorSQL();
         }

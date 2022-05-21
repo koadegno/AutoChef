@@ -9,6 +9,7 @@ import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
+import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.ProductDao;
 import ulb.infof307.g01.model.database.dao.ProductUnityDao;
@@ -42,9 +43,9 @@ public abstract class ShoppingListController extends Controller implements Shopp
 
     public ShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        Configuration configuration = Configuration.getCurrent();
         this.shopDao = configuration.getShopDao();
-        isProfessional = configuration.getCurrentUser().isProfessional();
+        User currentUser = configuration.getCurrentUser();
+        isProfessional = currentUser.isProfessional();
         productDao = configuration.getProductDao();
         productUnityDao = configuration.getProductUnityDao();
         shoppingListDao = configuration.getShoppingListDao();

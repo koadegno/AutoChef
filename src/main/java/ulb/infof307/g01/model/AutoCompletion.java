@@ -1,5 +1,6 @@
 package ulb.infof307.g01.model;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
 
 import java.sql.SQLException;
 import java.util.*;
@@ -29,7 +30,8 @@ public class AutoCompletion {
 
             while (recipes.size() == 0) {
                 categoryMax = findMax(categoriesWanted);
-                recipes = Configuration.getCurrent().getRecipeDao().getRecipeWhere(categoryMax, type,  0);
+                RecipeDao recipeDao = Configuration.getCurrent().getRecipeDao();
+                recipes = recipeDao.getRecipeWhere(categoryMax, type,  0);
 
                 // Si aucune recette trouvée correspondante à la catégorie souhaitée, la catégorie est supprimée
                 if (recipes.size() == 0) {

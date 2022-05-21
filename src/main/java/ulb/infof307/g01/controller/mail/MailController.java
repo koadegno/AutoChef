@@ -4,6 +4,7 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.help.HelpController;
+import ulb.infof307.g01.model.database.dao.MailAddressDao;
 import ulb.infof307.g01.model.exception.DuplicatedKeyException;
 import ulb.infof307.g01.model.export.Mail;
 import ulb.infof307.g01.model.ShoppingList;
@@ -103,7 +104,8 @@ public class MailController extends Controller implements MailViewController.Lis
 
     private void initComboboxFavoriteMail(){
         try {
-            List<String> allMail = Configuration.getCurrent().getMailAddressDao().getAllName();
+            MailAddressDao mailAddressDao = configuration.getMailAddressDao();
+            List<String> allMail = mailAddressDao.getAllName();
             mailViewController.initComboboxFavoriteMail(allMail);
         } catch (SQLException e) {
             ViewController.showErrorSQL();
@@ -126,7 +128,8 @@ public class MailController extends Controller implements MailViewController.Lis
         if(isValidEmailAddress(newMail)){
             try {
                 if(isSave){ //Enregistre le mail favorite dans la bdd
-                    Configuration.getCurrent().getMailAddressDao().insert(newMail);
+                    MailAddressDao mailAddressDao = configuration.getMailAddressDao();
+                    mailAddressDao.insert(newMail);
                     this.initComboboxFavoriteMail();
                 }
                 else{

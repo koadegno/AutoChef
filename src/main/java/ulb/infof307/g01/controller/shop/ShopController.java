@@ -10,6 +10,7 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.ProductDao;
 import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shop.ShopViewController;
@@ -34,8 +35,7 @@ public class ShopController extends Controller implements ShopViewController.Lis
 
     public ShopController(boolean isModifying){
         this.isModifying = isModifying;
-        Configuration current = Configuration.getCurrent();
-        shopDao = current.getShopDao();
+        shopDao = configuration.getShopDao();
         shop = new Shop();
     }
 
@@ -128,7 +128,8 @@ public class ShopController extends Controller implements ShopViewController.Lis
     @Override
     public void fillComboBoxProduct(ComboBox<String> productComboBox) throws SQLException {
         List<String> allProduct;
-        allProduct = Configuration.getCurrent().getProductDao().getAllName();
+        ProductDao productDao = configuration.getProductDao();
+        allProduct = productDao.getAllName();
         productComboBox.setItems(FXCollections.observableArrayList(allProduct));
     }
 

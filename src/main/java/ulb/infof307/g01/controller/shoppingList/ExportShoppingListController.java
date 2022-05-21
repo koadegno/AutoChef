@@ -3,6 +3,7 @@ package ulb.infof307.g01.controller.shoppingList;
 import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
+import ulb.infof307.g01.model.database.dao.ShoppingListDao;
 import ulb.infof307.g01.model.exception.PDFException;
 import ulb.infof307.g01.model.export.ODTCreator;
 import ulb.infof307.g01.model.export.PDFCreator;
@@ -31,7 +32,8 @@ public class ExportShoppingListController extends Controller implements ExportSh
         exportShoppingListViewController.setListener(this);
 
         try {
-            this.shoppingList =  Configuration.getCurrent().getShoppingListDao().get(currentShoppingListName);
+            ShoppingListDao shoppingListDao = configuration.getShoppingListDao();
+            this.shoppingList =  shoppingListDao.get(currentShoppingListName);
         } catch (SQLException e) {
             ViewController.showErrorSQL();
         }

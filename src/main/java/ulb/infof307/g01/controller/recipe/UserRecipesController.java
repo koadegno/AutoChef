@@ -13,6 +13,7 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
@@ -59,7 +60,8 @@ public class UserRecipesController extends Controller implements UserRecipesView
             userRecipesViewController.recipeSearchTextFieldError(true);
 
         try {
-            currentRecipe = Configuration.getCurrent().getRecipeDao().get(recipeName);
+            RecipeDao recipeDao = configuration.getRecipeDao();
+            currentRecipe = recipeDao.get(recipeName);
         } catch (SQLException e) {
             ViewController.showErrorSQL();
         }
@@ -105,7 +107,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
         ButtonType alertResult = ViewController.showAlert(Alert.AlertType.CONFIRMATION, "Supprimer la recette ?", "Etes vous sur de vouloir supprimer la recette ? ");
         if(alertResult == ButtonType.OK){
             try {
-                Configuration.getCurrent().getRecipeDao().delete(currentRecipe);
+                configuration.getRecipeDao().delete(currentRecipe);
             } catch (SQLException e) {
                 ViewController.showErrorSQL();
             }
@@ -173,7 +175,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
     public void onFavoriteRecipeCheck(Boolean isChecked) {
         currentRecipe.setFavorite(isChecked);
         try {
-            Configuration.getCurrent().getRecipeDao().update(currentRecipe);
+            configuration.getRecipeDao().update(currentRecipe);
         } catch (SQLException e) {
             UserRecipesViewController.showErrorSQL();
         }

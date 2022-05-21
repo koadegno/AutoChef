@@ -6,6 +6,9 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
+import ulb.infof307.g01.model.database.dao.RecipeDao;
+import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
@@ -36,9 +39,12 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
         searchRecipeViewController.setListener(this);
 
         try {
-            List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(null, null, 0);
-            List<String> typesList = Configuration.getCurrent().getRecipeTypeDao().getAllName();
-            List<String> dietsList = Configuration.getCurrent().getRecipeCategoryDao().getAllName();
+            RecipeDao recipeDao = configuration.getRecipeDao();
+            List<Recipe> recipesList = recipeDao.getRecipeWhere(null, null, 0);
+            RecipeTypeDao recipeTypeDao = configuration.getRecipeTypeDao();
+            List<String> typesList = recipeTypeDao.getAllName();
+            RecipeCategoryDao recipeCategoryDao = configuration.getRecipeCategoryDao();
+            List<String> dietsList = recipeCategoryDao.getAllName();
             searchRecipeViewController.initialize(dietsList, typesList, recipesList);
         } catch (SQLException e) {
             ViewController.showErrorSQL();
@@ -114,7 +120,7 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
      */
     private void refreshRecipeList(String recipeType, String recipeDiet, int nbPerson) {
         try {
-            List<Recipe> recipesList = Configuration.getCurrent().getRecipeDao().getRecipeWhere(recipeDiet, recipeType, nbPerson);
+            List<Recipe> recipesList = configuration.getRecipeDao().getRecipeWhere(recipeDiet, recipeType, nbPerson);
             searchRecipeViewController.refreshRecipesTableView(recipesList);
         } catch (SQLException e) {
             ViewController.showErrorSQL();

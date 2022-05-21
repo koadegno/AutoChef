@@ -7,6 +7,7 @@ import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.dao.UserDao;
 import ulb.infof307.g01.view.connexion.LoginViewController;
 
 import java.sql.SQLException;
@@ -47,8 +48,10 @@ public class LoginController extends Controller implements LoginViewController.L
     @Override
     public void onLoginButtonClick(String pseudo,String password) {
         User user;
+
         try {
-            user = Configuration.getCurrent().getUserDao().get(pseudo);
+            UserDao userDao = configuration.getUserDao();
+            user = userDao.get(pseudo);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -62,7 +65,7 @@ public class LoginController extends Controller implements LoginViewController.L
             loginViewController.showPasswordError(true);
         }
         else{ //bon mdp et bon pseudo
-            Configuration.getCurrent().setCurrentUser(user);
+            configuration.setCurrentUser(user);
             displayHome();
         }
 

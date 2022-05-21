@@ -17,6 +17,8 @@ import java.util.Scanner;
 public class Database {
 
     protected static Connection connection=null;
+    private static Configuration configuration;
+
 
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
@@ -25,6 +27,7 @@ public class Database {
      * @param nameDB nom de la base de données que l'ont veut charger/créer.
      */
     public Database(String nameDB) {
+        configuration = Configuration.getCurrent();
         String dbName = "jdbc:sqlite:" + nameDB;
         File file = new File(nameDB);
         boolean fileExist = file.exists();
@@ -211,7 +214,7 @@ public class Database {
     }
 
     protected static int getUserID() {
-        return Configuration.getCurrent().getCurrentUser().getId();
+        return configuration.getCurrentUser().getId();
     }
 
 
