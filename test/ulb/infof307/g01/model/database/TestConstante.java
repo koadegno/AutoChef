@@ -27,11 +27,11 @@ public class TestConstante {
     public static final String FAMILY_PRODUCT_MEAT = "Viande";
     public static final String FAMILY_PRODUCT_FISH = "Poison";
 
-    static final Menu MENU_TEST_1 = new Menu("Menu Test").
+    public static final Menu MENU_TEST_1 = new Menu("Menu Test").
             addRecipeTo(Day.Monday, BOLO_RECIPE).addRecipeTo(Day.Wednesday, CARBO_RECIPE).
             addRecipeTo(Day.Monday,BOLO_RECIPE).addRecipeTo(Day.Friday, PESTO_RECIPE);
 
-    static final Menu MENU_TEST_2 = new Menu("Menu Test2").
+    public static final Menu MENU_TEST_2 = new Menu("Menu Test2").
             addRecipeTo(Day.Monday, CARBO_RECIPE).
             addRecipeTo(Day.Wednesday, PESTO_RECIPE).
             addRecipeTo(Day.Monday,PESTO_RECIPE).

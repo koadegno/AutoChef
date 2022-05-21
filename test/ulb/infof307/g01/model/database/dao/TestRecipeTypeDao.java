@@ -1,31 +1,29 @@
-package ulb.infof307.g01.model.database;
+package ulb.infof307.g01.model.database.dao;
 
 import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
+import ulb.infof307.g01.model.database.Configuration;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
- * test du DAO de la catégorie de recette
+ * test du DAO du type de recette
  */
-class TestRecipeCategoryDao {
-
-    static private final String fish = "Poison";
-
+class TestRecipeTypeDao {
+    static private final String meal = "Plat";
 
     @BeforeAll
     static public void initConfig() throws SQLException {
         String databaseName = "test.sqlite";
         Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductFamilyDao().insert(fish);
+        Configuration.getCurrent().getRecipeTypeDao().insert(meal);
     }
 
     @AfterAll
@@ -36,15 +34,15 @@ class TestRecipeCategoryDao {
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(fish, categories.get(0));
+        List<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        assertEquals(meal, types.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
-        String meat = "Viande";
-        Configuration.getCurrent().getProductFamilyDao().insert(meat);
-        List<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
-        assertEquals(meat, categories.get(1));
+        String simmered = "Mijoté";
+        Configuration.getCurrent().getRecipeTypeDao().insert(simmered);
+        List<String> types = Configuration.getCurrent().getRecipeTypeDao().getAllName();
+        assertEquals(simmered, types.get(1));
     }
 }
