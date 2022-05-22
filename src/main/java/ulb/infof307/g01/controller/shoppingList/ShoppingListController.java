@@ -152,7 +152,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
             try {
                 ShoppingList shoppingList = shoppingListDao.get(currentShoppingListName);
                 Boolean readOnlyMode = true;
-                MapController mapController = new MapController(currentStage,listenerBackPreviousWindow,readOnlyMode );
+                MapController mapController = new MapController(listenerBackPreviousWindow,readOnlyMode );
                 mapController.setProductListToSearchInShops(shoppingList);
                 mapController.displayShopMap(shopWithProductList(shoppingList));
             } catch (SQLException e) {

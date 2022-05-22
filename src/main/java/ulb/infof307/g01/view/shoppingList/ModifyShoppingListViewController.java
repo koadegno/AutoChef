@@ -6,6 +6,8 @@ import javafx.scene.control.Button;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 
+import java.sql.Array;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -76,7 +78,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
 
 
     public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
-        Vector<Product> productOfShoppingList = new Vector<>(shoppingList);
+        List<Product> productOfShoppingList = new ArrayList<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);
         returnToMenu.setOnAction(event -> listener.cancelRecipeCreation());
@@ -84,7 +86,6 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
             fillShoppingListToSend();
             listener.returnAddedProducts();
         });
-
 
         comboBoxShoppingNameList.setVisible(false);
         btnSeeShoppingList.setVisible(false);

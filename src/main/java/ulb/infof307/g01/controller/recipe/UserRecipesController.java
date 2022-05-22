@@ -32,9 +32,9 @@ public class UserRecipesController extends Controller implements UserRecipesView
 
     boolean isWaitingModification = false;
 
-    private UserRecipesViewController userRecipesViewController;
+    protected UserRecipesViewController userRecipesViewController;
 
-    private Recipe currentRecipe;
+    protected Recipe currentRecipe;
     private ShoppingList currentShoppingList;
 
     public UserRecipesController(ListenerBackPreviousWindow listenerBackPreviousWindow,Recipe currentRecipe){
@@ -47,6 +47,13 @@ public class UserRecipesController extends Controller implements UserRecipesView
         userRecipesViewController.setListener(this);
         onRecipeSelected(currentRecipe);
     }
+
+    public void initReadOnlyRecipeController() {
+        userRecipesViewController.initReadOnlyMode();
+        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe),
+                currentRecipe.getPreparation());
+    }
+
     /**
      * Cherche si une recette existe dans la base de données et l'affiche si possible, sinon affiche une erreur
      * sur le champ de recherche
@@ -84,8 +91,6 @@ public class UserRecipesController extends Controller implements UserRecipesView
         isWaitingModification = false;
 
         this.sceneViewRecipe = currentStage.getScene();
-        // TODO  VOIR comment communiquer avec createRecipeView
-
         List<Product> productList = new ArrayList<>(currentRecipe);
         this.currentShoppingList = new ShoppingList(currentRecipe.getName());
         currentShoppingList.addAll(productList);
@@ -182,11 +187,7 @@ public class UserRecipesController extends Controller implements UserRecipesView
         displayUserRecipes();
     }
 
-    public void initReadOnlyRecipeController() {
-        userRecipesViewController.initReadOnlyMode();
-        userRecipesViewController.setRecipeTextArea(currentRecipe.getName(), HomePageRecipeController.productListToString(currentRecipe),
-                currentRecipe.getPreparation());
-    }
+
 
     @Override
     public void onRecipeSelected(Recipe selectedRecipe) {

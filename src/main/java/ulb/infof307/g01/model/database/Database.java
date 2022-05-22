@@ -257,7 +257,7 @@ public class Database {
      * @param <T>    Un type qui contient une liste de produit
      * @throws SQLException
      */
-    protected  <T extends ProductHashSet> void insertListOfProducts(T vectorOfProduct, int objectId, String table, boolean hasPrice) throws SQLException { //TODO : centraliser avec shop aussi
+    protected  <T extends ProductHashSet> void insertListOfProducts(T vectorOfProduct, int objectId, String table, boolean hasPrice) throws SQLException {
         int quantityIndexInPreparedStatement = 1;
         for (Product p: vectorOfProduct) { // ajout des produits lié a la recette
             int productID = getIDFromName("Ingredient", p.getName());

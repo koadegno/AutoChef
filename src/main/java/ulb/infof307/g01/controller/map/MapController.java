@@ -34,7 +34,7 @@ public class MapController extends Controller implements MapViewController.Liste
     private final ShopDao shopDao;
 
 
-    public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
+    public MapController(ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
         this.readOnlyMode = readOnlyMode;
         shopDao = configuration.getShopDao();

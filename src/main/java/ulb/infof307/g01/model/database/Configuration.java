@@ -37,8 +37,6 @@ public class Configuration {
     }
 
     public void setDatabase(String dbPath){
-        //TODO ils ont pas tous besoin de dbPath changer ca
-        // possibilité de creer le currentUser générique ici
         this.menuDao = new MenuDao(dbPath);
         this.productDao = new ProductDao(dbPath);
         this.productFamilyDao = new ProductFamilyDao(dbPath);

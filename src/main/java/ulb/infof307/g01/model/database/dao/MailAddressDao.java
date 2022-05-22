@@ -17,8 +17,6 @@ public class MailAddressDao extends Database implements Dao<String> {
     public static final String TABLE_MAIL_ADDRESS = "AdresseMail";
     public static final String TABLE_USER_MAIL_ADDRESS = "UtilisateurMailFavoris";
 
-
-    //TODO: MODIFIER STRING Pour mettre une classe Adresse mail ! si besoin
     /**
      * Constructeur qui charge une base de données existante si le paramètre nameDB
      * est un fichier de base de données existante. Sinon en créée une nouvelle.

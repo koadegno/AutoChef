@@ -25,9 +25,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
     private UserMenusViewController viewController;
 
 
-    public UserMenusController(Stage primaryStage) { this(primaryStage,null); }
-
-    public UserMenusController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public UserMenusController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         this.menus = new ArrayList<>();
         this.allMenusNames = new ArrayList<>();

@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Contrôleur de Vue pour l'interface de Création de Recettes
  */
-public class EditRecipeViewController extends ViewController<EditRecipeViewController.EditRecipeListener> implements Initializable {
+public class CreateRecipeViewController extends ViewController<CreateRecipeViewController.EditRecipeListener> implements Initializable {
     @FXML
     private TableView<Product> ingredientTableView;
     @FXML

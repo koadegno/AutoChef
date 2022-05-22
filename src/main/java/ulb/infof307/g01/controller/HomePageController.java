@@ -20,9 +20,7 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
 public class HomePageController extends Controller implements HomePageListener,ListenerBackPreviousWindow {
 
     // Méthodes de la fenêtre d'accueil
-
     public HomePageController(){}
-
 
     /**
      * Affiche la page principale de l'application.
@@ -47,7 +45,7 @@ public class HomePageController extends Controller implements HomePageListener,L
      * */
     @Override
     public void onMenuButtonClick() {
-        HomePageMenuController homePageMenuController = new HomePageMenuController(currentStage,this);
+        HomePageMenuController homePageMenuController = new HomePageMenuController(this);
         homePageMenuController.displayHomeMenu();
     }
 
@@ -58,7 +56,7 @@ public class HomePageController extends Controller implements HomePageListener,L
     @Override
     public void onMapButtonClick() {
         Boolean notReadOnlyMode = false;
-        MapController mapController = new MapController(currentStage,this,notReadOnlyMode );
+        MapController mapController = new MapController(this,notReadOnlyMode );
         mapController.displayMap();
     }
 

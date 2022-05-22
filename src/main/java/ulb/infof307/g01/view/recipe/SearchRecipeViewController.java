@@ -85,7 +85,7 @@ public class SearchRecipeViewController extends ViewController<SearchRecipeViewC
         Recipe recipe = recipesTableView.getSelectionModel().getSelectedItem();
         listener.onRecipesTableViewClicked(recipe);
     }
-    public void onCancelButtonClicked()  {listener.onCancelSearchButton();} // FIXME : Retourne sur HomeRecipe
+    public void onCancelButtonClicked()  {listener.onCancelSearchButton();}
 
     public String getDietComboBoxSelectedItem() {return dietComboBox.getSelectionModel().getSelectedItem();}
     public String getTypeComboBoxSelectedItem() {return typeComboBox.getSelectionModel().getSelectedItem();}

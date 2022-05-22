@@ -13,7 +13,7 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
  */
 public class HomePageMenuController extends Controller implements HomeMenuViewController.HomeMenuListener, ListenerBackPreviousWindow {
 
-    public HomePageMenuController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public HomePageMenuController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
     }
 
@@ -39,7 +39,7 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
      */
     @Override
     public void onUserMenusButtonClick() {
-        UserMenusController userMenusController = new UserMenusController(currentStage,this);
+        UserMenusController userMenusController = new UserMenusController(this);
         userMenusController.displayAllMenus();
     }
 

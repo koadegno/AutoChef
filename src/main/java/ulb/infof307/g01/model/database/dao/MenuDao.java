@@ -117,11 +117,10 @@ public class MenuDao extends Database implements Dao<Menu> {
         String idColumnName = "MenuID";
         deleteByID(menuID, MENU_RECIPE_TABLE_NAME, idColumnName); //supprimer les recettes du menus
         deleteByID(menuID, MENU_USER_TABLE_NAME, idColumnName);  //supprimer des menus de l'utilisateur
-        if(menu.size() == isEmpty) { //TODO: pourquoi cette condition
+        if(menu.size() == isEmpty) {
             deleteByID(menuID, MENU_TABLE_NAME, idColumnName);   //supprimer des menus
             return;
         }
-        //TODO uniformise les updates
         String query = String.format("""
                         UPDATE %s SET Nom = ?
                         WHERE MenuID = %s

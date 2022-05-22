@@ -10,9 +10,8 @@ import ulb.infof307.g01.view.ViewController;
 import java.sql.SQLException;
 import java.util.List;
 
-public class ModifyRecipeController extends EditRecipeController{
+public class ModifyRecipeController extends CreateRecipeController {
     private ListenerGetRecipe listenerGetRecipe;
-
 
     public ModifyRecipeController(ShoppingList currentShoppingList, Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, ListenerGetRecipe listenerGetRecipe) {
         super(primaryStage, listenerBackPreviousWindow);
@@ -20,8 +19,6 @@ public class ModifyRecipeController extends EditRecipeController{
         this.listenerGetRecipe = listenerGetRecipe;
 
     }
-
-
 
     public void onSubmitButtonClick(String diet, String type, int nbPerson, String preparation, String recipeName)  {
         if(!isValidRecipe(diet, type, nbPerson, preparation, recipeName)) return;
@@ -47,10 +44,10 @@ public class ModifyRecipeController extends EditRecipeController{
 
     public void prefillFields(Recipe currentRecipe, List<Product> productList) {
         this.currentRecipe = currentRecipe;
-        editRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
+        createRecipeViewController.prefillFields(currentRecipe.getName(), currentRecipe.getPreparation(),
                 currentRecipe.getType(), currentRecipe.getCategory(),
                 currentRecipe.getNbrPerson(), productList);
-        editRecipeViewController.setCancelButtonToModifyRecipe();
+        createRecipeViewController.setCancelButtonToModifyRecipe();
     }
 
     @FunctionalInterface
