@@ -8,47 +8,44 @@ import java.util.*;
 import com.itextpdf.text.Anchor;
 import com.itextpdf.text.Chapter;
 import com.itextpdf.text.Document;
-import com.itextpdf.text.DocumentException;
-import com.itextpdf.text.Font;
 import com.itextpdf.text.Paragraph;
 import com.itextpdf.text.Section;
 import com.itextpdf.text.pdf.PdfWriter;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.exception.PDFException;
+import ulb.infof307.g01.model.exception.DocumentException;
 
 /**
  * Classe qui permet d'exporter une liste de course en PDF
  */
-public class PDFCreator {
-    private static String nameFile = null;
+public class PDFCreator extends DocumentCreator {
 
-    private static final Font catFont = new Font(Font.FontFamily.TIMES_ROMAN, 18,
-            Font.BOLD);
-    private static final Font subFont = new Font(Font.FontFamily.TIMES_ROMAN, 16,
-            Font.BOLD);
-    public  void createPDF(ShoppingList shoppingList) throws PDFException {
+    @Override
+    public void createDocument(ShoppingList shoppingList) throws DocumentException {
+
         List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
         sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
 
         nameFile = shoppingList.getName();
         Document document = new Document();
+
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(nameFile +".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(nameFile + ".pdf"));
             document.open();
             addContent(document, sortedShoppingList);
-        } catch (DocumentException | FileNotFoundException e) {
-            throw new PDFException(e);
+        } catch (DocumentException | FileNotFoundException | com.itextpdf.text.DocumentException e) {
+            throw new DocumentException(e);
         }
         finally {
             document.close();
         }
     }
 
-    private static void addContent(Document document, List<Product> productList) throws DocumentException {
+
+    private void addContent(Document document, List<Product> productList) throws DocumentException {
         String nameFamilyProduct = productList.get(0).getFamilyProduct();
 
-        Anchor anchor = new Anchor("Liste de courses : " + nameFile, catFont); //catFont
+        Anchor anchor = new Anchor(LISTE_DE_COURSE_TITLE + nameFile, catFont); //catFont
         Chapter catPart = new Chapter(new Paragraph(anchor), 1);
         Paragraph subPara = new Paragraph(nameFamilyProduct, subFont); //subFont
         Section subCatPart = catPart.addSection(subPara);
@@ -56,8 +53,14 @@ public class PDFCreator {
         for (Product product : productList ){
             if (!Objects.equals(product.getFamilyProduct(), nameFamilyProduct)){
                 nameFamilyProduct = product.getFamilyProduct();
-                subCatPart = catPart.addSection(new Paragraph(nameFamilyProduct, subFont));} //subFont
-            subCatPart.add(new Paragraph(product.getName() + " " +product.getQuantity() + product.getNameUnity()));}
-        document.add(catPart);
+                subCatPart = catPart.addSection(new Paragraph(nameFamilyProduct, subFont)); //subFont
+            }
+            subCatPart.add(new Paragraph(product.getName() + " " +product.getQuantity() + product.getNameUnity()));
+        }
+        try {
+            document.add(catPart);
+        } catch (com.itextpdf.text.DocumentException e) {
+            throw new DocumentException(e);
+        }
     }
 }

@@ -4,11 +4,10 @@ import javafx.scene.control.Alert;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.database.dao.ShoppingListDao;
-import ulb.infof307.g01.model.exception.PDFException;
+import ulb.infof307.g01.model.exception.DocumentException;
 import ulb.infof307.g01.model.export.ODTCreator;
 import ulb.infof307.g01.model.export.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.shoppingList.ExportShoppingListViewController;
 
@@ -59,8 +58,8 @@ public class ExportShoppingListController extends Controller implements ExportSh
     public void exportToPDF(){
         PDFCreator pdfCreator = new PDFCreator();
         try {
-            pdfCreator.createPDF(shoppingList);
-        } catch (PDFException e) {
+            pdfCreator.createDocument(shoppingList);
+        } catch (DocumentException e) {
             ViewController.showAlert(Alert.AlertType.ERROR, "ERREUR", "Une erreur s'est produite lors de l'exportation en PDF.");
         }
         popupExportShoppingList.close();
@@ -72,7 +71,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
     public void exportToODT(){
         ODTCreator odtCreator = new ODTCreator();
         try {
-            odtCreator.createODT(shoppingList);
+            odtCreator.createDocument(shoppingList);
         } catch (Exception e) {
             ViewController.showAlert(Alert.AlertType.ERROR,"Erreur","Une erreur c'est produit avec le fichier ODT, contacté le service d'assistance.");
         }

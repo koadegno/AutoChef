@@ -5,8 +5,7 @@ import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.TestConstante;
-import ulb.infof307.g01.model.exception.PDFException;
-import ulb.infof307.g01.model.export.PDFCreator;
+import ulb.infof307.g01.model.exception.DocumentException;
 
 import com.itextpdf.text.pdf.PdfReader;
 import com.itextpdf.text.pdf.parser.PdfTextExtractor;
@@ -34,8 +33,8 @@ class TestPDF {
      public void testCreatePDF() throws IOException {
         PDFCreator pdfCreator = new PDFCreator();
         try {
-            pdfCreator.createPDF(shoppingList);
-        } catch (PDFException e) {
+            pdfCreator.createDocument(shoppingList);
+        } catch (DocumentException e) {
             e.printStackTrace();
         }
         String text = """

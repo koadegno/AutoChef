@@ -44,7 +44,7 @@ class TestODTCreator {
     @Test
     void testCreateODT()  throws Exception {
         ODTCreator odtCreator = new ODTCreator();
-        odtCreator.createODT(shoppingList);
+        odtCreator.createDocument(shoppingList);
 
         OdfTextDocument odtReader = OdfTextDocument.loadDocument (NAME_SHOPPING_LIST + ".odt");
         ShoppingList shoppingListRead =  odtCreator.readODT(odtReader);
