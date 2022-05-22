@@ -12,14 +12,12 @@ import ulb.infof307.g01.controller.shoppingList.ShoppingListController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
 import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.CreateRecipeViewController;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Vector;
 
@@ -62,20 +60,20 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
         FXMLLoader loader = this.loadFXML("CreateRecipe.fxml");
         createRecipeViewController = loader.getController();
         createRecipeViewController.setListener(this);
-        this.initElementToDataBaseForCombobox();
+        this.initElementToDataBaseForComboBox();
 
     }
 
     /**
      * Récupère les noms des catégories et des types des recettes de la base de donnée
      */
-    public void initElementToDataBaseForCombobox(){
+    public void initElementToDataBaseForComboBox(){
         try {
             RecipeCategoryDao recipeCategoryDao = configuration.getRecipeCategoryDao();
             List<String> recipeCategoriesList = recipeCategoryDao.getAllName();
             RecipeTypeDao recipeTypeDao = configuration.getRecipeTypeDao();
             List<String> recipeTypesList = recipeTypeDao.getAllName();
-            createRecipeViewController.initCombobox(recipeCategoriesList, recipeTypesList);
+            createRecipeViewController.initComboBox(recipeCategoriesList, recipeTypesList);
 
         } catch (SQLException e) {
             ViewController.showErrorSQL();
@@ -92,7 +90,7 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
      * @param recipeName  Nom de la recette
      */
     @Override
-    public void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName) {
+    public void onSubmitButtonClick(String diet, String type, int nbPerson, String preparation, String recipeName) {
 
         boolean isValid = isValidRecipe(diet, type, nbPerson, preparation, recipeName);
 
@@ -210,7 +208,7 @@ public class CreateRecipeController extends Controller implements CreateRecipeVi
     }
 
     @Override
-    public void onHelpCreateRecipeClicked() {
+    public void onHelpCreateRecipeClick() {
         int numberOfImageHelp = 10;
         HelpController helpController = new HelpController("helpCreateRecipe/", numberOfImageHelp);
         helpController.displayHelpShop();

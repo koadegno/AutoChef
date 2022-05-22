@@ -10,7 +10,6 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -54,7 +53,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
      * @param recipeCategoriesList une liste qui contient les noms des catégories de recettes
      * @param recipeTypesList une liste qui contient les noms des types de recettes
      */
-    public void initCombobox(List<String> recipeCategoriesList, List<String> recipeTypesList ){
+    public void initComboBox(List<String> recipeCategoriesList, List<String> recipeTypesList ){
         dietComboBox.setItems(FXCollections.observableArrayList(recipeCategoriesList));
         typeComboBox.setItems(FXCollections.observableArrayList(recipeTypesList));
     }
@@ -69,7 +68,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         String preparation = preparationTextArea.getText();
         String recipeName = recipeNameTextField.getText();
 
-        listener.onSubmitButton(diet, type, nbPerson, preparation, recipeName);
+        listener.onSubmitButtonClick(diet, type, nbPerson, preparation, recipeName);
     }
 
     public void onModifyProductsButton() {listener.onModifyProductsButton();}
@@ -77,35 +76,35 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     public void onCancelButton() {listener.onCancelButton();}
 
     /**
-     * Appelé lorsque la {@link ComboBox} {@code diet} à une valeur invalide
+     * Appelée lorsque la {@link ComboBox} {@code diet} à une valeur invalide
      */
     public void dietComboBoxError() {
         setNodeColor(dietComboBox, true);
     }
 
     /**
-     * Appelé lorsque la {@link ComboBox} {@code type} à une valeur invalide
+     * Appelée lorsque la {@link ComboBox} {@code type} à une valeur invalide
      */
     public void typeComboBoxError() {
         setNodeColor(typeComboBox, true);
     }
 
     /**
-     * Appelé lorsque la {@link TextArea} {@code preparation} à une valeur invalide
+     * Appelée lorsque la {@link TextArea} {@code preparation} à une valeur invalide
      */
     public void preparationTextAreaError() {
         setNodeColor(preparationTextArea, true);
     }
 
     /**
-     * Appelé lorsque la {@link TableView} {@code liste d'ingrédient} à une valeur invalide
+     * Appelée lorsque la {@link TableView} {@code liste d'ingrédient} à une valeur invalide
      */
     public void listIngredientIsSizeZeroError(){
         setNodeColor(ingredientTableView, true);
     }
 
     /**
-     * Appelé lorsque la {@link TextField} {@code recipeName} à une valeur invalide
+     * Appelée lorsque la {@link TextField} {@code recipeName} à une valeur invalide
      */
     public void recipeNameTextFieldError() {
         setNodeColor(recipeNameTextField, true);
@@ -116,7 +115,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     /**
-     * Efface les nodes qui étaient en rouge à cause d'une erreur causé par l'utilisateur
+     * Efface les nodes qui étaient en rouge à cause d'une erreur causée par l'utilisateur
      */
     public void clearErrors(){
         setNodeColor(dietComboBox, false);
@@ -149,7 +148,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     public void helpCreateRecipe(){
-        listener.onHelpCreateRecipeClicked();
+        listener.onHelpCreateRecipeClick();
     }
 
     public void logout() {
@@ -163,11 +162,11 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     public interface CreateRecipeListener {
-        void onSubmitButton(String diet, String type, int nbPerson, String preparation, String recipeName);
+        void onSubmitButtonClick(String diet, String type, int nbPerson, String preparation, String recipeName);
         void onModifyProductsButton();
         void onCancelButton();
         void onCancelModifyButton();
-        void onHelpCreateRecipeClicked();
+        void onHelpCreateRecipeClick();
         void logout();
     }
 }

@@ -60,7 +60,7 @@ public class HomePageRecipeController extends Controller implements HomeRecipeVi
      * Retourne à l'écran principal
      */
     @Override
-    public void onBackButtonClick() {
+    public void onBackButton() {
         HomePageController homePageController = new HomePageController(currentStage);
         homePageController.displayHome();
     }
@@ -73,7 +73,7 @@ public class HomePageRecipeController extends Controller implements HomeRecipeVi
 
 
     @Override
-    public void onFavoriteRecipe() {
+    public void onFavoriteRecipeButtonClick() {
         FavoriteRecipesController favoriteRecipesController = new FavoriteRecipesController(currentStage,this);
         favoriteRecipesController.displayFavoriteRecipe();
     }
