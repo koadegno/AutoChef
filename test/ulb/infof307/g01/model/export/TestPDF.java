@@ -30,13 +30,11 @@ class TestPDF {
     }
 
     @Test
-     public void testCreatePDF() throws IOException {
+     public void testCreatePDF() throws IOException, DocumentException {
         PDFCreator pdfCreator = new PDFCreator();
-        try {
-            pdfCreator.createDocument(shoppingList);
-        } catch (DocumentException e) {
-            e.printStackTrace();
-        }
+
+        pdfCreator.createDocument(shoppingList);
+
         String text = """
                 1. Liste de courses : test/testShoppingList
                 1.1. Fruit
