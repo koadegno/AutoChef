@@ -35,7 +35,7 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
     /**
      * Affiche la page permettant à l'utilisateur de consulter sa liste de Menus
      * @see ulb.infof307.g01.model.Menu
-     * //TODO: @see ControllerMenu + ViewController Liste Menu
+     *
      */
     @Override
     public void onUserMenusButtonClick() {
@@ -46,7 +46,7 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
     /**
      * Affiche la page permettant à l'utilisateur de créer un nouveau Menu
      * @see ulb.infof307.g01.model.Menu
-     * //TODO: @see ControllerMenu + ViewController CreateMenu
+     * //
      */
     @Override
     public void onUserCreateMenuButtonClick() {

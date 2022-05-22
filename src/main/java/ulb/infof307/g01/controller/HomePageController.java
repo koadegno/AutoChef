@@ -51,7 +51,7 @@ public class HomePageController extends Controller implements HomePageListener,L
 
     /**
      * Affiche la page principale de la carte
-     * //TODO: @see ControllerDeVue Carte
+     *
      */
     @Override
     public void onMapButtonClick() {
@@ -62,7 +62,7 @@ public class HomePageController extends Controller implements HomePageListener,L
 
     /**
      * Affiche la page principale de la carte
-     * //TODO: @see ControllerDeVue Accueil Recette
+     * //
      */
     @Override
     public void onRecipeButtonClick() {
@@ -72,7 +72,7 @@ public class HomePageController extends Controller implements HomePageListener,L
 
     /**
      * Affiche la page principale des magasins
-     * //TODO: @see ControllerDeVue Accueil Magasins
+     * //
      */
     @Override
     public void onShopButtonClick() {
