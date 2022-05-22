@@ -3,8 +3,6 @@ package ulb.infof307.g01.model;
 import com.esri.arcgisruntime.geometry.Point;
 import ulb.infof307.g01.controller.map.LocatorService;
 
-import java.util.HashSet;
-
 /**
  * Classe représentant un magasin
  */
@@ -20,8 +18,6 @@ public class Shop extends ProductHashSet{
         private Point coordinate = null;
         private String address = "";
         private int id = -1;
-
-
 
         public ShopBuilder withName(String name){
             this.name = name;
