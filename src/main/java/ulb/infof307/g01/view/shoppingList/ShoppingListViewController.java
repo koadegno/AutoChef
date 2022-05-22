@@ -51,7 +51,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public void initialize(URL location, ResourceBundle resources) {
         activeElementVisibility();
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
-        spinnerQuantityOrNumber.getEditor().textProperty().addListener((obs, oldValue, newValue) -> OnlyIntOrFloatTextFieldUnity(newValue));
+        super.onlyIntValue(spinnerQuantityOrNumber);
 
         columnProduct.setCellValueFactory(new PropertyValueFactory<>("name"));
         columnQuantityOrNumber.setCellValueFactory(new PropertyValueFactory<>("quantity"));
@@ -87,32 +87,21 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     }
 
     /**
-     * Ajout de chaque produit de la table dans une nouvelle liste de courses par le controller
+     * recupere chaque produit de la table view et l'envoie au controller
      */
     public void fillShoppingListToSend() {
         for (int i = 0; i < tableViewDisplayProductList.getItems().size(); i++) {
-            Product product = tableViewDisplayProductList.getItems().get(i);
-            listener.addProductToShoppingListToSend(product);
+            listener.addProductToShoppingListToSend(tableViewDisplayProductList.getItems().get(i));
         }
     }
 
-    /**
-     * Empeche d'ecrire autre chose qu'un int dans le textField
-     * @param newValue : string recup du textField
-     */
-    protected void OnlyIntOrFloatTextFieldUnity(String newValue) {
-        if (!newValue.matches("^\\d*")) {
-            spinnerQuantityOrNumber.getEditor().setText("0");
-            spinnerValueFactory.setValue(0);
-        }
-    }
 
     /**
-     * Rajoute-les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
+     * Rajoute les elements (produit, quantite, unite) choisis par l'utilisateur dans le tableView
      */
     @FXML
     public void addElementOfListToComboBoxProduct() {
-        //Recupere les elements choisi pour un produit
+        //Recupere les elements pour creer un produit
         Object nameProductChoose = comboBoxListProduct.getSelectionModel().getSelectedItem();
         int quantityOrNumberChoose = spinnerValueFactory.getValue();
         Object nameUnityChoose = comboBoxListUnity.getSelectionModel().getSelectedItem();
@@ -125,13 +114,14 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     }
 
     public void clearElementAddProduct(){
-        //Nettoyer les combobox et le spinner
+        //Nettoyer les combobox et le spinner apres ajout
         comboBoxListProduct.getSelectionModel().clearSelection();
         comboBoxListUnity.getSelectionModel().clearSelection();
         spinnerValueFactory.setValue(0);
     }
 
     public void initComboBox(List<String> allProduct, List<String> allUnitName) {
+        //initialise les combobox avec les informations prises de la base de données
         comboBoxListProduct.setItems(FXCollections.observableArrayList(allProduct));
         comboBoxListUnity.setItems(FXCollections.observableArrayList(allUnitName));
     }
@@ -174,10 +164,10 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
     public void exportShoppingList(){
         listener.exportShoppingList(currentShoppingListName);
     }
-
     public void sendShoppingListByMail() {
         listener.sendShoppingListByMail(currentShoppingListName);
     }
+
     public void onSeeShoppingListOnMap(){listener.viewShoppingListOnMap(currentShoppingListName);}
     public void logout(){listener.logout();}
 
