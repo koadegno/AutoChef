@@ -1,5 +1,7 @@
 package ulb.infof307.g01.model.export;
 
+import com.itextpdf.text.pdf.PdfReader;
+import com.itextpdf.text.pdf.parser.PdfTextExtractor;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
@@ -7,12 +9,9 @@ import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.database.TestConstante;
 import ulb.infof307.g01.model.exception.DocumentException;
 
-import com.itextpdf.text.pdf.PdfReader;
-import com.itextpdf.text.pdf.parser.PdfTextExtractor;
-
 import java.io.IOException;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertEquals;
 
 /**
  * test de l'exportation en PDF
@@ -36,7 +35,7 @@ class TestPDF {
         pdfCreator.createDocument(shoppingList);
 
         String text = """
-                1. Liste de courses : test/testShoppingList
+                1. Liste de course : test/testShoppingList
                 1.1. Fruit
                 Banane 1kg
                 1.2. Viande
