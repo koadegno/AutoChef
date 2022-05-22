@@ -10,7 +10,6 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.User;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.ProductDao;
 import ulb.infof307.g01.model.database.dao.ProductUnityDao;
 import ulb.infof307.g01.model.database.dao.ShopDao;

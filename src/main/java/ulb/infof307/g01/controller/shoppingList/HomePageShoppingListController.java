@@ -14,7 +14,6 @@ public class HomePageShoppingListController extends Controller implements HomeSh
 
     public HomePageShoppingListController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
     /**
      * Affiche la page principale des Listes de Courses.

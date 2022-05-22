@@ -12,7 +12,6 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.map.MapViewController;
@@ -37,7 +36,6 @@ public class MapController extends Controller implements MapViewController.Liste
 
     public MapController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow, Boolean readOnlyMode){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
         this.readOnlyMode = readOnlyMode;
         shopDao = configuration.getShopDao();
         locatorService = new LocatorService();

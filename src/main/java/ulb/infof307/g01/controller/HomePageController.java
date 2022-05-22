@@ -21,9 +21,7 @@ public class HomePageController extends Controller implements HomePageListener,L
 
     // Méthodes de la fenêtre d'accueil
 
-    public HomePageController(Stage primaryStage){
-        setStage(primaryStage);
-    }
+    public HomePageController(){}
 
 
     /**

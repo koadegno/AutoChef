@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.model.Shop;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.shop.HomeShopViewController;
 
@@ -13,7 +12,6 @@ public class HomeShopController extends Controller implements HomeShopViewContro
 
     public HomeShopController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
 
     public void displayHomeShop(){

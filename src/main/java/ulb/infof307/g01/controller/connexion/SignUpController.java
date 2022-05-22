@@ -20,9 +20,8 @@ public class SignUpController extends Controller implements SignUpViewController
 
     private SignUpViewController signUpViewController;
 
-    public SignUpController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public SignUpController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
     public void displaySignUp(){
         FXMLLoader loader = loadFXML("SignUp.fxml");
@@ -30,7 +29,7 @@ public class SignUpController extends Controller implements SignUpViewController
         signUpViewController.setListener(this);
     }
     public void displayHome(){
-        HomePageController homePageController = new HomePageController(currentStage);
+        HomePageController homePageController = new HomePageController();
         homePageController.displayHome();
     }
 

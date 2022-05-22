@@ -5,7 +5,6 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
 import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
@@ -14,7 +13,6 @@ import ulb.infof307.g01.view.recipe.SearchRecipeViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
 
 import java.sql.SQLException;
-import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -30,7 +28,6 @@ public class SearchRecipeController extends Controller implements SearchRecipeVi
 
     public SearchRecipeController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
 
     public void displaySearchRecipe(){

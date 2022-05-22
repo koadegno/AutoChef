@@ -6,7 +6,6 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.User;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.UserDao;
 import ulb.infof307.g01.view.connexion.LoginViewController;
 
@@ -38,7 +37,7 @@ public class LoginController extends Controller implements LoginViewController.L
 
 
     public void displayHome(){
-        HomePageController homePageController = new HomePageController(currentStage);
+        HomePageController homePageController = new HomePageController();
         homePageController.displayHome();
     }
 
@@ -74,7 +73,7 @@ public class LoginController extends Controller implements LoginViewController.L
 
     @Override
     public void onSignUpButtonClick() {
-        SignUpController signUpController = new SignUpController(currentStage,this);
+        SignUpController signUpController = new SignUpController(this);
         signUpController.displaySignUp();
     }
 

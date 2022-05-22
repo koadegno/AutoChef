@@ -30,9 +30,8 @@ public class ShowUserMenuController extends Controller implements ShowMenuViewCo
     private Menu menu;
     private ShowMenuViewController viewController;
 
-    public ShowUserMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShowUserMenuController(String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
         this.menu = new Menu(menuName);
     }
 
@@ -88,8 +87,8 @@ public class ShowUserMenuController extends Controller implements ShowMenuViewCo
     @Override
     public void onGenerateShoppingListClicked(){
         ShoppingList shoppingList = menu.generateShoppingList();
-        CreateShoppingListController createShoppingListController = new CreateShoppingListController(shoppingList,this);
-        createShoppingListController.setStage(currentStage);
+        CreateShoppingListController createShoppingListController = new CreateShoppingListController(this);
+        createShoppingListController.displayGeneratedShoppingList(shoppingList);
     }
 
     @Override

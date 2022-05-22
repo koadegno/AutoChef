@@ -29,7 +29,7 @@ public class ODTCreator extends DocumentCreator {
             addContent(odt, sortedShoppingList);
             odt.save(nameFile + ".odt");
         } catch (Exception e) {
-            throw new RuntimeException(e);
+            throw new DocumentException(e);
         }
     }
 
