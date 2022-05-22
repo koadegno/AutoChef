@@ -5,6 +5,7 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.model.database.dao.ShoppingListDao;
 import ulb.infof307.g01.model.exception.DocumentException;
+import ulb.infof307.g01.model.export.DocumentCreator;
 import ulb.infof307.g01.model.export.ODTCreator;
 import ulb.infof307.g01.model.export.PDFCreator;
 import ulb.infof307.g01.model.ShoppingList;
@@ -56,7 +57,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
      * Exporter la liste de courses en PDF puis fermer la popup
      */
     public void exportToPDF(){
-        PDFCreator pdfCreator = new PDFCreator();
+        DocumentCreator pdfCreator = new PDFCreator();
         try {
             pdfCreator.createDocument(shoppingList);
         } catch (DocumentException e) {
@@ -69,7 +70,7 @@ public class ExportShoppingListController extends Controller implements ExportSh
      * Exporter la liste de courses en ODT puis fermer la popup
      */
     public void exportToODT(){
-        ODTCreator odtCreator = new ODTCreator();
+        DocumentCreator odtCreator = new ODTCreator();
         try {
             odtCreator.createDocument(shoppingList);
         } catch (Exception e) {

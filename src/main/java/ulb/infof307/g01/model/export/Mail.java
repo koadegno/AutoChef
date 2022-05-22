@@ -80,7 +80,7 @@ public class Mail {
 
         messageBody.addBodyPart(addText(mailTextBody));
 
-        PDFCreator pdfCreator = new PDFCreator();
+        DocumentCreator pdfCreator = new PDFCreator();
         try {
             pdfCreator.createDocument(shoppingListToSend);
         } catch (DocumentException e) {

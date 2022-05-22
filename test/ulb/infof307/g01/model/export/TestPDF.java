@@ -30,7 +30,7 @@ class TestPDF {
 
     @Test
      public void testCreatePDF() throws IOException, DocumentException {
-        PDFCreator pdfCreator = new PDFCreator();
+        DocumentCreator pdfCreator = new PDFCreator();
 
         pdfCreator.createDocument(shoppingList);
 
