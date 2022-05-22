@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
 /**
  * Contrôleur de Vue pour l'interface de Création de Recettes
  */
-public class CreateRecipeViewController extends ViewController<CreateRecipeViewController.CreateRecipeListener> implements Initializable {
+public class EditRecipeViewController extends ViewController<EditRecipeViewController.EditRecipeListener> implements Initializable {
     @FXML
     private TableView<Product> ingredientTableView;
     @FXML
@@ -148,7 +148,7 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
     }
 
     public void helpCreateRecipe(){
-        listener.onHelpCreateRecipeClick();
+        listener.onHelpEditRecipeClick();
     }
 
     public void logout() {
@@ -161,12 +161,12 @@ public class CreateRecipeViewController extends ViewController<CreateRecipeViewC
         return size;
     }
 
-    public interface CreateRecipeListener {
+    public interface EditRecipeListener {
         void onSubmitButtonClick(String diet, String type, int nbPerson, String preparation, String recipeName);
         void onModifyProductsButton();
         void onCancelButton();
         void onCancelModifyButton();
-        void onHelpCreateRecipeClick();
+        void onHelpEditRecipeClick();
         void logout();
     }
 }

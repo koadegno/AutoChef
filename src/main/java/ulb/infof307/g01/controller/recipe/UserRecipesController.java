@@ -12,7 +12,6 @@ import ulb.infof307.g01.controller.help.HelpController;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
@@ -27,7 +26,7 @@ import java.util.List;
  * Classe qui contrôle l'affichage d'une recette
  * Permet de modifier cette recette, et de la visualiser
  */
-public class UserRecipesController extends Controller implements UserRecipesViewController.UserRecipesListener, ListenerBackPreviousWindow, SearchRecipeController.SearchRecipeListener, CreateRecipeController.ListenerGetRecipe {
+public class UserRecipesController extends Controller implements UserRecipesViewController.UserRecipesListener, ListenerBackPreviousWindow, SearchRecipeController.SearchRecipeListener, ModifyRecipeController.ListenerGetRecipe {
 
     Scene sceneViewRecipe = null;
 
@@ -92,11 +91,9 @@ public class UserRecipesController extends Controller implements UserRecipesView
         this.currentShoppingList = new ShoppingList(currentRecipe.getName());
         currentShoppingList.addAll(productList);
 
-        CreateRecipeController createRecipeController = new CreateRecipeController(currentShoppingList,currentStage,this);
-        createRecipeController.displayCreateRecipe();
-        createRecipeController.setWaitingModification(true);
-        createRecipeController.setListenerGetRecipe(this);
-        createRecipeController.prefillFields(currentRecipe,productList);
+        ModifyRecipeController modifyRecipeController = new ModifyRecipeController(currentShoppingList,currentStage,this, this);
+        modifyRecipeController.displayCreateRecipe();
+        modifyRecipeController.prefillFields(currentRecipe,productList);
     }
 
     /**

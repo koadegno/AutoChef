@@ -10,7 +10,7 @@ public class HomeRecipeViewController extends ViewController<HomeRecipeViewContr
 
     public void onUserRecipesButtonClick() {listener.onUserRecipesButtonClick();}
     public void onCreateRecipeButtonClick() {listener.onNewRecipeButtonClick();}
-    public void onBackButton() {listener.onBackButton();}
+    public void onBackButtonClick() {listener.onBackButton();}
 
     public void logout() {
         listener.logout();

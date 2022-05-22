@@ -36,7 +36,7 @@ public abstract class ShoppingListController extends Controller implements Shopp
     private final boolean isProfessional;
     private final ProductDao productDao;
     private final ProductUnityDao productUnityDao;
-    private final ShoppingListDao shoppingListDao;
+    protected final ShoppingListDao shoppingListDao;
 
 
     //-------------------------CONSTRUCTEUR
