@@ -22,8 +22,6 @@ import java.util.Vector;
  */
 public class ModifyShoppingListController extends ShoppingListController {
 
-    private ShoppingListDao shoppingListDao;
-
     public ModifyShoppingListController(ListenerBackPreviousWindow listenerBackPreviousWindow) {
         super(listenerBackPreviousWindow);
         displayModifyShoppingList();

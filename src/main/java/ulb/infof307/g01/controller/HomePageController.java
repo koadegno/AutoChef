@@ -7,10 +7,9 @@ import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.HomePageMenuController;
 import ulb.infof307.g01.controller.recipe.HomePageRecipeController;
 import ulb.infof307.g01.controller.shop.HomeShopController;
-import ulb.infof307.g01.controller.shoppingList.HomePageShoppingList;
+import ulb.infof307.g01.controller.shoppingList.HomePageShoppingListController;
 import ulb.infof307.g01.view.HomePageViewController.*;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
-import ulb.infof307.g01.view.shop.HomeShopViewController;
 
 
 /**
@@ -40,7 +39,7 @@ public class HomePageController extends Controller implements HomePageListener,L
 
     @Override
     public void onShoppingListButtonClick() {
-        HomePageShoppingList homePageShoppingList = new HomePageShoppingList(currentStage,this);
+        HomePageShoppingListController homePageShoppingList = new HomePageShoppingListController(currentStage,this);
         homePageShoppingList.displayHomeShoppingList();
     }
 

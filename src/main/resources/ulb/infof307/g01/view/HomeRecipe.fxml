@@ -34,7 +34,7 @@
                <font>
                   <Font size="18.0" />
                </font></Button>
-            <Button mnemonicParsing="false" onAction="#onFavoriteRecipe" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Favoris" textFill="WHITE">
+            <Button mnemonicParsing="false" onAction="#onFavoriteRecipeButtonClicked" prefHeight="50.0" prefWidth="170.0" style="-fx-background-color: #9F667A;" text="Favoris" textFill="WHITE">
                <font>
                   <Font name="Yu Gothic Medium" size="18.0" />
                </font></Button>

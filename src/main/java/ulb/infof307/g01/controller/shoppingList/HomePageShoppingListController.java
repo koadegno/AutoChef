@@ -5,15 +5,14 @@ import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.shoppingList.HomeShoppingListViewController;
-import ulb.infof307.g01.view.shoppingList.ModifyShoppingListViewController;
 
 /**
  * Contrôleur de la page d'accueil d'une liste de course
  */
-public class HomePageShoppingList extends Controller implements HomeShoppingListViewController.Listener, ListenerBackPreviousWindow {
+public class HomePageShoppingListController extends Controller implements HomeShoppingListViewController.Listener, ListenerBackPreviousWindow {
 
 
-    public HomePageShoppingList(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public HomePageShoppingListController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
     }
