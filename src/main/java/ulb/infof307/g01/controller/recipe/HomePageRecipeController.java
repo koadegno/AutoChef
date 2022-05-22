@@ -43,7 +43,7 @@ public class HomePageRecipeController extends Controller implements HomeRecipeVi
      */
     @Override
     public void onUserRecipesButtonClick() {
-        UserRecipesController userRecipesController = new UserRecipesController(currentStage,this,null);
+        UserRecipesController userRecipesController = new UserRecipesController(this,null);
         userRecipesController.displayUserRecipes();
     }
 
@@ -61,7 +61,7 @@ public class HomePageRecipeController extends Controller implements HomeRecipeVi
      */
     @Override
     public void onBackButton() {
-        HomePageController homePageController = new HomePageController(currentStage);
+        HomePageController homePageController = new HomePageController();
         homePageController.displayHome();
     }
 

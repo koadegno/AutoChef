@@ -29,7 +29,6 @@ public class UserMenusController extends Controller implements UserMenusViewCont
 
     public UserMenusController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
         this.menus = new ArrayList<>();
         this.allMenusNames = new ArrayList<>();
     }
@@ -91,7 +90,7 @@ public class UserMenusController extends Controller implements UserMenusViewCont
             try {
                 MenuDao menuDao = configuration.getMenuDao();
                 Menu menu = menuDao.get(menuName);
-                ShowUserMenuController showUserMenuController = new ShowUserMenuController(currentStage,menu.getName(),this);
+                ShowUserMenuController showUserMenuController = new ShowUserMenuController(menu.getName(),this);
                 showUserMenuController.displayMenu();
 
             } catch (SQLException e) {

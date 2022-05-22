@@ -7,7 +7,6 @@ import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.FavoriteRecipeViewController;
@@ -28,7 +27,6 @@ public class FavoriteRecipesController extends Controller implements FavoriteRec
 
     public FavoriteRecipesController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
 
     public void displayFavoriteRecipe(){
@@ -49,7 +47,7 @@ public class FavoriteRecipesController extends Controller implements FavoriteRec
     public void onFavoriteRecipesTableViewClicked(Recipe recipe) {
         currentRecipe = recipe;
         sceneFavoriteRecipe = currentStage.getScene();
-        UserRecipesController userRecipesController = new UserRecipesController(currentStage,this,currentRecipe);
+        UserRecipesController userRecipesController = new UserRecipesController(this,currentRecipe);
         userRecipesController.displayUserRecipes();
         userRecipesController.initReadOnlyRecipeController();
     }

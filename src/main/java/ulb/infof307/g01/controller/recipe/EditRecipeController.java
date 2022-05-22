@@ -38,7 +38,6 @@ public class EditRecipeController extends Controller implements EditRecipeViewCo
 
     public EditRecipeController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow) {
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
         currentShoppingList = null;
     }
 

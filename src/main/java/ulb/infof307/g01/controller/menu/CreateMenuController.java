@@ -40,7 +40,6 @@ public class CreateMenuController extends Controller implements CreateMenuViewCo
 
     public CreateMenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
         menu = new Menu();
         daysName = new ArrayList<>();
         daysName.addAll(Arrays.asList(Day.values()).subList(DAY_ONE, NUMBERS_DAYS_IN_WEEK));

@@ -37,10 +37,9 @@ public class UserRecipesController extends Controller implements UserRecipesView
     private Recipe currentRecipe;
     private ShoppingList currentShoppingList;
 
-    public UserRecipesController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow,Recipe currentRecipe){
+    public UserRecipesController(ListenerBackPreviousWindow listenerBackPreviousWindow,Recipe currentRecipe){
         super(listenerBackPreviousWindow);
         this.currentRecipe = currentRecipe;
-        setStage(primaryStage);
     }
     public void displayUserRecipes(){
         FXMLLoader loader = this.loadFXML("Recipe.fxml");

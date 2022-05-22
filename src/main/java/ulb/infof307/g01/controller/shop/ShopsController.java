@@ -5,7 +5,6 @@ import org.jetbrains.annotations.NotNull;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.model.Shop;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.ShopDao;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.ViewController;

@@ -27,17 +27,16 @@ public class CreateShoppingListController extends ShoppingListController {
         displayCreateShoppingList();
     }
 
-    public CreateShoppingListController(ShoppingList shoppingList,ListenerBackPreviousWindow listenerBackPreviousWindow) {
-        super(listenerBackPreviousWindow);
-        displayCreateShoppingList();
-        fillProductTable(shoppingList);
-    }
 
-    private void displayCreateShoppingList(){
+    public void displayCreateShoppingList(){
         createShoppingListViewController = new CreateShoppingListViewController();
         loadFXML(createShoppingListViewController, "ShoppingList.fxml");
         createShoppingListViewController.setListener(this);
         initInformationShoppingList(true);
+    }
+
+    public void displayGeneratedShoppingList(ShoppingList shoppingList){
+        fillProductTable(shoppingList);
     }
 
 

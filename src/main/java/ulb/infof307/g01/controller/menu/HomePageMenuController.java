@@ -15,7 +15,6 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
 
     public HomePageMenuController(Stage primaryStage,ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
-        setStage(primaryStage);
     }
 
     public void displayHomeMenu(){
