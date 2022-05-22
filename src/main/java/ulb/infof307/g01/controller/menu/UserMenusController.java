@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller.menu;
 
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.TreeItem;
 import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
@@ -92,8 +91,8 @@ public class UserMenusController extends Controller implements UserMenusViewCont
             try {
                 MenuDao menuDao = configuration.getMenuDao();
                 Menu menu = menuDao.get(menuName);
-                ShowMenuController showMenuController = new ShowMenuController(currentStage,menu.getName(),this);
-                showMenuController.displayMenu();
+                ShowUserMenuController showUserMenuController = new ShowUserMenuController(currentStage,menu.getName(),this);
+                showUserMenuController.displayMenu();
 
             } catch (SQLException e) {
                 ViewController.showErrorSQL();

@@ -11,7 +11,6 @@ import ulb.infof307.g01.controller.recipe.SearchRecipeController;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.MenuDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.CreateMenuViewController;
@@ -27,7 +26,7 @@ import java.util.List;
  * Classe qui contrôle la creation des menus
  * Permet de générer ses menus et d'en créer
  */
-public class MenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
+public class CreateMenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private CreateMenuViewController createMenuViewController;
@@ -39,7 +38,7 @@ public class MenuController extends Controller implements CreateMenuViewControll
     Scene previousScene;
 
 
-    public MenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public CreateMenuController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
         menu = new Menu();
@@ -47,6 +46,14 @@ public class MenuController extends Controller implements CreateMenuViewControll
         daysName.addAll(Arrays.asList(Day.values()).subList(DAY_ONE, NUMBERS_DAYS_IN_WEEK));
     }
 
+    public void displayCreateMenu(){
+        FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
+        createMenuViewController = loader.getController();
+        createMenuViewController.setListener(this);
+        createMenuViewController.setDay(currentDay);
+        start();
+        isModifying = false;
+    }
 
     private void start(){
         createMenuViewController.getDaysComboBox().setItems(FXCollections.observableArrayList(daysName));
@@ -61,15 +68,6 @@ public class MenuController extends Controller implements CreateMenuViewControll
         for (Recipe recipe : valueList) {
             createMenuViewController.getMenuTableView().getItems().add(recipe);
         }
-    }
-
-    public void displayCreateMenu(){
-        FXMLLoader loader = this.loadFXML("CreateDisplayMenu.fxml");
-        createMenuViewController = loader.getController();
-        createMenuViewController.setListener(this);
-        createMenuViewController.setDay(currentDay);
-        start();
-        isModifying = false;
     }
 
     public void showModifyMenu(Menu menu) {

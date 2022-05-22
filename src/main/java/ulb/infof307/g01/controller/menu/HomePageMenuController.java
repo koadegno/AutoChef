@@ -51,8 +51,8 @@ public class HomePageMenuController extends Controller implements HomeMenuViewCo
      */
     @Override
     public void onUserCreateMenuButtonClick() {
-        MenuController menuController = new MenuController(currentStage,this);
-        menuController.displayCreateMenu();
+        CreateMenuController createMenuController = new CreateMenuController(currentStage,this);
+        createMenuController.displayCreateMenu();
     }
 
     @Override

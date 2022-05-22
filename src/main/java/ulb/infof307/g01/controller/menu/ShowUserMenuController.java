@@ -12,11 +12,9 @@ import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
 import ulb.infof307.g01.model.ShoppingList;
-import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.dao.MenuDao;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.menu.ShowMenuViewController;
-import ulb.infof307.g01.view.shoppingList.CreateShoppingListViewController;
 
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -27,12 +25,12 @@ import java.util.List;
  * Classe qui contrôle l'affiche d'un menu de l'utilisateur
  * Permet de voir le menu, de générer une liste de course et de modifier un ce menu
  */
-public class ShowMenuController extends Controller implements ShowMenuViewController.Listener,ListenerBackPreviousWindow {
+public class ShowUserMenuController extends Controller implements ShowMenuViewController.Listener,ListenerBackPreviousWindow {
 
     private Menu menu;
     private ShowMenuViewController viewController;
 
-    public ShowMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
+    public ShowUserMenuController(Stage primaryStage, String menuName, ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);
         setStage(primaryStage);
         this.menu = new Menu(menuName);
@@ -83,8 +81,8 @@ public class ShowMenuController extends Controller implements ShowMenuViewContro
 
     @Override
     public void onModifyMenuClicked(){
-        MenuController menuController = new MenuController(currentStage,this);
-        menuController.showModifyMenu(menu);
+        CreateMenuController createMenuController = new CreateMenuController(currentStage,this);
+        createMenuController.showModifyMenu(menu);
     }
 
     @Override
