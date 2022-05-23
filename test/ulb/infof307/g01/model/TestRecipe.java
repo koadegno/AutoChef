@@ -20,5 +20,7 @@ public class TestRecipe {
 
         Recipe recipeTestInvalid = new Recipe.RecipeBuilder().withId(2).withName("Invalid").withDuration(3).withCategory("Informatique").withType("Test").withNumberOfPerson(2).withPreparation("Faire le test avant le code").build();
         assertNotEquals(recipeTest, recipeTestInvalid, "Echec du test de comparaison invalide");
+
+        assertNotEquals(recipeTest, null, "Echec du test de comparaison avec null");
     }
 }
