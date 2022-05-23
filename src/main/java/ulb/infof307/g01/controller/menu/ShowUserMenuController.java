@@ -57,7 +57,7 @@ public class ShowUserMenuController extends Controller implements ShowMenuViewCo
 
     private void displayMenuInfo(){
         viewController.getMenuNameLabel().setText(menu.getName());
-        viewController.getNbOfDayLabel().setText("Durée : "+ Menu.NB_OF_DAYS +"jours");
+        viewController.getNbOfDayLabel().setText("Durée : "+ Menu.NB_OF_DAYS +" jours");
     }
 
     /**
@@ -70,6 +70,7 @@ public class ShowUserMenuController extends Controller implements ShowMenuViewCo
             dayTable.getColumns().clear();
             TableColumn<Recipe, String> dayCol = new TableColumn<>(day.toString());
             dayCol.setCellValueFactory(new PropertyValueFactory<>("name"));
+            dayCol.setStyle("-fx-background-color :  #915F6D;");
             List<Recipe> mealForDay = menu.getRecipesfor(day);
             dayTable.getColumns().add(dayCol);
             dayTable.getItems().addAll(mealForDay);
