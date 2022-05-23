@@ -1,66 +1,60 @@
 package ulb.infof307.g01.model.export;
 
 
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.util.*;
-
-import com.itextpdf.text.Anchor;
-import com.itextpdf.text.Chapter;
-import com.itextpdf.text.Document;
-import com.itextpdf.text.Paragraph;
-import com.itextpdf.text.Section;
+import com.itextpdf.text.*;
 import com.itextpdf.text.pdf.PdfWriter;
 import ulb.infof307.g01.model.Product;
-import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.exception.DocumentException;
+
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 
 /**
  * Classe qui permet d'exporter une liste de course en PDF
  */
 public class PDFCreator extends DocumentCreator {
 
+    Chapter chapter;
+    Section currentSection;
+    Document document = new Document();
     @Override
-    public void createDocument(ShoppingList shoppingList) throws DocumentException {
-
-        List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
-        sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
-
-        nameFile = shoppingList.getName();
-        Document document = new Document();
+    protected void createFile(String fileName) throws DocumentException {
 
         try {
-            PdfWriter.getInstance(document, new FileOutputStream(nameFile + ".pdf"));
+            PdfWriter.getInstance(document, new FileOutputStream(fileName + ".pdf"));
             document.open();
-            addContent(document, sortedShoppingList);
-        } catch (DocumentException | FileNotFoundException | com.itextpdf.text.DocumentException e) {
+        } catch ( FileNotFoundException | com.itextpdf.text.DocumentException e) {
+            document.close();
             throw new DocumentException(e);
         }
-        finally {
-            document.close();
-        }
+
     }
 
+    @Override
+    protected void addTitle(String title) {
+        Anchor anchor = new Anchor(title, catFont);
+        chapter = new Chapter(new Paragraph(anchor), 1);
+    }
 
-    private void addContent(Document document, List<Product> productList) throws DocumentException {
-        String nameFamilyProduct = productList.get(0).getFamilyProduct();
+    @Override
+    protected void addChapter(String chapterTitle) throws DocumentException {
+        Paragraph paragraphChapterTitle = new Paragraph(chapterTitle, subFont);
+        currentSection = chapter.addSection(paragraphChapterTitle);
+    }
 
-        Anchor anchor = new Anchor(LISTE_DE_COURSE_TITLE + nameFile, catFont); //catFont
-        Chapter catPart = new Chapter(new Paragraph(anchor), 1);
-        Paragraph subPara = new Paragraph(nameFamilyProduct, subFont); //subFont
-        Section subCatPart = catPart.addSection(subPara);
+    @Override
+    protected void addProduct(Product item) {
+        currentSection.add(new Paragraph(item.getName() + " " + item.getQuantity() + item.getNameUnity()));
+    }
 
-        for (Product product : productList ){
-            if (!Objects.equals(product.getFamilyProduct(), nameFamilyProduct)){
-                nameFamilyProduct = product.getFamilyProduct();
-                subCatPart = catPart.addSection(new Paragraph(nameFamilyProduct, subFont)); //subFont
-            }
-            subCatPart.add(new Paragraph(product.getName() + " " +product.getQuantity() + product.getNameUnity()));
-        }
+    @Override
+    protected void saveFile() throws DocumentException {
         try {
-            document.add(catPart);
+            document.add(chapter);
         } catch (com.itextpdf.text.DocumentException e) {
             throw new DocumentException(e);
         }
+        document.close();
     }
+
 }
