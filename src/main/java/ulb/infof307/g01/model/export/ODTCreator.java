@@ -10,53 +10,65 @@ import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.ShoppingList;
 import ulb.infof307.g01.model.exception.DocumentException;
 
-import java.util.*;
-
 /**
  * Classe d'exportation d'une recette en ODT
  */
 public class ODTCreator extends DocumentCreator {
 
+    String fileName;
+
+    private OdfTextDocument file;
+
+    protected void createFile(String fileName) throws DocumentException {
+
+        this.fileName = fileName;
+
+        try {
+            file = OdfTextDocument.newTextDocument();
+        }
+        catch (Exception e) {
+            file.close();
+            throw new DocumentException(e);
+        }
+    }
 
     @Override
-    public void createDocument(ShoppingList shoppingList) throws DocumentException {
-
-        List<Product> sortedShoppingList = new ArrayList<>(shoppingList);
-        sortedShoppingList.sort(Comparator.comparing(Product::getFamilyProduct));
-
-        nameFile = shoppingList.getName();
-        try (OdfTextDocument odt = OdfTextDocument.newTextDocument()) {
-            addContent(odt, sortedShoppingList);
-            odt.save(nameFile + ".odt");
+    protected void addTitle(String title) throws DocumentException {
+        try {
+            file.newParagraph().addContentWhitespace(title);
         } catch (Exception e) {
             throw new DocumentException(e);
         }
     }
 
-
-    private void addContent(OdfTextDocument odt, List<Product> productList) throws Exception {
-
-        String nameFamilyProduct = productList.get(0).getFamilyProduct();
-
-        writeODT(odt, LISTE_DE_COURSE_TITLE + nameFile + "\n");
-        writeODT(odt, nameFamilyProduct+" : ");
-
-        for (Product product : productList) {
-            if (!Objects.equals(product.getFamilyProduct(), nameFamilyProduct)){
-                nameFamilyProduct = product.getFamilyProduct();
-                writeODT(odt,nameFamilyProduct +" : ");
-            }
-            String productString = String.format("\t%s %d %s",product.getName(),product.getQuantity(),product.getNameUnity());
-            writeODT(odt,productString);
+    @Override
+    protected void addChapter(String chapterTitle) throws DocumentException {
+        try {
+            file.newParagraph().addContentWhitespace(chapterTitle);
+        } catch (Exception e) {
+            throw new DocumentException(e);
         }
     }
 
-
-    private void writeODT(@NotNull OdfTextDocument odt,@NotNull  String string) throws Exception {
-        String stringToWrite = String.format("%s", string);
-        odt.newParagraph().addContentWhitespace(stringToWrite);
+    @Override
+    protected void addProduct(Product item) throws DocumentException {
+        try {
+            String productString = String.format("\t%s %d %s", item.getName(), item.getQuantity(), item.getNameUnity());
+            file.newParagraph().addContentWhitespace(productString);
+        } catch (Exception e) {
+            throw new DocumentException(e);
+        }
     }
 
+    @Override
+    protected void saveFile() throws DocumentException {
+        try {
+            file.save(fileName + ".odt");
+        } catch (Exception e) {
+            throw new DocumentException(e);
+        }
+        file.close();
+    }
 
     /**
      * Parcours les enfants du fichier XML lié au fichier ODT et récupère les zones de text
@@ -80,12 +92,11 @@ public class ODTCreator extends DocumentCreator {
                         productElements = nodeList.item(j).getNextSibling().getNodeValue();
                         createProduct = true;
                         j++; // tu passes le produit parce que c'est le next node
-//
                     }
                     // corresponds à une ligne de texte avec la famille
                     else if(nodeList.item(j).getNodeName().equals("#text")){
                         familyProduct = nodeList.item(j).getNodeValue();
-                        if(familyProduct.contains(LISTE_DE_COURSE_TITLE)){ // on est sur le titre de la page
+                        if(familyProduct.contains(DOCUMENT_TITLE)){ // on est sur le titre de la page
                             continue;
                         }
                         familyProduct = familyProduct.replace(":","").strip();
