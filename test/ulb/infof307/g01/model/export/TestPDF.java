@@ -22,7 +22,7 @@ class TestPDF {
     @BeforeAll
     static public void createShoppingList() {
         shoppingList =  new ShoppingList("test/testShoppingList");
-        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
+        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FAMILY_PRODUCT_FRUIT).withQuantity(1).withNameUnity("kg").build();
         Product testProduct2 = new Product.ProductBuilder().withName("Carotte").withQuantity(7).withFamilyProduct(TestConstante.FOOD_CATEGORY_VEGE).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         shoppingList.add(testProduct);
         shoppingList.add(testProduct2);

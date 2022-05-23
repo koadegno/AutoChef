@@ -3,6 +3,8 @@ package ulb.infof307.g01.model;
 import org.junit.jupiter.api.*;
 import static org.junit.jupiter.api.Assertions.*;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Vector;
 
 import ulb.infof307.g01.model.*;
@@ -13,12 +15,12 @@ import ulb.infof307.g01.model.*;
 class TestShoppingList {
 
     static private ShoppingList list;
-    static private Vector<Product> testList;
+    static private List<Product> testList;
 
     @BeforeAll
     static public void createList() {
         list = new ShoppingList("Liste de course pour Noël");
-        testList = new Vector<>(2);
+        testList = new ArrayList<>(2);
 
         testList.add(new Product.ProductBuilder().withName("Dinde").build());
         testList.add(new Product.ProductBuilder().withName("Orange").build());

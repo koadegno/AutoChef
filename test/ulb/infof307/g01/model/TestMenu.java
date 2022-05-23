@@ -77,7 +77,7 @@ class TestMenu {
         recipes[5]  = TestConstante.TIRAMISU_RECIPE;
 
         //createDB();
-        TestConstante.createDefaultDB(configuration);
+        TestConstante.createDefaultDB();
         fillDB();
     }
 
@@ -89,27 +89,6 @@ class TestMenu {
         configuration.getRecipeDao().insert(recipes[4]);
     }
 
-    //FIXME: Refactor (classe createDB dans TestAutoCompletion)
-/*
-    static public void createDB() throws SQLException {
-        configuration.setDatabase(databaseName);
-
-        User testUser = new User("admin","admin",true);
-        testUser.setId(1);
-        configuration.setCurrentUser(testUser);
-
-        //Ajout des catégories des recettes dans la DB
-        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
-        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
-        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
-        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
-        //Ajout des types de recettes dans la DB
-        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
-        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
-        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
-
-    }
-*/
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {

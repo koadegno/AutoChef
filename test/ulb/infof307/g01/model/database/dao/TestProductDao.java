@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,35 +21,37 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestProductDao {
     static private final String fruit = "Fruit";
     static private final String gram = "g";
-    
-    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withNameUnity(gram).withFamilyProduct(fruit).build();
-    static private final Product strawberry = new Product.ProductBuilder().withName("fraise").withQuantity(1).withNameUnity(gram).withFamilyProduct(fruit).build();
+    static private final Configuration configuration = Configuration.getCurrent();
+    static private ProductDao productDao;
+    static private final Product peach = TestConstante.PEACH;
+    static private final Product strawberry = TestConstante.STRAWBERRY;
 
     @BeforeAll
     static public void initConfig() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductUnityDao().insert(gram);
-        Configuration.getCurrent().getProductFamilyDao().insert(fruit);
-        Configuration.getCurrent().getProductDao().insert(peach);
+        String databaseName = TestConstante.databaseName;
+        configuration.setDatabase(databaseName);
+        configuration.getProductUnityDao().insert(gram);
+        configuration.getProductFamilyDao().insert(fruit);
+        configuration.getProductDao().insert(peach);
+        productDao = configuration.getProductDao();
     }
 
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
-        Files.deleteIfExists(Path.of("test.sqlite"));
+        configuration.closeConnection();
+        Files.deleteIfExists(Path.of(TestConstante.databaseName));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> products = Configuration.getCurrent().getProductDao().getAllName();
+        List<String> products = productDao.getAllName();
         assertEquals(peach.getName(), products.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
-        Configuration.getCurrent().getProductDao().insert(strawberry);
-        Product strawberry2 = Configuration.getCurrent().getProductDao().get(strawberry.getName());
+        productDao.insert(strawberry);
+        Product strawberry2 = productDao.get(strawberry.getName());
         assertEquals(strawberry.getName(), strawberry2.getName());
         assertEquals(strawberry.getNameUnity(), strawberry2.getNameUnity());
         assertEquals(strawberry.getFamilyProduct(), strawberry2.getFamilyProduct());
@@ -56,7 +59,7 @@ class TestProductDao {
 
     @Test
     void testGet() throws SQLException {
-        Product peach2 = Configuration.getCurrent().getProductDao().get(peach.getName());
+        Product peach2 = productDao.get(peach.getName());
         assertEquals(peach.getName(), peach2.getName());
         assertEquals(peach.getNameUnity(), peach2.getNameUnity());
         assertEquals(peach.getFamilyProduct(), peach2.getFamilyProduct());

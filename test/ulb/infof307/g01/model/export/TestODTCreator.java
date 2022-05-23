@@ -26,7 +26,7 @@ class TestODTCreator {
     @BeforeAll
     static public void createShoppingList() {
         shoppingList =  new ShoppingList(NAME_SHOPPING_LIST);
-        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
+        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FAMILY_PRODUCT_FRUIT).withQuantity(1).withNameUnity("kg").build();
         Product testProduct2 = new Product.ProductBuilder().withName("Boeuf").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         Product testProduct3 = new Product.ProductBuilder().withName("Mouton").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         Product testProduct4 = new Product.ProductBuilder().withName("Dorade").withQuantity(7).withFamilyProduct(TestConstante.FAMILY_PRODUCT_FISH).withQuantity(1).withNameUnity(TestConstante.GRAM).build();

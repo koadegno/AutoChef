@@ -25,20 +25,22 @@ class TestJSON {
     final static private String fileNameDB   = "testJSON.sqlite";
     final static private String fileNameRecipe = "testRecette.json";
     final static private String fileNameProduct = "testProduct.json";
+    final static private Configuration configuration = Configuration.getCurrent();
+
 
     @BeforeAll
     static public void createDB() throws SQLException {
-        Configuration.getCurrent().setDatabase(fileNameDB);
+        configuration.setDatabase(fileNameDB);
 
         User testUser = new User("admin","admin",true);
         testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
+        configuration.setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
-        Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
+        configuration.getRecipeCategoryDao().insert("Viande");
+        configuration.getRecipeTypeDao().insert("Desserts");
 
-        Configuration.getCurrent().getProductFamilyDao().insert("soupes");
-        Configuration.getCurrent().getProductUnityDao().insert("l");
+        configuration.getProductFamilyDao().insert("soupes");
+        configuration.getProductUnityDao().insert("l");
     }
 
     @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
@@ -84,7 +86,7 @@ class TestJSON {
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("testJSON.sqlite"));
     }
 

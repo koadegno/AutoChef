@@ -16,33 +16,35 @@ import java.sql.SQLException;
 import java.util.List;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 /**
  * test du DAO de la liste de course
  */
 class TestShoppingListDao {
 
-    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
-    static private final Product strawberry = new Product.ProductBuilder().withName("fraise").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product peach = TestConstante.PEACH;
+    static private final Product strawberry = TestConstante.STRAWBERRY;
     static private final ShoppingList halloween = new ShoppingList("Halloween");
     static private final ShoppingList christmas = new ShoppingList("Noël");
     static private final ShoppingList easter = new ShoppingList("Pâques");
+    static private final Configuration configuration = Configuration.getCurrent();
+    static private ShoppingListDao shoppingListDao;
 
 
     @BeforeAll
     static public void initConfig() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
-
+        configuration.setDatabase(TestConstante.databaseName);
+        shoppingListDao = configuration.getShoppingListDao();
         User testUser = new User("admin","admin",true);
         testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
+        configuration.setCurrentUser(testUser);
 
-        Configuration.getCurrent().getProductUnityDao().insert(TestConstante.GRAM);
-        Configuration.getCurrent().getProductFamilyDao().insert(TestConstante.FRUIT);
+        configuration.getProductUnityDao().insert(TestConstante.GRAM);
+        configuration.getProductFamilyDao().insert(TestConstante.FAMILY_PRODUCT_FRUIT);
 
-        Configuration.getCurrent().getProductDao().insert(peach);
-        Configuration.getCurrent().getProductDao().insert(strawberry);
+        configuration.getProductDao().insert(peach);
+        configuration.getProductDao().insert(strawberry);
 
         halloween.add(peach);
         halloween.add(strawberry);
@@ -51,34 +53,35 @@ class TestShoppingListDao {
 
         easter.add(peach);
 
-        Configuration.getCurrent().getShoppingListDao().insert(halloween);
-        Configuration.getCurrent().getShoppingListDao().insert(easter);
+        shoppingListDao.insert(halloween);
+        shoppingListDao.insert(easter);
     }
 
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> shoppingList = Configuration.getCurrent().getShoppingListDao().getAllName();
-        assertEquals(halloween.getName(), shoppingList.get(0));
+        List<String> shoppingList = shoppingListDao.getAllName();
+        assertTrue(shoppingList.contains(halloween.getName()));
+        assertTrue(shoppingList.contains(easter.getName()));
     }
 
     @Test
     void testInsert() throws SQLException {
-        Configuration.getCurrent().getShoppingListDao().insert(christmas);
-        ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(christmas.getName());
-        assertEquals(christmas.getName(), shoppingList2.getName());
+        shoppingListDao.insert(christmas);
+        ShoppingList shoppingList2 = shoppingListDao.get(christmas.getName());
 
+        assertEquals(christmas.getName(), shoppingList2.getName());
         assertEquals(christmas, shoppingList2);
     }
 
     @Test
     void testGet() throws SQLException {
-        ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(halloween.getName());
+        ShoppingList shoppingList2 = shoppingListDao.get(halloween.getName());
         assertEquals(halloween.getName(), shoppingList2.getName());
 
         assertEquals(halloween, shoppingList2);
@@ -87,8 +90,8 @@ class TestShoppingListDao {
     @Test
     void testUpdate() throws SQLException {
         easter.add(strawberry);
-        Configuration.getCurrent().getShoppingListDao().update(easter);
-        ShoppingList shoppingList2 = Configuration.getCurrent().getShoppingListDao().get(easter.getName());
+        shoppingListDao.update(easter);
+        ShoppingList shoppingList2 = shoppingListDao.get(easter.getName());
         assertEquals(easter.getName(), shoppingList2.getName());
 
         assertEquals(easter, shoppingList2);
