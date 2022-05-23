@@ -13,7 +13,7 @@ import java.util.ResourceBundle;
  * La classe gère la vue pour la création d'un compte utilisateur
  */
 
-public class SignUpViewController extends ViewController<SignUpViewController.SignUpListener> implements Initializable {
+public class SignUpViewController extends ViewController<SignUpViewController.Listener> implements Initializable {
 
     @FXML
     private TextField pseudoTextField,
@@ -84,7 +84,7 @@ public class SignUpViewController extends ViewController<SignUpViewController.Si
         listener.onCancelButton();
     }
 
-    public interface SignUpListener {
+    public interface Listener {
         void onSubmitButton(String pseudo, String lastName, String firstName, String password, String confirmPassword, String country, String city, String streetName, String houseNumber, boolean isProfessional);
         void onCancelButton();
     }

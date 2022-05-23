@@ -9,7 +9,7 @@ import ulb.infof307.g01.view.ViewController;
  * La classe gère la partie vue pour la connexion d'un compte
  */
 
-public class LoginViewController extends ViewController<LoginViewController.LoginListener> {
+public class LoginViewController extends ViewController<LoginViewController.Listener> {
     @FXML
     private TextField password;
 
@@ -29,7 +29,7 @@ public class LoginViewController extends ViewController<LoginViewController.Logi
 
     public void showPasswordError(boolean isError) {setNodeColor(password,isError);}
 
-    public interface LoginListener {
+    public interface Listener {
         void onLoginButtonClick(String pseudo,String password);
         void onSignUpButtonClick();
         void onQuitButtonClick();

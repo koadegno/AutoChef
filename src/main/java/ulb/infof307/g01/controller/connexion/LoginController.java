@@ -16,7 +16,7 @@ import java.util.Objects;
  * Classe qui contrôle la gestion du login
  * Créée au démarrage
  */
-public class LoginController extends Controller implements LoginViewController.LoginListener,  ListenerBackPreviousWindow {
+public class LoginController extends Controller implements LoginViewController.Listener,  ListenerBackPreviousWindow {
 
     private LoginViewController loginViewController;
 

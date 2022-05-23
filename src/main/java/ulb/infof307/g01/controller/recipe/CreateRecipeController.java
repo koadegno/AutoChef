@@ -24,7 +24,7 @@ import java.util.Vector;
 /**
  * Classe qui contrôle la création d'une recette
  */
-public class CreateRecipeController extends Controller implements CreateRecipeViewController.EditRecipeListener {
+public class CreateRecipeController extends Controller implements CreateRecipeViewController.Listener {
 
     protected CreateRecipeViewController createRecipeViewController;
 

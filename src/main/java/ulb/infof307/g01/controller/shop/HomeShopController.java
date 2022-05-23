@@ -7,7 +7,7 @@ import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
 import ulb.infof307.g01.view.shop.HomeShopViewController;
 
-public class HomeShopController extends Controller implements HomeShopViewController.HomeShopListener, ListenerBackPreviousWindow {
+public class HomeShopController extends Controller implements HomeShopViewController.Listener, ListenerBackPreviousWindow {
 
 
     public HomeShopController(Stage primaryStage, ListenerBackPreviousWindow listenerBackPreviousWindow){

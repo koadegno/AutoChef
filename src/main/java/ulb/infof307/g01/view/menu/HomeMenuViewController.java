@@ -7,7 +7,7 @@ import ulb.infof307.g01.view.ViewController;
  * Elle permet à d'accéder à la page de création de Menu, voir sa liste de Menus ou revenir à la page d'accueil
  * @see ulb.infof307.g01.model.Menu
  * */
-public class HomeMenuViewController extends ViewController<HomeMenuViewController.HomeMenuListener> {
+public class HomeMenuViewController extends ViewController<HomeMenuViewController.Listener> {
 
     public void onUserMenusButtonClick() { listener.onUserMenusButtonClick(); }
 
@@ -20,7 +20,7 @@ public class HomeMenuViewController extends ViewController<HomeMenuViewControlle
         listener.logout();
     }
 
-    public interface HomeMenuListener {
+    public interface Listener {
         void onBackButtonClick();
         void onUserMenusButtonClick();
         void onUserCreateMenuButtonClick();

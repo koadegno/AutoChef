@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller.connexion;
 
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
@@ -16,7 +15,7 @@ import java.sql.SQLException;
  * Classe qui contrôle la creation d'un utilisateur
  * Est créée par le LoginController
  */
-public class SignUpController extends Controller implements SignUpViewController.SignUpListener {
+public class SignUpController extends Controller implements SignUpViewController.Listener {
 
     private SignUpViewController signUpViewController;
 

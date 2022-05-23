@@ -10,7 +10,7 @@ import ulb.infof307.g01.view.ViewController;
  * La classe gère la vue pour voir et modifier ses recettes
  */
 
-public class UserRecipesViewController extends ViewController<UserRecipesViewController.UserRecipesListener> {
+public class UserRecipesViewController extends ViewController<UserRecipesViewController.Listener> {
 
     @FXML
     private Menu helpRecipeMenu;
@@ -103,7 +103,7 @@ public class UserRecipesViewController extends ViewController<UserRecipesViewCon
     }
 
 
-    public interface UserRecipesListener {
+    public interface Listener {
         void onRecipeSearchTextFieldSubmit(String recipeName);
         void onModifyRecipeButtonClick();
         void onDeleteRecipeButtonClick();

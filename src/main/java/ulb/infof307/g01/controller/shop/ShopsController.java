@@ -14,7 +14,7 @@ import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 
-public class ShopsController extends Controller implements ShopsViewController.ShopsListener, ListenerBackPreviousWindow, ShopController.ShopListener {
+public class ShopsController extends Controller implements ShopsViewController.Listener, ListenerBackPreviousWindow, ShopController.ShopListener {
 
     private final ShopDao shopDao;
     private ShopsViewController shopsViewController;

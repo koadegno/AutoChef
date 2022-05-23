@@ -4,15 +4,16 @@ import javafx.fxml.FXMLLoader;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.HomePageController;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
-import ulb.infof307.g01.model.*;
-import ulb.infof307.g01.view.recipe.*;
+import ulb.infof307.g01.model.Product;
+import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.view.recipe.HomeRecipeViewController;
 
 
 /**
  * Contrôleur responsable de tous les écrans en lien avec les recettes
  * Permet d'accéder à la création d'une recette, la visualisation des toutes ses recettes et de ses recettes favorites
  */
-public class HomePageRecipeController extends Controller implements HomeRecipeViewController.HomeRecipeListener, ListenerBackPreviousWindow {
+public class HomePageRecipeController extends Controller implements HomeRecipeViewController.Listener, ListenerBackPreviousWindow {
 
     /**
      * Affiche l'écran d'accueil des recettes

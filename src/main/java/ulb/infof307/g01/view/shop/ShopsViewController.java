@@ -6,8 +6,6 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
-import javafx.scene.input.MouseEvent;
 import ulb.infof307.g01.view.ViewController;
 
 import java.net.URL;
@@ -18,7 +16,7 @@ import java.util.ResourceBundle;
  * La classe gère la vue pour l'affichage d'une recette favorite
  */
 
-public class ShopsViewController extends ViewController<ShopsViewController.ShopsListener> implements Initializable {
+public class ShopsViewController extends ViewController<ShopsViewController.Listener> implements Initializable {
     @FXML
     TableView<String> shopsTableView;
     @FXML
@@ -48,7 +46,7 @@ public class ShopsViewController extends ViewController<ShopsViewController.Shop
         listener.onShopTableViewClicked(shopName);
     }
 
-    public  interface ShopsListener{
+    public  interface Listener {
         void logout();
         void onReturnButton();
         void onShopTableViewClicked(String shopName);
