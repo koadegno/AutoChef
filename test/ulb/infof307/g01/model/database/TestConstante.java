@@ -4,6 +4,9 @@ import ulb.infof307.g01.model.*;
 
 import java.sql.SQLException;
 
+/**
+ * Constantes utilisées pour les tests
+ */
 public class TestConstante {
     //------------Catégories Recettes
     public static final String FOOD_CATEGORY_MEAT = "Viande";
