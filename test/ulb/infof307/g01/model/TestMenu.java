@@ -97,7 +97,7 @@ class TestMenu {
     }
 
     @BeforeEach
-    private void reset() {
+    public void reset() {
         new Menu("Menu Test");
 
         menu.addRecipeTo(Day.Monday, recipes[0]);
@@ -111,7 +111,7 @@ class TestMenu {
     }
 
     @AfterEach
-    private void tearDown() {
+    public void tearDown() {
         menu.clearDay(Day.Monday);
         menu.clearDay(Day.Wednesday);
         menu.clearDay(Day.Friday);

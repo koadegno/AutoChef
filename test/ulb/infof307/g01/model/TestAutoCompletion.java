@@ -5,9 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.TestConstante;
-import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
 import ulb.infof307.g01.model.database.dao.RecipeDao;
-import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -26,6 +24,8 @@ import static org.junit.jupiter.api.Assertions.assertNull;
 class TestAutoCompletion {
 
     private static final Configuration configuration= Configuration.getCurrent();
+    public static final String MESSAGE = "Test si recette utilise autant de fois que necessaire";
+    public static final String MESSAGE1 = "Test si nombre de categries adequat";
     //private static final String databaseName = "test.sqlite";
 
     @BeforeAll
@@ -54,16 +54,16 @@ class TestAutoCompletion {
         HashMap<String, Integer> testRecipes      = new HashMap<>();
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
 
-        categoriesWanted.put("Végétarien", 3);
-        categoriesWanted.put("Viande", 2);
-        categoriesWanted.put("Poisson", 2);
-        testRecipes.put("Viande", 0);
-        testRecipes.put("Poisson", 0);
-        testRecipes.put("Végétarien", 0);
-        testRecipes.put("Bolognaise", 0);
-        testRecipes.put("Carbonara", 0);
-        testRecipes.put("Pesto", 0);
-        testRecipes.put("Tiramisu", 0);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_VEGE, 3);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_MEAT, 2);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_FISH, 2);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_MEAT, 0);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_FISH, 0);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_VEGE, 0);
+        testRecipes.put(TestConstante.BOLOGNAISE_NAME, 0);
+        testRecipes.put(TestConstante.CARBONARA_NAME, 0);
+        testRecipes.put(TestConstante.PESTO_NAME, 0);
+        testRecipes.put(TestConstante.TIRAMISU_NAME, 0);
 
         List<Recipe> recipes;
         AutoCompletion autoCompletion = new AutoCompletion();
@@ -77,13 +77,13 @@ class TestAutoCompletion {
             testRecipes.replace(recipe.getName(), ++valName);
         }
 
-        assertEquals(2, testRecipes.get("Viande"),     "Test si nombre de categries adequat");
-        assertEquals(2, testRecipes.get("Poisson"),    "Test si nombre de categories adequat");
-        assertEquals(3, testRecipes.get("Végétarien"), "Test si nombre de categories adequat");
-        assertEquals(2, testRecipes.get("Bolognaise"), "Test si recette utilise autant de fois que necessaire");
-        assertEquals(1, testRecipes.get("Carbonara"),  "Test si recette utilise autant de fois que necessaire");
-        assertEquals(1, testRecipes.get("Pesto"),      "Test si recette utilise autant de fois que necessaire");
-        assertEquals(3, testRecipes.get("Tiramisu"),   "Test si recette utilise autant de fois que necessaire");
+        assertEquals(2, testRecipes.get(TestConstante.FOOD_CATEGORY_MEAT), MESSAGE1);
+        assertEquals(2, testRecipes.get(TestConstante.FOOD_CATEGORY_FISH),    MESSAGE1);
+        assertEquals(3, testRecipes.get(TestConstante.FOOD_CATEGORY_VEGE), MESSAGE1);
+        assertEquals(2, testRecipes.get(TestConstante.BOLOGNAISE_NAME), MESSAGE);
+        assertEquals(1, testRecipes.get(TestConstante.CARBONARA_NAME), MESSAGE);
+        assertEquals(1, testRecipes.get(TestConstante.PESTO_NAME), MESSAGE);
+        assertEquals(3, testRecipes.get(TestConstante.TIRAMISU_NAME), MESSAGE);
     }
 
 
@@ -95,11 +95,11 @@ class TestAutoCompletion {
         assertNull(autoCompletion.findMax(recipes),
                 "Test si HashMap donne est vide");
 
-        recipes.put("Poisson", 1);
-        recipes.put("Viande", 10);
+        recipes.put(TestConstante.FOOD_CATEGORY_FISH, 1);
+        recipes.put(TestConstante.FOOD_CATEGORY_MEAT, 10);
         recipes.put("Vegetarien", 3);
 
-        assertEquals("Viande",
+        assertEquals(TestConstante.FOOD_CATEGORY_MEAT,
                 autoCompletion.findMax(recipes),
                 "Test si bonne Key trouver");
     }

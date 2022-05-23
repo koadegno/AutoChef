@@ -41,10 +41,14 @@ public class TestConstante {
     public static final String menuTest2Name = "Menu Test2";
 
     //--------------Recettes
-    public static final Recipe BOLO_RECIPE = new Recipe.RecipeBuilder().withName("Bolognaise").withDuration(DURATION).withCategory(FOOD_CATEGORY_MEAT).withType(FOOD_TYPE_SIMMERED).withNumberOfPerson(4).withPreparation( "Cuire des pâtes, oignons, tomates, ail, basilic").build();
-    public static final Recipe CARBO_RECIPE = new Recipe.RecipeBuilder().withName("Carbonara").withDuration(DURATION).withCategory(FOOD_CATEGORY_FISH).withType(FOOD_TYPE_MEAL).withNumberOfPerson(5).withPreparation(  "Cuire des pâtes, poisson").build();
-    public static final Recipe PESTO_RECIPE = new Recipe.RecipeBuilder().withName("Pesto").withDuration(20).withCategory(FOOD_CATEGORY_FISH).withType(FOOD_TYPE_MEAL).withNumberOfPerson(3).withPreparation(  "Cuire des pâtes, poisson").build();
-    public static final Recipe TIRAMISU_RECIPE = new Recipe.RecipeBuilder().withName("Tiramisu").withDuration(20).withCategory("Végétarien").withType("Dessert").withNumberOfPerson(3).withPreparation("Preparer la mascarpone").build();
+    public static final String BOLOGNAISE_NAME = "Bolognaise";
+    public static final String CARBONARA_NAME = "Carbonara";
+    public static final String PESTO_NAME = "Pesto";
+    public static final String TIRAMISU_NAME = "Tiramisu";
+    public static final Recipe BOLO_RECIPE = new Recipe.RecipeBuilder().withName(BOLOGNAISE_NAME).withDuration(DURATION).withCategory(FOOD_CATEGORY_MEAT).withType(FOOD_TYPE_SIMMERED).withNumberOfPerson(4).withPreparation( "Cuire des pâtes, oignons, tomates, ail, basilic").build();
+    public static final Recipe CARBO_RECIPE = new Recipe.RecipeBuilder().withName(CARBONARA_NAME).withDuration(DURATION).withCategory(FOOD_CATEGORY_FISH).withType(FOOD_TYPE_MEAL).withNumberOfPerson(5).withPreparation(  "Cuire des pâtes, poisson").build();
+    public static final Recipe PESTO_RECIPE = new Recipe.RecipeBuilder().withName(PESTO_NAME).withDuration(20).withCategory(FOOD_CATEGORY_FISH).withType(FOOD_TYPE_MEAL).withNumberOfPerson(3).withPreparation(  "Cuire des pâtes, poisson").build();
+    public static final Recipe TIRAMISU_RECIPE = new Recipe.RecipeBuilder().withName(TIRAMISU_NAME).withDuration(20).withCategory("Végétarien").withType("Dessert").withNumberOfPerson(3).withPreparation("Preparer la mascarpone").build();
 
 
     //--------------Menus

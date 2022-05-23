@@ -1,13 +1,14 @@
 package ulb.infof307.g01.model;
 
-import org.junit.jupiter.api.*;
-import static org.junit.jupiter.api.Assertions.*;
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.Vector;
 
-import ulb.infof307.g01.model.*;
+import static org.junit.jupiter.api.Assertions.*;
 
 /**
  * test de la classe shoppingList
@@ -33,7 +34,7 @@ class TestShoppingList {
     }
 
     @AfterEach
-    private void tearDown() {
+    public void tearDown() {
         list.clear();
     }
 

@@ -5,7 +5,6 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Product;
 import ulb.infof307.g01.model.Recipe;
-import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.TestConstante;
 
