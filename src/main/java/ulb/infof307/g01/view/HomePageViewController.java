@@ -12,7 +12,7 @@ import javafx.scene.control.Button;
  * @see ulb.infof307.g01.model.Recipe
  * @see ulb.infof307.g01.model.Menu
  * */
-public class HomePageViewController extends ViewController<HomePageViewController.HomePageListener> {
+public class HomePageViewController extends ViewController<HomePageViewController.Listener> {
 
     @FXML
     public Button shoppingListButton;
@@ -44,7 +44,7 @@ public class HomePageViewController extends ViewController<HomePageViewControlle
      * Interface qui doit être implémenté par les {@code Controller} qui utilisent
      * {@code HomePageViewController}
      */
-    public interface HomePageListener {
+    public interface Listener {
         void onShoppingListButtonClick();
         void onMenuButtonClick();
         void onMapButtonClick();

@@ -18,11 +18,12 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
  */
 class TestPDF {
     static private ShoppingList shoppingList;
+    static private final String PATH_TO_PDF = "test/testShoppingList";
 
     @BeforeAll
     static public void createShoppingList() {
-        shoppingList =  new ShoppingList("test/testShoppingList");
-        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FAMILY_PRODUCT_FRUIT).withQuantity(1).withNameUnity("kg").build();
+        shoppingList =  new ShoppingList(PATH_TO_PDF);
+        Product testProduct = new Product.ProductBuilder().withName("Banane").withQuantity(3).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity("kg").build();
         Product testProduct2 = new Product.ProductBuilder().withName("Carotte").withQuantity(7).withFamilyProduct(TestConstante.FOOD_CATEGORY_VEGE).withFamilyProduct(TestConstante.FOOD_CATEGORY_MEAT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
         shoppingList.add(testProduct);
         shoppingList.add(testProduct2);
@@ -41,8 +42,8 @@ class TestPDF {
                 1.2. Viande
                 Carotte 1g""";
 
-        PdfReader reader = new PdfReader("test/testShoppingList.pdf");
-        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);  // pageNumber = 1
+        PdfReader reader = new PdfReader(PATH_TO_PDF + ".pdf");
+        String textFromPage = PdfTextExtractor.getTextFromPage(reader, 1);
         assertEquals(text, textFromPage);
         reader.close();
     }

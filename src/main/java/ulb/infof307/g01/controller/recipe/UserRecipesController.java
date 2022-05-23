@@ -4,7 +4,6 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonType;
-import javafx.stage.Stage;
 import org.json.simple.parser.ParseException;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
@@ -16,6 +15,7 @@ import ulb.infof307.g01.model.database.dao.RecipeDao;
 import ulb.infof307.g01.model.export.JSON;
 import ulb.infof307.g01.view.ViewController;
 import ulb.infof307.g01.view.recipe.UserRecipesViewController;
+
 import java.io.File;
 import java.io.IOException;
 import java.sql.SQLException;
@@ -26,7 +26,7 @@ import java.util.List;
  * Classe qui contrôle l'affichage d'une recette
  * Permet de modifier cette recette, et de la visualiser
  */
-public class UserRecipesController extends Controller implements UserRecipesViewController.UserRecipesListener, ListenerBackPreviousWindow, SearchRecipeController.SearchRecipeListener, ModifyRecipeController.ListenerGetRecipe {
+public class UserRecipesController extends Controller implements UserRecipesViewController.Listener, ListenerBackPreviousWindow, SearchRecipeController.SearchRecipeListener, ModifyRecipeController.ListenerGetRecipe {
 
     Scene sceneViewRecipe = null;
 

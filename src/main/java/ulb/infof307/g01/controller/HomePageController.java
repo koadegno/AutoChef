@@ -1,14 +1,13 @@
 package ulb.infof307.g01.controller;
 
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import ulb.infof307.g01.controller.connexion.LoginController;
 import ulb.infof307.g01.controller.map.MapController;
 import ulb.infof307.g01.controller.menu.HomePageMenuController;
 import ulb.infof307.g01.controller.recipe.HomePageRecipeController;
 import ulb.infof307.g01.controller.shop.HomeShopController;
 import ulb.infof307.g01.controller.shoppingList.HomePageShoppingListController;
-import ulb.infof307.g01.view.HomePageViewController.*;
+import ulb.infof307.g01.view.HomePageViewController.Listener;
 import ulb.infof307.g01.view.menu.HomeMenuViewController;
 
 
@@ -17,7 +16,7 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
  * Permet d'aller sur les 4 fonctionnalités principales : liste de courses, menus, recettes et la map
  * Créé quand l'utilisateur se connecte
  */
-public class HomePageController extends Controller implements HomePageListener,ListenerBackPreviousWindow {
+public class HomePageController extends Controller implements Listener,ListenerBackPreviousWindow {
 
     // Méthodes de la fenêtre d'accueil
     public HomePageController(){}

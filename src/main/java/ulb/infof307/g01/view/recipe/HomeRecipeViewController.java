@@ -6,7 +6,7 @@ import ulb.infof307.g01.view.ViewController;
 /**
  * Cette classe gère la vue de la page d'accueil pour les recettes
  */
-public class HomeRecipeViewController extends ViewController<HomeRecipeViewController.HomeRecipeListener> {
+public class HomeRecipeViewController extends ViewController<HomeRecipeViewController.Listener> {
 
     public void onUserRecipesButtonClick() {listener.onUserRecipesButtonClick();}
     public void onCreateRecipeButtonClick() {listener.onNewRecipeButtonClick();}
@@ -20,7 +20,7 @@ public class HomeRecipeViewController extends ViewController<HomeRecipeViewContr
         listener.onFavoriteRecipeButtonClick();
     }
 
-    public interface HomeRecipeListener {
+    public interface Listener {
         void onUserRecipesButtonClick();
         void onNewRecipeButtonClick();
         void onBackButton();

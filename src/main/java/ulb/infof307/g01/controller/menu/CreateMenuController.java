@@ -26,7 +26,7 @@ import java.util.List;
  * Classe qui contrôle la creation des menus
  * Permet de générer ses menus et d'en créer
  */
-public class CreateMenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.GenerateMenuListener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
+public class CreateMenuController extends Controller implements CreateMenuViewController.Listener, GenerateMenuViewController.Listener, SearchRecipeController.SearchRecipeListener,ListenerBackPreviousWindow {
     public static final int NUMBERS_DAYS_IN_WEEK = 7;
     public static final int DAY_ONE = 0;
     private CreateMenuViewController createMenuViewController;

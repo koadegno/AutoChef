@@ -15,10 +15,9 @@ import java.util.ResourceBundle;
  * La classe gère la vue de la popup qui permet de générer un menu
  */
 
-public class GenerateMenuViewController extends ViewController<GenerateMenuViewController.GenerateMenuListener> implements Initializable {
+public class GenerateMenuViewController extends ViewController<GenerateMenuViewController.Listener> implements Initializable {
     public static final int SPINNER_MAX = 1000;
     public static final int SPINNER_MIN = 0;
-    GenerateMenuListener listener;
     @FXML
     private Spinner<Integer> vegetarianSpinner;
     @FXML
@@ -59,11 +58,7 @@ public class GenerateMenuViewController extends ViewController<GenerateMenuViewC
         cancelButton.setOnAction(event -> listener.cancelGenerateMenu());
     }
 
-    public void setListener(GenerateMenuListener listener) {
-        this.listener = listener;
-    }
-
-    public interface GenerateMenuListener{
+    public interface Listener {
         void addValuesToGenerateMenu(int nbVegetarianDishes, int nbMeatDishes, int nbFishDishes) throws SQLException;
         void cancelGenerateMenu();
     }

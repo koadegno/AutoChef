@@ -1,7 +1,6 @@
 package ulb.infof307.g01.controller.menu;
 
 import javafx.fxml.FXMLLoader;
-import javafx.stage.Stage;
 import ulb.infof307.g01.controller.Controller;
 import ulb.infof307.g01.controller.ListenerBackPreviousWindow;
 import ulb.infof307.g01.view.HomePageViewController;
@@ -11,7 +10,7 @@ import ulb.infof307.g01.view.menu.HomeMenuViewController;
  * Classe qui contrôle le Home du menu
  * Permet d'accéder à la création d'un menu et l'affichage de tous les menus créés par l'utilisateur
  */
-public class HomePageMenuController extends Controller implements HomeMenuViewController.HomeMenuListener, ListenerBackPreviousWindow {
+public class HomePageMenuController extends Controller implements HomeMenuViewController.Listener, ListenerBackPreviousWindow {
 
     public HomePageMenuController(ListenerBackPreviousWindow listenerBackPreviousWindow){
         super(listenerBackPreviousWindow);

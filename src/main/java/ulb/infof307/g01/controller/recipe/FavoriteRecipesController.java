@@ -18,7 +18,7 @@ import java.util.List;
  * Classe qui contrôle les recettes favorites d'un utilisateur
  * Permet d'afficher une liste des recettes favorites + de visualiser une recette sélectionnée
  */
-public class FavoriteRecipesController extends Controller implements FavoriteRecipeViewController.FavoriteRecipesListener,ListenerBackPreviousWindow {
+public class FavoriteRecipesController extends Controller implements FavoriteRecipeViewController.Listener,ListenerBackPreviousWindow {
 
     Scene sceneFavoriteRecipe = null;
     private FavoriteRecipeViewController favoriteRecipeViewController;

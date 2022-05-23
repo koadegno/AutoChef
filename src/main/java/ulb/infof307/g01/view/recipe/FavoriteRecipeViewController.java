@@ -16,7 +16,7 @@ import java.util.ResourceBundle;
  * La classe gère la vue pour l'affichage d'une recette favorite
  */
 
-public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeViewController.FavoriteRecipesListener> implements Initializable {
+public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeViewController.Listener> implements Initializable {
     @FXML
     TableView<Recipe> favoriteRecipeTableView;
     @FXML
@@ -43,7 +43,7 @@ public class FavoriteRecipeViewController extends ViewController<FavoriteRecipeV
         listener.logout();
     }
 
-    public  interface FavoriteRecipesListener{
+    public  interface Listener {
         void logout();
         void onCancelButton();
         void onFavoriteRecipesTableViewClicked(Recipe recipe);
