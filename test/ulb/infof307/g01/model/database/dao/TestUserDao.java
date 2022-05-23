@@ -6,6 +6,7 @@ import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.Address;
 import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -20,16 +21,20 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestUserDao {
     private static final Address userAddress = new Address("Empire Romain","Rome",1180,"Rue l'empereur",20);
     private static final User basicUser = new User(-1,"Caius","Augustus","Caligula2","mot de passe",userAddress,true);
-    private static final String DATABASE_NAME = "test.sqlite";
+    private static final String DATABASE_NAME = TestConstante.databaseName;
+    static private final Configuration configuration = Configuration.getCurrent();
+    static private UserDao userDao;
 
     @BeforeAll
     static void startDatabase(){
-        Configuration.getCurrent().setDatabase(DATABASE_NAME);
+
+        configuration.setDatabase(DATABASE_NAME);
+        userDao = configuration.getUserDao();
     }
 
     @AfterAll
     static void deleteDatabase() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of(DATABASE_NAME));
     }
 
@@ -37,13 +42,13 @@ class TestUserDao {
     void insert() throws SQLException {
         String userPseudo = "Caligula 1";
         insertion(userPseudo);
-        User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
+        User userInserted = userDao.get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
 
     private void insertion(String pseudo) throws SQLException {
         basicUser.setPseudo(pseudo);
-        Configuration.getCurrent().getUserDao().insert(basicUser);
+        userDao.insert(basicUser);
 
     }
 
@@ -51,7 +56,7 @@ class TestUserDao {
     void get() throws SQLException {
         String userPseudo = "Caligula 2";
         insertion(userPseudo);
-        User userInserted = Configuration.getCurrent().getUserDao().get(userPseudo);
+        User userInserted = userDao.get(userPseudo);
         assertEquals(basicUser,userInserted);
     }
 

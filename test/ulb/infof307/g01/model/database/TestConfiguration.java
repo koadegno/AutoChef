@@ -17,39 +17,41 @@ import java.util.List;
  * Test du singleton Configuration
  */
 class TestConfiguration {
-    static private final Product peach = new Product.ProductBuilder().withName("peche").withQuantity(1).withFamilyProduct("Fruit").withNameUnity("g").build();
+    private static final String databaseName = "test.sqlite";
+    private static Configuration configuration = Configuration.getCurrent();
+    static private final Product peach = TestConstante.PEACH;
+
     @BeforeAll
     static public void initConfig() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
 
-        Configuration.getCurrent().getProductFamilyDao().insert(peach.getFamilyProduct());
-        Configuration.getCurrent().getProductUnityDao().insert(peach.getNameUnity());
-        Configuration.getCurrent().getProductDao().insert(peach);
+        configuration.setDatabase(databaseName);
+
+        configuration.getProductFamilyDao().insert(peach.getFamilyProduct());
+        configuration.getProductUnityDao().insert(peach.getNameUnity());
+        configuration.getProductDao().insert(peach);
     }
 
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
-        Files.deleteIfExists(Path.of("test.sqlite"));
+        configuration.closeConnection();
+        Files.deleteIfExists(Path.of(databaseName));
     }
 
     @Test
     void testGetProductFamilyDao() throws SQLException {
-        List<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        List<String> families = configuration.getProductFamilyDao().getAllName();
         assertEquals(peach.getFamilyProduct(), families.get(0));
     }
 
     @Test
     void testGetProductUnityDao() throws SQLException {
-
-        List<String> unities = Configuration.getCurrent().getProductUnityDao().getAllName();
+        List<String> unities = configuration.getProductUnityDao().getAllName();
         assertEquals(peach.getNameUnity(), unities.get(0));
     }
 
     @Test
     void testGetProductDao() throws SQLException {
-        Product product = Configuration.getCurrent().getProductDao().get(peach.getName());
+        Product product = configuration.getProductDao().get(peach.getName());
         assertEquals(peach.getName(), product.getName());
         assertEquals(peach.getQuantity(), product.getQuantity());
         assertEquals(peach.getNameUnity(),product.getNameUnity());

@@ -103,14 +103,20 @@ public class Recipe extends ProductHashSet {
 
     @Override
     public boolean equals(Object other) {
-
+        Recipe otherRecipe = (Recipe) other;
         if (this == other)
             return true;
 
         if (other == null || this.getClass() != other.getClass())
             return false;
 
-        return this.getName().equals(((Recipe) other).getName()) && super.equals(other);
+        return this.getName().equals(otherRecipe.getName()) &&
+                this.getCategory().equals(otherRecipe.getCategory()) &&
+                this.getPreparation().equals(otherRecipe.getPreparation()) &&
+                this.getDuration() == otherRecipe.getDuration() &&
+                this.getNbrPerson() == otherRecipe.getNbrPerson() &&
+                this.getType().equals(otherRecipe.getType()) &&
+                super.equals(other);
     }
 
     public void setFavorite(Boolean isChecked) {

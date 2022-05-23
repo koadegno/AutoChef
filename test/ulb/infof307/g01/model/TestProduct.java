@@ -13,7 +13,7 @@ public class TestProduct {
     private Product productTest;
 
     @BeforeEach
-    private void createProduct() {
+    public void createProduct() {
         productTest =  new Product.ProductBuilder().withName("Produit Test").build();
     }
 

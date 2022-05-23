@@ -5,9 +5,7 @@ import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.database.TestConstante;
-import ulb.infof307.g01.model.database.dao.RecipeCategoryDao;
 import ulb.infof307.g01.model.database.dao.RecipeDao;
-import ulb.infof307.g01.model.database.dao.RecipeTypeDao;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -25,83 +23,67 @@ import static org.junit.jupiter.api.Assertions.assertNull;
  */
 class TestAutoCompletion {
 
-    private static Configuration configuration;
+    private static final Configuration configuration= Configuration.getCurrent();
+    public static final String MESSAGE = "Test si recette utilise autant de fois que necessaire";
+    public static final String MESSAGE1 = "Test si nombre de categries adequat";
+    //private static final String databaseName = "test.sqlite";
 
     @BeforeAll
-    static public void createDB() throws SQLException {
-        String databaseName = "test.sqlite";
-        configuration = Configuration.getCurrent();
-        configuration.setDatabase(databaseName);
-        RecipeCategoryDao recipeCategoryDao = configuration.getRecipeCategoryDao();
-        RecipeTypeDao recipeTypeDao = configuration.getRecipeTypeDao();
+    static public void setUp() throws SQLException{
+        //createDB();
+        TestConstante.createDefaultDB();
+
         RecipeDao recipeDao = configuration.getRecipeDao();
-
-        User testUser = new User("admin","admin",true);
-        testUser.setId(1);
-        configuration.setCurrentUser(testUser);
-
-        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_FISH);
-        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_MEAT);
-        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_VEGE);
-        recipeCategoryDao.insert(TestConstante.FOOD_CATEGORY_VEGAN);
-
-        recipeTypeDao.insert(TestConstante.FOOD_TYPE_MEAL);
-        recipeTypeDao.insert(TestConstante.FOOD_TYPE_SIMMERED);
-        recipeTypeDao.insert(TestConstante.FOOD_TYPE_DESSERT);
-
         recipeDao.insert(TestConstante.BOLO_RECIPE);
         recipeDao.insert(TestConstante.CARBO_RECIPE);
         recipeDao.insert(TestConstante.PESTO_RECIPE);
         recipeDao.insert(TestConstante.TIRAMISU_RECIPE);
     }
 
-
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
         configuration.closeConnection();
-        Files.deleteIfExists(Path.of("test.sqlite"));
+        Files.deleteIfExists(Path.of(TestConstante.databaseName));
     }
 
 
     @Test
     public void TestGenerateRecipesList() throws SQLException {
 
-        ArrayList<Recipe> recipesAllReadyUsed     = new ArrayList<>();
+        ArrayList<Recipe> recipesAlreadyUsed     = new ArrayList<>();
         HashMap<String, Integer> testRecipes      = new HashMap<>();
         HashMap<String, Integer> categoriesWanted = new HashMap<>();
 
-        categoriesWanted.put("Végétarien", 3);
-        categoriesWanted.put("Viande", 2);
-        categoriesWanted.put("Poisson", 2);
-        testRecipes.put("Viande", 0);
-        testRecipes.put("Poisson", 0);
-        testRecipes.put("Végétarien", 0);
-        testRecipes.put("Bolognaise", 0);
-        testRecipes.put("Carbonara", 0);
-        testRecipes.put("Pesto", 0);
-        testRecipes.put("Tiramisu", 0);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_VEGE, 3);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_MEAT, 2);
+        categoriesWanted.put(TestConstante.FOOD_CATEGORY_FISH, 2);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_MEAT, 0);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_FISH, 0);
+        testRecipes.put(TestConstante.FOOD_CATEGORY_VEGE, 0);
+        testRecipes.put(TestConstante.BOLOGNAISE_NAME, 0);
+        testRecipes.put(TestConstante.CARBONARA_NAME, 0);
+        testRecipes.put(TestConstante.PESTO_NAME, 0);
+        testRecipes.put(TestConstante.TIRAMISU_NAME, 0);
 
         List<Recipe> recipes;
         AutoCompletion autoCompletion = new AutoCompletion();
-        recipes = autoCompletion.generateRecipesList(recipesAllReadyUsed,categoriesWanted, 7, null);
+        recipes = autoCompletion.generateRecipesList(recipesAlreadyUsed,categoriesWanted, 7, null);
 
         // Enumére les catégories et les recettes utilisées dans la HashMap
         for (Recipe recipe : recipes) {
-            String category = recipe.getCategory();
-            String name     = recipe.getName();
-            int valCategory = testRecipes.get(category);
-            int valName     = testRecipes.get(name);
-            testRecipes.replace(category, ++valCategory);
-            testRecipes.replace(name, ++valName);
+            int valCategory = testRecipes.get(recipe.getCategory());
+            int valName     = testRecipes.get(recipe.getName());
+            testRecipes.replace(recipe.getCategory(), ++valCategory);
+            testRecipes.replace(recipe.getName(), ++valName);
         }
 
-        assertEquals(2, testRecipes.get("Viande"),     "Test si nombre de categries adequat");
-        assertEquals(2, testRecipes.get("Poisson"),    "Test si nombre de categories adequat");
-        assertEquals(3, testRecipes.get("Végétarien"), "Test si nombre de categories adequat");
-        assertEquals(2, testRecipes.get("Bolognaise"), "Test si recette utilise autant de fois que necessaire");
-        assertEquals(1, testRecipes.get("Carbonara"),  "Test si recette utilise autant de fois que necessaire");
-        assertEquals(1, testRecipes.get("Pesto"),      "Test si recette utilise autant de fois que necessaire");
-        assertEquals(3, testRecipes.get("Tiramisu"),   "Test si recette utilise autant de fois que necessaire");
+        assertEquals(2, testRecipes.get(TestConstante.FOOD_CATEGORY_MEAT), MESSAGE1);
+        assertEquals(2, testRecipes.get(TestConstante.FOOD_CATEGORY_FISH),    MESSAGE1);
+        assertEquals(3, testRecipes.get(TestConstante.FOOD_CATEGORY_VEGE), MESSAGE1);
+        assertEquals(2, testRecipes.get(TestConstante.BOLOGNAISE_NAME), MESSAGE);
+        assertEquals(1, testRecipes.get(TestConstante.CARBONARA_NAME), MESSAGE);
+        assertEquals(1, testRecipes.get(TestConstante.PESTO_NAME), MESSAGE);
+        assertEquals(3, testRecipes.get(TestConstante.TIRAMISU_NAME), MESSAGE);
     }
 
 
@@ -113,11 +95,11 @@ class TestAutoCompletion {
         assertNull(autoCompletion.findMax(recipes),
                 "Test si HashMap donne est vide");
 
-        recipes.put("Poisson", 1);
-        recipes.put("Viande", 10);
+        recipes.put(TestConstante.FOOD_CATEGORY_FISH, 1);
+        recipes.put(TestConstante.FOOD_CATEGORY_MEAT, 10);
         recipes.put("Vegetarien", 3);
 
-        assertEquals("Viande",
+        assertEquals(TestConstante.FOOD_CATEGORY_MEAT,
                 autoCompletion.findMax(recipes),
                 "Test si bonne Key trouver");
     }

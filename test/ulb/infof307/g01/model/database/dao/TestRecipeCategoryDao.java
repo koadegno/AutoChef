@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,32 +20,34 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestRecipeCategoryDao {
 
     static private final String fish = "Poison";
+    static private final Configuration configuration = Configuration.getCurrent();
+    static private RecipeCategoryDao recipeCategoryDao;
 
 
     @BeforeAll
     static public void initConfig() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductFamilyDao().insert(fish);
+        configuration.setDatabase(TestConstante.databaseName);
+        recipeCategoryDao = configuration.getRecipeCategoryDao();
+        recipeCategoryDao.insert(fish);
     }
 
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        List<String> categories = recipeCategoryDao.getAllName();
         assertEquals(fish, categories.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
         String meat = "Viande";
-        Configuration.getCurrent().getProductFamilyDao().insert(meat);
-        List<String> categories = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        recipeCategoryDao.insert(meat);
+        List<String> categories = recipeCategoryDao.getAllName();
         assertEquals(meat, categories.get(1));
     }
 }

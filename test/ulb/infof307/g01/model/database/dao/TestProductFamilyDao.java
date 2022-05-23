@@ -4,6 +4,7 @@ import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.Test;
 import ulb.infof307.g01.model.database.Configuration;
+import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
 import java.nio.file.Files;
@@ -19,32 +20,36 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 class TestProductFamilyDao {
 
     static private final String fruit = "Fruit";
+    private static final Configuration configuration = Configuration.getCurrent();
+    private static ProductFamilyDao productFamilyDao;
+    
 
 
     @BeforeAll
     static public void initConfig() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
-        Configuration.getCurrent().getProductFamilyDao().insert(fruit);
+        String databaseName = TestConstante.databaseName;
+        configuration.setDatabase(databaseName);
+        productFamilyDao = configuration.getProductFamilyDao();
+        productFamilyDao.insert(fruit);
     }
 
     @AfterAll
     static public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("test.sqlite"));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        List<String> families = productFamilyDao.getAllName();
         assertEquals(fruit, families.get(0));
     }
 
     @Test
     void testInsert() throws SQLException {
         String vegetable = "Légume";
-        Configuration.getCurrent().getProductFamilyDao().insert(vegetable);
-        List<String> families = Configuration.getCurrent().getProductFamilyDao().getAllName();
+        productFamilyDao.insert(vegetable);
+        List<String> families = productFamilyDao.getAllName();
         assertEquals(vegetable, families.get(1));
     }
 }

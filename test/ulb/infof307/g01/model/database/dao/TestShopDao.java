@@ -25,7 +25,7 @@ import static org.junit.jupiter.api.Assertions.*;
 class TestShopDao {
     static  private final String MY_SHOPPING_LIST_FOR_TEST = "myShoppingForTest";
     private static final Product.ProductBuilder productBuilder = new Product.ProductBuilder();
-    static private final Product PEACH = productBuilder.withName("peche").withQuantity(1).withFamilyProduct(TestConstante.FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
+    static private final Product PEACH = productBuilder.withName("peche").withFamilyProduct(TestConstante.FAMILY_PRODUCT_FRUIT).withQuantity(1).withNameUnity(TestConstante.GRAM).build();
     static private final Product STRAWBERRY = productBuilder.withName("fraise").build();
     static private final Product MANGO = productBuilder.withName("mango").build();
     static private final Product MELON =  productBuilder.withName("melon").withQuantity(1).build();
@@ -37,64 +37,67 @@ class TestShopDao {
     static private final Shop ALDI_RUE_NEUVE = new Shop.ShopBuilder().withName("1 aldi Rue neuve").withAddress("Belgique, Ixelles").build();
     static private final Shop CARREFOUR_ANVERS = new Shop.ShopBuilder().withName("Carrefour Anvers").withAddress("Anvers").build();
 
-    static private final String DATABASE_NAME = "test.sqlite";
+    static private final String DATABASE_NAME = TestConstante.databaseName;
+    static private final Configuration configuration = Configuration.getCurrent();
+    static private ShopDao shopDao;
     static ShoppingList myShoppingList;
 
 
     @BeforeEach
     public void initConfig() throws SQLException {
-        Configuration.getCurrent().setDatabase(DATABASE_NAME);
+        configuration.setDatabase(DATABASE_NAME);
+        shopDao = configuration.getShopDao();
 
         User testUser = new User("admin","admin",true);
         testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
+        configuration.setCurrentUser(testUser);
 
-        Configuration.getCurrent().getProductUnityDao().insert(TestConstante.GRAM);
-        Configuration.getCurrent().getProductFamilyDao().insert(TestConstante.FRUIT);
-        Configuration.getCurrent().getProductDao().insert(PEACH);
-        Configuration.getCurrent().getProductDao().insert(STRAWBERRY);
-        Configuration.getCurrent().getProductDao().insert(MANGO);
-        Configuration.getCurrent().getProductDao().insert(MELON);
-        Configuration.getCurrent().getShopDao().insert(ALDI_SHOP);
-        Configuration.getCurrent().getShopDao().insert(ALDI_RUE_NEUVE);
-        Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS);
-        Configuration.getCurrent().getShopDao().insert(ALDI_SHOP2);
-        Configuration.getCurrent().getShopDao().insert(CARREFOUR_ANVERS2);
+
+        configuration.getProductUnityDao().insert(TestConstante.GRAM);
+        configuration.getProductFamilyDao().insert(TestConstante.FAMILY_PRODUCT_FRUIT);
+        configuration.getProductDao().insert(PEACH);
+        configuration.getProductDao().insert(STRAWBERRY);
+        configuration.getProductDao().insert(MANGO);
+        configuration.getProductDao().insert(MELON);
+        shopDao.insert(ALDI_SHOP);
+        shopDao.insert(ALDI_RUE_NEUVE);
+        shopDao.insert(CARREFOUR_ANVERS);
+        shopDao.insert(ALDI_SHOP2);
+        shopDao.insert(CARREFOUR_ANVERS2);
         //ShoppingList
         myShoppingList = new ShoppingList(MY_SHOPPING_LIST_FOR_TEST);
-        myShoppingList.add(Configuration.getCurrent().getProductDao().get(MANGO.getName()));
-        myShoppingList.add(Configuration.getCurrent().getProductDao().get(MELON.getName()));
-        Configuration.getCurrent().getShoppingListDao().insert(myShoppingList);
-        myShoppingList = Configuration.getCurrent().getShoppingListDao().get(myShoppingList.getName());
+        myShoppingList.add(configuration.getProductDao().get(MANGO.getName()));
+        myShoppingList.add(configuration.getProductDao().get(MELON.getName()));
+        configuration.getShoppingListDao().insert(myShoppingList);
+        myShoppingList = configuration.getShoppingListDao().get(myShoppingList.getName());
 
     }
 
     @AfterEach
     public void deleteConfig() throws SQLException, IOException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of(DATABASE_NAME));
     }
 
     @Test
     void testGetAllName() throws SQLException {
-        List<String> allShopName = Configuration.getCurrent().getShopDao().getAllName();
+        List<String> allShopName = shopDao.getAllName();
         assertEquals(ALDI_SHOP.getName(),allShopName.get(0));
         assertEquals(ALDI_RUE_NEUVE.getName(),allShopName.get(1));
     }
 
     @Test
     void testDelete() throws SQLException{
-
-        Configuration.getCurrent().getShopDao().delete( Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS.getName(), CARREFOUR_ANVERS.getCoordinate()));
-        List<Shop> shopList = Configuration.getCurrent().getShopDao().getAllShops();
+        shopDao.delete( shopDao.get(CARREFOUR_ANVERS.getName(), CARREFOUR_ANVERS.getCoordinate()));
+        List<Shop> shopList = shopDao.getAllShops();
         assertNotEquals(shopList.get(shopList.size()-1), CARREFOUR_ANVERS);
     }
 
     @Test
     void testInsert() throws SQLException {
         Point point = new Point(LIDL_SHOP.getCoordinateX(), LIDL_SHOP.getCoordinateY());
-        Configuration.getCurrent().getShopDao().insert(LIDL_SHOP);
-        Shop shopInserted = Configuration.getCurrent().getShopDao().get(LIDL_SHOP.getName(), point);
+        shopDao.insert(LIDL_SHOP);
+        Shop shopInserted = shopDao.get(LIDL_SHOP.getName(), point);
 
         assertNotNull(shopInserted);
         assertEquals(LIDL_SHOP,shopInserted);
@@ -104,10 +107,10 @@ class TestShopDao {
     void testUpdate() throws SQLException {
         Point coordinate = new Point(1,1);
         Shop aldiBruxellesShop = new Shop.ShopBuilder().withID(2).withName("aldi Bruxelles").withCoordinate(coordinate).build();
-        Configuration.getCurrent().getShopDao().insert(aldiBruxellesShop);
+        shopDao.insert(aldiBruxellesShop);
         aldiBruxellesShop = new Shop.ShopBuilder().withID(2).withName("aldi Zaventem").withCoordinate(coordinate).build();
-        Configuration.getCurrent().getShopDao().update(aldiBruxellesShop);
-        Shop shopInserted = Configuration.getCurrent().getShopDao().get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
+        shopDao.update(aldiBruxellesShop);
+        Shop shopInserted = shopDao.get(aldiBruxellesShop.getName(),aldiBruxellesShop.getCoordinate());
 
         assertEquals(aldiBruxellesShop,shopInserted);
 
@@ -116,7 +119,7 @@ class TestShopDao {
     @Test
     void testGetShops() throws SQLException {
 
-        List<Shop> shopList = Configuration.getCurrent().getShopDao().getAllShops();
+        List<Shop> shopList = shopDao.getAllShops();
         assertEquals(shopList.get(0), ALDI_SHOP);
         assertEquals(shopList.get(1), ALDI_RUE_NEUVE);
 
@@ -124,7 +127,7 @@ class TestShopDao {
 
     @Test
     void testGet() throws SQLException {
-        Shop shopInserted = Configuration.getCurrent().getShopDao().get(ALDI_SHOP.getName(), ALDI_SHOP.getCoordinate());
+        Shop shopInserted = shopDao.get(ALDI_SHOP.getName(), ALDI_SHOP.getCoordinate());
 
         assertEquals(ALDI_SHOP,shopInserted);
 
@@ -133,7 +136,7 @@ class TestShopDao {
     @Test
     void testFillShopWithProduct() throws SQLException{
 
-        Shop shopToTest = Configuration.getCurrent().getShopDao().get(ALDI_SHOP.getName(),ALDI_SHOP.getCoordinate());
+        Shop shopToTest = shopDao.get(ALDI_SHOP.getName(),ALDI_SHOP.getCoordinate());
 
         assertEquals(ALDI_SHOP.size(),shopToTest.size());
 
@@ -142,15 +145,15 @@ class TestShopDao {
     @Test
     void getShopWithProductList() throws SQLException {
         int nbShops = 2;
-        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
-        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
-        aldi.add(Configuration.getCurrent().getProductDao().get(MANGO.getName()));
-        aldi.add(Configuration.getCurrent().getProductDao().get(MELON.getName()));
-        carrefour.add(Configuration.getCurrent().getProductDao().get(MANGO.getName()));
-        carrefour.add(Configuration.getCurrent().getProductDao().get(MELON.getName()));
-        Configuration.getCurrent().getShopDao().update(aldi);
-        Configuration.getCurrent().getShopDao().update(carrefour);
-        List<Shop> allShopsWithShoppingList = Configuration.getCurrent().getShopDao().getShopWithProductList(myShoppingList);
+        Shop aldi = shopDao.get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
+        Shop carrefour = shopDao.get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        aldi.add(configuration.getProductDao().get(MANGO.getName()));
+        aldi.add(configuration.getProductDao().get(MELON.getName()));
+        carrefour.add(configuration.getProductDao().get(MANGO.getName()));
+        carrefour.add(configuration.getProductDao().get(MELON.getName()));
+        shopDao.update(aldi);
+        shopDao.update(carrefour);
+        List<Shop> allShopsWithShoppingList = shopDao.getShopWithProductList(myShoppingList);
         assertEquals(allShopsWithShoppingList.size(), nbShops);
         assertTrue(allShopsWithShoppingList.contains(aldi));
         assertTrue(allShopsWithShoppingList.contains(carrefour));
@@ -165,12 +168,12 @@ class TestShopDao {
         double carrefourMelonPrice = 4;
         double aldiMelonPrice = 6;
         //products
-        Product mango = Configuration.getCurrent().getProductDao().get(MANGO.getName());
-        Product melon = Configuration.getCurrent().getProductDao().get(MELON.getName());
+        Product mango = configuration.getProductDao().get(MANGO.getName());
+        Product melon = configuration.getProductDao().get(MELON.getName());
 
         //shops
-        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
-        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        Shop aldi = shopDao.get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
+        Shop carrefour = shopDao.get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
         aldi.remove(mango);
         aldi.remove(melon);
         carrefour.remove(mango);
@@ -179,14 +182,14 @@ class TestShopDao {
         melon.setPrice(aldiMelonPrice);
         aldi.add(mango);
         aldi.add(melon);
-        Configuration.getCurrent().getShopDao().update(aldi);
+        shopDao.update(aldi);
         mango.setPrice(carrefourMangoPrice);
         melon.setPrice(carrefourMelonPrice);
         carrefour.add(mango);
         carrefour.add(melon);
-        Configuration.getCurrent().getShopDao().update(carrefour);
+        shopDao.update(carrefour);
         //test
-        List<Shop> allShopsWithMinPriceShoppingList = Configuration.getCurrent().getShopDao().getShopWithMinPriceForProductList(myShoppingList);
+        List<Shop> allShopsWithMinPriceShoppingList = shopDao.getShopWithMinPriceForProductList(myShoppingList);
         assertEquals(allShopsWithMinPriceShoppingList.size(), nbShopWithMinPrice);
         assertTrue(allShopsWithMinPriceShoppingList.contains(carrefour));
     }
@@ -195,15 +198,15 @@ class TestShopDao {
     void getNearestShopsWithProductList() throws SQLException {
         int nbShops = 1;
         Point position = new Point(0,3); //same position as aldi
-        Shop aldi = Configuration.getCurrent().getShopDao().get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
-        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
-        aldi.add(Configuration.getCurrent().getProductDao().get(MANGO.getName()));
-        aldi.add(Configuration.getCurrent().getProductDao().get(MELON.getName()));
-        carrefour.add(Configuration.getCurrent().getProductDao().get(MANGO.getName()));
-        carrefour.add(Configuration.getCurrent().getProductDao().get(MELON.getName()));
-        Configuration.getCurrent().getShopDao().update(aldi);
-        Configuration.getCurrent().getShopDao().update(carrefour);
-        List<Shop> nearestShopsWithShoppingList = Configuration.getCurrent().getShopDao().getNearestShopsWithProductList(myShoppingList, position);
+        Shop aldi = shopDao.get(ALDI_SHOP2.getName(), ALDI_SHOP2.getCoordinate());
+        Shop carrefour = shopDao.get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        aldi.add(configuration.getProductDao().get(MANGO.getName()));
+        aldi.add(configuration.getProductDao().get(MELON.getName()));
+        carrefour.add(configuration.getProductDao().get(MANGO.getName()));
+        carrefour.add(configuration.getProductDao().get(MELON.getName()));
+        shopDao.update(aldi);
+        shopDao.update(carrefour);
+        List<Shop> nearestShopsWithShoppingList = shopDao.getNearestShopsWithProductList(myShoppingList, position);
         assertEquals(nearestShopsWithShoppingList.size(), nbShops);
         assertTrue(nearestShopsWithShoppingList.contains(aldi));
     }
@@ -213,17 +216,17 @@ class TestShopDao {
         double carrefourMangoPrice = 2;
         double carrefourMelonPrice = 4;
         //products
-        Product mango = Configuration.getCurrent().getProductDao().get(MANGO.getName());
-        Product melon = Configuration.getCurrent().getProductDao().get(MELON.getName());
+        Product mango = configuration.getProductDao().get(MANGO.getName());
+        Product melon = configuration.getProductDao().get(MELON.getName());
         //shops
-        Shop carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        Shop carrefour = shopDao.get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
         mango.setPrice(carrefourMangoPrice);
         melon.setPrice(carrefourMelonPrice);
         carrefour.add(mango);
         carrefour.add(melon);
-        Configuration.getCurrent().getShopDao().update(carrefour);
-        carrefour = Configuration.getCurrent().getShopDao().get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
-        Double price = Configuration.getCurrent().getShopDao().getShoppingListPriceInShop(carrefour,myShoppingList);
+        shopDao.update(carrefour);
+        carrefour = shopDao.get(CARREFOUR_ANVERS2.getName(), CARREFOUR_ANVERS2.getCoordinate());
+        Double price = shopDao.getShoppingListPriceInShop(carrefour,myShoppingList);
         assertEquals(price, carrefourMangoPrice + carrefourMelonPrice);
     }
 }

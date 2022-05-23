@@ -1,14 +1,6 @@
 package ulb.infof307.g01.model.export;
 
-import java.io.FileWriter;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.sql.SQLException;
-import java.util.LinkedHashMap;
-import java.util.Map;
 import org.json.simple.JSONArray;
-
 import org.json.simple.JSONObject;
 import org.json.simple.parser.ParseException;
 import org.junit.jupiter.api.AfterAll;
@@ -18,6 +10,14 @@ import ulb.infof307.g01.model.User;
 import ulb.infof307.g01.model.database.Configuration;
 import ulb.infof307.g01.model.exception.JSONException;
 
+import java.io.FileWriter;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.sql.SQLException;
+import java.util.LinkedHashMap;
+import java.util.Map;
+
 /**
  * Test de la classe JSON
  */
@@ -25,20 +25,22 @@ class TestJSON {
     final static private String fileNameDB   = "testJSON.sqlite";
     final static private String fileNameRecipe = "testRecette.json";
     final static private String fileNameProduct = "testProduct.json";
+    final static private Configuration configuration = Configuration.getCurrent();
+
 
     @BeforeAll
     static public void createDB() throws SQLException {
-        Configuration.getCurrent().setDatabase(fileNameDB);
+        configuration.setDatabase(fileNameDB);
 
         User testUser = new User("admin","admin",true);
         testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
+        configuration.setCurrentUser(testUser);
 
-        Configuration.getCurrent().getRecipeCategoryDao().insert("Viande");
-        Configuration.getCurrent().getRecipeTypeDao().insert("Desserts");
+        configuration.getRecipeCategoryDao().insert("Viande");
+        configuration.getRecipeTypeDao().insert("Desserts");
 
-        Configuration.getCurrent().getProductFamilyDao().insert("soupes");
-        Configuration.getCurrent().getProductUnityDao().insert("l");
+        configuration.getProductFamilyDao().insert("soupes");
+        configuration.getProductUnityDao().insert("l");
     }
 
     @BeforeAll @SuppressWarnings("unchecked") //Warning pour le put car librairie pas a jour.
@@ -51,40 +53,41 @@ class TestJSON {
         recipe.put("Categorie", "Viande");
         recipe.put("Preparation", "mix then eat");
 
-        FileWriter fileJSON = new FileWriter(fileNameRecipe);
-        fileJSON.write(recipe.toJSONString());
-        fileJSON.flush();
+        try (FileWriter fileJSON = new FileWriter(fileNameRecipe)) {
+            fileJSON.write(recipe.toJSONString());
+            fileJSON.flush();
+        }
     }
 
     @BeforeAll
      static public void createJSONProduct() throws IOException {
         JSONObject job = new JSONObject();
-        JSONArray jab = new JSONArray();
+        JSONArray jsonArray = new JSONArray();
 
-        Map<String,String> m1 = new LinkedHashMap<>(4);
-        m1.put("Unite", "l");
-        m1.put("FamilleAliment", "soupes");
-        m1.put("Nom", "miam2");
-        jab.add(m1);
+        Map<String,String> linkedHashMap = new LinkedHashMap<>(4);
+        linkedHashMap.put("Unite", "l");
+        linkedHashMap.put("FamilleAliment", "soupes");
+        linkedHashMap.put("Nom", "miam2");
+        jsonArray.add(linkedHashMap);
 
-        m1 = new LinkedHashMap<>(4);
-        m1.put("Unite", "l");
-        m1.put("FamilleAliment", "soupes");
-        m1.put("Nom", "miam");
+        linkedHashMap = new LinkedHashMap<>(4);
+        linkedHashMap.put("Unite", "l");
+        linkedHashMap.put("FamilleAliment", "soupes");
+        linkedHashMap.put("Nom", "miam");
 
-        jab.add(m1);
-        job.put("Liste",jab);
+        jsonArray.add(linkedHashMap);
+        job.put("Liste",jsonArray);
 
-        FileWriter fileJSON = new FileWriter(fileNameProduct);
-        fileJSON.write(job.toJSONString());
-        fileJSON.flush();
-        fileJSON.close();
+        try (FileWriter fileJSON = new FileWriter(fileNameProduct)) {
+            fileJSON.write(job.toJSONString());
+            fileJSON.flush();
+        }
 
     }
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        Configuration.getCurrent().closeConnection();
+        configuration.closeConnection();
         Files.deleteIfExists(Path.of("testJSON.sqlite"));
     }
 

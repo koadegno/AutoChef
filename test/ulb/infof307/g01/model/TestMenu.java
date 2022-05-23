@@ -2,7 +2,6 @@ package ulb.infof307.g01.model;
 
 import org.junit.jupiter.api.*;
 import ulb.infof307.g01.model.database.Configuration;
-import ulb.infof307.g01.model.*;
 import ulb.infof307.g01.model.database.TestConstante;
 
 import java.io.IOException;
@@ -21,6 +20,8 @@ class TestMenu {
     static private final Menu menu = new Menu("Menu Test");
     static private Recipe[] recipes;
     static private Product[] products;
+    static private final Configuration configuration = Configuration.getCurrent();
+    //static private final String databaseName = "test.sqlite";
 
     /**
      * Stocke la quantité contenu dans une recette pour chaque produit
@@ -46,14 +47,24 @@ class TestMenu {
         products[0] = new Product.ProductBuilder().withName("Abricot").build();
         products[1] =  new Product.ProductBuilder().withName("Fraise").build();
 
-
-        recipes[0] = new Recipe.RecipeBuilder().withId(4).withName("test1").withDuration(3).withCategory(TestConstante.FOOD_CATEGORY_VEGAN).withType(TestConstante.FOOD_TYPE_DESSERT).withPreparation("Avant le code").build();
+        recipes[0] = new Recipe.RecipeBuilder()
+                .withId(4).withName("test1")
+                .withDuration(3)
+                .withCategory(TestConstante.FOOD_CATEGORY_VEGAN)
+                .withType(TestConstante.FOOD_TYPE_DESSERT)
+                .withPreparation("Avant le code").build();
         recipes[0].add(products[0]);
         recipes[0].add(products[0]);
 
         RECIPE_PRODUCT_QUANTITY[0][0] = 2;
 
-        recipes[1] = new Recipe.RecipeBuilder().withId(5).withName("test2").withDuration(5).withCategory(TestConstante.FOOD_CATEGORY_VEGAN).withType(TestConstante.FOOD_TYPE_DESSERT).withPreparation("Avant le code").build();
+        recipes[1] = new Recipe.RecipeBuilder()
+                .withId(5)
+                .withName("test2")
+                .withDuration(5)
+                .withCategory(TestConstante.FOOD_CATEGORY_VEGAN)
+                .withType(TestConstante.FOOD_TYPE_DESSERT)
+                .withPreparation("Avant le code").build();
         recipes[1].add(products[0]);
         recipes[1].add(products[1]);
 
@@ -65,40 +76,28 @@ class TestMenu {
         recipes[4]  = TestConstante.PESTO_RECIPE;
         recipes[5]  = TestConstante.TIRAMISU_RECIPE;
 
-        createDB();
+        //createDB();
+        TestConstante.createDefaultDB();
+        fillDB();
     }
 
-    static public void createDB() throws SQLException {
-        String databaseName = "test.sqlite";
-        Configuration.getCurrent().setDatabase(databaseName);
-
-        User testUser = new User("admin","admin",true);
-        testUser.setId(1);
-        Configuration.getCurrent().setCurrentUser(testUser);
-
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
-        Configuration.getCurrent().getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
-
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
-        Configuration.getCurrent().getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
-
-        Configuration.getCurrent().getRecipeDao().insert(recipes[5]);
-        Configuration.getCurrent().getRecipeDao().insert(recipes[2]);
-        Configuration.getCurrent().getRecipeDao().insert(recipes[3]);
-        Configuration.getCurrent().getRecipeDao().insert(recipes[4]);
+    static public void fillDB()throws SQLException{
+        //Ajout des recettes dans la DB
+        configuration.getRecipeDao().insert(recipes[5]);
+        configuration.getRecipeDao().insert(recipes[2]);
+        configuration.getRecipeDao().insert(recipes[3]);
+        configuration.getRecipeDao().insert(recipes[4]);
     }
+
 
     @AfterAll
     static public void deleteDB() throws IOException, SQLException {
-        Configuration.getCurrent().closeConnection();
-        Files.deleteIfExists(Path.of("test.sqlite"));
+        configuration.closeConnection();
+        Files.deleteIfExists(Path.of(TestConstante.databaseName));
     }
 
     @BeforeEach
-    private void reset() {
+    public void reset() {
         new Menu("Menu Test");
 
         menu.addRecipeTo(Day.Monday, recipes[0]);
@@ -112,7 +111,7 @@ class TestMenu {
     }
 
     @AfterEach
-    private void tearDown() {
+    public void tearDown() {
         menu.clearDay(Day.Monday);
         menu.clearDay(Day.Wednesday);
         menu.clearDay(Day.Friday);
@@ -120,9 +119,11 @@ class TestMenu {
 
 
     @Test
-    void getRecipesfor() {
+    void getRecipesFor() {
+        List<Recipe> recipesMonday = menu.getRecipesfor(Day.Monday);
         int i =0;
-        for (Recipe recipeTest : menu.getRecipesfor(Day.Monday)) {
+
+        for (Recipe recipeTest : recipesMonday) {
                 assertEquals(recipes[i], recipeTest);
                 i++;
         }
@@ -130,49 +131,56 @@ class TestMenu {
 
     @Test
     void addRecipesTo() {
-        menu.addRecipeTo(Day.Monday, recipes[1]);
-
-        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
-
         int counter = 0;
 
-        for (Recipe r : recipesList) {
-            if (r == recipes[1])
+        menu.addRecipeTo(Day.Monday, recipes[1]);
+
+        for (Recipe r : menu.getRecipesfor(Day.Monday)) {
+            if (r.equals(recipes[1]))
                 counter++;
         }
-
         assertEquals(2, counter);
-        // Reset
-        menu.removeRecipeFrom(Day.Monday, recipes[1]);
     }
 
     @Test
     void removeRecipesFrom() {
+        int counter = 0;
+
         menu.removeRecipeFrom(Day.Monday, recipes[1]);
 
-        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
-        int counter = 0;
-        for (Recipe r : recipesList) {
+        for (Recipe r : menu.getRecipesfor(Day.Monday)) {
             if (r == recipes[1])
                 counter++;
         }
-
         assertEquals(0, counter);
-        // Reset
-        menu.addRecipeTo(Day.Monday, recipes[1]);
+    }
+
+    @Test
+    void addRemoveRecipes(){
+        int counterRecipe0 = 0;
+        int counterRecipe1 = 0;
+
+        menu.addRecipeTo(Day.Monday, recipes[0]);
+        menu.removeRecipeFrom(Day.Monday, recipes[1]);
+
+        for (Recipe r : menu.getRecipesfor(Day.Monday)) {
+            if (r.equals(recipes[0])) counterRecipe0++;
+            if (r.equals(recipes[1])) counterRecipe1++;
+        }
+        assertEquals(2, counterRecipe0);
+        assertEquals(0, counterRecipe1);
     }
 
     @Test
     void replaceRecipes() {
-
+        //FIXME: si on add recipe[1] dans menu, il devrait apparaitre 2 fois, donc assert fails?
         menu.addRecipeTo(Day.Monday, recipes[1]);
-        menu.replaceRecipe(Day.Monday, recipes[1], recipes[0]);
-
-        List<Recipe> recipesList = menu.getRecipesfor(Day.Monday);
-
         int counterRecipe0 = 0;
         int counterRecipe1 = 0;
-        for (Recipe r : recipesList) {
+
+        menu.replaceRecipe(Day.Monday, recipes[1], recipes[0]);
+
+        for (Recipe r : menu.getRecipesfor(Day.Monday)) {
             if (r == recipes[0])
                 counterRecipe0++;
         }
@@ -182,26 +190,19 @@ class TestMenu {
 
     @Test
     void clearDay() {
-
         menu.clearDay(Day.Monday);
         assertEquals(0, menu.getRecipesfor(Day.Monday).size());
-
-        menu.clearDay(Day.Wednesday);
-        assertEquals(0, menu.getRecipesfor(Day.Wednesday).size());
-
-        menu.clearDay(Day.Friday);
-        assertEquals(0, menu.getRecipesfor(Day.Friday).size());
     }
 
     @Test
     void generateShoppingList() {
-
         ShoppingList generatedShoppingList = menu.generateShoppingList();
 
+        //Vérifier la taille de la Liste de courses
         assertEquals(products.length, generatedShoppingList.size());
 
+        //Vérifier que tous les produits de la liste de courses correspondent à ceux du menu
         int[] productsCounter = new int[products.length];
-
         for (Product p : generatedShoppingList) {
             for (int i = 0; i < products.length; i++) {
                 if (p.equals(products[i])) {
@@ -209,7 +210,6 @@ class TestMenu {
                 }
             }
         }
-
         assertEquals(MENU_PRODUCT_QUANTITY[0], productsCounter[0]);
         assertEquals(MENU_PRODUCT_QUANTITY[1], productsCounter[1]);
     }
