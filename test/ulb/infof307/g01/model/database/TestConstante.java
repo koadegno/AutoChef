@@ -3,6 +3,9 @@ package ulb.infof307.g01.model.database;
 import ulb.infof307.g01.model.Day;
 import ulb.infof307.g01.model.Menu;
 import ulb.infof307.g01.model.Recipe;
+import ulb.infof307.g01.model.User;
+
+import java.sql.SQLException;
 
 public class TestConstante {
     public static final String FOOD_CATEGORY_MEAT = "Viande";
@@ -38,4 +41,24 @@ public class TestConstante {
             addRecipeTo(Day.Friday, BOLO_RECIPE);
 
     private TestConstante(){}
+
+    public static final String databaseName = "test.sqlite";
+    public static void createDefaultDB(Configuration configuration) throws SQLException {
+        configuration.setDatabase(databaseName);
+
+        User testUser = new User("admin","admin",true);
+        testUser.setId(1);
+        configuration.setCurrentUser(testUser);
+
+        //Ajout des catégories des recettes dans la DB
+        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_MEAT);
+        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_FISH);
+        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGE);
+        configuration.getRecipeCategoryDao().insert(TestConstante.FOOD_CATEGORY_VEGAN);
+        //Ajout des types de recettes dans la DB
+        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_MEAL);
+        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_SIMMERED);
+        configuration.getRecipeTypeDao().insert(TestConstante.FOOD_TYPE_DESSERT);
+
+    }
 }
