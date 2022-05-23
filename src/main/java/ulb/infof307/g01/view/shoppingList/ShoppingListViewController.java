@@ -49,7 +49,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        activeElementVisibility();
+        updateShoppingList();
         this.spinnerQuantityOrNumber.setValueFactory(spinnerValueFactory);
         super.onlyIntValue(spinnerQuantityOrNumber);
 
@@ -62,7 +62,7 @@ public abstract class ShoppingListViewController extends ViewController<Shopping
 
     }
 
-    protected void activeElementVisibility(){}
+    protected void updateShoppingList(){}
 
 
     public void removeBorderColor() {

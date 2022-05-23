@@ -20,7 +20,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
     Button btnConfirm, btnAddNewProduct;
 
     /**
-     * Permet d'afficher sur le tableView les listes de courses à partir d'un nom d'une
+     * Permet d'afficher sur la tableView les listes de courses à partir d'un nom d'une
      * liste de courses
      */
     @FXML
@@ -63,7 +63,16 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
         btnSeeShoppingListOnMap.setVisible(isVisible);
     }
 
-    protected void activeElementVisibility() {
+    private void isVisibleElementToCreateRecipe(boolean isVisible) {
+        comboBoxShoppingNameList.setVisible(isVisible);
+        btnSeeShoppingList.setVisible(isVisible);
+        btnSeeShoppingListOnMap.setVisible(isVisible);
+        btnExportShoppingList.setVisible(isVisible);
+        btnSendMail.setVisible(isVisible);
+        helpMenuShoppingList.setVisible(isVisible);
+    }
+
+    protected void updateShoppingList() {
         comboBoxShoppingNameList.setVisible(true);
         btnConfirm.setText("Enregistrer");
         btnSeeShoppingList.setVisible(true);
@@ -77,7 +86,7 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
     }
 
 
-    public void initForCreateRecipe(ShoppingList shoppingList) { //TODO: reformer
+    public void initForCreateRecipe(ShoppingList shoppingList) {
         List<Product> productOfShoppingList = new ArrayList<>(shoppingList);
         tableViewDisplayProductList.setItems(FXCollections.observableArrayList(productOfShoppingList));
         isVisibleElementToModifyMyShoppingList(true);
@@ -86,14 +95,9 @@ public class ModifyShoppingListViewController extends ShoppingListViewController
             fillShoppingListToSend();
             listener.returnAddedProducts();
         });
-
-        comboBoxShoppingNameList.setVisible(false);
-        btnSeeShoppingList.setVisible(false);
-        btnSeeShoppingListOnMap.setVisible(false);
-        btnExportShoppingList.setVisible(false);
-        btnSendMail.setVisible(false);
-        helpMenuShoppingList.setVisible(false);
+        isVisibleElementToCreateRecipe(false);
     }
+
 
     public void helpShoppingList(){
         listener.helpModifyShoppingList();

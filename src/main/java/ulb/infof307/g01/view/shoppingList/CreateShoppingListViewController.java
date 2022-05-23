@@ -33,7 +33,7 @@ public class CreateShoppingListViewController extends ShoppingListViewController
     /**
      * Methode qui rend visible les boutons utilisée
      */
-    protected void activeElementVisibility() {
+    protected void updateShoppingList() {
         btnAddNewProduct.setVisible(true);
         nameMyCreateShoppingList.setVisible(true);
         labelNameShoppingList.setVisible(true);
